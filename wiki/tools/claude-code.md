@@ -2,10 +2,11 @@
 title: "Claude Code"
 type: "tool"
 pillar: "building"
-tags: [claude-code, cli, agentic-engineering, automation, voice-input]
+tags: [claude-code, cli, agentic-engineering, automation, voice-input, knowledge-management]
 sources:
   - "summaries/2026-03-30_aicodeking_claude-code-2-0-hidden-features-new-version.md"
   - "summaries/2026-02-12_lex-clips_how-to-code-with-ai-agents-advice-from-openclaw-creator.md"
+  - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
 last_updated: "2026-04-09"
 ---
 
@@ -56,8 +57,14 @@ Define in `.claude/agents/my-agent.md` with frontmatter controlling name, tools,
 
 > "Most people still think of Claude Code as something that only lives inside one terminal window. Power users are using it like a whole operating environment." — Boris Cherny
 
+## Beyond Code: Knowledge Management
+
+Claude Code isn't limited to writing code. Using the Karpathy LLM wiki pattern, it can build and maintain a structured knowledge base — ingesting sources, creating cross-referenced wiki pages, and keeping everything consistent. Paired with Obsidian for visualization, it becomes a "digital brain" engine. *(Source: sayed.developer)*
+
 ## Related Pages
 
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md)
 - [Empathize with the Agent](../concepts/empathize-with-the-agent.md)
 - [Peter Steinberger](../people/peter-steinberger.md)
+- [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md)
+- [Obsidian](obsidian.md)
