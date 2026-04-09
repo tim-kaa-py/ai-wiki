@@ -1,3 +1,15 @@
+---
+title: "Claude Code 2.0 & Hidden Features"
+source_type: "youtube"
+channel: "AICodeKing"
+date: "2026-03-30"
+url: "https://www.youtube.com/watch?v=pgopk2SFl5Y"
+pillar: "building"
+tags: [claude-code, cli-commands, automation, hooks, worktrees, custom-agents, voice-input, remote-control]
+ingested: "2026-03-30"
+source_file: "sources/youtube/2026-03-30_aicodeking_claude-code-2-0-hidden-features-new-version.md"
+---
+
 # Claude Code 2.0 & Hidden Features — Tips & Tricks
 
 **Source:** AICodeKing | 2026-03-30 | [Watch](https://www.youtube.com/watch?v=pgopk2SFl5Y) | 7:13
