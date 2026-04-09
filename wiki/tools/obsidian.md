@@ -4,6 +4,7 @@ type: "tool"
 pillar: "building"
 tags: [obsidian, knowledge-management, wiki, visualization, web-clipper]
 sources:
+  - "summaries/2026-04-02_karpathy_llm-wiki.md"
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
 last_updated: "2026-04-09"
 ---
@@ -45,7 +46,17 @@ Clips web pages (including images) directly into a designated folder as markdown
 4. Configure clipper output folder to the wiki's `inbox/` directory
 5. The existing markdown structure with cross-references renders immediately as a navigable graph
 
+### Useful Plugins (from Karpathy)
+
+- **Dataview** — runs queries over page frontmatter. If wiki pages have YAML frontmatter (tags, dates, source counts), Dataview generates dynamic tables and lists.
+- **Marp** — markdown-based slide deck format. Generate presentations directly from wiki content.
+
+### Image Handling Tip
+
+In Settings → Files and links, set "Attachment folder path" to a fixed directory (e.g. `sources/assets/`). Then bind "Download attachments for current file" to a hotkey (e.g. Ctrl+Shift+D). After clipping an article, hit the hotkey to download all images locally — prevents broken URL references over time. *(Source: Karpathy gist)*
+
 ## Related Pages
 
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md) — the pattern Obsidian visualizes
 - [Claude Code](claude-code.md) — the engine that maintains the wiki
+- [Andrej Karpathy](../people/andrej-karpathy.md) — originator of the pattern

@@ -4,6 +4,7 @@ type: "concept"
 pillar: "building"
 tags: [karpathy, wiki, knowledge-management, rag, markdown]
 sources:
+  - "summaries/2026-04-02_karpathy_llm-wiki.md"
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
 last_updated: "2026-04-09"
 ---
@@ -32,11 +33,24 @@ Instead of querying raw documents via retrieval-augmented generation, let the LL
 | **Query** | Ask questions → LLM searches wiki pages, synthesizes answer with citations |
 | **Lint** | Health check → LLM finds stale info, orphan pages, contradictions, gaps |
 
+## Key Insight: File Good Answers Back
+
+Valuable query answers — comparisons, analyses, discovered connections — shouldn't disappear into chat history. They should be filed back into the wiki as new pages. This way explorations compound in the knowledge base just like ingested sources do. *(Source: Karpathy gist)*
+
+## Use Cases
+
+From Karpathy's original description:
+- **Personal:** goals, health, self-improvement — journal entries, articles, podcast notes
+- **Research:** going deep on a topic over weeks/months with an evolving thesis
+- **Reading a book:** chapter-by-chapter companion wiki (characters, themes, plot threads)
+- **Business/team:** internal wiki fed by Slack, meeting transcripts, project docs
+- **Anything with knowledge accumulation:** competitive analysis, due diligence, course notes, hobby deep-dives
+
 ## Why It Works (and When It Doesn't)
 
-**Why it works:** The tedious part of knowledge management isn't reading or thinking — it's the bookkeeping. LLMs handle maintenance at near-zero cost. Humans direct analysis and ask good questions.
+**Why it works:** The tedious part of knowledge management isn't reading or thinking — it's the bookkeeping. LLMs handle maintenance at near-zero cost. Humans direct analysis and ask good questions. Related in spirit to Vannevar Bush's Memex (1945) — a personal knowledge store with associative trails between documents. Bush couldn't solve who does the maintenance. The LLM handles that. *(Source: Karpathy gist)*
 
-**Scalability limit:** Karpathy's wiki is ~100 articles. For gigabytes of data, RAG is still the better approach. This pattern works best for curated, personal knowledge bases where depth matters more than breadth.
+**Scalability limit:** Works well at ~100 sources, hundreds of pages. For larger scale, consider adding search tooling like [qmd](https://github.com/tobi/qmd) — a local markdown search engine with hybrid BM25/vector search and LLM re-ranking, available as both CLI and MCP server. *(Source: Karpathy gist)*
 
 ## The "Digital Brain" Analogy
 
@@ -46,3 +60,4 @@ The wiki acts as an externalized, structured memory. Each ingest strengthens con
 
 - [Claude Code](../tools/claude-code.md) — the LLM tool that maintains the wiki
 - [Obsidian](../tools/obsidian.md) — visualization frontend for the wiki
+- [Andrej Karpathy](../people/andrej-karpathy.md) — originator of the pattern
