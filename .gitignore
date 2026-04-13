@@ -2,3 +2,6 @@
 *.srt
 *.ttml
 *.vtt
+
+# Obsidian local config
+.obsidian/
