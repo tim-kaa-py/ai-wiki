@@ -6,7 +6,7 @@ tags: [karpathy, wiki, knowledge-management, ai-research, tesla, openai]
 sources:
   - "summaries/2026-04-02_karpathy_llm-wiki.md"
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
-last_updated: "2026-04-09"
+last_updated: "2026-04-13"
 ---
 
 # Andrej Karpathy
@@ -17,7 +17,9 @@ AI researcher. Former Director of AI at Tesla, founding member of OpenAI. Known 
 
 - **The LLM Wiki pattern** — introduced the idea of using LLMs to incrementally build and maintain personal knowledge bases as structured markdown wikis, replacing traditional RAG for curated knowledge domains
 - Framed the key insight: "The tedious part of maintaining a knowledge base is not the reading or the thinking — it's the bookkeeping."
+- Described shifting token throughput from "manipulating code" to "manipulating knowledge stored as markdown and images"
 - Shared the pattern as an open gist designed to be copy-pasted into any LLM agent
+- Acknowledged the scalability limit: the pattern works for ~100 articles; at gigabyte scale, RAG is still better
 
 ## The LLM Wiki Gist
 

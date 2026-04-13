@@ -6,7 +6,7 @@ tags: [karpathy, wiki, knowledge-management, rag, markdown]
 sources:
   - "summaries/2026-04-02_karpathy_llm-wiki.md"
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
-last_updated: "2026-04-09"
+last_updated: "2026-04-13"
 ---
 
 # LLM Wiki Pattern
@@ -18,6 +18,8 @@ A knowledge management approach introduced by Andrej Karpathy where an LLM incre
 Instead of querying raw documents via retrieval-augmented generation, let the LLM compile a persistent wiki. The wiki becomes the queryable artifact — not the raw sources. The LLM handles all bookkeeping: summarization, cross-referencing, categorization, and consistency maintenance.
 
 > "I thought I had to reach out for some fancy RAG, but the LLM has been pretty good about auto-maintaining the index files and brief summaries of all the documents." — Karpathy
+
+Karpathy frames this as shifting token throughput from "manipulating code" to "manipulating knowledge stored as markdown and images."
 
 ## Three-Layer Architecture
 
@@ -31,7 +33,18 @@ Instead of querying raw documents via retrieval-augmented generation, let the LL
 |-----------|-------------|
 | **Ingest** | Drop a source into raw → LLM reads it, creates summary, updates wiki pages, maintains cross-references |
 | **Query** | Ask questions → LLM searches wiki pages, synthesizes answer with citations |
-| **Lint** | Health check → LLM finds stale info, orphan pages, contradictions, gaps |
+| **Lint** | Health check → LLM finds stale info, orphan pages, contradictions, gaps. Analogous to a code linter for knowledge. |
+
+## The Argument: RAG vs. Wiki
+
+The pattern makes a specific claim about when RAG is unnecessary:
+
+- LLMs can auto-maintain index files and brief summaries of all documents
+- Markdown backlinks create navigable structure without vector search
+- For ~100 articles, the LLM can read and reason across the full wiki
+- **Therefore:** RAG is unnecessary at personal scale — the wiki pattern is sufficient
+
+**Acknowledged limit:** At gigabyte scale with hundreds or thousands of documents, RAG is still the better option. The pattern is explicitly not a universal RAG replacement — it's scoped to personal knowledge bases where the LLM's context can cover the index and summaries.
 
 ## Key Insight: File Good Answers Back
 
@@ -51,10 +64,6 @@ From Karpathy's original description:
 **Why it works:** The tedious part of knowledge management isn't reading or thinking — it's the bookkeeping. LLMs handle maintenance at near-zero cost. Humans direct analysis and ask good questions. Related in spirit to Vannevar Bush's Memex (1945) — a personal knowledge store with associative trails between documents. Bush couldn't solve who does the maintenance. The LLM handles that. *(Source: Karpathy gist)*
 
 **Scalability limit:** Works well at ~100 sources, hundreds of pages. For larger scale, consider adding search tooling like [qmd](https://github.com/tobi/qmd) — a local markdown search engine with hybrid BM25/vector search and LLM re-ranking, available as both CLI and MCP server. *(Source: Karpathy gist)*
-
-## The "Digital Brain" Analogy
-
-The wiki acts as an externalized, structured memory. Each ingest strengthens connections. Over time, the wiki becomes more valuable than any individual source because it contains synthesized, cross-referenced knowledge that no single document holds.
 
 ## Related Pages
 

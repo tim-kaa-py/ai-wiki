@@ -10,7 +10,7 @@ ingested: "2026-03-30"
 source_file: "sources/youtube/2026-03-30_aicodeking_claude-code-2-0-hidden-features-new-version.md"
 ---
 
-# Claude Code 2.0 & Hidden Features — Tips & Tricks
+# Claude Code 2.0 & Hidden Features — Summary
 
 **Source:** AICodeKing | 2026-03-30 | [Watch](https://www.youtube.com/watch?v=pgopk2SFl5Y) | 7:13
 
@@ -18,259 +18,65 @@ source_file: "sources/youtube/2026-03-30_aicodeking_claude-code-2-0-hidden-featu
 
 A walkthrough of Boris Cherny's (Claude Code builder) thread on underutilized Claude Code features. Covers session mobility, automation loops, hooks, parallel worktrees, custom agents, and voice input — turning Claude Code from a simple chat tool into a full operating environment.
 
-## Key Commands & Features
+## Video Structure
 
-### 1. `/teleport` / `--teleport` — Move a web session to your terminal
+1. [00:02-00:46] Introduction — Boris Cherny's thread on hidden Claude Code features, credibility framing
+2. [00:46-01:30] Session mobility — Claude Code on mobile/web, `--teleport` and `/remote-control`
+3. [01:30-02:16] Automation — `/loop` and `/schedule` for recurring workflows
+4. [02:16-02:48] Hooks — Deterministic logic at agent lifecycle points
+5. [02:48-03:30] Output verification — Dispatch, co-work, Chrome extension, built-in browser
+6. [03:30-04:12] Session forking — `/branch` and `/btw` for parallel exploration
+7. [04:12-05:16] Parallel work — Git worktrees, `/batch` for fanning out changes
+8. [05:16-05:57] Scripted usage — `--bare`, `--add-dir` for programmatic and multi-repo setups
+9. [05:57-06:43] Custom agents & voice — `--agent` and `/voice`
+10. [06:43-07:11] Conclusion — Claude Code as an operating environment, not a chat tool
 
-**What it does:** Resumes a session started on claude.ai/code in your local terminal, giving you access to local files, MCP servers, and tools.
+## Key Concepts
 
-**Syntax:**
-```bash
-claude --teleport
-```
+### Claude Code as Operating Environment
 
-**When to use:** You started a task on the web or mobile and now need full local environment access to continue.
+Boris frames Claude Code not as a chat tool but as a full operating environment: mobile, web, desktop, remote control, hooks, loops, branching, worktrees, verification, custom agents, and voice all working together. Most users only use it in "one-shot mode" and leave significant value on the table.
 
----
+### Output Verification Principle
 
-### 2. `/remote-control` / `--remote-control` / `--rc` — Control local session from phone/web
+Boris says the most important tip for using Claude Code is to give Claude a way to verify its own output. If the AI cannot see what it built, it is basically guessing. For front-end work, he uses the Chrome extension; the desktop app can auto-start web servers and test in a built-in browser.
 
-**What it does:** Exposes a locally running Claude Code session so you can control it from claude.ai/code or the Claude mobile app.
+## Key Takeaways
 
-**Syntax:**
-```bash
-# From CLI
-claude remote-control --name "My Project"
-claude --remote-control "My Project"
+1. **Session mobility lets you start anywhere, finish anywhere.** `--teleport` moves web sessions to terminal; `/remote-control` lets you steer a local session from your phone.
+   - **How to apply:** Start complex tasks on mobile, then `claude --teleport` to continue with full local environment.
 
-# From within a session
-/remote-control My Project
-/rc
-```
+2. **`/loop` and `/schedule` turn Claude into an automated co-worker.** Recurring tasks like PR babysitting, deploy watching, and review sweeping run on intervals.
+   - **How to apply:** `/loop 5m check if the deployment finished` — anything you'd check every N minutes.
 
-**Flags (server mode):**
-- `--name "Title"` — Custom session title
-- `--spawn <mode>` — `same-dir` (default) or `worktree` (isolated per session)
-- `--capacity <N>` — Max concurrent sessions (default 32)
-- `--sandbox` / `--no-sandbox` — Filesystem/network isolation
+3. **Hooks give you deterministic control at agent lifecycle points.** Auto-load context at session start, log bash commands, block edits to protected files, route permissions.
+   - **How to apply:** Configure hooks in `~/.claude/settings.json` under `PreToolUse`, `PostToolUse`, `SessionStart`, etc.
 
-**When to use:** Start work at your desk, continue from your phone. Session runs locally with full environment, you just steer it remotely.
+4. **`/branch` preserves context while exploring alternatives.** Fork a session to try a different approach without losing your original progress.
+   - **How to apply:** `/branch` mid-session, or `claude --resume <id> --fork-session` from CLI.
 
----
+5. **`/btw` lets you ask side questions without polluting the main thread.** Quick clarification during a long task, ephemeral response.
+   - **How to apply:** `/btw what was the name of that config file?` while Claude is working.
 
-### 3. `/loop` — Automate work on intervals
+6. **Git worktrees enable true parallel work.** Multiple Claude sessions on the same repo, each isolated with independent file state.
+   - **How to apply:** `claude --worktree feature-auth` for each parallel task. Use `.worktreeinclude` for gitignored files like `.env`.
 
-**What it does:** Runs a prompt or slash command repeatedly on a schedule while your session is open.
+7. **`/batch` fans out large changes to parallel agents.** Claude interviews you first, then distributes work to multiple worktree agents, each opening a PR.
+   - **How to apply:** `/batch refactor auth to use OAuth2` for codebase-wide migrations.
 
-**Syntax:**
-```bash
-/loop 5m check if the deployment finished
-/loop 20m /review-pr 1234
-/loop check the build              # defaults to 10 min
-```
+8. **`--bare` makes Claude deterministic for scripted usage.** Skips hooks, skills, plugins, CLAUDE.md, memory. Fast and reproducible.
+   - **How to apply:** `claude --bare -p "Analyze this code" --allowedTools "Read,Edit,Bash"` in CI/CD pipelines.
 
-**Interval syntax:** `s` (seconds), `m` (minutes), `h` (hours), `d` (days)
+9. **`--add-dir` gives multi-repo access from one session.** No more switching context between related repos.
+   - **How to apply:** `claude --add-dir ../apps ../lib ../config`
 
-**Management:** Ask "what scheduled tasks do I have?" or "cancel the deploy check job"
+10. **Custom agents create specialized, reusable workflows.** Define system prompt, tool restrictions, model, and permissions in `.claude/agents/`.
+    - **How to apply:** Create `.claude/agents/code-reviewer.md` with frontmatter: `tools: Read, Grep`, `permissionMode: plan`.
 
-**Limitations:** Session-scoped only (lost on exit), expires after 3 days, no catch-up for missed fires.
+11. **Voice input is underrated.** Boris does a lot of his coding by speaking. Push-to-talk with Space key.
+    - **How to apply:** `/config` → enable voice dictation, or `export CLAUDE_CODE_VOICE_DICTATION=true`.
 
-**When to use:** Babysitting PRs, watching deploys, sweeping review comments, pruning stale PRs — anything you'd check every N minutes.
-
----
-
-### 4. Hooks — Deterministic logic at agent lifecycle points
-
-**What it does:** Runs shell commands, HTTP requests, or LLM calls automatically when Claude Code events fire.
-
-**Configuration** (in `~/.claude/settings.json` or `.claude/settings.json`):
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo 'logging bash command'"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-**Key events:**
-| Event | When it fires |
-|-------|---------------|
-| `SessionStart` | Session begins or resumes |
-| `PreToolUse` | Before tool execution (can block with exit code 2) |
-| `PostToolUse` | After tool succeeds |
-| `PermissionRequest` | Permission dialog appears |
-| `Notification` | Claude needs attention |
-| `FileChanged` | Watched file changes |
-
-**Hook types:** `command` (shell), `http` (POST), `prompt` (LLM yes/no), `agent` (multi-turn subagent)
-
-**When to use:** Auto-format code after edits, block edits to protected files, send notifications, log commands, re-inject context after compaction.
-
----
-
-### 5. `/branch` / `--fork-session` — Fork a session
-
-**What it does:** Creates a new independent session preserving conversation history up to that point.
-
-**Syntax:**
-```bash
-# Within a session
-/branch
-
-# From command line
-claude --resume <session-id> --fork-session
-```
-
-**When to use:** You're making progress but want to explore an alternate approach without destroying context. The original session continues unchanged.
-
----
-
-### 6. `/btw` — Side queries without interrupting work
-
-**What it does:** Ask a quick question while Claude is working. Answer appears in a dismissible overlay, doesn't pollute conversation history.
-
-**Syntax:**
-```bash
-/btw what was the name of that config file?
-/btw remind me what the error was
-```
-
-**Characteristics:** Full context visibility, no tool access, single response, ephemeral (not saved).
-
-**When to use:** Quick clarifications while a long task runs, without derailing the main thread.
-
----
-
-### 7. `--worktree` / `-w` — Parallel sessions in git worktrees
-
-**What it does:** Creates isolated checkout directories so multiple Claude sessions work on the same repo without file conflicts.
-
-**Syntax:**
-```bash
-claude --worktree feature-auth
-claude -w bugfix-123
-claude --worktree                  # auto-generated name
-```
-
-**Details:**
-- Worktrees live at `.claude/worktrees/<name>`
-- Branch name: `worktree-<name>`, based on `origin/HEAD`
-- Auto-cleanup if no changes; prompts if there are commits
-- Use `.worktreeinclude` to copy gitignored files (e.g., `.env`) to worktrees
-
-**When to use:** Working on multiple features/branches simultaneously. Each session gets independent file state but shared git history.
-
----
-
-### 8. `/batch` — Fan out large changes to parallel agents
-
-**What it does:** Claude interviews you about a large change, then fans the work out to multiple worktree agents in parallel, each opening a PR.
-
-**Syntax:**
-```bash
-/batch refactor auth to use OAuth2
-```
-
-**When to use:** Large-scale migrations, codebase-wide refactors, repetitive changes across many files.
-
----
-
-### 9. `--bare` — Minimal mode for scripted usage
-
-**What it does:** Starts Claude Code skipping auto-discovery of hooks, skills, plugins, MCP servers, CLAUDE.md, and memory. Deterministic and fast.
-
-**Syntax:**
-```bash
-claude --bare -p "Analyze this code for bugs"
-claude --bare -p "Refactor this" --allowedTools "Read,Edit,Bash"
-```
-
-**Pass things back explicitly if needed:**
-```bash
-claude --bare -p "query" --append-system-prompt "Instructions"
-claude --bare -p "query" --settings ./settings.json
-claude --bare -p "query" --mcp-config ./mcp.json
-```
-
-**When to use:** CI/CD pipelines, scripted automation, SDK-driven usage — anywhere you want reproducible behavior without local config interference.
-
----
-
-### 10. `--add-dir` — Multi-folder access
-
-**What it does:** Gives Claude access to additional directories beyond the current working directory.
-
-**Syntax:**
-```bash
-claude --add-dir ../apps ../lib ../config
-claude --add-dir /absolute/path relative/path
-```
-
-**When to use:** Multi-repo projects, monorepos, or when you need access to shared libraries/configs outside the main project.
-
----
-
-### 11. `--agent` / `.claude/agents/` — Custom agents with specialized prompts
-
-**What it does:** Starts Claude with a custom system prompt, tool restrictions, model, and permissions.
-
-**Syntax:**
-```bash
-claude --agent code-reviewer
-claude --agent my-custom-agent
-```
-
-**Agent definition** (`.claude/agents/my-agent.md`):
-```markdown
----
-name: my-agent
-description: When Claude should use this agent
-tools: Read, Grep, Edit
-model: sonnet
-permissionMode: plan
----
-
-You are a specialized agent for [specific task].
-```
-
-**Key frontmatter fields:** `name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `maxTurns`, `isolation`, `hooks`
-
-**Scope hierarchy** (highest wins):
-1. `--agents` CLI flag
-2. `.claude/agents/` (project)
-3. `~/.claude/agents/` (user)
-4. Plugin agents
-
-**When to use:** Specialized workflows — code review, debugging, documentation, read-only analysis. Create reusable configs for your team.
-
----
-
-### 12. `/voice` — Push-to-talk dictation
-
-**What it does:** Enables voice input. Hold Space to record, release to transcribe and insert at cursor.
-
-**Setup:**
-```bash
-/config    # Toggle "Enable voice dictation"
-# or
-export CLAUDE_CODE_VOICE_DICTATION=true
-```
-
-**When to use:** Hands-free coding, long prompts, accessibility, or when you just prefer talking over typing.
-
----
-
-## Quick Reference Table
+## Notable Commands / Code Snippets
 
 | Command | Type | Use case |
 |---------|------|----------|

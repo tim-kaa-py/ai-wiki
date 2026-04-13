@@ -5,7 +5,7 @@ pillar: "building"
 tags: [agentic-engineering, prompt-craft, mental-model]
 sources:
   - "summaries/2026-02-12_lex-clips_how-to-code-with-ai-agents-advice-from-openclaw-creator.md"
-last_updated: "2026-04-09"
+last_updated: "2026-04-13"
 ---
 
 # Empathize with the Agent
@@ -28,12 +28,25 @@ Most frustration with AI coding tools comes from mismatched expectations. The de
 - "The constraint is X"
 - "This interacts with the auth system in Y"
 
+Friction during a task is a signal: if the agent is spinning or taking too long, you likely didn't provide enough context, or the architecture makes the task unnecessarily hard. Stop, reframe, add what's missing.
+
+## Why Expert Programmers Struggle
+
+Steinberger observes that programming skill is "almost a burden" for agent adoption:
+
+- Expert programmers have deep intuitions about how code "should" look
+- Agents produce code that looks different — it works but doesn't match the expert's style
+- The expert's deep skill creates an inability to empathize with a system starting from zero
+- World-class programmers dismiss agents as broken — not because the tools are bad, but because expertise prevents the mental shift
+
+This is a genuinely new paradigm. The guitar analogy: sitting at a piano once and saying "the piano's broken" is not a fair assessment.
+
 ## The Agentic Trap
 
-This connects to Peter Steinberger's observation about the agentic trap — a skill progression curve:
+A skill progression curve observed by Peter Steinberger:
 
 1. **Beginner:** Simple prompts ("fix this"). Works for simple tasks.
-2. **Intermediate:** Over-engineering — 8 agents, complex orchestration, 18 slash commands. Trying to compensate for the agent's lack of context by building elaborate systems.
+2. **Intermediate (the trap):** Over-engineering — 8 agents, complex orchestration, 18 slash commands. Trying to compensate for the agent's lack of context by building elaborate systems.
 3. **Expert:** Return to simple prompts — but with deep understanding. The sophistication is invisible; it lives in your empathy for what the agent needs, not in tooling.
 
 The expert gives the agent just enough context with a few words. The intermediate builds a pipeline to inject context automatically. The expert's approach is faster, more flexible, and produces better results.
@@ -44,6 +57,7 @@ The expert gives the agent just enough context with a few words. The intermediat
 2. **Build your codebase for the agent:** Don't fight its naming (the name in the weights is the name it'll search for). Keep structure clean and discoverable.
 3. **Write orientation files:** CLAUDE.md, soul.md, agent files — anything that helps the agent understand the project quickly.
 4. **Interrupt, don't wait:** If the agent is spinning, it's a signal that it lacks context. Stop it, reframe, add what's missing.
+5. **Don't force your worldview:** The agent may have a better approach because it was trained on patterns you haven't seen. Evaluate on merit.
 
 ## Related Pages
 

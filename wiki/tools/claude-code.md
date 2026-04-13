@@ -7,7 +7,7 @@ sources:
   - "summaries/2026-03-30_aicodeking_claude-code-2-0-hidden-features-new-version.md"
   - "summaries/2026-02-12_lex-clips_how-to-code-with-ai-agents-advice-from-openclaw-creator.md"
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
-last_updated: "2026-04-09"
+last_updated: "2026-04-13"
 ---
 
 # Claude Code
@@ -25,13 +25,18 @@ Peter Steinberger tried Cursor but came back to Claude Code as his primary drive
 - Dedicated sessions by task type: features, exploration, bugs, docs
 - Voice input for agent conversations, keyboard for terminal commands
 - At peak: 7 Max subscriptions, burning through one per day
+- IDE used only as diff viewer — not for writing code
+
+### Output Verification Principle
+Boris Cherny says the most important tip for using Claude Code is to give Claude a way to verify its own output. If the AI cannot see what it built, it is basically guessing. For front-end work, use the Chrome extension. The desktop app can auto-start web servers and test in a built-in browser.
 
 ### Session Mobility
 | Command | Direction | Use case |
 |---------|-----------|----------|
-| `--teleport` | Web/mobile -> terminal | Continue a web session locally with full environment access |
-| `--remote-control` | Terminal -> phone/web | Steer a local session from your phone |
+| `--teleport` | Web/mobile → terminal | Continue a web session locally with full environment access |
+| `--remote-control` | Terminal → phone/web | Steer a local session from your phone |
 | `/branch` | Fork in place | Explore an alternative without losing current context |
+| `/btw` | Side query | Ask a question without polluting the main thread |
 
 ### Automation
 | Command | What it does |
@@ -59,7 +64,7 @@ Define in `.claude/agents/my-agent.md` with frontmatter controlling name, tools,
 
 ## Beyond Code: Knowledge Management
 
-Claude Code isn't limited to writing code. Using the Karpathy LLM wiki pattern, it can build and maintain a structured knowledge base — ingesting sources, creating cross-referenced wiki pages, and keeping everything consistent. Paired with Obsidian for visualization, it becomes a "digital brain" engine. *(Source: sayed.developer)*
+Claude Code isn't limited to writing code. Using the Karpathy LLM wiki pattern, it can build and maintain a structured knowledge base — ingesting sources, creating cross-referenced wiki pages, and keeping everything consistent. Paired with Obsidian for visualization, it becomes a "digital brain" engine. The CLAUDE.md file serves as the brain's operating manual, telling Claude how to behave with respect to the wiki's schema.
 
 ## Related Pages
 

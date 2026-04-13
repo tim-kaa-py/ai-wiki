@@ -6,7 +6,7 @@ tags: [obsidian, knowledge-management, wiki, visualization, web-clipper]
 sources:
   - "summaries/2026-04-02_karpathy_llm-wiki.md"
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
-last_updated: "2026-04-09"
+last_updated: "2026-04-13"
 ---
 
 # Obsidian
@@ -26,7 +26,7 @@ Obsidian doesn't replace Claude Code — it complements it. Claude Code builds a
 ## Key Features for Wiki Use
 
 ### Graph View
-Renders the wiki as an interactive knowledge graph. Each markdown file is a node. Internal links (`[[page]]` or `[text](path)`) create edges. Makes connections between concepts visible at a glance.
+Renders the wiki as an interactive knowledge graph. Each markdown file is a node. Internal links create edges. Makes connections between concepts, entities, and sources visible at a glance. In the sayed.developer demo, Instagram video scripts organized as wiki entities and concepts form a rich, navigable graph.
 
 ### Backlinks
 Shows every page that links to the current page. Essential for seeing how a concept connects to others across the wiki.
