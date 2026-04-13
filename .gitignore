@@ -5,3 +5,6 @@
 
 # Obsidian local config
 .obsidian/
+
+# Claude Code local settings
+.claude/settings.local.json
