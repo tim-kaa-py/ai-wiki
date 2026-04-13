@@ -2,10 +2,11 @@
 title: "Obsidian"
 type: "tool"
 pillar: "building"
-tags: [obsidian, knowledge-management, wiki, visualization, web-clipper]
+tags: [obsidian, knowledge-management, wiki, visualization, web-clipper, self-documenting]
 sources:
   - "summaries/2026-04-02_karpathy_llm-wiki.md"
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
+  - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
 last_updated: "2026-04-13"
 ---
 
@@ -55,8 +56,20 @@ Clips web pages (including images) directly into a designated folder as markdown
 
 In Settings → Files and links, set "Attachment folder path" to a fixed directory (e.g. `sources/assets/`). Then bind "Download attachments for current file" to a hotkey (e.g. Ctrl+Shift+D). After clipping an article, hit the hotkey to download all images locally — prevents broken URL references over time. *(Source: Karpathy gist)*
 
+## Self-Documenting Codebase Vault
+
+Cole Medin extends Obsidian's role beyond external knowledge visualization to **internal codebase memory**. The approach: structure your Claude Code memory system as an Obsidian vault so the same graph view, backlinks, and navigation tools work for your session logs and wiki entries.
+
+The vault contains:
+- **Daily logs** — session summaries captured automatically by Claude Code hooks
+- **Wiki entries** — concepts and connections promoted from logs by a flush process
+- **Index files** — LLM-maintained navigation that agents read at session start
+
+Clone the repo, open it as a vault, and the entire self-documenting codebase is immediately browsable with Obsidian's full feature set. *(Source: Cole Medin)*
+
 ## Related Pages
 
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md) — the pattern Obsidian visualizes
 - [Claude Code](claude-code.md) — the engine that maintains the wiki
 - [Andrej Karpathy](../people/andrej-karpathy.md) — originator of the pattern
+- [Claude Code Hooks for Memory](../how-tos/claude-code-hooks-memory.md) — the hook system that feeds the vault
