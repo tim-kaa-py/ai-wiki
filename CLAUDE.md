@@ -11,6 +11,26 @@ Three layers:
 
 Plus: `playbook.md` (living agentic coding practices), `index.md` (master index), `log.md` (chronological ingest log), `inbox/` (unprocessed items).
 
+## Model Routing
+
+Default model: **Sonnet**. The main session runs on Sonnet for orchestration and mechanical steps. Analytical steps delegate to **Opus sub-agents** via the Agent tool.
+
+| Step | Model | Why |
+|------|-------|-----|
+| 1-4 (metadata, slug, extract, save) | Sonnet | Mechanical — extraction, formatting, file I/O |
+| 5 (Focus & Discovery) | **Opus sub-agent** | Deep reading — mapping focus to transcript, discovering non-obvious points |
+| 6 (save notes) | Sonnet | Mechanical — file write |
+| 7 (Summarize) | **Opus sub-agent** | Deep analysis — Key Concepts, Argument Structures, opinionated TL;DR |
+| 8 (CONNECT) | **Opus sub-agent** | Synthesis — cross-source analysis, wiki page decisions |
+| 9 (index & log) | Sonnet | Mechanical — append operations |
+| Tier 1 Quick Clip | Sonnet (all steps) | Simpler content, no deep analysis needed |
+| Query | Sonnet | Reading + synthesis over existing wiki pages |
+| Lint | Sonnet | Structural checks, no deep reasoning |
+
+**How to delegate:** Use the Agent tool with `model: "opus"`. Pass file paths in the prompt — let the sub-agent read files itself. Include the relevant CLAUDE.md template/instructions in the prompt so the sub-agent knows the expected output format.
+
+**When to skip Opus:** If the source is purely instructional (feature walkthrough, tutorial) with no argumentative content, Steps 5 and 7 can stay on Sonnet. The user can override with "use Opus for this one" or "Sonnet is fine."
+
 ## Four Pillars
 
 | Pillar | Slug | What goes here |
@@ -96,6 +116,8 @@ last_updated: "<YYYY-MM-DD>"
 
 ## Tier 1 — Quick Clip Workflow
 
+**Model: Sonnet (all steps).** Quick clips don't require deep analysis.
+
 For articles, blog posts, documentation, web clips. Fast, no interview.
 
 ### Entry Point A: URL Paste
@@ -153,9 +175,13 @@ Generate slug from metadata: `YYYY-MM-DD_source-slug_title-slug`
 
 **YouTube/Podcast:**
 ```bash
-./scripts/extract-transcript.sh "<URL>" "<SLUG>"
+python scripts/extract-transcript.py "<URL>"
 ```
-If output is `NO_CAPTIONS`, ask the user to paste the transcript manually.
+The script outputs JSON: `{"status", "extraction_method", "subtitle_lang", "transcript"}`.
+
+If `status` is `"no_captions"`, ask the user to paste the transcript manually.
+
+Use `extraction_method` from the output to set the source frontmatter field.
 
 **Paper:** Read PDF, extract full text.
 
@@ -165,21 +191,61 @@ If output is `NO_CAPTIONS`, ask the user to paste the transcript manually.
 
 Write to `sources/<type>/<slug>.md` with full frontmatter. Content is verbatim — never edit after saving.
 
-### Step 5 — Interview
+### Step 5 — Focus & Discovery
 
-Ask one question at a time. Adapt based on responses. Skip questions already answered. Probe if answers are vague.
+**Model: Opus sub-agent.** Spawn via Agent tool with `model: "opus"`. Prompt the sub-agent with:
+- Path to the source file (for transcript)
+- The user's notes (inline or path to notes file)
+- Instructions: "Read the transcript. Map the user's focus points to timestamp ranges. Identify 3-5 notable points not covered by the user's notes. Return the extraction plan in the format below."
 
-1. "What was the main topic or technique that caught your attention?"
-2. "Were there specific tips, commands, or workflows you want to capture?"
-3. "Any timestamps or sections you found most valuable? (I can look them up in the transcript)"
-4. "Anything you want to try in your own projects? Immediate takeaway?"
-5. "Additional notes or context for the summary?"
+The sub-agent returns the extraction plan. The Sonnet orchestrator presents it to the user for confirmation.
+
+Two modes depending on whether the user provided notes with the URL.
+
+**Mode A — Notes provided (user pasted bullet points of what to capture):**
+
+1. Parse the user's notes into focus points
+2. Read the full transcript and map each focus point to timestamp ranges
+3. Identify 3-5 notable points in the transcript NOT covered by the user's notes
+4. Present an extraction plan:
+   - **Your focus points:** each mapped to timestamps
+   - **Also in this transcript:** discovered points with timestamp, one-line description, and why it's relevant
+5. User confirms which discoveries to include (all / specific letters / none)
+
+This is a single interaction — present the plan, get one response.
+
+**Mode B — No notes (URL only):**
+
+1. Read the transcript first
+2. Ask one question: "What caught your attention? Any specific topics, workflows, or concepts to capture? Anything to exclude?"
+3. Then proceed with Mode A steps 3-5 using the response as focus points
 
 ### Step 6 — Notes
 
-Save all interview responses to `notes/<slug>.md` with header linking to the source.
+Save focus and confirmed discoveries to `notes/<slug>.md`:
+
+```markdown
+# Ingest Notes
+
+**Source:** [<Title>](<URL>)
+
+## User Focus
+<!-- Bullet list from user's notes (Mode A) or interview response (Mode B) -->
+
+## Confirmed Discoveries
+<!-- Discoveries from the extraction plan the user chose to include.
+  Omit if user added none. -->
+```
 
 ### Step 7 — Summarize
+
+**Model: Opus sub-agent.** Spawn via Agent tool with `model: "opus"`. Prompt the sub-agent with:
+- Path to the source file (for transcript)
+- Path to the notes file (for user focus + confirmed discoveries)
+- The summary frontmatter to use (title, tags, pillar, etc.)
+- Instructions: "Read the transcript and notes. Generate the summary following the template below. Write it to `summaries/<slug>.md`."
+
+The sub-agent writes the summary file directly and returns a confirmation.
 
 Generate `summaries/<slug>.md` with this structure:
 
@@ -191,10 +257,38 @@ Generate `summaries/<slug>.md` with this structure:
 ## TL;DR
 <!-- 2-3 sentences focused on what the user found interesting -->
 
+## Video Structure
+<!-- Numbered list of the video's narrative sections with timestamps.
+  Format: "1. [MM:SS-MM:SS] Section Title — Brief description"
+  Purpose: navigation aid and understanding the creator's framing.
+  Omit for non-video sources (articles, papers, repos). -->
+
+## Key Concepts
+<!-- H3 subheadings for each concept the creator explains or defines.
+  For each concept:
+  - Brief definition in the creator's own framing
+  - If the creator's definition meaningfully diverges from the standard/common
+    understanding, note the difference
+  Purpose: definitional knowledge — what things ARE.
+  Keep this distinct from Key Takeaways (what the creator ARGUES). -->
+
 ## Key Takeaways
-<!-- Numbered list. Each item includes:
+<!-- Numbered list of the creator's insights, claims, and arguments.
+  Each item includes:
   - The takeaway itself
-  - **How to apply:** concrete next step or command -->
+  - **How to apply:** concrete next step or command
+  Purpose: actionable insights — what the creator ARGUES or RECOMMENDS.
+  Keep this distinct from Key Concepts (what things ARE). -->
+
+## Argument Structures
+<!-- Trace the creator's reasoning chains where they make non-obvious arguments.
+  Format flexibly — use whatever structure best captures the logic:
+  - Premises → conclusion
+  - If X then Y, because Z
+  - Nested reasoning with sub-conclusions
+  Be faithful to the creator's actual arguments.
+  Omit this section if the source is purely instructional/tutorial with no
+  argumentative content (e.g., a feature walkthrough). -->
 
 ## Notable Commands / Code Snippets
 <!-- Code blocks with context. Only include what's actually useful. -->
@@ -208,7 +302,18 @@ Generate `summaries/<slug>.md` with this structure:
 
 Focus on what the USER found interesting, not a generic overview.
 
+**Section usage rules:**
+- **Video Structure:** Include for YouTube/podcast sources. Omit for articles, papers, repos.
+- **Key Concepts:** Include when the creator explains or defines terms/concepts. Omit if no concepts worth defining separately.
+- **Argument Structures:** Include when the creator makes substantive arguments. Omit for purely instructional content (feature walkthroughs, tutorials, how-tos with no argumentation).
+
 ### Step 8 — Connect
+
+**Model: Opus sub-agent.** Spawn via Agent tool with `model: "opus"`. Prompt the sub-agent with:
+- Path to the new summary
+- Instructions: "Read the summary. Search wiki/ for relevant pages. For each relevant page, merge new information. Create new wiki pages if needed. Update playbook.md if applicable. Report what was updated."
+
+The sub-agent handles all wiki reads, searches, and writes. Returns a report of changes to the Sonnet orchestrator.
 
 See CONNECT step detail below.
 
@@ -275,9 +380,10 @@ Use existing tags when possible. Create new tags sparingly. Keep tags lowercase,
 ## Guardrails
 
 - **Never download video/audio files** — always use `--skip-download`
-- **Check for yt-dlp** — run `which yt-dlp` before using it. If missing, suggest installation.
+- **Check for yt-dlp** — run `which yt-dlp` before using it. If missing, suggest installation. (ffmpeg is NOT required.)
+- **Check for Python** — run `python --version` before using `extract-transcript.py`. If missing, suggest installation.
 - **Check for duplicates** — search `index.md` for the URL or video ID before processing
-- **Sources are verbatim** — never modify source content after saving
+- **Sources are verbatim** — never modify source content after saving. Exception: re-extraction with upgraded tooling is allowed (same content, better formatting).
 - **Summaries are opinionated** — focus on the user's interests, not exhaustive coverage
 - **Wiki pages are synthesized** — combine multiple sources, maintain over time
 - **Playbook updates are additive** — don't remove content without user approval
