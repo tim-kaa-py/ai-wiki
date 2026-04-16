@@ -7,7 +7,8 @@ sources:
   - "summaries/2026-02-12_lex-clips_how-to-code-with-ai-agents-advice-from-openclaw-creator.md"
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
   - "summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md"
-last_updated: "2026-04-13"
+  - "summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
+last_updated: "2026-04-15"
 ---
 
 # Empathize with the Agent
@@ -52,6 +53,8 @@ A skill progression curve observed by Peter Steinberger:
 3. **Expert:** Return to simple prompts — but with deep understanding. The sophistication is invisible; it lives in your empathy for what the agent needs, not in tooling.
 
 The expert gives the agent just enough context with a few words. The intermediate builds a pipeline to inject context automatically. The expert's approach is faster, more flexible, and produces better results.
+
+**Empirical validation:** Chase AI's benchmark of GSD vs Superpowers vs vanilla Claude Code quantifies this trap. GSD (the most elaborate orchestration layer) burned 1.2M tokens and 1h45m; Superpowers used 250K tokens and 1 hour; vanilla Claude Code finished in 20 minutes and 200K tokens — with indistinguishable output quality. The orchestration overhead produced no measurable benefit, which is exactly what the agentic trap predicts: the sophistication should be in the human's understanding, not in tooling. *(Source: Chase AI)*
 
 ## How to Apply
 
