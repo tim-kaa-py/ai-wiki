@@ -2,12 +2,13 @@
 title: "Andrej Karpathy"
 type: "person"
 pillar: "ecosystem"
-tags: [karpathy, wiki, knowledge-management, ai-research, tesla, openai, compiler-analogy, prd-as-prompt]
+tags: [karpathy, wiki, knowledge-management, ai-research, tesla, openai, compiler-analogy, prd-as-prompt, auto-research, self-improving-ai]
 sources:
   - "summaries/2026-04-02_karpathy_llm-wiki.md"
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
-last_updated: "2026-04-13"
+  - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
+last_updated: "2026-04-16"
 ---
 
 # Andrej Karpathy
@@ -47,8 +48,17 @@ See [PRD-as-Prompt Pattern](../concepts/prd-as-prompt.md).
 
 Cole Medin adapted Karpathy's external-data wiki pattern for internal codebase memory. The key pivot: session logs from Claude Code conversations replace web clips as the raw input. Same three-layer architecture, same index-over-RAG philosophy, but applied to capturing tacit development knowledge — decisions, lessons learned, and action items that would otherwise be lost between sessions. *(Source: Cole Medin)*
 
+## Auto Research Framework
+
+Karpathy's Auto Research framework, originally built for ML optimization, has been adapted by Ben AI for general AI skill optimization. The core mechanism: define boolean criteria, establish a baseline, generate hypotheses, test with a sub-agent, evaluate, keep or discard, repeat — all autonomously. Ben demonstrates it optimizing LinkedIn copywriting skills (80% to 100% on hard rules, 27% improvement on complex criteria over 10 iterations) and CLAUDE.md files (knowledge routing, wiki link creation, retrieval quality).
+
+The key adaptation insight: Auto Research's ML optimization loop maps directly onto any skill that can be decomposed into boolean success criteria — even creative/subjective tasks like copywriting. The bottleneck is not the framework's rigidity but the user's ability to articulate what makes their output theirs. *(Source: Ben AI)*
+
+See [Auto Research](../concepts/auto-research.md) for the full concept breakdown.
+
 ## Related Pages
 
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md) — the pattern he introduced
 - [Obsidian](../tools/obsidian.md) — the tool he pairs with the wiki
 - [PRD-as-Prompt Pattern](../concepts/prd-as-prompt.md) — the bootstrap pattern from his follow-up tweet
+- [Auto Research](../concepts/auto-research.md) — his ML optimization framework adapted for general skill optimization

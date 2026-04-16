@@ -2,7 +2,7 @@
 title: "Agentic Coding Workflow"
 type: "how-to"
 pillar: "building"
-tags: [agentic-engineering, workflow, best-practices, claude-code, spec-quality, ai-coding]
+tags: [agentic-engineering, workflow, best-practices, claude-code, spec-quality, ai-coding, auto-research, optimization]
 sources:
   - "summaries/2026-02-12_lex-clips_how-to-code-with-ai-agents-advice-from-openclaw-creator.md"
   - "summaries/2026-03-30_aicodeking_claude-code-2-0-hidden-features-new-version.md"
@@ -11,7 +11,8 @@ sources:
   - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
   - "summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
   - "summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md"
-last_updated: "2026-04-15"
+  - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
+last_updated: "2026-04-16"
 ---
 
 # Agentic Coding Workflow
@@ -112,6 +113,20 @@ For tasks that should run autonomously (no human-in-the-loop), Claude Routines p
 
 See [Claude Routines](../tools/claude-routines.md) for the full feature breakdown. *(Source: Nick Saraev)*
 
+## Autonomous Skill Optimization (Auto Research)
+
+Karpathy's Auto Research framework enables fully autonomous optimization of any AI skill — including CLAUDE.md files, prompt templates, and content workflows. The agent runs a closed loop: define boolean criteria, baseline, hypothesize, test, evaluate, keep/discard, repeat.
+
+**How to apply:**
+1. **Identify a high-value, frequently-used skill** — LinkedIn posts, email templates, CLAUDE.md routing rules, summary quality
+2. **Write 3-5 boolean criteria** using the three-level framework: Level 1 (hard rules like character limits), Level 2 (subjective patterns expressed as boolean checks, evaluated by LLM judge), Level 3 (real-world data-derived criteria)
+3. **Run 5-10 iterations** — performance degrades after 10-15 (overfitting/drift); token costs scale linearly
+4. **Optimize in order** — hard rules first, then subjective patterns, then real-world data. Each level builds on a solid foundation from the previous one
+
+**Key insight:** Even creative/subjective tasks (copywriting, tone of voice) can be largely decomposed into testable boolean criteria. The bottleneck is articulating what makes your output yours, not the framework's rigidity.
+
+See [Auto Research](../concepts/auto-research.md) for the full concept breakdown. *(Source: Ben AI)*
+
 ## Orchestration Layers vs Vanilla Claude Code
 
 Orchestration layers (GSD, Superpowers) sit on top of Claude Code and add planning rigor, sub-agent-driven development, and context management. Chase AI's benchmark found that vanilla Claude Code finished the same task in 20 minutes / 200K tokens, versus 1 hour / 250K for Superpowers and 1 hour 45 min / 1.2M for GSD — with no meaningful quality difference.
@@ -151,3 +166,5 @@ See [Claude Code Orchestration Layers](../comparisons/claude-code-orchestration-
 - [Prompt Engineering for Claude](../concepts/prompt-engineering-claude.md)
 - [Five Levels of AI Coding](../concepts/five-levels-of-ai-coding.md)
 - [Peter Steinberger](../people/peter-steinberger.md)
+- [Claude Code Status Line Setup](claude-code-status-line.md)
+- [Auto Research](../concepts/auto-research.md)
