@@ -5,7 +5,8 @@ pillar: "building"
 tags: [prompt-engineering, claude, best-practices, xml-tags, few-shot-prompting, thinking, adaptive-thinking]
 sources:
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
-last_updated: "2026-04-13"
+  - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
+last_updated: "2026-04-15"
 ---
 
 # Prompt Engineering for Claude
@@ -96,8 +97,22 @@ Use `<investigate_before_answering>` to enforce that Claude reads files before m
 - Git for checkpoints across sessions
 - Prompt Claude not to stop early due to token budget concerns
 
+## Routine Prompt Design
+
+Claude Routines run fully hands-off — no human-in-the-loop to course-correct. This makes routine prompts a distinct prompt engineering discipline from interactive prompts:
+
+- **Structure as step-by-step SOPs** rather than conversational instructions
+- **Define "done" explicitly** — e.g., "use the Slack connector to send me an update when finished"
+- **Include edge cases and fallback behaviors** — the routine cannot ask for clarification
+- **Don't economize on length** — there appears to be no length limit; more context reduces misinterpretation
+- **Provide examples of expected inputs** — especially for webhook-triggered routines receiving variable payloads
+- **Test with "Run Now"** before scheduling to verify behavior
+
+This is conceptually related to spec quality as the new bottleneck (see [Five Levels of AI Coding](five-levels-of-ai-coding.md)) — when the agent runs autonomously, prompt precision is everything. *(Source: Nick Saraev)*
+
 ## Related Pages
 
 - [Empathize with the Agent](empathize-with-the-agent.md) — the practitioner's version of the "brilliant new employee" mental model
 - [Claude Code](../tools/claude-code.md) — the tool where these patterns are applied
+- [Claude Routines](../tools/claude-routines.md) — autonomous sessions where prompt design is critical
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — practical workflow incorporating these principles
