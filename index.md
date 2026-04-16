@@ -17,6 +17,8 @@
 | 2026-04-15 | [Optimize your terminal setup (Anthropic)](summaries/2026-04-15_claude-docs_optimize-your-terminal-setup.md) | docs | claude-code, terminal, configuration, how-to, reference |
 | 2026-04-13 | [GSD vs Superpowers vs Claude Code (Chase AI)](summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md) | youtube | claude-code, comparison, agents, workflow, gsd, superpowers, orchestration |
 | 2026-01-02 | [Claude Code Tips from the Creator (Boris Cherny)](summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md) | article | claude-code, workflow, hooks, agents, permissions, mcp, best-practices |
+| 2026-04-16 | [Claude Code Status Line Setup](summaries/2026-04-16_self_claude-code-statusline-setup.md) | article | claude-code, workflow, how-to, reference, terminal, configuration, status-line |
+| 2026-04-07 | [How to use Karpathy's Autoresearch to 10x Claude (Ben AI)](summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md) | youtube | auto-research, self-improving-ai, optimization, skills, claude-code, evals, agents, linkedin, criteria-design |
 
 ### Wiki Pages
 
@@ -35,6 +37,8 @@
 - [Claude Code Orchestration Layers](wiki/comparisons/claude-code-orchestration-layers.md) — head-to-head: GSD vs Superpowers vs vanilla Claude Code benchmark and decision framework
 - [GSD](wiki/tools/gsd.md) — orchestration framework for Claude Code: phase-based planning, sub-agents, northstar state management
 - [Superpowers](wiki/tools/superpowers.md) — Claude Code plugin: auto-invoked skills, visual companion, TDD enforcement
+- [Claude Code Status Line Setup](wiki/how-tos/claude-code-status-line.md) — how-to: live dashboard for context window, rate limits, session cost, code velocity
+- [Auto Research](wiki/concepts/auto-research.md) — concept: Karpathy's self-improving optimization loop, three-level criteria framework, autonomous skill optimization
 
 ## Understanding AI
 
@@ -53,4 +57,4 @@
 
 ---
 
-**11 sources** | **17 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**13 sources** | **19 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)

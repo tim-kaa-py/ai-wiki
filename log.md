@@ -4,6 +4,8 @@
 
 | Date | Action | Source | Type | Tier | Updates |
 |------|--------|--------|------|------|---------|
+| 2026-04-16 | INGEST | [How to use Karpathy's Autoresearch to 10x Claude (Ben AI)](summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md) | youtube | deep-dive | new: wiki/concepts/auto-research.md; updated: wiki/people/andrej-karpathy.md, wiki/how-tos/agentic-coding-workflow.md, wiki/tools/claude-code.md, playbook.md, index.md |
+| 2026-04-16 | INGEST | [Claude Code Status Line Setup](summaries/2026-04-16_self_claude-code-statusline-setup.md) | article | quick-clip | new: wiki/how-tos/claude-code-status-line.md; updated: wiki/tools/claude-code.md, playbook.md, index.md |
 | 2026-04-15 | CONNECT | [Claude Code Tips from the Creator (Boris Cherny)](summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md) | article | quick-clip | new: wiki/how-tos/claude-code-permissions.md; updated: wiki/tools/claude-code.md, wiki/how-tos/agentic-coding-workflow.md, wiki/how-tos/claude-code-hooks-memory.md, playbook.md, index.md |
 | 2026-04-15 | CONNECT | [GSD vs Superpowers vs Claude Code (Chase AI)](summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md) | youtube | deep-dive | new: wiki/tools/gsd.md, wiki/tools/superpowers.md, wiki/comparisons/claude-code-orchestration-layers.md; updated: wiki/tools/claude-code.md, wiki/how-tos/agentic-coding-workflow.md, wiki/concepts/empathize-with-the-agent.md, playbook.md, index.md |
 | 2026-04-15 | INGEST | [Optimize your terminal setup (Anthropic)](summaries/2026-04-15_claude-docs_optimize-your-terminal-setup.md) | docs | quick-clip | updated: wiki/tools/claude-code.md (Terminal Setup section) |
