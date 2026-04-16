@@ -13,7 +13,9 @@ sources:
   - "summaries/2026-04-15_claude-docs_optimize-your-terminal-setup.md"
   - "summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
   - "summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md"
-last_updated: "2026-04-15"
+  - "summaries/2026-04-16_self_claude-code-statusline-setup.md"
+  - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
+last_updated: "2026-04-16"
 ---
 
 # Claude Code
@@ -169,6 +171,27 @@ See [Claude Routines](claude-routines.md) for the full feature breakdown and [Cl
 
 Kitty and Ghostty support notifications and Shift+Enter natively — no configuration needed. iTerm2 needs the notification opt-in above. macOS Terminal.app does not support native notifications; use hooks instead. *(Source: Anthropic docs)*
 
+### Status Line: Live Dashboard
+
+Claude Code supports a custom status line configured via `settings.json`. A well-designed status line turns the terminal into a live dashboard showing context window usage, session cost, rate limit burn rates, git branch, and code velocity — situational awareness without leaving the editor.
+
+**Configuration:**
+```json
+"statusLine": {"type": "command", "command": "bash ~/.claude/statusline-command.sh"}
+```
+
+**Key indicators:**
+| Indicator | What it shows | Why it matters |
+|-----------|--------------|----------------|
+| Context window (color-coded) | Green (0-19%), Yellow (20-69%), Red (70%+) | Yellow = consider wrapping up or starting a new session |
+| Rate limit burn rate | Usage%/elapsed hours + sustainability color | Red = unsustainable pace; slow down or switch tasks |
+| Burn indicator (lightning bolt) | Single interaction consumed >5% of the 5h limit | The last prompt was expensive; break large tasks into smaller steps |
+| Session cost (EUR) | Running cost + kilotokens counter | Session efficiency at a glance |
+| API wait % | Fraction of time waiting on API responses | High (>70%) = you're keeping the model busy; Low = batch your prompts |
+| Code velocity (+/-) | Lines added/removed across session | Productivity pulse |
+
+See [Claude Code Status Line Setup](../how-tos/claude-code-status-line.md) for the full setup guide. *(Source: self)*
+
 ## Orchestration Layers: GSD, Superpowers, and Why Vanilla Wins
 
 Third-party orchestration layers like [GSD](gsd.md) and [Superpowers](superpowers.md) sit on top of Claude Code and restructure how it approaches complex projects — adding planning rigor, sub-agent-driven development, and context management. Chase AI's head-to-head benchmark (same AI agency website built by all three) found that vanilla Claude Code won decisively:
@@ -188,6 +211,10 @@ See [Claude Code Orchestration Layers](../comparisons/claude-code-orchestration-
 ## Beyond Code: Knowledge Management
 
 Claude Code isn't limited to writing code. Using the Karpathy LLM wiki pattern, it can build and maintain a structured knowledge base — ingesting sources, creating cross-referenced wiki pages, and keeping everything consistent. Paired with Obsidian for visualization, it becomes a "digital brain" engine. The CLAUDE.md file serves as the brain's operating manual, telling Claude how to behave with respect to the wiki's schema.
+
+### Self-Improving CLAUDE.md via Auto Research
+
+Karpathy's Auto Research framework can be turned on CLAUDE.md files themselves — defining boolean criteria (e.g., "file routing accuracy to correct folders > 90%") and running autonomous optimization loops against test scenarios. This is a meta-application: using the system to improve the system's own instructions. See [Auto Research](../concepts/auto-research.md). *(Source: Ben AI)*
 
 ## Prompting for Claude 4.6
 
@@ -215,3 +242,5 @@ See [Prompt Engineering for Claude](../concepts/prompt-engineering-claude.md) fo
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md)
 - [Obsidian](obsidian.md)
 - [Claude Code Hooks for Memory](../how-tos/claude-code-hooks-memory.md)
+- [Claude Code Status Line Setup](../how-tos/claude-code-status-line.md)
+- [Auto Research](../concepts/auto-research.md)

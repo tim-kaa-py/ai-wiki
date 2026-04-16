@@ -1,7 +1,7 @@
 # My Agentic Coding Playbook
 
 > A living document. Auto-updated when new relevant sources are ingested.
-> Last updated: 2026-04-15
+> Last updated: 2026-04-16
 
 ## Core Principles
 
@@ -100,6 +100,13 @@
 - Hold Space to record, release to transcribe
 - Encourages conversational, natural prompting
 
+### Status Line & Situational Awareness
+- **Set up a status line dashboard for live session metrics.** Configure `settings.json` with a custom status line command (`"statusLine": {"type": "command", "command": "bash ~/.claude/statusline-command.sh"}`). Shows context window usage, rate limit burn rate, session cost, API wait %, and code velocity — all without leaving the terminal. *(Source: self — status line setup)*
+- **Watch the context window color: yellow means wrap up soon.** Green (0-19%) = plenty of headroom. Yellow (20-69%) = extended context or compaction territory — start planning to finish the current task. Red (70%+) = start a new session. Thresholds tuned for Opus's 1M context. *(Source: self — status line setup)*
+- **Monitor rate limit sustainability, not just current percentage.** The burn rate (usage%/elapsed hours) matters more than raw percentage. If the rate limit timer turns red (>= 20%/h), slow down or switch tasks. The `(Xh left)` estimate prevents surprise rate limit walls. *(Source: self — status line setup)*
+- **Treat the lightning bolt (burn indicator) as a signal to decompose.** When a single interaction consumes >5% of the 5-hour rate limit window, the bolt appears. Break large tasks into smaller steps to avoid burning through the limit in a few heavy prompts. *(Source: self — status line setup)*
+- **Use API wait % to diagnose your own bottleneck.** High API% (>70%) means you're efficiently keeping the model busy. Low API% means you're the bottleneck — prepare and batch your prompts. *(Source: self — status line setup)*
+
 ### Memory & Knowledge Capture
 - **Set up Claude Code hooks for automatic session memory.** Three hooks cover the lifecycle: session start (load agents.md + index.md), pre-compact (capture before compaction), session end (capture final summary). Zero maintenance — hooks fire automatically. *(Source: Cole Medin)*
 - **Use an agents.md as a meta-reasoning layer.** A global rules file that tells the agent how the knowledge base works — not just what's in it, but how to search it, what to update, and how pieces connect. Gives the agent a self-model. *(Source: Cole Medin)*
@@ -180,6 +187,18 @@ The METR study showed developers are 19% slower with AI but believe they are 24%
 
 13. **Re-evaluate orchestration layers periodically.** Claude Code natively absorbs features that originally justified them (auto context clearing, improved planning). The gap keeps shrinking while the speed gap keeps widening. *(Source: Chase AI)*
 
+## Autonomous Skill Optimization (Auto Research)
+
+16. **Decompose even subjective tasks into boolean criteria.** The three-level framework: Level 1 (hard rules — character limits, format checks), Level 2 (subjective patterns expressed as boolean checks — evaluated by LLM judge), Level 3 (real-world data-derived criteria). Always optimize in order — Level 2 and 3 are fragile without solid Level 1 foundations. *(Source: Ben AI — Karpathy's Auto Research)*
+
+17. **Cap optimization iterations at 5-10.** Performance degrades after 10-15 iterations — the optimization overfits or drifts. Token costs scale linearly. Default to 5 for simple criteria, 10 for complex multi-criteria runs. *(Source: Ben AI — Karpathy's Auto Research)*
+
+18. **Only optimize high-value, frequently-used skills.** Token costs are non-trivial for extended optimization runs. Prioritize skills that run daily or produce customer-facing output (posts, emails, landing pages, CLAUDE.md routing). *(Source: Ben AI — Karpathy's Auto Research)*
+
+19. **Use AI to discover your own optimization criteria.** Feed Claude your top 10 and bottom 10 outputs with engagement metrics. Let it identify patterns — hooks, CTAs, writing frameworks — that correlate with performance, then express those patterns as boolean criteria. *(Source: Ben AI — Karpathy's Auto Research)*
+
+20. **Auto Research can optimize CLAUDE.md files.** Define criteria for your project instructions (e.g., "file routing accuracy to correct folders > 90%") and run the optimization loop against test scenarios. The system improves the system's own instructions. *(Source: Ben AI — Karpathy's Auto Research)*
+
 ## Anti-Patterns
 
 - **Over-engineering prompt pipelines** — elaborate orchestration when a simple prompt would do
@@ -196,3 +215,6 @@ The METR study showed developers are 19% slower with AI but believe they are 24%
 - **Using `--dangerously-skip-permissions`** — blanket bypass with no granularity; use `/permissions` to pre-allow safe commands by pattern instead *(Source: Boris Cherny, Creator of Claude Code)*
 - **Skipping the verification feedback loop** — without tests/typecheck/lint in the loop, Claude is "basically guessing"; with a feedback loop quality is 2-3x higher *(Source: Boris Cherny, Creator of Claude Code)*
 - **Not planning before execution** — jumping straight into coding without a Plan mode blueprint reduces first-shot success; start every session with Shift+Tab twice *(Source: Boris Cherny, Creator of Claude Code)*
+- **Flying blind on context and rate limits** — without visible indicators, you hit context limits or rate limit walls mid-task; set up a status line dashboard to make these invisible constraints visible and take action before they interrupt your flow *(Source: self — status line setup)*
+- **Vague optimization criteria** — "make it better" produces nothing; every criterion must be a single boolean condition (true/false), specific enough to evaluate deterministically or by LLM judge *(Source: Ben AI — Karpathy's Auto Research)*
+- **Running optimization loops indefinitely** — more iterations is not better; after 10-15 the optimization overfits or drifts, and token costs scale linearly with no quality gain *(Source: Ben AI — Karpathy's Auto Research)*
