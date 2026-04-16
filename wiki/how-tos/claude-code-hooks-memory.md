@@ -5,7 +5,8 @@ pillar: "building"
 tags: [claude-code, hooks, memory, llm-knowledge-bases, agents, workflow, automation]
 sources:
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
-last_updated: "2026-04-13"
+  - "summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md"
+last_updated: "2026-04-15"
 ---
 
 # Claude Code Hooks for Memory
@@ -134,10 +135,36 @@ An LLM-maintained `index.md` that describes all folders and resources gives agen
 
 This works because the knowledge base is structured markdown, not unstructured blobs. At personal/project scale (~100s of files), the index + backlinks provide sufficient navigational structure.
 
+## PostToolUse Hook: Auto-Formatting
+
+Beyond memory capture, hooks are also used for code quality enforcement. Boris Cherny (creator of Claude Code) uses a **PostToolUse** hook that runs a formatter after every `Write` or `Edit` tool call. This handles the last 10% of formatting issues that Claude doesn't catch, preventing CI failures silently.
+
+```json
+"PostToolUse": [{
+    "matcher": "Write|Edit",
+    "hooks": [{
+        "type": "command",
+        "command": "bun run format || true"
+    }]
+}]
+```
+
+The `|| true` ensures the hook never blocks Claude's execution — formatting failures are non-fatal. Replace `bun run format` with your project's formatter (e.g. `prettier --write`, `black`). *(Source: Boris Cherny, Creator of Claude Code)*
+
+## Verification Hooks for Long-Running Tasks
+
+For tasks that run unattended, Boris Cherny recommends adding deterministic verification:
+- Use a **Stop hook** that runs your test suite or a verify-app agent after every session ends
+- Use a background agent to verify when done
+- The ralph-wiggum plugin provides another option for unattended verification
+
+*(Source: Boris Cherny, Creator of Claude Code)*
+
 ## Related Pages
 
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md) -- the underlying pattern
 - [Claude Code](../tools/claude-code.md) -- the tool this configures
+- [Claude Code Permissions](claude-code-permissions.md) -- permissions configuration
 - [Obsidian](../tools/obsidian.md) -- visualization frontend for the vault
 - [PRD-as-Prompt Pattern](../concepts/prd-as-prompt.md) -- bootstrap the entire system from a single prompt
 - [Andrej Karpathy](../people/andrej-karpathy.md) -- originator of the underlying pattern

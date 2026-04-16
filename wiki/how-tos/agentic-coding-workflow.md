@@ -8,7 +8,10 @@ sources:
   - "summaries/2026-03-30_aicodeking_claude-code-2-0-hidden-features-new-version.md"
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
   - "summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md"
-last_updated: "2026-04-13"
+  - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
+  - "summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
+  - "summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md"
+last_updated: "2026-04-15"
 ---
 
 # Agentic Coding Workflow
@@ -21,6 +24,10 @@ A step-by-step guide to productive agentic coding, synthesized from Peter Steinb
 2. **Multiple terminal windows.** Each runs its own agent session with its own task. Keyboard to switch, voice to prompt.
 3. **Write a CLAUDE.md.** Orient the agent: project structure, conventions, what matters. The agent starts from zero every session.
 4. **Consider a soul.md.** A personality/values document for your agent. Let the agent contribute to it.
+
+5. **Start in Plan mode.** Press Shift+Tab twice to enter Plan mode. Write a full blueprint before execution — a good plan dramatically increases first-shot success rate. *(Source: Boris Cherny, Creator of Claude Code)*
+6. **Use the best model.** Default to Opus. It's bigger and slower per call, but handles tasks better — net result is faster overall. *(Source: Boris Cherny, Creator of Claude Code)*
+7. **Pre-allow safe commands via `/permissions`.** Don't use `--dangerously-skip-permissions`. Use `/permissions` to allowlist build, test, lint, and typecheck commands by pattern. Check `.claude/settings.json` into the team repo. See [Claude Code Permissions](../how-tos/claude-code-permissions.md). *(Source: Boris Cherny, Creator of Claude Code)*
 
 ## Assigning Work
 
@@ -41,7 +48,7 @@ A step-by-step guide to productive agentic coding, synthesized from Peter Steinb
 - **Don't force your worldview.** The agent may have a better approach from training. Evaluate on merit, not style.
 - **Interrupt when stuck.** If the agent is spinning, press escape. Long execution is feedback — reframe the problem, add context.
 - **Voice for conversations.** Talk for agent prompts (richer, more natural). Type for terminal commands (faster).
-- **Give the agent verification.** The most important tip (Boris Cherny): give Claude a way to verify its own output. Use Chrome extension for frontend, built-in browser for web work.
+- **Give the agent a verification feedback loop.** Boris Cherny (creator of Claude Code) calls this the single most impactful practice: if Claude can check its own work (run tests, typecheck, lint), quality is **2-3x higher**. Include a "before committing" checklist in CLAUDE.md with typecheck + tests + lint. *(Source: Boris Cherny, Creator of Claude Code)*
 - **Dial back aggressive prompting for 4.6.** If prompts previously said "CRITICAL: You MUST use this tool", change to "Use this tool when...". Claude 4.6 is proactive enough to overtrigger on older anti-laziness patterns. *(Source: Anthropic)*
 
 ## Git & CI
@@ -94,6 +101,31 @@ Dan Shapiro's 5-level framework provides a concrete vocabulary for assessing whe
 
 See [Five Levels of AI Coding](../concepts/five-levels-of-ai-coding.md) for the full framework analysis.
 
+## Automation with Routines
+
+For tasks that should run autonomously (no human-in-the-loop), Claude Routines provide scheduled, triggered, or API-invoked sessions in cloud containers. Key workflow considerations:
+
+- **Routine prompts need more precision than interactive prompts.** There is no human to course-correct mid-run, so the prompt must be a self-contained SOP with edge cases, fallback behaviors, and a clear "definition of done."
+- **Chain routines via webhooks for multi-step pipelines.** Each routine handles one stage and fires the next — e.g., transcript arrives via webhook, routine generates proposal, signature event triggers onboarding routine.
+- **Default to routines for new automation.** For new builds, writing natural-language instructions is faster than wiring n8n/Make.com nodes. Reserve node-based tools for high-volume, stable workflows where token cost matters.
+- **Use managed sessions for multi-agent orchestration.** Break complex workflows into specialized agents (parser, writer, drafter) running in isolated containers, coordinated through API calls.
+
+See [Claude Routines](../tools/claude-routines.md) for the full feature breakdown. *(Source: Nick Saraev)*
+
+## Orchestration Layers vs Vanilla Claude Code
+
+Orchestration layers (GSD, Superpowers) sit on top of Claude Code and add planning rigor, sub-agent-driven development, and context management. Chase AI's benchmark found that vanilla Claude Code finished the same task in 20 minutes / 200K tokens, versus 1 hour / 250K for Superpowers and 1 hour 45 min / 1.2M for GSD — with no meaningful quality difference.
+
+**Decision framework:**
+1. **Default to vanilla Claude Code** for every project. The time saved compounds through iteration.
+2. **Only escalate to an orchestration layer** if you hit actual complexity walls — not anticipated ones.
+3. **If you must use one, prefer Superpowers** — lighter on tokens, more fluid (auto-invoked skills vs manual slash commands), and lower penalty if the task didn't need it.
+4. **The "line in the sand" problem:** You cannot reliably predict whether a task justifies orchestration overhead. Under uncertainty, the rational default is the option with the lowest cost of being wrong — which is vanilla Claude Code.
+
+Claude Code has natively absorbed many features (auto context clearing, context management) that originally justified orchestration layers. Re-evaluate periodically — the gap keeps shrinking.
+
+See [Claude Code Orchestration Layers](../comparisons/claude-code-orchestration-layers.md) for the full benchmark and analysis. *(Source: Chase AI)*
+
 ## Anti-Patterns to Avoid
 
 - Over-engineering prompt pipelines (the "agentic trap")
@@ -103,12 +135,18 @@ See [Five Levels of AI Coding](../concepts/five-levels-of-ai-coding.md) for the 
 - Ignoring long execution as feedback
 - Mixing unrelated concerns in one session
 - Using orchestration frameworks that remove the human from the loop
+- **Reaching for orchestration layers preemptively** — GSD burned 1.2M tokens and 1h45m on a task that vanilla Claude Code handled in 20 minutes; the overhead is real and the quality difference is not *(Source: Chase AI)*
 - **Bolting AI onto existing workflows without redesign** — produces the J-curve dip where productivity drops before it improves; most orgs mistake the dip for evidence AI doesn't work *(Source: Nate B Jones / Dan Shapiro)*
 - **Trusting subjective AI productivity assessments** — the METR study shows developers are confidently wrong about both direction and magnitude of AI's impact on their speed *(Source: Nate B Jones / Dan Shapiro)*
+- **Using `--dangerously-skip-permissions`** — this is a blanket bypass with no granularity; use `/permissions` to pre-allow safe commands by pattern instead, and check `.claude/settings.json` into the team repo *(Source: Boris Cherny, Creator of Claude Code)*
+- **Skipping the verification feedback loop** — without tests/typecheck/lint in the loop, Claude is "basically guessing"; with a feedback loop quality is 2-3x higher *(Source: Boris Cherny, Creator of Claude Code)*
 
 ## Related Pages
 
 - [Claude Code](../tools/claude-code.md)
+- [Claude Code Permissions](claude-code-permissions.md)
+- [Claude Routines](../tools/claude-routines.md)
+- [Claude Code Orchestration Layers](../comparisons/claude-code-orchestration-layers.md)
 - [Empathize with the Agent](../concepts/empathize-with-the-agent.md)
 - [Prompt Engineering for Claude](../concepts/prompt-engineering-claude.md)
 - [Five Levels of AI Coding](../concepts/five-levels-of-ai-coding.md)

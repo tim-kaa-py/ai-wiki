@@ -1,7 +1,7 @@
 # My Agentic Coding Playbook
 
 > A living document. Auto-updated when new relevant sources are ingested.
-> Last updated: 2026-04-13
+> Last updated: 2026-04-15
 
 ## Core Principles
 
@@ -22,6 +22,18 @@
 8. **Spec quality is the new bottleneck.** When AI builds what you describe, ambiguity produces software that fills gaps with machine guesses, not customer-centric guesses. Write specs detailed enough for an agent to implement without human intervention — the spec must anticipate the questions the agent doesn't know to ask. *(Source: Nate B Jones / Dan Shapiro)*
 
 9. **Audit your workflow for human-implementation assumptions.** Standups, sprint planning, manual code review, and QA all exist because humans write code. When agents handle implementation, these become friction. Ask which coordination structures still serve their purpose and which need redesign. *(Source: Nate B Jones / Dan Shapiro)*
+
+10. **Give Claude a verification feedback loop — the single highest-leverage practice.** If Claude can check its own work (run tests, typecheck, lint), quality is 2-3x higher. Include a "before committing" checklist in CLAUDE.md with typecheck + tests + lint, and instruct Claude to run them on every change. *(Source: Boris Cherny, Creator of Claude Code)*
+
+11. **Start every session in Plan mode.** Press Shift+Tab twice. Write a full blueprint before execution. A good plan dramatically increases first-shot success rate. *(Source: Boris Cherny, Creator of Claude Code)*
+
+12. **Use `/permissions`, never `--dangerously-skip-permissions`.** Pre-allow safe bash commands by pattern via `/permissions`. Check `.claude/settings.json` into the team repo so everyone shares the same allowlist. The blanket bypass removes all safety with no granularity. *(Source: Boris Cherny, Creator of Claude Code)*
+
+13. **Use the best/biggest model.** Opus is bigger and slower per call, but it handles tasks better and you write less code — net result is faster overall. Default to Opus unless cost is a hard constraint. *(Source: Boris Cherny, Creator of Claude Code)*
+
+14. **Auto-format with a PostToolUse hook.** Run your formatter after every Write/Edit tool call to handle the last 10% of formatting issues silently and prevent CI failures. Add to `.claude/settings.json`: `"PostToolUse": [{"matcher": "Write|Edit", "hooks": [{"type": "command", "command": "<formatter> || true"}]}]` *(Source: Boris Cherny, Creator of Claude Code)*
+
+15. **Give Claude real tools via MCP.** Connect Slack, BigQuery, Sentry (or your equivalents) via `.mcp.json`. Check `.mcp.json` into the team repo so all team members get the same tool access. *(Source: Boris Cherny, Creator of Claude Code)*
 
 ## Workflow Patterns
 
@@ -67,6 +79,7 @@
 | `/loop 5m <prompt>` | Run a prompt on a recurring interval |
 | Hooks | Deterministic logic at lifecycle events (PreToolUse, PostToolUse, etc.) |
 | `--bare` | Minimal mode for scripted/CI usage |
+| **Routines** | Scheduled/triggered autonomous sessions in cloud containers (`claude.ai/code/routines`) |
 
 ### Parallel Work
 | Command | What it does |
@@ -79,6 +92,8 @@
 - Define in `.claude/agents/my-agent.md` with frontmatter: name, tools, model, permissions
 - Use for specialized workflows: code review, debugging, documentation, read-only analysis
 - Scope hierarchy: CLI flag > project > user > plugin
+- Boris Cherny's agent set: `build-validator.md`, `code-architect.md`, `code-simplifier.md`, `oncall-guide.md`, `verify-app.md` — each fires at a consistent point in the workflow *(Source: Boris Cherny, Creator of Claude Code)*
+- Identify your 3-5 most common post-coding tasks and write an agent file for each
 
 ### Voice
 - `/voice` or `export CLAUDE_CODE_VOICE_DICTATION=true`
@@ -91,6 +106,13 @@
 - **Spawn Claude Agent SDK as a background processor in hooks.** Heavy processing (summarization) runs as a separate Claude process so the main session stays responsive. Uses existing Anthropic subscription, no API key setup. *(Source: Cole Medin)*
 - **Index files can replace RAG at personal scale.** An LLM-maintained index.md + markdown backlinks give agents enough navigational structure to search effectively without vector databases. Works for ~100s of files. *(Source: Karpathy via Cole Medin)*
 - **Run a periodic flush to promote logs into wiki.** Daily logs accumulate automatically, but they only compound when a flush process extracts concepts and connections into structured wiki pages. Run daily or on-demand. *(Source: Cole Medin)*
+
+### Routines & Autonomous Agents
+- **Default to routines for new automation instead of n8n/Make.com.** Writing a natural-language SOP as a routine prompt is faster than wiring drag-and-drop nodes. Reserve node-based tools for high-volume, stable workflows where token cost matters. *(Source: Nick Saraev)*
+- **Routine prompts must be self-contained SOPs.** Unlike interactive skills where humans can course-correct, routines run fully hands-off. Structure as step-by-step instructions. Define "done" explicitly. Include edge cases and fallback behaviors. Don't economize on length — more context reduces misinterpretation. *(Source: Nick Saraev)*
+- **Chain routines via webhooks for multi-step pipelines.** Design pipelines where each routine handles one stage and fires the next — e.g., transcript arrives via webhook, routine generates proposal, signature event triggers onboarding. This is the microservices pattern applied to AI agents. *(Source: Nick Saraev)*
+- **Use managed sessions for multi-agent orchestration.** Break complex workflows into specialized agents (parser, writer, drafter) running in isolated containers, coordinated through API calls to managed sessions. *(Source: Nick Saraev)*
+- **Test routines with "Run Now" before scheduling.** Validate behavior interactively before committing to autonomous execution. *(Source: Nick Saraev)*
 
 ### Bootstrap & Architecture
 - **Use the PRD-as-prompt pattern for reusable system setup.** Encode your full architecture (folder structure, file schemas, agent rules, processing pipeline) as a single PRD-style document. Test that a coding agent can one-shot the system from a blank slate. *(Source: Karpathy via Cole Medin)*
@@ -148,6 +170,16 @@ The METR study showed developers are 19% slower with AI but believe they are 24%
 
 *(Source: Nate B Jones / Dan Shapiro)*
 
+## Tool Selection: Orchestration Layers
+
+10. **Default to vanilla Claude Code — orchestration layers are almost never worth it.** Chase AI benchmarked GSD, Superpowers, and vanilla Claude Code on the same task. Vanilla finished in 20 min / 200K tokens; Superpowers in 1 hr / 250K; GSD in 1 hr 45 min / 1.2M — with indistinguishable output. The time saved compounds through iteration: "me and Claude Code with 80 more minutes" beats any orchestration layer's one-shot output. *(Source: Chase AI)*
+
+11. **The "line in the sand" problem: you can't predict if orchestration is justified.** The threshold of task complexity where orchestration becomes worthwhile is unknowable in advance. If you guess wrong with vanilla Claude Code, the cost is zero — you keep iterating. If you guess wrong with GSD, you've wasted 80+ minutes. Under uncertainty, minimize maximum regret. *(Source: Chase AI)*
+
+12. **If you must use an orchestration layer, pick Superpowers over GSD.** Superpowers is lighter (250K vs 1.2M tokens), more fluid (auto-invoked skills vs manual slash commands), and has a lower penalty for misjudging complexity (40 min lost vs 80+ min). Install at the project level (`/plugin`) so it's available when needed, but don't invoke by default. *(Source: Chase AI)*
+
+13. **Re-evaluate orchestration layers periodically.** Claude Code natively absorbs features that originally justified them (auto context clearing, improved planning). The gap keeps shrinking while the speed gap keeps widening. *(Source: Chase AI)*
+
 ## Anti-Patterns
 
 - **Over-engineering prompt pipelines** — elaborate orchestration when a simple prompt would do
@@ -158,5 +190,9 @@ The METR study showed developers are 19% slower with AI but believe they are 24%
 - **Mixing unrelated concerns in one session** — keep sessions focused on one task
 - **Aggressive anti-laziness prompting on 4.6** — instructions like "CRITICAL: always use this tool" cause overtriggering on Claude 4.6; use calm directives instead *(Source: Anthropic)*
 - **Spawning subagents for simple tasks** — Claude 4.6 is predisposed to spawn subagents; add guardrails for when direct work is faster *(Source: Anthropic)*
+- **Reaching for orchestration layers preemptively** — GSD burned 1.2M tokens and 1h45m on a task that vanilla Claude Code handled in 20 minutes with no quality loss; orchestration overhead compounds the wrong direction *(Source: Chase AI)*
 - **Bolting AI onto existing workflows without redesign** — produces the J-curve productivity dip; the tool changes the workflow but the workflow hasn't been redesigned around the tool *(Source: Nate B Jones / Dan Shapiro)*
 - **Trusting AI productivity self-assessment** — developers are confidently wrong about AI's impact on their speed; measure with controlled comparisons *(Source: Nate B Jones / Dan Shapiro)*
+- **Using `--dangerously-skip-permissions`** — blanket bypass with no granularity; use `/permissions` to pre-allow safe commands by pattern instead *(Source: Boris Cherny, Creator of Claude Code)*
+- **Skipping the verification feedback loop** — without tests/typecheck/lint in the loop, Claude is "basically guessing"; with a feedback loop quality is 2-3x higher *(Source: Boris Cherny, Creator of Claude Code)*
+- **Not planning before execution** — jumping straight into coding without a Plan mode blueprint reduces first-shot success; start every session with Shift+Tab twice *(Source: Boris Cherny, Creator of Claude Code)*
