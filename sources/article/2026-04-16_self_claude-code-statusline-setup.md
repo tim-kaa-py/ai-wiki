@@ -18,12 +18,13 @@ Wer hat Bock auf mehr Context Awareness und ne geile Status Bar? Zwei Zeilen am 
 
 **Zeile 1 — Context Health + Identity:**
 ```
-Opus 4.6  ████████░░░░░░░░░░░░ 35%  201.0 kT | ~1.47€  │  main  ~/local_dev/MeinProjekt
+Opus 4.7 · medium  ████████░░░░░░░░░░░░ 35%  201.0 kT | ~1.47€  │  main  ~/local_dev/MeinProjekt
 ```
 
 | Segment | Beschreibung |
 |---------|-------------|
-| `Opus 4.6` | Aktuelles Model (gekuerzt) |
+| `Opus 4.7` | Aktuelles Model (gekuerzt) |
+| `· medium` | Aktuelles Thinking-Effort-Level (low=dim, medium=gruen, high=gelb, xhigh=rot). Quelle: `CLAUDE_CODE_EFFORT_LEVEL` env var > `effortLevel` aus `~/.claude/settings.json`. Da die statusLine-JSON das Effort (noch) nicht liefert, wird es aus der Settings gelesen |
 | `████████░░░░░░░░░░░░ 35%` | Context-Window-Auslastung als farbiger Balken |
 | `201.0 kT` | Token-Verbrauch der Session in Kilotokens |
 | `~1.47€` | Geschaetzte Session-Kosten in Euro (USD x 0.88) |
@@ -179,7 +180,29 @@ build_bar() {
   for ((i=0; i<empty; i++)); do bar+="░"; done
   BAR_RESULT="${clr}${bar}${RST} ${clr}${pct}%${RST}"
 }
+effort="${CLAUDE_CODE_EFFORT_LEVEL:-}"
+if [ -z "$effort" ]; then
+  effort=$(python -c "
+import json, os
+try:
+    with open(os.path.expanduser('~/.claude/settings.json')) as f:
+        print(json.load(f).get('effortLevel',''))
+except: pass
+" 2>/dev/null)
+fi
+effort_colored=""
+case "$effort" in
+  low)    effort_colored="${DIM}${effort}${RST}" ;;
+  medium) effort_colored="${GREEN}${effort}${RST}" ;;
+  high)   effort_colored="${YELLOW}${effort}${RST}" ;;
+  xhigh)  effort_colored="${RED}${effort}${RST}" ;;
+  "")     ;;
+  *)      effort_colored="${DIM}${effort}${RST}" ;;
+esac
 line1="${model}"
+if [ -n "$effort_colored" ]; then
+  line1+=" ${DIM}·${RST} ${effort_colored}"
+fi
 if [ -n "$ctx_pct" ] && [ "$ctx_pct" != "" ]; then
   ctx_int=$(printf '%.0f' "$ctx_pct")
   build_bar "$ctx_int" 20 20 70
