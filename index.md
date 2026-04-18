@@ -55,6 +55,11 @@
 
 *No experiments yet.*
 
+## About This Wiki
+
+- [User Documentation](docs/user-documentation.md) — how to use this system
+- [Concept](docs/concept.md) — architecture + recreation guide for any topic
+
 ---
 
 **13 sources** | **19 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
