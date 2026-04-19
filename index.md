@@ -19,6 +19,7 @@
 | 2026-01-02 | [Claude Code Tips from the Creator (Boris Cherny)](summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md) | article | claude-code, workflow, hooks, agents, permissions, mcp, best-practices |
 | 2026-04-16 | [Claude Code Status Line Setup](summaries/2026-04-16_self_claude-code-statusline-setup.md) | article | claude-code, workflow, how-to, reference, terminal, configuration, status-line |
 | 2026-04-07 | [How to use Karpathy's Autoresearch to 10x Claude (Ben AI)](summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md) | youtube | auto-research, self-improving-ai, optimization, skills, claude-code, evals, agents, linkedin, criteria-design |
+| 2026-04-19 | [VSCode Hotkey: Launch Claude Code in Editor Tab](summaries/2026-04-19_self_vscode-claude-code-hotkey.md) | article | claude-code, vscode, configuration, workflow, how-to, reference |
 
 ### Wiki Pages
 
@@ -39,6 +40,7 @@
 - [Superpowers](wiki/tools/superpowers.md) — Claude Code plugin: auto-invoked skills, visual companion, TDD enforcement
 - [Claude Code Status Line Setup](wiki/how-tos/claude-code-status-line.md) — how-to: live dashboard for context window, rate limits, session cost, code velocity
 - [Auto Research](wiki/concepts/auto-research.md) — concept: Karpathy's self-improving optimization loop, three-level criteria framework, autonomous skill optimization
+- [VSCode Hotkey: Launch Claude Code in Editor Tab](wiki/how-tos/vscode-claude-code-hotkey.md) — how-to: Ctrl/Cmd+Shift+C opens Claude Code as a full editor tab for parallel sessions
 
 ## Understanding AI
 
@@ -85,4 +87,4 @@
 
 ---
 
-**15 sources** | **29 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**16 sources** | **30 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)

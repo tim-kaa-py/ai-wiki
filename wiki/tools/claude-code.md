@@ -17,6 +17,7 @@ sources:
   - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
   - "summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md"
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
+  - "summaries/2026-04-19_self_vscode-claude-code-hotkey.md"
 last_updated: "2026-04-19"
 ---
 
@@ -172,6 +173,12 @@ See [Claude Routines](claude-routines.md) for the full feature breakdown and [Cl
 | Vim keybindings | `/config` → Editor mode, or set `"editorMode": "vim"` in `~/.claude.json` |
 
 Kitty and Ghostty support notifications and Shift+Enter natively — no configuration needed. iTerm2 needs the notification opt-in above. macOS Terminal.app does not support native notifications; use hooks instead. *(Source: Anthropic docs)*
+
+### VSCode Hotkey Launch (Editor Tab)
+
+For users running Claude Code inside VSCode, a custom terminal profile + keybinding with `location: "editor"` binds Ctrl/Cmd+Shift+C to open Claude Code as a full editor tab rather than in the bottom panel. Each press spawns an independent session — ideal for Steinberger's multi-session workflow inside a single IDE window.
+
+See [VSCode Hotkey: Launch Claude Code in Editor Tab](../how-tos/vscode-claude-code-hotkey.md) for the full setup.
 
 ### Status Line: Live Dashboard
 
