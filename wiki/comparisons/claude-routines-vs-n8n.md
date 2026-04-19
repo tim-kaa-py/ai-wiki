@@ -5,7 +5,8 @@ pillar: "building"
 tags: [claude-code, routines, n8n, automation, workflow, comparison]
 sources:
   - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
-last_updated: "2026-04-15"
+  - "summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md"
+last_updated: "2026-04-19"
 ---
 
 # Claude Routines vs n8n
@@ -83,8 +84,21 @@ Nick acknowledges he has previously claimed various Claude features made n8n obs
 
 The caveat he provides himself: natural language wins on development speed, but tokens cost more than compute per execution. The comparison is about where each approach is optimal, not a wholesale replacement.
 
+## Where Each Sits on the Build-to-Buy Spectrum
+
+Mapped to [the five agent platform tiers](../concepts/agent-platform-tiers.md):
+
+- **n8n / Make.com** → **Tier 4** (visual low-code AI platforms). Configuration-based, drag-and-drop, platform-owned runtime.
+- **Claude Routines** → effectively **Tier 3** (managed platform) for Claude Code specifically. Anthropic-managed containers, natural-language SOPs, no local infra.
+
+This reframes the Nick Saraev comparison: he's implicitly arguing for **Tier 3 > Tier 4** for most new automation when the logic is complex, nuanced, or frequently modified. The tier-level insight generalizes: Tier 3 natural-language platforms (routines) beat Tier 4 visual platforms on development speed for nuanced logic, and lose on marginal execution cost at high volume.
+
+*(Source: The AI Automators for the tier framing; Nick Saraev for the n8n comparison)*
+
 ## Related Pages
 
 - [Claude Routines](../tools/claude-routines.md) -- full feature breakdown
 - [Claude Code](../tools/claude-code.md) -- the platform both routines and interactive sessions run on
 - [Claude Code Orchestration Layers](claude-code-orchestration-layers.md) -- different comparison: GSD vs Superpowers vs vanilla Claude Code for dev workflow
+- [Agent Platform Tiers](../concepts/agent-platform-tiers.md) -- the five-tier build-to-buy spectrum this comparison maps onto
+- [Managed Agent Platforms](managed-agent-platforms.md) -- Tier-3 comparison for general agent building (Claude Managed Agents vs Deep Agents Deploy vs OpenAI Agents SDK)
