@@ -15,7 +15,9 @@ sources:
   - "summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md"
   - "summaries/2026-04-16_self_claude-code-statusline-setup.md"
   - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
-last_updated: "2026-04-16"
+  - "summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md"
+  - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
+last_updated: "2026-04-19"
 ---
 
 # Claude Code
@@ -216,6 +218,24 @@ Claude Code isn't limited to writing code. Using the Karpathy LLM wiki pattern, 
 
 Karpathy's Auto Research framework can be turned on CLAUDE.md files themselves — defining boolean criteria (e.g., "file routing accuracy to correct folders > 90%") and running autonomous optimization loops against test scenarios. This is a meta-application: using the system to improve the system's own instructions. See [Auto Research](../concepts/auto-research.md). *(Source: Ben AI)*
 
+## Claude Code Is an Agent Product, Not a Platform
+
+On [The AI Automators' build-to-buy spectrum](../concepts/agent-platform-tiers.md), Claude Code is explicitly **off-spectrum**. The five tiers (direct API → frameworks → managed platforms → low-code → embedded SaaS) describe where you build agents *for others*. Claude Code is a finished agent product you *use*, alongside OpenClaude.
+
+The practical implication when scoping internal tooling: ask "do we need to **build** an agent, or **adopt** one?" first. A Claude Code license (or a Claude Routine, or a pre-built agent) may replace a whole Tier-2 build. Don't conflate "we need agents" with "we need to build an agent platform."
+
+For context on the managed-agent landscape (Claude Managed Agents, LangChain Deep Agents Deploy, OpenAI Agents SDK) and when to build vs. buy, see [Managed Agent Platforms](../comparisons/managed-agent-platforms.md). *(Source: The AI Automators)*
+
+## Claude Code as Agentic Proposer (Meta Harness)
+
+In Stanford's **Meta Harness** paper (Omar Khattab, March 2026), the optimizer that reads raw execution traces, diagnoses failures, and writes a complete new harness is **Claude Code with Opus 4.6**. Scale per iteration: ~10M tokens, ~82 files read, 400x more feedback than any prior harness-optimization method.
+
+The notable claim: a harness optimized by this loop **transfers across five models** and **Haiku + optimized harness beat Opus + optimized harness**. The harness — not the model running inside it — is the reusable asset.
+
+Practical implication for Claude Code users: Claude Code is already the tool-of-choice when research groups need an agent that can read traces and rewrite pipelines end-to-end. That is a non-trivial endorsement of its file-reading / orchestration / long-context behavior.
+
+See [Meta Harness](../concepts/meta-harness.md) and [Harness Engineering](../concepts/harness-engineering.md). *(Source: PY — Rise of Harness Engineering)*
+
 ## Prompting for Claude 4.6
 
 Claude 4.6 models are significantly more proactive than predecessors. Key adjustments from Anthropic's official guidance:
@@ -244,3 +264,7 @@ See [Prompt Engineering for Claude](../concepts/prompt-engineering-claude.md) fo
 - [Claude Code Hooks for Memory](../how-tos/claude-code-hooks-memory.md)
 - [Claude Code Status Line Setup](../how-tos/claude-code-status-line.md)
 - [Auto Research](../concepts/auto-research.md)
+- [Agent Platform Tiers](../concepts/agent-platform-tiers.md) — where Claude Code sits (off-spectrum: an agent product, not a platform)
+- [Managed Agent Platforms](../comparisons/managed-agent-platforms.md) — Claude Managed Agents vs Deep Agents Deploy vs OpenAI Agents SDK
+- [Harness Engineering](../concepts/harness-engineering.md) — the discipline the Meta Harness work sits inside
+- [Meta Harness](../concepts/meta-harness.md) — the research loop that uses Claude Code as its proposer

@@ -42,14 +42,37 @@
 
 ## Understanding AI
 
-*No sources yet.*
+### Sources
+
+| Date | Title | Type | Tags |
+|------|-------|------|------|
+| 2026-04-14 | [Rethinking AI Agents: The Rise of Harness Engineering (PY)](summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md) | youtube | harness-engineering, agents, agent-architecture, prompt-engineering, context-engineering, meta-harness, dspy, nlh, evaluation, claude-code |
+
+### Wiki Pages
+
+- [Harness Engineering](wiki/concepts/harness-engineering.md) — concept: Agent = Model + Harness, OS analogy, craft of subtraction, three-era framing
+- [Agent Orchestration Patterns](wiki/concepts/agent-orchestration-patterns.md) — Anthropic's five canonical patterns (chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer) and ablation findings
+- [Natural Language Harness (NLH)](wiki/concepts/natural-language-harness.md) — Tingua's three-layer separation, execution contracts, file-backed state
+- [Meta Harness](wiki/concepts/meta-harness.md) — Omar Khattab / Stanford: optimizing the pipeline itself, raw traces irreplaceable, harness transfers across models
+- [Omar Khattab](wiki/people/omar-khattab.md) — DSPy + Meta Harness author
 
 ## AI Ecosystem
+
+### Sources
+
+| Date | Title | Type | Tags |
+|------|-------|------|------|
+| 2026-04-18 | [Anthropic Built It. OpenAI and LangChain Just Responded (The AI Automators)](summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md) | youtube | managed-agents, claude, openai, langchain, agents, harness, sandbox, agent-frameworks, infrastructure, comparison |
 
 ### Wiki Pages
 
 - [Andrej Karpathy](wiki/people/andrej-karpathy.md) — AI researcher, creator of the LLM wiki pattern
 - [Peter Steinberger](wiki/people/peter-steinberger.md) — OpenClaw creator, agentic coding pioneer
+- [Agent Platform Tiers](wiki/concepts/agent-platform-tiers.md) — 5-tier build-to-buy spectrum for agentic systems, lock-in surfaces, tier selection heuristics
+- [Claude Managed Agents](wiki/tools/claude-managed-agents.md) — Anthropic's fully hosted agent platform: brain/hands, meta-harness, shipped vs research-preview
+- [Deep Agents & Deep Agents Deploy](wiki/tools/deep-agents-deploy.md) — LangChain's open-source harness + SaaS deployment; open-license-but-not-open-deployment critique
+- [OpenAI Agents SDK](wiki/tools/openai-agents-sdk.md) — OpenAI's next-evolution agent SDK with baked-in harness, sandbox integrations
+- [Managed Agent Platforms](wiki/comparisons/managed-agent-platforms.md) — head-to-head: Claude Managed Agents vs Deep Agents Deploy vs OpenAI Agents SDK
 
 ## My Lab
 
@@ -62,4 +85,4 @@
 
 ---
 
-**13 sources** | **19 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**15 sources** | **29 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)

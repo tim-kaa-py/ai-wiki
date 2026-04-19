@@ -1,7 +1,7 @@
 # My Agentic Coding Playbook
 
 > A living document. Auto-updated when new relevant sources are ingested.
-> Last updated: 2026-04-16
+> Last updated: 2026-04-19 (harness engineering principles added)
 
 ## Core Principles
 
@@ -34,6 +34,26 @@
 14. **Auto-format with a PostToolUse hook.** Run your formatter after every Write/Edit tool call to handle the last 10% of formatting issues silently and prevent CI failures. Add to `.claude/settings.json`: `"PostToolUse": [{"matcher": "Write|Edit", "hooks": [{"type": "command", "command": "<formatter> || true"}]}]` *(Source: Boris Cherny, Creator of Claude Code)*
 
 15. **Give Claude real tools via MCP.** Connect Slack, BigQuery, Sentry (or your equivalents) via `.mcp.json`. Check `.mcp.json` into the team repo so all team members get the same tool access. *(Source: Boris Cherny, Creator of Claude Code)*
+
+## Harness Engineering
+
+Principles from the 2026 harness-engineering research (PY, NLH paper, Meta Harness paper). See [Harness Engineering](wiki/concepts/harness-engineering.md).
+
+27. **Harness > model choice when performance is off.** Stanford and LangChain documented a 6x performance variation attributable to the harness alone (patterns, prompts, verification, memory). Before paying for a bigger model, audit and optimize the orchestration code wrapping the model. Haiku + optimized harness beat Opus + the same harness. *(Source: PY — Rise of Harness Engineering)*
+
+28. **Pruning is maturity — re-audit on every model upgrade.** Every harness component encodes an assumption about what the model can't do, and those assumptions expire. Anthropic dropped context resets once Opus 4.6 no longer needed them; Vercel removed 80% of an agent's tools and got better results; Manus rewrote their harness 5x in 6 months. When a new model ships, actively delete scaffolding that no longer earns its keep. *(Source: PY — Rise of Harness Engineering)*
+
+29. **Prefer a narrow acceptance-gated attempt loop over broad search.** In the NLH ablation, self-evolution was the only consistently helpful module (+4.8 SWE, +2.7 OS World) while verifiers and multi-candidate search *actively hurt* (–0.8/–8.4 and –2.4/–5.6). Default to a disciplined single-path-with-retry loop; only widen to multi-candidate search when the narrow path clearly fails. *(Source: PY — Rise of Harness Engineering)*
+
+30. **Persist raw execution traces — summaries are not a substitute.** Meta Harness accuracy drops from 50% → 34.6% when traces are removed, and 50% → 34.9% when replaced with summaries. If you intend to iterate on an agent (manually or with an optimizer like Meta Harness or Auto Research), keep the full traces. *(Source: PY — Rise of Harness Engineering)*
+
+31. **Treat the harness as long-lived IP, not a script you rewrite each quarter.** A harness optimized on one model transfers to five others and improves all of them. Invest in structure, contracts, and state conventions you expect to re-run against the next five model releases. *(Source: PY — Rise of Harness Engineering)*
+
+32. **Before adding another module, rewrite what you have with explicit contracts and file-backed state.** OS Symphony's NLH rewrite jumped 30.4% → 47.2%, cut runtime 60%, and used 35x fewer LLM calls — same strategy, same model, only the representation changed. Execution contracts ("function signatures for agents") and path-addressable state files survive truncation, restarts, and delegation. *(Source: PY — Rise of Harness Engineering — NLH / Tingua)*
+
+33. **Design parent agents as thin dispatchers; put reasoning budget into the children.** ~90% of compute in orchestrator-worker setups flows through delegated child agents, not the parent. The harness is an orchestration pattern, not a reasoning pattern — decompose, delegate, and bind children with contracts rather than loading the parent up. *(Source: PY — Rise of Harness Engineering)*
+
+34. **Treat community agent skills / AGENTS.md / shared tools like third-party dependencies.** 1-in-4 community-contributed agent skills contains a vulnerability; prompt injection can live in harness text. Review, pin, and isolate blast radius before you graft a shared skill into your system prompt or tool set. *(Source: PY — Rise of Harness Engineering)*
 
 ## Workflow Patterns
 
@@ -199,6 +219,22 @@ The METR study showed developers are 19% slower with AI but believe they are 24%
 
 20. **Auto Research can optimize CLAUDE.md files.** Define criteria for your project instructions (e.g., "file routing accuracy to correct folders > 90%") and run the optimization loop against test scenarios. The system improves the system's own instructions. *(Source: Ben AI — Karpathy's Auto Research)*
 
+## Agent Platform Selection (Tier Decision First, Vendor Second)
+
+When picking an agent platform (Claude Managed Agents, LangChain Deep Agents Deploy, OpenAI Agents SDK, Vertex, AgentCore, Foundry, n8n, Agentforce, etc.), use the [Agent Platform Tiers](wiki/concepts/agent-platform-tiers.md) mental model. See also [Managed Agent Platforms](wiki/comparisons/managed-agent-platforms.md).
+
+21. **Decide tier before vendor.** The five-tier build-to-buy spectrum (direct API → frameworks → managed platforms → low-code → embedded SaaS) is the primary lock-in decision. Vendor choice within a tier is secondary. Tier 3+ cedes memory, infra, and harness simultaneously — migration cost compounds. *(Source: The AI Automators)*
+
+22. **Write down which of memory / infra / harness you'll cede.** These are the three lock-in surfaces. Tier 1-2 locks in nothing beyond the model API. Tier 3 locks memory + infra. Tier 4-5 locks the entire configuration. Listing your acceptable surfaces eliminates ~80% of vendor options before you start comparing. *(Source: The AI Automators)*
+
+23. **Run the four tier-selection checks in order.** (1) Full control / compliance-heavy → Tier 1-2, possibly self-hosted. (2) Fast time to market → Tier 3-5. (3) Must swap models → model-agnostic only (Vertex, AgentCore, Deep Agents library, OpenAI Agents SDK, Google ADK). (4) Strict data-residency → self-hosted or strong DPA. The first hard constraint narrows the tier; only then compare vendors within that tier. *(Source: The AI Automators)*
+
+24. **Treat "open source" and "openly deployable" as separate questions.** MIT license on the library ≠ free deployment path. LangChain Deep Agents is MIT, but Deep Agents Deploy requires LangSmith Plus at $39/seat/month and self-hosting is enterprise-only. Before adopting an "open alternative," verify you can actually self-host at your plan tier. *(Source: The AI Automators)*
+
+25. **Managed-harness framing is lock-in dressed as future-proofing.** When a vendor argues "harnesses must evolve with models, so let us own it," the premise is true but the conclusion is a choice, not a necessity. Only accept the meta-harness bargain if you're committed to that vendor's model long-term AND your use case tolerates harness behavior changing under you. *(Source: The AI Automators)*
+
+26. **Ask "build an agent" vs "adopt an agent" before comparing platforms.** Finished agent products (Claude Code, OpenClaude, Intercom Fin, Agentforce) are off-spectrum — you use them, you don't build on them. A license to an existing agent can replace a whole Tier-2 build. Scope this first. *(Source: The AI Automators)*
+
 ## Anti-Patterns
 
 - **Over-engineering prompt pipelines** — elaborate orchestration when a simple prompt would do
@@ -218,3 +254,9 @@ The METR study showed developers are 19% slower with AI but believe they are 24%
 - **Flying blind on context and rate limits** — without visible indicators, you hit context limits or rate limit walls mid-task; set up a status line dashboard to make these invisible constraints visible and take action before they interrupt your flow *(Source: self — status line setup)*
 - **Vague optimization criteria** — "make it better" produces nothing; every criterion must be a single boolean condition (true/false), specific enough to evaluate deterministically or by LLM judge *(Source: Ben AI — Karpathy's Auto Research)*
 - **Running optimization loops indefinitely** — more iterations is not better; after 10-15 the optimization overfits or drifts, and token costs scale linearly with no quality gain *(Source: Ben AI — Karpathy's Auto Research)*
+- **Picking an agent vendor before picking a tier** — vendor comparisons across different build-to-buy tiers are apples-to-oranges; the tier choice drives which lock-in surfaces (memory, infra, harness) you cede, and that decision dominates vendor differences *(Source: The AI Automators)*
+- **Trusting "open source" to mean "openly deployable"** — MIT on the library can coexist with SaaS-only deployment and enterprise-gated self-hosting; verify the deployment path, not just the license *(Source: The AI Automators)*
+- **Reaching for a managed Tier-3 agent platform when a finished agent product exists** — adopting Claude Code / OpenClaude / Agentforce can replace a whole Tier-2 or Tier-3 build; scope build-vs-adopt first *(Source: The AI Automators)*
+- **Adding modules before pruning the ones that stopped earning their keep.** In the NLH ablation, verifiers and multi-candidate search *actively hurt* benchmark scores. Mature harness work is subtraction first — delete assumptions the newer model no longer needs before stacking on new structure. *(Source: PY — Rise of Harness Engineering)*
+- **Keeping only trace summaries for agents you plan to iterate on.** Meta Harness accuracy drops almost as far with summaries (34.9%) as with no traces at all (34.6%) vs 50% with raw traces. Summaries destroy the signal future optimizers need. *(Source: PY — Rise of Harness Engineering)*
+- **Grafting community-contributed skills into your harness without review.** 1-in-4 contains a vulnerability; prompt injection can live in harness text. Pin and review like any third-party dependency. *(Source: PY — Rise of Harness Engineering)*

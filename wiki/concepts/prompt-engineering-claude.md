@@ -6,7 +6,8 @@ tags: [prompt-engineering, claude, best-practices, xml-tags, few-shot-prompting,
 sources:
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
   - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
-last_updated: "2026-04-15"
+  - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
+last_updated: "2026-04-19"
 ---
 
 # Prompt Engineering for Claude
@@ -110,9 +111,16 @@ Claude Routines run fully hands-off — no human-in-the-loop to course-correct. 
 
 This is conceptually related to spec quality as the new bottleneck (see [Five Levels of AI Coding](five-levels-of-ai-coding.md)) — when the agent runs autonomously, prompt precision is everything. *(Source: Nick Saraev)*
 
+## Where Prompt Engineering Sits Now (2026)
+
+The 2026 framing from harness-engineering research: there have been three eras in four years — **prompt engineering → context engineering → harness engineering**. Each swallows the prior one. Prompt engineering didn't vanish; it became a sub-component of the harness. The patterns on this page (XML structuring, positive framing, examples, adaptive thinking) still apply — they now live *inside* system prompts, tool descriptions, execution contracts, and sub-agent definitions rather than being the whole game.
+
+Practical upshot: when your agent underperforms, the first audit is no longer "tweak the prompt" — it's "audit the harness (patterns, prompts, verification, memory) before considering a model upgrade." See [Harness Engineering](harness-engineering.md). *(Source: PY — Rise of Harness Engineering)*
+
 ## Related Pages
 
 - [Empathize with the Agent](empathize-with-the-agent.md) — the practitioner's version of the "brilliant new employee" mental model
 - [Claude Code](../tools/claude-code.md) — the tool where these patterns are applied
 - [Claude Routines](../tools/claude-routines.md) — autonomous sessions where prompt design is critical
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — practical workflow incorporating these principles
+- [Harness Engineering](harness-engineering.md) — the era that absorbs prompt + context engineering

@@ -5,7 +5,8 @@ pillar: "building"
 tags: [auto-research, self-improving-ai, optimization, evals, criteria-design, agents, claude-code]
 sources:
   - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
-last_updated: "2026-04-16"
+  - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
+last_updated: "2026-04-19"
 ---
 
 # Auto Research
@@ -73,8 +74,25 @@ Ben argues that even creative/subjective tasks are more testable than they appea
 3. But most subjective qualities can be decomposed into discrete boolean checks — formatting rules are obvious, and even style/tone can be expressed as pattern-match conditions
 4. **Conclusion:** The bottleneck is not the framework's rigidity but your ability to articulate what makes your output yours
 
+## Sibling: Meta Harness
+
+Stanford's **Meta Harness** (Omar Khattab / DSPy creator, March 2026) is the same basic machinery at a larger unit of optimization: an agentic proposer (Claude Code with Opus 4.6) reads raw execution traces, diagnoses failures, and rewrites the *entire pipeline* — not just one skill's prompt. 10M tokens per iteration, 400x more feedback than prior methods. Headline finding: **raw traces are irreplaceable** (removing them drops accuracy from 50% to 34.6%; summaries as substitute: 34.9%).
+
+The contrast is useful for sizing your own optimization work:
+
+| Axis | Auto Research | Meta Harness |
+|------|---------------|--------------|
+| Unit | A skill (prompt + boolean criteria) | The full pipeline / harness |
+| Evaluation | Boolean criteria | Benchmark scores |
+| Typical run | 5–10 iterations | Hundreds, 10M tokens each |
+| Who | Individual developer | Research lab |
+
+See [Meta Harness](meta-harness.md) and [Harness Engineering](harness-engineering.md).
+
 ## Related Pages
 
 - [Andrej Karpathy](../people/andrej-karpathy.md) — originated the Auto Research framework for ML
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — workflow context for autonomous optimization
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md) — Auto Research can optimize the wiki's own quality
+- [Meta Harness](meta-harness.md) — same loop, applied to the full pipeline rather than a single skill
+- [Harness Engineering](harness-engineering.md) — the broader discipline where self-evolving loops are the one consistently-helpful module
