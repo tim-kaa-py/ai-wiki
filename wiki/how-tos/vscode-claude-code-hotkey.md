@@ -103,6 +103,52 @@ Command Palette → "Developer: Reload Window". Press the shortcut. A new editor
 | Opens in terminal panel, not a tab | `location: "editor"` missing or misspelled in keybinding args. |
 | Tab renames itself to "bash" | Add `"overrideName": true` to the profile. |
 
+## Related Tip: Shift+Enter for Newlines (VSCode Terminal + Windows Terminal)
+
+Git Bash / mintty does not send a distinguishable sequence for Shift+Enter by default, so Claude Code treats it as plain Enter and submits the prompt. The fix is **per-terminal-emulator**, not per-shell: each terminal app must be configured to intercept Shift+Enter and emit a byte sequence Claude Code recognizes as "insert newline." Claude Code accepts two such encodings, so either of the following works.
+
+### VSCode integrated terminal
+
+Add to `keybindings.json` (Command Palette → "Preferences: Open Keyboard Shortcuts (JSON)"):
+
+```json
+{
+  "key": "shift+enter",
+  "command": "workbench.action.terminal.sendSequence",
+  "args": { "text": "\u001b\r" },
+  "when": "terminalFocus"
+}
+```
+
+Sends `ESC + CR` — the legacy "modifyOtherKeys" convention.
+
+### Windows Terminal
+
+Edit `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json` (or open the Settings UI → Actions). Add an action and bind it to `shift+enter`:
+
+```json
+"actions": [
+  {
+    "command": { "action": "sendInput", "input": "\u001b[13;2u" },
+    "id": "User.sendInput.ShiftEnter"
+  }
+],
+"keybindings": [
+  { "id": "User.sendInput.ShiftEnter", "keys": "shift+enter" }
+]
+```
+
+Sends `\u001b[13;2u` — the **CSI-u** encoding (fixterms / kitty keyboard protocol): `CSI <keycode> ; <modifiers> u`, where `13` = Enter and `2` = Shift.
+
+### Why both work
+
+Claude Code's TUI treats either `ESC + CR` or the CSI-u form as "insert newline," so the UX is seamless across both terminals despite the different byte sequences on the wire.
+
+### Scope and caveats
+
+- Only applies to the terminal emulator whose config was edited. Launching Git Bash from its Start Menu shortcut (plain mintty) still submits on Shift+Enter unless mintty is configured separately.
+- In unsupported terminals, fall back to `Alt+Enter` or run `/terminal-setup` if the terminal is on Claude Code's supported list.
+
 ## Related
 
 - [Claude Code](../tools/claude-code.md) — tool reference and multi-session patterns.
