@@ -117,3 +117,4 @@ The internal variant captures **tacit knowledge** — decisions, lessons learned
 - [Andrej Karpathy](../people/andrej-karpathy.md) — originator of the pattern
 - [Claude Code Hooks for Memory](../how-tos/claude-code-hooks-memory.md) — implementation guide for the internal data variant
 - [PRD-as-Prompt Pattern](../concepts/prd-as-prompt.md) — bootstrap pattern for one-shotting the system setup
+- [Contextual Retrieval](./contextual-retrieval.md) — the RAG-improving counterpart: where the wiki pattern abandons RAG at personal scale, Contextual Retrieval improves RAG at production scale.

@@ -5,7 +5,8 @@ pillar: "understanding"
 tags: [meta-harness, harness-engineering, dspy, optimization, self-improving-ai, agents, claude-code]
 sources:
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
-last_updated: "2026-04-19"
+  - "summaries/2024-12-19_anthropic_building-effective-agents.md"
+last_updated: "2026-04-20"
 ---
 
 # Meta Harness

@@ -2,10 +2,13 @@
 title: "Claude Code Permissions"
 type: "how-to"
 pillar: "building"
-tags: [claude-code, permissions, best-practices, security, workflow]
+tags: [claude-code, permissions, best-practices, security, workflow, auto-mode, sandbox]
 sources:
   - "summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md"
-last_updated: "2026-04-15"
+  - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
+  - "summaries/2026-03-25_anthropic_claude-code-auto-mode.md"
+  - "summaries/2025-10-20_anthropic_claude-code-sandboxing.md"
+last_updated: "2026-04-20"
 ---
 
 # Claude Code Permissions
@@ -74,8 +77,36 @@ Good candidates for pre-approval:
 - Secret-accessing commands
 - Package install commands (unless in a sandboxed environment)
 
+## The Three Permission Strategies
+
+Anthropic's canonical guidance is that Claude Code offers **three complementary permission strategies** — not one right answer:
+
+| Strategy | Command | What it does |
+|----------|---------|--------------|
+| Allowlist | `/permissions` | Pre-approve safe command patterns (covered above) |
+| Auto mode | `--permission-mode auto` | Classifier-gated auto-approval for most actions |
+| Sandbox | `/sandbox` | OS-level filesystem + network isolation |
+
+These compose. Power-user setup: `/permissions` allowlist for routine commands, `--permission-mode auto` for long autonomous runs, `/sandbox` as the outer ring when running unknown scripts.
+
+### Auto Mode (`--permission-mode auto`)
+
+A two-stage classifier replaces permission fatigue: server-side prompt-injection detector on inputs, transcript classifier on outputs. Three approval tiers (safe-tool allowlist, in-project file ops, high-risk → classifier review).
+
+Published metrics: **0.4% false positive, 17% false negative**. Much safer than `--dangerously-skip-permissions`, but the 17% miss rate means it is **not** a substitute for human review on prod or security-critical systems. Escalation halt: after 3 consecutive or 20 total denials, the agent stops.
+
+See [Claude Code Auto Mode](claude-code-auto-mode.md) for the full how-to.
+
+### Sandbox (`/sandbox`)
+
+OS-level isolation — bubblewrap on Linux, seatbelt on macOS — restricting filesystem and network access. Catches spawned subprocesses (application-level permissioning does not). Internal testing: **-84% permission prompts**. The right choice for scripted / unattended runs and running unknown code.
+
+See [Claude Code Sandboxing](claude-code-sandboxing.md) for the full how-to.
+
 ## Related Pages
 
+- [Claude Code Auto Mode](claude-code-auto-mode.md) -- classifier-gated permission mode
+- [Claude Code Sandboxing](claude-code-sandboxing.md) -- OS-level isolation
 - [Claude Code](../tools/claude-code.md) -- the tool this configures
 - [Claude Code Hooks for Memory](claude-code-hooks-memory.md) -- other `.claude/settings.json` configuration
 - [Agentic Coding Workflow](agentic-coding-workflow.md) -- workflow incorporating these practices

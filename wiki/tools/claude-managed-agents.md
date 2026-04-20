@@ -6,7 +6,8 @@ tags: [managed-agents, claude, anthropic, infrastructure, sandbox, harness, harn
 sources:
   - "summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md"
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
-last_updated: "2026-04-19"
+  - "summaries/2026-04-15_anthropic_scaling-managed-agents.md"
+last_updated: "2026-04-20"
 ---
 
 # Claude Managed Agents
@@ -32,6 +33,26 @@ Anthropic's positioning metaphor:
 - **Hands** = sandboxed execution surface for code, tools, MCPs
 
 The decoupling isn't novel — AWS Bedrock AgentCore and Google Vertex AI Agent Builder ship the same split, but **model-agnostically**. Claude Managed Agents is model-locked to Claude.
+
+## Brain / Hands / Session — the Three-Way Split
+
+Anthropic's April 2026 engineering post ([Scaling Managed Agents](https://www.anthropic.com/engineering/managed-agents)) sharpens the metaphor into three independently-lifecycled components, explicitly framed as OS-style hardware virtualization:
+
+| Component | Role | Failure handling |
+|-----------|------|-----------------|
+| **Brain (harness)** | Stateless, replaceable | Recovery via `wake(sessionId)` + `getSession(id)` |
+| **Hands (sandboxes)** | Uniform `execute(name, input) → string` | Tool-level errors trigger sandbox re-provisioning |
+| **Session (log)** | Append-only, outside Claude's context window | Model re-queries history without irreversible trimming |
+
+Design principle: **failure of one component must not kill the session.** The prior design lost everything on container failure.
+
+**Concrete wins from the architecture:**
+
+- **Lazy container provisioning** — p50 TTFT cut 60%, p95 cut 90%+
+- **Credentials outside the sandbox** — bundled at init (e.g. Git creds) or in vaults; generated code cannot reach them
+- **Session log outside context window** — model can re-query its own history without compacting or losing information
+
+The OS-as-analogy framing: treat the harness as a virtualization layer over model capabilities so future model upgrades plug in without rewrites. This is the *technical* case for the meta-harness pitch below.
 
 ## The "Meta-Harness" Argument
 

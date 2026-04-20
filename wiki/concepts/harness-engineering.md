@@ -5,7 +5,12 @@ pillar: "understanding"
 tags: [harness-engineering, agents, agent-architecture, orchestration, evaluation, prompt-engineering, context-engineering, meta-harness, nlh, dspy]
 sources:
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
-last_updated: "2026-04-19"
+  - "summaries/2024-12-19_anthropic_building-effective-agents.md"
+  - "summaries/2025-09-29_anthropic_effective-context-engineering.md"
+  - "summaries/2025-11-26_anthropic_effective-harnesses-long-running-agents.md"
+  - "summaries/2026-03-24_anthropic_harness-design-long-running-apps.md"
+  - "summaries/2026-04-15_anthropic_scaling-managed-agents.md"
+last_updated: "2026-04-20"
 ---
 
 # Harness Engineering
@@ -109,6 +114,63 @@ Two threats from the research:
 
 Treat third-party skills / AGENTS.md / tool packages like third-party code dependencies: review, pin, isolate blast radius.
 
+## Anthropic's Primary Sources (2024-2026)
+
+The harness-engineering discipline has a documented lineage in Anthropic's own engineering posts. Key landmarks:
+
+| Date | Post | What it added |
+|------|------|--------------|
+| 2024-12-19 | Building effective agents | Canonical **workflows vs agents** distinction and the five patterns — the vocabulary the field now uses |
+| 2025-09-29 | Effective context engineering | Named **context rot** (n² attention), formalized **just-in-time retrieval** over pre-loading, and the three long-horizon strategies: compaction / structured note-taking / sub-agent decomposition |
+| 2025-11-26 | Effective harnesses for long-running agents | **Initializer / coding agent split** — initializer writes `init.sh`, progress file, and a 200+ failing-feature checklist; coding agent picks one feature at a time. Commit-per-feature as the cross-window persistence layer. **Puppeteer MCP** for E2E verification over unit tests |
+| 2026-03-24 | Harness design for long-running apps | **GAN-style Planner / Generator / Evaluator** harness. Named **context anxiety** and **self-evaluation bias**. Introduced **sprint contracts**. Documented the 20× cost delta ($200 vs $9) for generator-evaluator runs |
+| 2026-04-15 | Scaling managed agents | **Brain / Hands / Session decoupling** — OS-style virtualization of the agent. Credentials outside the sandbox, lazy container provisioning (-90% p95 TTFT). See [Claude Managed Agents](../tools/claude-managed-agents.md) |
+
+## Context Engineering Inside the Harness
+
+The harness is where context engineering actually lives. See [Context Engineering](context-engineering.md) for the full treatment. Key primitives the harness wires:
+
+- **Just-in-time retrieval** via narrow, non-overlapping tools instead of pre-loading
+- **Full context resets with handoff artifacts** beat compaction for cross-session coherence (Anthropic March 2026)
+- **File-backed progress** (progress file, commit log) survives window turnover
+- **Context anxiety mitigation** — give the agent an explicit failing-feature list so window pressure doesn't push it to declare "done"
+
+## Generator-Evaluator as Production Pattern
+
+The GAN-inspired **Planner → Generator → Evaluator** loop is evaluator-optimizer taken seriously — evaluator is a full agent (not a judge call), rubric is explicit (design/originality/craft/functionality), and evaluator runs the app with Playwright/Puppeteer. 5-15 cycles per artifact. Full detail on [Generator-Evaluator Harness](generator-evaluator-harness.md).
+
+## Brain / Hands / Session Decoupling
+
+Anthropic's Scaling Managed Agents post (April 2026) operationalizes the OS analogy as a three-way split:
+
+| Component | Role | Recovery |
+|-----------|------|----------|
+| **Brain** | Stateless harness | `wake(sessionId)` + `getSession(id)` |
+| **Hands** | Interchangeable sandboxes — uniform `execute(name, input) → string` | Re-provision on tool-level error |
+| **Session** | Append-only log *outside* the context window | Model re-queries history without irreversible trimming |
+
+Design rule: **each layer has an independent lifecycle.** Failure of one shouldn't kill the session. Credentials live outside the sandbox (bundled at init or in vaults) so generated code can't reach them.
+
+This is a sharper operationalization of the OS analogy above: the session log is durable state ("disk") held distinctly from the harness ("OS") and the sandbox ("device drivers").
+
+## Initializer / Coding Agent Split
+
+For multi-context-window builds (Anthropic, November 2025):
+
+- **Initializer agent** — writes `init.sh`, progress file, feature list with 200+ failing flags, makes first commit
+- **Coding agent** — picks one feature, implements, verifies E2E with Puppeteer MCP, commits, moves on
+
+Failure modes mapped to fixes:
+
+| Problem | Fix |
+|---------|-----|
+| Premature "done" | Feature list with explicit failing flags |
+| Lost context between sessions | Git commits + progress file |
+| Marked-passing-but-broken | Mandatory E2E browser test |
+| Runtime confusion | Pre-written `init.sh` |
+
+The persistence layer is git itself — commit-per-feature lets the next session reconstruct progress without reading prior chat history.
+
 ## Related Pages
 
 - [Natural Language Harness](natural-language-harness.md) — NLH, execution contracts, three-layer separation
@@ -118,3 +180,5 @@ Treat third-party skills / AGENTS.md / tool packages like third-party code depen
 - [Claude Managed Agents](../tools/claude-managed-agents.md) — Anthropic's "meta-harness" product framing
 - [Prompt Engineering for Claude](prompt-engineering-claude.md) — prior-era techniques that still live inside the harness
 - [Auto Research](auto-research.md) — self-improving loop related to self-evolution findings
+- [Context Engineering](context-engineering.md) — the prior-era discipline the harness now absorbs
+- [Generator-Evaluator Harness](generator-evaluator-harness.md) — production variant of evaluator-optimizer

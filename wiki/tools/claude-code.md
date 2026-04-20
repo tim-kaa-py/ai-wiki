@@ -18,7 +18,13 @@ sources:
   - "summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md"
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
   - "summaries/2026-04-19_self_vscode-claude-code-hotkey.md"
-last_updated: "2026-04-19"
+  - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
+  - "summaries/2026-03-25_anthropic_claude-code-auto-mode.md"
+  - "summaries/2025-10-20_anthropic_claude-code-sandboxing.md"
+  - "summaries/2025-10-16_anthropic_agent-skills.md"
+  - "summaries/2026-02-05_anthropic_building-c-compiler.md"
+  - "summaries/2025-06-13_anthropic_multi-agent-research-system.md"
+last_updated: "2026-04-20"
 ---
 
 # Claude Code
@@ -86,10 +92,22 @@ Define in `.claude/agents/my-agent.md` with frontmatter controlling name, tools,
 
 Boris Cherny's personal agent set: `build-validator.md`, `code-architect.md`, `code-simplifier.md`, `oncall-guide.md`, `verify-app.md`. Each encodes detailed instructions for a specific task run at a consistent point in the workflow (e.g. code-simplifier runs after Claude finishes, verify-app runs before shipping). *(Source: Boris Cherny, Creator of Claude Code)*
 
-### Permissions: `/permissions` vs `--dangerously-skip-permissions`
-The `/permissions` command lets you pre-allow safe bash commands by pattern (e.g. `Bash(bun run test:*)`). Allowlists are stored in `.claude/settings.json` and can be checked into the team repo so all teammates share the same pre-approved command set. **Never use `--dangerously-skip-permissions`** — it is a blanket bypass with no granularity.
+### Permissions: Three Strategies
+Anthropic's canonical guidance: Claude Code offers **three complementary permission strategies**, not one right answer. Compose them.
 
-See [Claude Code Permissions](../how-tos/claude-code-permissions.md) for the full how-to. *(Source: Boris Cherny, Creator of Claude Code)*
+| Strategy | Command | When to use |
+|----------|---------|-------------|
+| **Allowlist** | `/permissions` | Team-shared pre-approved safe commands (build/test/lint) |
+| **Auto mode** | `--permission-mode auto` | Long autonomous runs; classifier gates each action |
+| **Sandbox** | `/sandbox` | OS-level isolation for unknown scripts / unattended runs |
+
+**Never use `--dangerously-skip-permissions`** — it is a blanket bypass with no granularity. All three strategies above are safer.
+
+**Auto mode** uses a two-stage classifier (prompt-injection detector on inputs, transcript classifier on outputs). Classifier strips assistant narrative so the agent can't rationalize bad calls. Three approval tiers (safe-tool allowlist, in-project file ops, high-risk review). Metrics: **0.4% FP / 17% FN**. Escalation halt after 3 consecutive or 20 total denials. Safer than skip-permissions, **not** a substitute for human review on prod.
+
+**Sandbox** (`/sandbox`) uses bubblewrap on Linux, seatbelt on macOS. Restricts filesystem + network — and catches spawned subprocesses, which application-level permissioning can't. Internal testing: **-84% permission prompts**. Claude Code on the Web extends this to cloud VMs with credentials held in a separate proxy (Claude never touches signing keys).
+
+See [Claude Code Permissions](../how-tos/claude-code-permissions.md), [Auto Mode](../how-tos/claude-code-auto-mode.md), and [Sandboxing](../how-tos/claude-code-sandboxing.md). *(Source: Anthropic Engineering, Boris Cherny)*
 
 ### MCP Integration
 Claude Code can use MCP servers to interact with external services (Slack, BigQuery, Sentry). Configuration lives in `.mcp.json`, checked into the team repo so all team members get the same tool access.
@@ -254,9 +272,109 @@ Claude 4.6 models are significantly more proactive than predecessors. Key adjust
 
 See [Prompt Engineering for Claude](../concepts/prompt-engineering-claude.md) for the full set of patterns.
 
+## Canonical Best Practices (Anthropic)
+
+Most of Anthropic's official guidance traces to one constraint: **context fills fast, and performance degrades as it fills.** Nearly every rule is downstream of this.
+
+### The Four-Phase Loop: Explore → Plan → Implement → Commit
+
+Default workflow for non-trivial tasks. Use Plan Mode (Shift+Tab twice, or `Ctrl+G` to open the plan in an editor). Skip this only for one-line fixes.
+
+### CLAUDE.md Hygiene
+
+For every line in CLAUDE.md, ask: **"Would removing this make Claude wrong?"** If no, cut it. A bloated CLAUDE.md is an ignored CLAUDE.md.
+
+- **CLAUDE.md** = always loaded, applies broadly (project conventions, tool setup)
+- **Skills** = on-demand, domain-specific (see [Agent Skills](../concepts/agent-skills.md))
+- **Hooks** = deterministic — use for what must happen every time, not things Claude should "usually" do
+
+CLAUDE.md is *advisory*. Hooks are *deterministic*. Don't put things in CLAUDE.md that need to happen reliably.
+
+### The After-2-Corrections Rule
+
+If you've corrected Claude twice on the same task, don't fight a polluted context. **`/clear` and rewrite the prompt** with what you learned. Keep going in a polluted context and quality compounds downward.
+
+### Fan-Out for Large Changes
+
+Scripted parallel `claude -p` invocations across many files or repos:
+
+```bash
+for f in $(cat files.txt); do
+  claude -p "apply refactor X to $f" --allowedTools "Edit,Bash(bun run test:*)"
+done
+```
+
+**Test on 2-3 inputs before fanning out** to catch prompt issues cheaply.
+
+### Writer / Reviewer Pattern
+
+Fresh-context reviewer beats self-review. After the writer Claude finishes, spawn a reviewer Claude with a clean context and the output. The writer can't see its own blind spots; a fresh context can.
+
+### Subagents for Investigation
+
+Use subagents for open-ended investigation — they run in a **separate context window** and return only a summary. Keeps the main session's context clean. This is the cheapest way to "look something up" without polluting the current thread.
+
+### Common Failure Patterns (and the Fix)
+
+| Failure | Fix |
+|---------|-----|
+| Kitchen-sink session (too many topics) | `/clear` |
+| Endless corrections | `/clear` + rewrite prompt |
+| Over-specified CLAUDE.md | Prune aggressively |
+| Trust-then-verify gap | Always include "and verify by X" |
+| Infinite exploration | Scope, or delegate to subagent |
+
+### Useful Side-Channel Commands
+
+```bash
+claude --continue            # resume most recent session
+claude --resume              # pick from session list
+claude -p "prompt" --output-format json
+```
+```
+/btw     # side question that doesn't pollute main context
+@path/to/file              # CLAUDE.md import
+${user_config.key}         # manifest template literal
+```
+
+*(Source: Anthropic — Claude Code Best Practices)*
+
+## Agent Skills
+
+Skills are reusable capability bundles packaged as a directory with a `SKILL.md` file. Available in Claude.ai, Claude Code, Agent SDK, and the Developer Platform.
+
+**Progressive disclosure — three levels:**
+1. **L1:** `name` + `description` always in system prompt
+2. **L2:** full SKILL.md loads when Claude judges the skill relevant
+3. **L3+:** bundled scripts / reference files load on demand
+
+Frontmatter:
+```yaml
+---
+name: my-skill
+description: Specific, action-oriented description — what it does and when to use
+---
+```
+
+The description is the discovery signal. A vague description means the skill never triggers. Put deterministic work into bundled scripts (Anthropic's PDF skill uses Python) instead of burning tokens. **Audit unfamiliar skills before installing** — malicious skills can introduce vulnerabilities.
+
+See [Agent Skills](../concepts/agent-skills.md) for the concept. *(Source: Anthropic Engineering)*
+
+## Parallel Claudes: Lock-File Agent Teams
+
+Nicholas Carlini's C compiler project ran **16 parallel Claude Code agents** in a shared Docker + Git repo, coordinated only by lock files on work items. No human in the loop, no lead agent. ~2,000 sessions over two weeks produced a 100k-line Rust C compiler that compiles Linux 6.9 across x86/ARM/RISC-V with a **99% test pass rate**.
+
+Load-bearing insight: **"The task verifier must be nearly perfect."** Autonomous agents will solve whatever has clear feedback — weak tests cause drift. Most engineering effort goes into test infrastructure, not orchestration.
+
+Contrast with the hierarchical **orchestrator-worker** pattern of the multi-agent research system (lead Opus + parallel Sonnet workers, +90.2% over single-agent Opus, at **15× token cost**). See [Parallel Agent Patterns](../concepts/parallel-agent-patterns.md) for both.
+
 ## Related Pages
 
 - [Claude Code Permissions](../how-tos/claude-code-permissions.md)
+- [Claude Code Auto Mode](../how-tos/claude-code-auto-mode.md)
+- [Claude Code Sandboxing](../how-tos/claude-code-sandboxing.md)
+- [Agent Skills](../concepts/agent-skills.md)
+- [Parallel Agent Patterns](../concepts/parallel-agent-patterns.md)
 - [Claude Routines](claude-routines.md)
 - [Claude Routines vs n8n](../comparisons/claude-routines-vs-n8n.md)
 - [Claude Code Orchestration Layers](../comparisons/claude-code-orchestration-layers.md)

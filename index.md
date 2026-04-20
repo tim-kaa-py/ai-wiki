@@ -20,6 +20,13 @@
 | 2026-04-16 | [Claude Code Status Line Setup](summaries/2026-04-16_self_claude-code-statusline-setup.md) | article | claude-code, workflow, how-to, reference, terminal, configuration, status-line |
 | 2026-04-07 | [How to use Karpathy's Autoresearch to 10x Claude (Ben AI)](summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md) | youtube | auto-research, self-improving-ai, optimization, skills, claude-code, evals, agents, linkedin, criteria-design |
 | 2026-04-19 | [VSCode Hotkey: Launch Claude Code in Editor Tab](summaries/2026-04-19_self_vscode-claude-code-hotkey.md) | article | claude-code, vscode, configuration, workflow, how-to, reference |
+| 2026-03-25 | [Claude Code auto mode (Anthropic)](summaries/2026-03-25_anthropic_claude-code-auto-mode.md) | article | claude-code, permissions, auto-mode, safety, prompt-injection, classifier |
+| 2026-02-05 | [Building a C compiler with parallel Claudes (Anthropic)](summaries/2026-02-05_anthropic_building-c-compiler.md) | article | agent-teams, parallel-claude, claude-code, autonomous, multi-agent |
+| 2025-11-04 | [Code execution with MCP (Anthropic)](summaries/2025-11-04_anthropic_code-execution-with-mcp.md) | article | mcp, code-execution, agents, context-management, progressive-disclosure |
+| 2025-10-20 | [Claude Code sandboxing (Anthropic)](summaries/2025-10-20_anthropic_claude-code-sandboxing.md) | article | claude-code, sandbox, security, permissions, bubblewrap, seatbelt |
+| 2025-10-16 | [Agent Skills (Anthropic)](summaries/2025-10-16_anthropic_agent-skills.md) | article | agent-skills, claude, skills, progressive-disclosure, mcp |
+| 2025-09-11 | [Writing effective tools for agents (Anthropic)](summaries/2025-09-11_anthropic_writing-tools-for-agents.md) | article | tool-design, agents, mcp, evaluation, namespacing, best-practices |
+| 2025-04-18 | [Claude Code Best Practices (Anthropic)](summaries/2025-04-18_anthropic_claude-code-best-practices.md) | docs | claude-code, best-practices, claude-md, plan-mode, sub-agents, hooks, skills |
 
 ### Wiki Pages
 
@@ -41,6 +48,13 @@
 - [Claude Code Status Line Setup](wiki/how-tos/claude-code-status-line.md) — how-to: live dashboard for context window, rate limits, session cost, code velocity
 - [Auto Research](wiki/concepts/auto-research.md) — concept: Karpathy's self-improving optimization loop, three-level criteria framework, autonomous skill optimization
 - [VSCode Hotkey: Launch Claude Code in Editor Tab](wiki/how-tos/vscode-claude-code-hotkey.md) — how-to: Ctrl/Cmd+Shift+C opens Claude Code as a full editor tab for parallel sessions
+- [Claude Code Auto Mode](wiki/how-tos/claude-code-auto-mode.md) — how-to: classifier-gated permissions (0.4% FP / 17% FN), three approval tiers, when to use vs `/permissions` or `/sandbox`
+- [Claude Code Sandboxing](wiki/how-tos/claude-code-sandboxing.md) — how-to: `/sandbox` with bubblewrap/seatbelt OS isolation, Claude Code on the Web with credential proxy
+- [Agent Skills](wiki/concepts/agent-skills.md) — concept: progressive disclosure 3 levels, SKILL.md frontmatter, skills-vs-CLAUDE.md
+- [Parallel Agent Patterns](wiki/concepts/parallel-agent-patterns.md) — concept: Carlini's lock-file agent teams + orchestrator-worker research system, 90.2% gain at 15× cost
+- [Tool Design for Agents](wiki/concepts/tool-design-for-agents.md) — concept: five Anthropic principles, ACI=HCI, prototype→evaluate→optimize loop
+- [MCP (Model Context Protocol)](wiki/concepts/mcp.md) — concept: MCP overview, code-execution pattern (-98.7% tokens), Tool Search / Programmatic Tool Calling / Tool Use Examples
+- [Desktop Extensions (.mcpb)](wiki/how-tos/desktop-extensions-mcpb.md) — how-to: one-click MCP install, manifest schema, enterprise MDM/Group Policy
 
 ## Understanding AI
 
@@ -49,6 +63,17 @@
 | Date | Title | Type | Tags |
 |------|-------|------|------|
 | 2026-04-14 | [Rethinking AI Agents: The Rise of Harness Engineering (PY)](summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md) | youtube | harness-engineering, agents, agent-architecture, prompt-engineering, context-engineering, meta-harness, dspy, nlh, evaluation, claude-code |
+| 2026-04-18 | [Quantifying infrastructure noise in agentic coding evals (Anthropic)](summaries/2026-04-18_anthropic_quantifying-infrastructure-noise.md) | article | evaluation, agents, benchmarks, infrastructure, swe-bench, terminal-bench |
+| 2026-03-24 | [Harness design for long-running app development (Anthropic)](summaries/2026-03-24_anthropic_harness-design-long-running-apps.md) | article | harness-engineering, agents, generator-evaluator, context-management, multi-agent |
+| 2026-03-06 | [Eval awareness in Claude Opus 4.6's BrowseComp (Anthropic)](summaries/2026-03-06_anthropic_eval-awareness-browsecomp.md) | article | evaluation, eval-awareness, alignment, contamination, multi-agent |
+| 2026-01-09 | [Demystifying evals for AI agents (Anthropic)](summaries/2026-01-09_anthropic_demystifying-evals-for-ai-agents.md) | article | evaluation, agents, graders, pass-at-k, swe-bench, best-practices |
+| 2025-11-26 | [Effective harnesses for long-running agents (Anthropic)](summaries/2025-11-26_anthropic_effective-harnesses-long-running-agents.md) | article | harness-engineering, agents, long-running, initializer-agent, testing |
+| 2025-09-29 | [Effective context engineering for AI agents (Anthropic)](summaries/2025-09-29_anthropic_effective-context-engineering.md) | article | context-engineering, agents, context-rot, compaction, sub-agents |
+| 2025-06-13 | [How we built our multi-agent research system (Anthropic)](summaries/2025-06-13_anthropic_multi-agent-research-system.md) | article | multi-agent, research, orchestrator-worker, parallelization, evaluation |
+| 2025-03-20 | [The 'think' tool (Anthropic)](summaries/2025-03-20_anthropic_think-tool.md) | article | think-tool, tool-use, reasoning, tau-bench, swe-bench |
+| 2025-01-06 | [SWE-bench 49% with Claude 3.5 Sonnet (Anthropic)](summaries/2025-01-06_anthropic_swe-bench-sonnet.md) | article | swe-bench, claude, agents, scaffolding, evaluation |
+| 2024-12-19 | [Building effective agents (Anthropic)](summaries/2024-12-19_anthropic_building-effective-agents.md) | article | agents, workflows, orchestration-patterns, prompt-chaining, routing, parallelization, evaluator-optimizer |
+| 2024-09-19 | [Introducing Contextual Retrieval (Anthropic)](summaries/2024-09-19_anthropic_contextual-retrieval.md) | article | rag, retrieval, embeddings, bm25, contextual-retrieval, prompt-caching |
 
 ### Wiki Pages
 
@@ -57,6 +82,13 @@
 - [Natural Language Harness (NLH)](wiki/concepts/natural-language-harness.md) — Tingua's three-layer separation, execution contracts, file-backed state
 - [Meta Harness](wiki/concepts/meta-harness.md) — Omar Khattab / Stanford: optimizing the pipeline itself, raw traces irreplaceable, harness transfers across models
 - [Omar Khattab](wiki/people/omar-khattab.md) — DSPy + Meta Harness author
+- [Context Engineering](wiki/concepts/context-engineering.md) — concept: context rot (n² attention), just-in-time retrieval, three long-horizon strategies
+- [Generator-Evaluator Harness](wiki/concepts/generator-evaluator-harness.md) — concept: GAN-inspired planner/generator/evaluator, sprint contracts, 20× cost reality
+- [Agent Evaluation](wiki/concepts/agent-evaluation.md) — concept: vocabulary, three grader types, pass@k vs pass^k, per-agent-class patterns, eval-driven development
+- [Eval Awareness](wiki/concepts/eval-awareness.md) — concept: BrowseComp incident, contamination breakdown, 3.7× multi-agent amplification, defenses
+- [Infrastructure Noise in Evals](wiki/concepts/infrastructure-noise-in-evals.md) — concept: 6pp Terminal-Bench gap, environment-dependent benchmarks, recommendations
+- [The 'think' Tool](wiki/concepts/think-tool.md) — concept: no-op mid-chain reasoning tool, distinct from extended thinking, τ-Bench airline +54%
+- [Contextual Retrieval](wiki/concepts/contextual-retrieval.md) — concept: prepend chunk-context summaries, 35%/49%/67% failure-rate reductions, $1.02/M tokens
 
 ## AI Ecosystem
 
@@ -65,6 +97,11 @@
 | Date | Title | Type | Tags |
 |------|-------|------|------|
 | 2026-04-18 | [Anthropic Built It. OpenAI and LangChain Just Responded (The AI Automators)](summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md) | youtube | managed-agents, claude, openai, langchain, agents, harness, sandbox, agent-frameworks, infrastructure, comparison |
+| 2026-04-15 | [Scaling Managed Agents: Decoupling brain from hands (Anthropic)](summaries/2026-04-15_anthropic_scaling-managed-agents.md) | article | managed-agents, claude, agents, harness, architecture, sandbox |
+| 2026-01-21 | [Designing AI-resistant technical evaluations (Anthropic)](summaries/2026-01-21_anthropic_designing-ai-resistant-evaluations.md) | article | hiring, evaluation, claude, performance-engineering, ai-resistance |
+| 2025-11-24 | [Advanced tool use on the Claude Developer Platform (Anthropic)](summaries/2025-11-24_anthropic_advanced-tool-use.md) | article | tool-use, claude-api, tool-search, programmatic-tool-calling, context-management |
+| 2025-09-17 | [Postmortem of three recent issues (Anthropic)](summaries/2025-09-17_anthropic_postmortem-three-recent-issues.md) | article | postmortem, claude, infrastructure, model-quality, tpu |
+| 2025-06-26 | [Desktop Extensions: One-click MCP install (Anthropic)](summaries/2025-06-26_anthropic_desktop-extensions.md) | article | mcp, claude-desktop, mcpb, packaging, enterprise |
 
 ### Wiki Pages
 
@@ -75,6 +112,7 @@
 - [Deep Agents & Deep Agents Deploy](wiki/tools/deep-agents-deploy.md) — LangChain's open-source harness + SaaS deployment; open-license-but-not-open-deployment critique
 - [OpenAI Agents SDK](wiki/tools/openai-agents-sdk.md) — OpenAI's next-evolution agent SDK with baked-in harness, sandbox integrations
 - [Managed Agent Platforms](wiki/comparisons/managed-agent-platforms.md) — head-to-head: Claude Managed Agents vs Deep Agents Deploy vs OpenAI Agents SDK
+- [AI-Resistant Evaluation Design](wiki/comparisons/ai-resistant-evaluation-design.md) — comparison: V1/V2/V3 take-home arc, why Zachtronics-style puzzles resist model pattern-matching
 
 ## My Lab
 
@@ -87,4 +125,4 @@
 
 ---
 
-**16 sources** | **30 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**39 sources** | **45 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)

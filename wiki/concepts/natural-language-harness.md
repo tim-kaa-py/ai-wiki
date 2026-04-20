@@ -5,7 +5,9 @@ pillar: "understanding"
 tags: [nlh, harness-engineering, agents, agent-architecture, orchestration, execution-contracts]
 sources:
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
-last_updated: "2026-04-19"
+  - "summaries/2025-09-29_anthropic_effective-context-engineering.md"
+  - "summaries/2026-03-24_anthropic_harness-design-long-running-apps.md"
+last_updated: "2026-04-20"
 ---
 
 # Natural Language Harness (NLH)
@@ -70,8 +72,19 @@ The conclusion: **representation is a first-class design variable**, not bookkee
 - When child agents drop state between delegation hops.
 - When you're about to add another verifier/searcher module — first try rewriting what you have as NLH with explicit contracts and artifact-backed completion.
 
+## Convergent Framings from Anthropic
+
+Two Anthropic posts converge on primitives NLH names explicitly:
+
+- **Just-in-time retrieval** (Sep 2025) — load info via tools when needed, not upfront. This is what NLH's "permissions" slot in execution contracts enforces, and what file-backed state enables at the harness level. See [Context Engineering](context-engineering.md).
+- **Sprint contracts** (March 2026) — negotiated definitions of "done" before implementation. This sits alongside NLH's execution contracts: execution contracts bound the *agent call*, sprint contracts bound the *work unit*. See [Generator-Evaluator Harness](generator-evaluator-harness.md).
+
+Both fit the NLH three-layer split cleanly: they're task-specific control logic (NLH layer), not runtime charter, not back-end infrastructure.
+
 ## Related Pages
 
 - [Harness Engineering](harness-engineering.md) — the parent concept
 - [Agent Orchestration Patterns](agent-orchestration-patterns.md) — the patterns NLH expresses cleanly
 - [Meta Harness](meta-harness.md) — optimizing a harness NLH describes
+- [Context Engineering](context-engineering.md) — just-in-time retrieval as an NLH-compatible primitive
+- [Generator-Evaluator Harness](generator-evaluator-harness.md) — sprint contracts alongside execution contracts

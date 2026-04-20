@@ -6,7 +6,8 @@ tags: [managed-agents, agent-frameworks, infrastructure, comparison, agents, san
 sources:
   - "summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md"
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
-last_updated: "2026-04-19"
+  - "summaries/2026-04-15_anthropic_scaling-managed-agents.md"
+last_updated: "2026-04-20"
 ---
 
 # Agent Platform Tiers (Build-to-Buy Spectrum)
@@ -42,6 +43,8 @@ Tier choice, not vendor choice, is what drives lock-in. The three surfaces that 
 | 5 | SaaS | SaaS | SaaS (opaque) |
 
 Migration cost scales with how much state the vendor owns. That is why moving off Tier 3+ is painful: you're moving memory, infra, and harness simultaneously.
+
+**Anthropic's Brain / Hands / Session decoupling (April 2026)** refines this for Tier 3: at the managed-agent layer, vendors aren't ceding one monolith but three independently-lifecycled components — stateless harness (brain), interchangeable sandboxes (hands), and durable append-only session log. Recovery via `wake(sessionId)` + `getSession(id)`. Credentials live outside the sandbox surface. The three lock-in surfaces above map cleanly onto this split: *harness* = brain, *infra* = hands, *memory* = session. Evaluating a Tier-3 vendor means asking how cleanly *their* version of this decoupling is drawn and which slot you could swap out if needed. See [Claude Managed Agents](../tools/claude-managed-agents.md).
 
 **The harness surface is the one whose value changed most in 2026.** Stanford and LangChain documented a 6x performance variation attributable to the harness alone, and an optimized harness transfers across five models and improves all of them (see [Harness Engineering](harness-engineering.md)). That reframes the Tier-3+ decision: ceding "harness" is no longer ceding orchestration glue — it's ceding the reusable, compounding asset that often matters more than model choice.
 
