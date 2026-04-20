@@ -225,6 +225,23 @@ $ claude
 
 ---
 
+## Tim's Recommendations
+
+New to the wiki? These are the questions worth asking first. Open the repo in Claude.ai or a Claude Code session and paste them in directly.
+
+**Setup**
+- "How do I set up the Claude Code status bar?"
+- "How do I set up a VS Code keybinding to open a Claude Code terminal with Ctrl+C?"
+- "How do I make Shift+Enter work for multi-line input in Git Bash and the VS Code terminal with Claude Code?"
+- "How do I use Obsidian to browse this wiki?"
+
+**Getting started with Claude Code**
+- "What are the best practices for working with Claude Code?"
+
+*More recommendations will be added here over time.*
+
+---
+
 ## When In Doubt
 
 Ask. The agent can answer "how do I X in this system?" by reading `CLAUDE.md` and this file. If its answer contradicts what you want, update `CLAUDE.md` — that's how you teach the system.
