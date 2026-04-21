@@ -274,6 +274,7 @@ $ claude
 - [`log.md`](../log.md) — chronological ingest history.
 - [`playbook.md`](../playbook.md) — accumulated practices.
 - [`scripts/extract-transcript.py`](../scripts/extract-transcript.py) — YouTube/podcast transcript extractor.
+- [`docs/private-modules.md`](private-modules.md) — pattern for author-private extensions mounted inside this repo (some skills may not be available in a public clone).
 
 ---
 
