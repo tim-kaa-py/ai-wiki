@@ -50,7 +50,7 @@ Before writing any files, interview the user to define the topic-specific shape 
 4. **Starter tag taxonomy.** "List 5–15 tags you already know you'll use. Don't overthink — tags grow organically."
 5. **Primary interest lens.** "When I summarize a source, what should I bias toward capturing? (e.g., actionable how-tos, argument structures, tool comparisons, historical context.)"
 6. **Model routing preference.** "Do you have access to more than one Claude model (e.g., Sonnet + Opus)? If yes I'll route mechanical steps to the faster/cheaper model and deep analysis to the stronger one. If no, I'll use your single model for everything."
-7. **Repo visibility.** "Public or private GitHub repo? What account/org?"
+7. **Repo visibility.** "Public or private GitHub repo? What account/org?" If public, flag the **Confidentiality Scan (Step 0)** from the reference `CLAUDE.md` — it gates non-public content before it lands in `sources/` or `summaries/` and scans every generated summary before CONNECT. If private, the scan is optional (see §4.1).
 
 Record the answers. You will inject them into the `CLAUDE.md` template in Step 4.
 
@@ -79,7 +79,7 @@ Create the following directory structure in the working directory:
 ├── scripts/
 │   └── extract-transcript.py
 ├── sources/
-│   ├── article/
+│   ├── articles/
 │   ├── docs/
 │   ├── papers/
 │   ├── podcasts/
@@ -113,7 +113,8 @@ Use the reference implementation in this repo as your template: [`CLAUDE.md`](..
 - Replace **Source Types & Auto-Detection** rows if the user's source mix differs.
 - Replace **Tag Taxonomy** categories with the user's starter tags from Q4.
 - If the user has a single model only (Q6), replace the **Model Routing** section with: *"Single-model mode: all steps run on the user's available model. No sub-agent delegation."*
-- Keep **Frontmatter Schemas**, **Tier 1/Tier 2 Workflows**, **CONNECT Step Detail**, **Query Workflow**, **Lint Workflow**, and **Guardrails** unchanged — these are the mechanics.
+- **Confidentiality Scan (Step 0)** — keep as-is for public repos (Q7 = public). For private repos, the scan is optional; either drop the Step 0 section and its references in the workflows, or keep it as a lighter-weight sanity check (e.g., credentials only). Document the choice in the new repo's `CLAUDE.md` Guardrails so future sessions understand the threat model.
+- Keep **Frontmatter Schemas**, **Tier 1/Tier 2 Workflows** (minus or including Step 0 per above), **CONNECT Step Detail**, **Query Workflow**, **Lint Workflow**, and **Guardrails** unchanged — these are the mechanics.
 
 ### 4.2 `index.md`
 

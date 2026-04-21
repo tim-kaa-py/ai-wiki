@@ -17,6 +17,7 @@ Default model: **Sonnet**. The main session runs on Sonnet for orchestration and
 
 | Step | Model | Why |
 |------|-------|-----|
+| 0 (Confidentiality Scan) | **Sonnet sub-agent** | Compliance check — isolated scan with structured verdict |
 | 1-4 (metadata, slug, extract, save) | Sonnet | Mechanical — extraction, formatting, file I/O |
 | 5 (Focus & Discovery) | **Opus sub-agent** | Deep reading — mapping focus to transcript, discovering non-obvious points |
 | 6 (save notes) | Sonnet | Mechanical — file write |
@@ -42,16 +43,18 @@ Default model: **Sonnet**. The main session runs on Sonnet for orchestration and
 
 ## Source Types & Auto-Detection
 
-| URL pattern / input | Source type | Default tier |
-|---------------------|------------|-------------|
-| youtube.com, youtu.be | youtube | Deep dive |
-| Podcast URLs (common hosts) | podcast | Deep dive |
-| arxiv.org, .pdf file | paper | Deep dive |
-| github.com (not gist) | repo | Deep dive |
-| Any other URL | article | Quick clip |
-| File in `inbox/` | article | Quick clip |
-| User says "deep dive" | (any) | Deep dive (override) |
-| User says "quick" or "clip" | (any) | Quick clip (override) |
+| URL pattern / input | Source type | Folder | Default tier |
+|---------------------|------------|--------|-------------|
+| youtube.com, youtu.be | youtube | `sources/youtube/` | Deep dive |
+| Podcast URLs (common hosts) | podcast | `sources/podcasts/` | Deep dive |
+| arxiv.org, .pdf file | paper | `sources/papers/` | Deep dive |
+| github.com (not gist) | repo | `sources/repos/` | Deep dive |
+| Any other URL | article | `sources/articles/` | Quick clip |
+| File in `inbox/` | article | `sources/articles/` | Quick clip |
+| User says "deep dive" | (any) | — | Deep dive (override) |
+| User says "quick" or "clip" | (any) | — | Quick clip (override) |
+
+**Folder naming convention:** All `sources/` subdirectories use the **plural** form of the source type (`articles/`, `podcasts/`, `papers/`, `repos/`). Exception: `youtube/` stays singular — "youtubes" is not valid English for a proper noun.
 
 ## Slug Format
 
@@ -64,7 +67,7 @@ Default model: **Sonnet**. The main session runs on Sonnet for orchestration and
 
 ## Frontmatter Schemas
 
-### Source (`sources/<type>/<slug>.md`)
+### Source (`sources/<folder>/<slug>.md`, where `<folder>` is the plural folder from the table above)
 
 ```yaml
 ---
@@ -95,7 +98,7 @@ url: "<url>"
 pillar: "<pillar>"
 tags: [tag1, tag2]
 ingested: "<YYYY-MM-DD>"
-source_file: "sources/<type>/<slug>.md"
+source_file: "sources/<folder>/<slug>.md"
 ---
 ```
 
@@ -114,6 +117,79 @@ last_updated: "<YYYY-MM-DD>"
 ---
 ```
 
+## Step 0 — Confidentiality Scan
+
+This wiki is public. Before ingesting any source that is **not obviously public**, scan the content for confidential information that must not be published.
+
+### When to run
+
+**Run Step 0 when the source is NOT obviously public:**
+- Files found in `inbox/` (unknown provenance)
+- User-pasted content (transcripts, documents, text blobs)
+- User-authored material (concepts, internal docs, personal notes the user explicitly ingests as a source)
+- Any source where you are not certain the content is already publicly published
+
+**Skip Step 0 when the source IS obviously public:**
+- YouTube, podcast, arxiv, GitHub, and web article URLs fetched via WebFetch/yt-dlp (the content is already published)
+- Documentation pages on public vendor sites
+
+When in doubt, run the scan. The cost is low.
+
+**Also run Step 0 on the generated summary** (after Step 7 / after Tier 1 Summarize), regardless of whether the source was scanned. Summaries fold in user notes and focus points which can introduce context the source did not have.
+
+### Where it slots into the workflows
+
+- **Tier 1 (Quick Clip):** For URL-paste entry, skip (source is public). For inbox/pasted content, run Step 0 after SAVE and before SUMMARIZE. Always run the summary scan after SUMMARIZE and before CONNECT.
+- **Tier 2 (Deep Dive):** For public URLs (YT/podcast/paper/repo), skip the source scan. For user-supplied non-public material, run Step 0 **before Step 3 (Extract)** so we don't waste tokens on content that may be aborted. Always run the summary scan after Step 7 (Summarize) and before Step 8 (CONNECT).
+
+### How to run
+
+**Model: Sonnet sub-agent.** Spawn via Agent tool. The sub-agent does the scan in isolation and returns a structured verdict.
+
+Prompt the sub-agent with:
+- Path(s) to the content to scan
+- Role framing: *"You are a compliance specialist reviewing content for public publication in an open-source knowledge wiki. You also understand the value of publishing useful technical content — your goal is to enable safe publication, not to strip everything that could theoretically be sensitive."*
+- What to look for (use judgment, over-flag in doubt):
+  - Client/customer names and identifiers
+  - Internal project codenames or product names not publicly announced
+  - Employee names and internal team references
+  - Internal tool names, internal URLs, internal system identifiers
+  - Credentials, API keys, tokens, connection strings
+  - Financial figures tied to specific clients or unreleased deals
+  - Unreleased client deliverables or pre-publication drafts
+  - Anything that would embarrass the author or a third party if published
+- Rule: **when uncertain, flag it and let the user decide.** False positives cost one prompt; false negatives cost a leak.
+
+### Expected sub-agent output
+
+Return a structured verdict:
+
+```
+VERDICT: CLEAR | FLAGGED
+
+If FLAGGED, for each issue:
+- LOCATION: file path + line range or quoted span
+- CATEGORY: (client-name | internal-tool | credential | employee | financial | unreleased | other)
+- CONCERN: one-sentence explanation of why this is potentially confidential
+
+REMEDIATION OPTIONS (3-4 options, compliance-specialist framing):
+Option A: <description>
+  - Pros: <what this preserves>
+  - Cons: <what this loses>
+  - Compliance assessment: <risk level after applying this option>
+Option B: ...
+Option C: ...
+(Option D: abort the ingest — always include this)
+```
+
+### Handling the verdict
+
+- **CLEAR:** Proceed to the next workflow step. No user interaction needed.
+- **FLAGGED:** Present the full verdict and options to the user. Wait for the user to choose an option (by letter) or provide custom instructions. Do not proceed until the user has resolved every flagged item.
+- After remediation, re-scan the revised content before proceeding. Repeat until CLEAR or the user aborts.
+
+If the user chooses to abort, stop the workflow. Do not write partial artifacts to `sources/` or `summaries/`.
+
 ## Tier 1 — Quick Clip Workflow
 
 **Model: Sonnet (all steps).** Quick clips don't require deep analysis.
@@ -128,22 +204,23 @@ User pastes a URL (not YouTube/podcast/arxiv/github).
 2. **FETCH** — Retrieve content via WebFetch
 3. **CLASSIFY** — Assign pillar and tags based on content
 4. **SLUG** — Generate slug from author/domain + title + date
-5. **SAVE** — Write verbatim content to `sources/<type>/<slug>.md` with frontmatter
+5. **SAVE** — Write verbatim content to `sources/<folder>/<slug>.md` with frontmatter
 6. **SUMMARIZE** — Generate `summaries/<slug>.md`:
    - TL;DR (2-3 sentences)
    - Key Takeaways (numbered, with **How to apply** for actionable items)
    - Notable Commands/Snippets (if applicable)
    - Related Topics (tags)
-7. **CONNECT** — Update wiki pages (see CONNECT step below)
-8. **INDEX** — Add row to `index.md` under correct pillar
-9. **LOG** — Append entry to `log.md` (date, action, source, type, tier, what was updated)
+7. **SCAN SUMMARY** — Run Step 0 on the generated summary. Resolve any flags before proceeding.
+8. **CONNECT** — Update wiki pages (see CONNECT step below)
+9. **INDEX** — Add row to `index.md` under correct pillar
+10. **LOG** — Append entry to `log.md` (date, action, source, type, tier, what was updated)
 
 ### Entry Point B: Inbox Processing
 
 User says "process inbox" or similar.
 
 1. **SCAN** — List all files in `inbox/`
-2. **For each file:** READ → CLASSIFY → SLUG → move to `sources/<type>/` → SUMMARIZE → CONNECT → INDEX → LOG
+2. **For each file:** READ → **Step 0 (Confidentiality Scan — inbox files are non-public by default)** → CLASSIFY → SLUG → move to `sources/<folder>/` → SUMMARIZE → **Scan summary (Step 0)** → CONNECT → INDEX → LOG
 3. **CLEAN** — Delete processed files from `inbox/`
 
 ## Tier 2 — Deep Dive Workflow
@@ -171,6 +248,8 @@ Check `index.md` for duplicates (match on URL or video ID). If already processed
 
 Generate slug from metadata: `YYYY-MM-DD_source-slug_title-slug`
 
+**If the source is not obviously public** (e.g., user-supplied document rather than a public URL), run the **Confidentiality Scan (Step 0)** on the raw source material now, before Extract. For public URLs (YouTube, podcast, arxiv, GitHub, web articles), skip the source scan — the summary scan after Step 7 is sufficient.
+
 ### Step 3 — Extract
 
 **YouTube/Podcast:**
@@ -189,7 +268,7 @@ Use `extraction_method` from the output to set the source frontmatter field.
 
 ### Step 4 — Save
 
-Write to `sources/<type>/<slug>.md` with full frontmatter. Content is verbatim — never edit after saving.
+Write to `sources/<folder>/<slug>.md` with full frontmatter. Content is verbatim — never edit after saving.
 
 ### Step 5 — Focus & Discovery
 
@@ -307,6 +386,8 @@ Focus on what the USER found interesting, not a generic overview.
 - **Key Concepts:** Include when the creator explains or defines terms/concepts. Omit if no concepts worth defining separately.
 - **Argument Structures:** Include when the creator makes substantive arguments. Omit for purely instructional content (feature walkthroughs, tutorials, how-tos with no argumentation).
 
+**After the summary is written, run the Confidentiality Scan (Step 0) on `summaries/<slug>.md`.** The summary folds in user notes and focus points, which can introduce context the source did not have. Resolve any flags before proceeding to Connect.
+
 ### Step 8 — Connect
 
 **Model: Opus sub-agent.** Spawn via Agent tool with `model: "opus"`. Prompt the sub-agent with:
@@ -390,3 +471,66 @@ Use existing tags when possible. Create new tags sparingly. Keep tags lowercase,
 - **Always confirm metadata** with user before proceeding (Tier 2 only)
 - **Log every ingest** to `log.md`
 - **Report CONNECT updates** — always tell the user which wiki pages were created or modified
+- **This repo is public** — run the **Confidentiality Scan (Step 0)** on every non-public source before extract/summarize, and on every generated summary before CONNECT. When in doubt whether something is public, run the scan.
+- **Manual edits are not scanned automatically** — if the user (or Claude) edits a source, summary, or wiki page by hand outside the ingest workflow, ask Claude to run a confidentiality pass on the edited file before committing. The Step 0 workflow only runs when a workflow runs.
+- **Keep docs in sync with CLAUDE.md** — when CLAUDE.md is functionally extended or changed, update `docs/user-documentation.md` and `docs/concept.md` in the same response. See [Self-Documentation Rule](#self-documentation-rule) for what counts as a functional change and which doc receives which update.
+
+## Self-Documentation Rule
+
+This repo has three doc surfaces with distinct audiences. Keeping them in sync is part of every functional change, not a separate cleanup task.
+
+| Surface | Audience | Purpose |
+|---------|----------|---------|
+| `CLAUDE.md` | The agent | Operating contract. Authoritative. |
+| `docs/user-documentation.md` | The human user | Daily usage, overrides, pitfalls. |
+| `docs/concept.md` | A different agent recreating the system | Architecture + scaffolding guide. |
+
+### What counts as a functional change
+
+**In scope (trigger the rule):**
+- New workflow step, or a changed trigger/order for an existing step.
+- New or changed guardrail that affects agent behavior.
+- Changed model routing (which step runs on which model).
+- New frontmatter field, new slug rule, new tag-taxonomy category.
+- New script, or a breaking change to an existing script's interface.
+- New public/private-repo consideration.
+- Any change to what the user sees, has to know, or can do.
+
+**Out of scope (do NOT trigger the rule):**
+- Typo fixes, wording tweaks, reformatting.
+- Internal examples that don't change behavior.
+- Edits that clarify without changing rules.
+
+### Routing table
+
+| Change type | Update `CLAUDE.md` | Update `user-documentation.md` | Update `concept.md` |
+|-------------|:------------------:|:------------------------------:|:-------------------:|
+| New/changed workflow step visible to the user | ✓ (authoritative) | ✓ (what the user sees) | ✓ if it's a recreation-template consideration |
+| New guardrail with user impact | ✓ | ✓ | — unless public/private relevant |
+| New guardrail, agent-internal only | ✓ | — | — |
+| Changed model routing | ✓ | ✓ if it changes cost/speed the user notices | ✓ (template consideration for recreation) |
+| New frontmatter / schema field | ✓ | — unless the user edits files by hand | ✓ (template consideration) |
+| New script / breaking script change | ✓ | ✓ (prerequisites + usage) | ✓ (scripts section) |
+| Public/private-repo consideration | ✓ | ✓ | ✓ (bootstrap interview + template section) |
+| Typo / wording / formatting | as needed | as needed | as needed |
+
+### Timing
+
+Update the docs in the **same response** as the CLAUDE.md change. Context is loaded, rationale is fresh, routing decisions are obvious. Do not defer to a "cleanup pass later" — later never comes.
+
+### Cross-check
+
+After editing the docs:
+1. Re-read the changed sections in `CLAUDE.md`.
+2. Verify the docs describe the same behavior using the same terminology.
+3. Reconcile any contradictions — CLAUDE.md is authoritative; docs follow.
+
+### Out of this rule's scope
+
+- `playbook.md` — user-approval required for changes; not auto-updated.
+- `MEMORY.md` — session-side memory, not repo documentation.
+- `README.md` — minimal pointer file; update only if links break or top-level structure changes.
+
+### Enforcement
+
+This rule lives in CLAUDE.md and is agent-enforced. There is no pre-commit hook. Manual edits to CLAUDE.md made outside a Claude Code session bypass it — after such edits, ask Claude to "sync the docs with CLAUDE.md" as a recovery step.

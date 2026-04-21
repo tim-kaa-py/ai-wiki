@@ -147,6 +147,58 @@ Durable agentic-coding practices, workflows, and anti-patterns that survived con
 
 ---
 
+## Confidentiality Scan
+
+Because this wiki is a **public repo**, the agent runs a confidentiality scan on anything that is not obviously public content before it lands in `sources/` or `summaries/`.
+
+### When it runs
+
+**Scanned:**
+- Files you drop into `inbox/` (unknown provenance).
+- Content you paste directly into the session (transcripts, docs, notes).
+- Sources you explicitly mark as your own (concepts, internal docs, personal notes you ingest as sources).
+- **Every generated summary** — summaries fold in your focus notes, which can introduce context the original source did not have.
+
+**Not scanned:**
+- Public URLs the agent fetches itself (YouTube, podcast hosts, arxiv, GitHub, public articles/docs). The content is already published; scanning it adds no protection.
+
+When in doubt, the agent runs the scan. False positives cost you one prompt; a leak costs a lot more.
+
+### What the scan looks for
+
+A Sonnet sub-agent, framed as a compliance specialist, looks for (and over-flags when uncertain):
+
+- Client or customer names and identifiers.
+- Internal project codenames or product names not publicly announced.
+- Employee names and internal team references.
+- Internal tool names, internal URLs, internal system identifiers.
+- Credentials, API keys, tokens, connection strings.
+- Financial figures tied to specific clients or unreleased deals.
+- Unreleased client deliverables or pre-publication drafts.
+- Anything that would embarrass the author or a third party if published.
+
+### What you'll see when something is flagged
+
+The agent pauses the workflow and shows a structured verdict:
+
+- **Location** — which file, which lines / quoted span.
+- **Category** — e.g., `client-name`, `internal-tool`, `credential`.
+- **Concern** — one sentence on why this might be confidential.
+- **3–4 remediation options** with pros/cons and a compliance risk assessment. One option is always *abort the ingest*.
+
+You pick an option by letter, or write your own instruction. The agent applies the fix, re-scans, and repeats until the content is CLEAR or you abort. On abort, nothing gets written to `sources/` or `summaries/`.
+
+### Known gaps
+
+- **Manual edits bypass the scan.** If you edit a source, summary, or wiki page by hand outside the ingest workflow, the scan won't run automatically. Ask the agent to scan the file before you commit: *"Run a confidentiality scan on `summaries/<slug>.md` before I commit."*
+- **Notes alongside a public source.** If you ingest a public YouTube transcript and add your own focus notes that contain internal context, the source scan is skipped (public content) but the **summary scan catches it** once the notes are folded in. The window between "you write the note" and "the summary runs" is the risk — keep it in mind when pasting focus bullets.
+
+### Overriding the scan
+
+You can tell the agent to skip the scan for a specific ingest (*"Skip the confidentiality scan — this is already public"*), or to run it on demand against a specific file (*"Scan `sources/notes/foo.md`"*). The scan is a guardrail, not a cage.
+
+---
+
 ## Git / GitHub
 
 The repo is a normal Git repo. Commit cadence is up to you. Practical options:
