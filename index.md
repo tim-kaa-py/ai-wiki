@@ -16,6 +16,8 @@
 | 2026-04-14 | [Claude Routines Just Dropped, And It's Perfect (Nick Saraev)](summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md) | youtube | claude-code, agents, workflow, automation, how-to |
 | 2026-04-15 | [Optimize your terminal setup (Anthropic)](summaries/2026-04-15_claude-docs_optimize-your-terminal-setup.md) | docs | claude-code, terminal, configuration, how-to, reference |
 | 2026-04-13 | [GSD vs Superpowers vs Claude Code (Chase AI)](summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md) | youtube | claude-code, comparison, agents, workflow, gsd, superpowers, orchestration |
+| 2026-04-20 | [The ONLY Claude Design Guide You Should Watch (Chase AI)](summaries/2026-04-20_chase-ai_only-claude-design-guide-you-should-watch.md) | youtube | claude-design, claude-code, front-end, design-system, tutorial, workflow |
+| 2026-04-18 | [How I Built INSANE Claude Design Websites In 10 Minutes (Jono Catliff)](summaries/2026-04-18_jono-catliff_how-i-built-insane-claude-design-websites-in-10-minutes.md) | youtube | claude-design, claude-code, nextjs, gsap, vercel, deployment, handoff |
 | 2026-01-02 | [Claude Code Tips from the Creator (Boris Cherny)](summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md) | articles | claude-code, workflow, hooks, agents, permissions, mcp, best-practices |
 | 2026-04-16 | [Claude Code Status Line Setup](summaries/2026-04-16_self_claude-code-statusline-setup.md) | articles | claude-code, workflow, how-to, reference, terminal, configuration, status-line |
 | 2026-04-07 | [How to use Karpathy's Autoresearch to 10x Claude (Ben AI)](summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md) | youtube | auto-research, self-improving-ai, optimization, skills, claude-code, evals, agents, linkedin, criteria-design |
@@ -55,6 +57,7 @@
 - [Tool Design for Agents](wiki/concepts/tool-design-for-agents.md) — concept: five Anthropic principles, ACI=HCI, prototype→evaluate→optimize loop
 - [MCP (Model Context Protocol)](wiki/concepts/mcp.md) — concept: MCP overview, code-execution pattern (-98.7% tokens), Tool Search / Programmatic Tool Calling / Tool Use Examples
 - [Desktop Extensions (.mcpb)](wiki/how-tos/desktop-extensions-mcpb.md) — how-to: one-click MCP install, manifest schema, enterprise MDM/Group Policy
+- [Claude Design](wiki/tools/claude-design.md) — tool reference: visual mock-up tool (cloud.ai/design), tweaks + variants for fast iteration, design systems, export to Claude Code
 
 ## Understanding AI
 
@@ -63,6 +66,7 @@
 | Date | Title | Type | Tags |
 |------|-------|------|------|
 | 2026-04-14 | [Rethinking AI Agents: The Rise of Harness Engineering (PY)](summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md) | youtube | harness-engineering, agents, agent-architecture, prompt-engineering, context-engineering, meta-harness, dspy, nlh, evaluation, claude-code |
+| 2026-04-19 | [The Future of MCP — David Soria Parra, Anthropic (AI Engineer)](summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md) | youtube | mcp, protocol, agents, progressive-discovery, programmatic-tool-calling, skills, connectivity, anthropic |
 | 2026-04-18 | [Quantifying infrastructure noise in agentic coding evals (Anthropic)](summaries/2026-04-18_anthropic_quantifying-infrastructure-noise.md) | articles | evaluation, agents, benchmarks, infrastructure, swe-bench, terminal-bench |
 | 2026-03-24 | [Harness design for long-running app development (Anthropic)](summaries/2026-03-24_anthropic_harness-design-long-running-apps.md) | articles | harness-engineering, agents, generator-evaluator, context-management, multi-agent |
 | 2026-03-06 | [Eval awareness in Claude Opus 4.6's BrowseComp (Anthropic)](summaries/2026-03-06_anthropic_eval-awareness-browsecomp.md) | articles | evaluation, eval-awareness, alignment, contamination, multi-agent |
@@ -129,4 +133,4 @@
 
 ---
 
-**40 sources** | **48 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**43 sources** | **49 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
