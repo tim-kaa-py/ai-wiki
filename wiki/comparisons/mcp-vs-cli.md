@@ -7,7 +7,8 @@ sources:
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2025-11-04_anthropic_code-execution-with-mcp.md"
   - "summaries/2025-11-24_anthropic_advanced-tool-use.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
+last_updated: "2026-04-21"
 ---
 
 # MCP vs CLI
@@ -45,6 +46,22 @@ So: for deterministic third-party API work, MCP can be strictly more expensive t
 ## Progressive Disclosure
 
 Both platforms need it past ~dozens of tools. Showing all tools upfront inflates tokens and degrades quality across *unrelated* prompts (niche tools get over-called). See [MCP](../concepts/mcp.md) Tool Search for the MCP-side fix, and [Harness Engineering](../concepts/harness-engineering.md#progressive-disclosure-past-dozens-of-tools) for the general principle.
+
+## The Connectivity Stack (Parra, April 2026)
+
+David Soria Parra (Anthropic, MCP maintainer) extends the "support both" framing into a **four-part connectivity stack**: the best 2026 agents use **all of** Skills + MCP + CLI + computer-use together, and pick per job. The argument by construction:
+
+- **Knowledge-worker agents** (financial analysts, marketers) are the 2026 production wave — not just coders. Their needs are "connect to five SaaS apps and a shared drive," not "compile and verify locally."
+- **No single mechanism covers that surface:** CLIs need a sandbox, computer-use is brittle, raw MCP lacks pre-trained affordances, skills alone have no runtime.
+- Therefore: stack them. Anyone claiming a silver bullet is wrong by construction.
+
+Role per layer:
+- **Skills** — domain knowledge / usage guidance (cheap in context).
+- **CLI** — sandboxed pre-trained tools (git, gh); self-repairing; cheap amortized cost.
+- **MCP** — rich/enterprise/UI-bearing integrations; permissioned semantics.
+- **Computer-use** — the long tail no one wired up.
+
+Budget context accordingly: skills and CLI are cheap; MCP tool lists need progressive discovery.
 
 ## Why You Support Both
 

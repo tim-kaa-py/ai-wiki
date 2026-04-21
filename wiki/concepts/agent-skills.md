@@ -6,7 +6,8 @@ tags: [agent-skills, claude, skills, progressive-disclosure, agents, mcp, claude
 sources:
   - "summaries/2025-10-16_anthropic_agent-skills.md"
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
+last_updated: "2026-04-21"
 ---
 
 # Agent Skills
@@ -70,6 +71,14 @@ Skills are code + instructions that enter Claude's trusted context. **Malicious 
 2. **Write the description last.** Draft the skill body, then write a frontmatter description that specifically names the task and the trigger conditions.
 3. **Move deterministic work into scripts.** Any step that doesn't require model judgment should be a script call.
 4. **Test the discovery signal.** Give the agent representative tasks without priming for the skill. If it doesn't pick up the skill, the description is too vague.
+
+## Forward-Looking: Skills over MCP
+
+David Soria Parra (Anthropic, MCP maintainer — AI Engineer April 2026) announced **skills-over-MCP** as an upcoming MCP extension in the June 2026 spec. An MCP server will ship not only tools but the **skill files** that explain how to use them, folding today's distribution channels (plugins, registries, separate `load_skills` tools) into the protocol itself.
+
+Implication for skill authors: once this lands, server authors can push updated usage guidance alongside updated tools through a single channel — no plugin mechanism or external registry required. Skills become a first-class MCP primitive, not just a Claude Code / Claude.ai feature.
+
+See [MCP — Future of MCP / 2026 Roadmap](mcp.md#future-of-mcp--2026-roadmap).
 
 ## Relation to Broader Patterns
 

@@ -7,7 +7,8 @@ sources:
   - "summaries/2025-09-11_anthropic_writing-tools-for-agents.md"
   - "summaries/2024-12-19_anthropic_building-effective-agents.md"
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
+last_updated: "2026-04-21"
 ---
 
 # Tool Design for Agents
@@ -45,6 +46,18 @@ Notion's evolution (April 2026) past a handful of tools into 100+: **few-shot-ba
 Shift to **crisp per-tool goal descriptions** — what the tool accomplishes, when to use it, when not to. Teams then own their own tools end-to-end. This is a discipline consistent with Principle 5 (prompt-engineer the description) but sharpened for multi-team scale.
 
 Practical implication: stop investing in curated few-shots for new capabilities. Invest in goal-focused descriptions plus progressive disclosure (see [MCP](./mcp.md#mcp-vs-cli--not-a-dichotomy) Tool Search).
+
+## Design for an Agent, Not a 1:1 REST Conversion
+
+David Soria Parra (Anthropic, MCP maintainer — AI Engineer April 2026) sharpens Principle 1 for the MCP era: **wrapping a REST API 1:1 as MCP tools is an anti-pattern.** REST is designed for human/machine request-response consumers; it preserves none of MCP's rich semantics (applications, elicitations, tasks, skills-over-MCP). A 1:1 converter ships the REST surface and ignores all of that — you pay MCP's overhead for zero of its benefits.
+
+Design from the agent's perspective:
+- Start from "how would a human use this *through* an agent?"
+- Collapse multi-call workflows into single high-level tools.
+- Use elicitations for missing input, tasks for long-running work, applications for the human UI surface.
+- If your server is `tool() → JSON` everywhere with no MCP-unique semantics, downgrade to a CLI or REST.
+
+Parra's rule: *"If you are not using MCP-unique semantics, don't use MCP."* This is Principle 1 ("fewer but better tools") applied at the protocol level.
 
 ## Don't Hide Your Tool List
 
