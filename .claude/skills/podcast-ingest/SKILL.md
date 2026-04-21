@@ -82,7 +82,7 @@ Set `extraction_method: "user-pasted"` in frontmatter.
 
 ## Step 4 — Save Source
 
-Write to `sources/podcast/<slug>.md`:
+Write to `sources/podcasts/<slug>.md`:
 
 ```yaml
 ---
