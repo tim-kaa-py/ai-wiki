@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/AI-resistant-technical-evaluations"
 pillar: "ecosystem"
 tags: [hiring, evaluation, claude, performance-engineering, ai-resistance]
 ingested: "2026-04-20"
-source_file: "sources/article/2026-01-21_anthropic_designing-ai-resistant-evaluations.md"
+source_file: "sources/articles/2026-01-21_anthropic_designing-ai-resistant-evaluations.md"
 ---
 
 # Designing AI-Resistant Technical Evaluations — Summary

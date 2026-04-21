@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/harness-design-long-running-apps"
 pillar: "understanding"
 tags: [harness-engineering, agents, generator-evaluator, context-management, multi-agent]
 ingested: "2026-04-20"
-source_file: "sources/article/2026-03-24_anthropic_harness-design-long-running-apps.md"
+source_file: "sources/articles/2026-03-24_anthropic_harness-design-long-running-apps.md"
 ---
 
 # Harness Design for Long-Running App Development — Summary

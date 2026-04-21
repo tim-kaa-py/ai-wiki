@@ -7,7 +7,7 @@ url: "https://podcasts.apple.com/de/podcast/latent-space-the-ai-engineer-podcast
 pillar: "ecosystem"
 tags: [agents, mcp, notion, tool-use, architecture, building, ecosystem, software-factory, evals, harness-design]
 ingested: "2026-04-20"
-source_file: "sources/podcast/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
+source_file: "sources/podcasts/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
 ---
 
 # Notion's Token Town: 5 Rebuilds, 100+ Tools, MCP vs CLIs and the Software Factory Future — Summary

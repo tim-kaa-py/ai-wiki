@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/claude-think-tool"
 pillar: "understanding"
 tags: [think-tool, claude, tool-use, reasoning, tau-bench, swe-bench, agents]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-03-20_anthropic_think-tool.md"
+source_file: "sources/articles/2025-03-20_anthropic_think-tool.md"
 ---
 
 # The "Think" Tool — Summary

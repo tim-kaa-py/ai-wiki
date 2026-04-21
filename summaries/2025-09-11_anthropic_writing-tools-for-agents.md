@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/writing-tools-for-agents"
 pillar: "building"
 tags: [tool-design, agents, mcp, evaluation, claude-code, namespacing, best-practices]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-09-11_anthropic_writing-tools-for-agents.md"
+source_file: "sources/articles/2025-09-11_anthropic_writing-tools-for-agents.md"
 ---
 
 # Writing Effective Tools for Agents — Summary

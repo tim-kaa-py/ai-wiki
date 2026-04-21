@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/claude-code-auto-mode"
 pillar: "building"
 tags: [claude-code, permissions, auto-mode, safety, prompt-injection, classifier]
 ingested: "2026-04-20"
-source_file: "sources/article/2026-03-25_anthropic_claude-code-auto-mode.md"
+source_file: "sources/articles/2026-03-25_anthropic_claude-code-auto-mode.md"
 ---
 
 # Claude Code Auto Mode — Summary

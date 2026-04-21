@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/building-effective-agents"
 pillar: "understanding"
 tags: [agents, workflows, orchestration-patterns, prompt-chaining, routing, parallelization, evaluator-optimizer, mcp]
 ingested: "2026-04-20"
-source_file: "sources/article/2024-12-19_anthropic_building-effective-agents.md"
+source_file: "sources/articles/2024-12-19_anthropic_building-effective-agents.md"
 ---
 
 # Building Effective Agents (Anthropic) — Summary

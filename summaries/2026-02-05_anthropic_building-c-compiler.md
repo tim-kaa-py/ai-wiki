@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/building-c-compiler"
 pillar: "building"
 tags: [agent-teams, parallel-claude, claude-code, autonomous, multi-agent, agents]
 ingested: "2026-04-20"
-source_file: "sources/article/2026-02-05_anthropic_building-c-compiler.md"
+source_file: "sources/articles/2026-02-05_anthropic_building-c-compiler.md"
 ---
 
 # Parallel Claudes Build a C Compiler — Summary

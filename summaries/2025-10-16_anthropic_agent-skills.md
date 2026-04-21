@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-
 pillar: "building"
 tags: [agent-skills, claude, skills, progressive-disclosure, agents, mcp, claude-code]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-10-16_anthropic_agent-skills.md"
+source_file: "sources/articles/2025-10-16_anthropic_agent-skills.md"
 ---
 
 # Agent Skills — Summary

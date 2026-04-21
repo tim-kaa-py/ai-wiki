@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/a-postmortem-of-three-recent-issues"
 pillar: "ecosystem"
 tags: [postmortem, claude, infrastructure, model-quality, debugging, tpu]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-09-17_anthropic_postmortem-three-recent-issues.md"
+source_file: "sources/articles/2025-09-17_anthropic_postmortem-three-recent-issues.md"
 ---
 
 # Postmortem: Three Anthropic Quality Bugs (Aug-Sep 2025) — Summary

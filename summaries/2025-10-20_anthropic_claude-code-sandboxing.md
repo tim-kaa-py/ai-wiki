@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/claude-code-sandboxing"
 pillar: "building"
 tags: [claude-code, sandbox, security, permissions, bubblewrap, seatbelt, claude-code-web]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-10-20_anthropic_claude-code-sandboxing.md"
+source_file: "sources/articles/2025-10-20_anthropic_claude-code-sandboxing.md"
 ---
 
 # Claude Code Sandboxing — Summary

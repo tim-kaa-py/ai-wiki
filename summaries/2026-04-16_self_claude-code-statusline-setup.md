@@ -7,7 +7,7 @@ url: ""
 pillar: "building"
 tags: [claude-code, workflow, how-to, reference, terminal, configuration, status-line]
 ingested: "2026-04-16"
-source_file: "sources/article/2026-04-16_self_claude-code-statusline-setup.md"
+source_file: "sources/articles/2026-04-16_self_claude-code-statusline-setup.md"
 ---
 
 # Claude Code Status Line — Summary

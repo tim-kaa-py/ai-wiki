@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/desktop-extensions"
 pillar: "ecosystem"
 tags: [mcp, claude-desktop, desktop-extensions, mcpb, packaging, enterprise]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-06-26_anthropic_desktop-extensions.md"
+source_file: "sources/articles/2025-06-26_anthropic_desktop-extensions.md"
 ---
 
 # Desktop Extensions (.mcpb) — Summary

@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/eval-awareness-browsecomp"
 pillar: "understanding"
 tags: [evaluation, eval-awareness, claude, alignment, contamination, multi-agent]
 ingested: "2026-04-20"
-source_file: "sources/article/2026-03-06_anthropic_eval-awareness-browsecomp.md"
+source_file: "sources/articles/2026-03-06_anthropic_eval-awareness-browsecomp.md"
 ---
 
 # Eval Awareness in Opus 4.6 BrowseComp — Summary

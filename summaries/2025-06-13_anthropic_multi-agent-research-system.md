@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/multi-agent-research-system"
 pillar: "understanding"
 tags: [multi-agent, research, orchestrator-worker, claude, prompt-engineering, evaluation, parallelization]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-06-13_anthropic_multi-agent-research-system.md"
+source_file: "sources/articles/2025-06-13_anthropic_multi-agent-research-system.md"
 ---
 
 # Multi-Agent Research System (Anthropic) — Summary

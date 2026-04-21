@@ -7,7 +7,7 @@ url: "https://x.com/bcherny"
 pillar: "building"
 tags: [claude-code, workflow, hooks, agents, permissions, mcp, best-practices, how-to]
 ingested: "2026-04-15"
-source_file: "sources/article/2026-01-02_bcherny_claude-code-tips-from-creator.md"
+source_file: "sources/articles/2026-01-02_bcherny_claude-code-tips-from-creator.md"
 ---
 
 # Claude Code Tips from the Creator (Boris Cherny Thread) — Summary

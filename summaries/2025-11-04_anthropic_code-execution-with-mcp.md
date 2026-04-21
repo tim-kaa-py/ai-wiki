@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/code-execution-with-mcp"
 pillar: "building"
 tags: [mcp, code-execution, agents, context-management, tool-use, progressive-disclosure]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-11-04_anthropic_code-execution-with-mcp.md"
+source_file: "sources/articles/2025-11-04_anthropic_code-execution-with-mcp.md"
 ---
 
 # Code Execution with MCP — Summary

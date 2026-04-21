@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents"
 pillar: "understanding"
 tags: [evaluation, agents, graders, pass-at-k, claude-code, swe-bench, best-practices]
 ingested: "2026-04-20"
-source_file: "sources/article/2026-01-09_anthropic_demystifying-evals-for-ai-agents.md"
+source_file: "sources/articles/2026-01-09_anthropic_demystifying-evals-for-ai-agents.md"
 ---
 
 # Demystifying evals for AI agents — Summary

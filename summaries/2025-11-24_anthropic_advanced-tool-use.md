@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/advanced-tool-use"
 pillar: "ecosystem"
 tags: [tool-use, claude-api, tool-search, programmatic-tool-calling, agents, context-management]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-11-24_anthropic_advanced-tool-use.md"
+source_file: "sources/articles/2025-11-24_anthropic_advanced-tool-use.md"
 ---
 
 # Advanced Tool Use (Claude Developer Platform) — Summary

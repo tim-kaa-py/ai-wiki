@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/contextual-retrieval"
 pillar: "understanding"
 tags: [rag, retrieval, embeddings, bm25, contextual-retrieval, claude, prompt-caching]
 ingested: "2026-04-20"
-source_file: "sources/article/2024-09-19_anthropic_contextual-retrieval.md"
+source_file: "sources/articles/2024-09-19_anthropic_contextual-retrieval.md"
 ---
 
 # Contextual Retrieval — Summary

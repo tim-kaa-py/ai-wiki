@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/effective-harnesses-for-long-running
 pillar: "understanding"
 tags: [harness-engineering, agents, long-running, claude, initializer-agent, testing]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-11-26_anthropic_effective-harnesses-long-running-agents.md"
+source_file: "sources/articles/2025-11-26_anthropic_effective-harnesses-long-running-agents.md"
 ---
 
 # Effective harnesses for long-running agents — Summary

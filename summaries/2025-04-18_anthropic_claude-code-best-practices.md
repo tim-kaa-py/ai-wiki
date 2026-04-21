@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/claude-code-best-practices"
 pillar: "building"
 tags: [claude-code, best-practices, claude-md, plan-mode, sub-agents, hooks, skills, mcp, parallel-sessions]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-04-18_anthropic_claude-code-best-practices.md"
+source_file: "sources/articles/2025-04-18_anthropic_claude-code-best-practices.md"
 ---
 
 # Claude Code Best Practices (Anthropic Docs) — Summary

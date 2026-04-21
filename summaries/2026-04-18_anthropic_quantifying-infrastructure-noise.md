@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/infrastructure-noise"
 pillar: "understanding"
 tags: [evaluation, agents, benchmarks, infrastructure, swe-bench, terminal-bench]
 ingested: "2026-04-20"
-source_file: "sources/article/2026-04-18_anthropic_quantifying-infrastructure-noise.md"
+source_file: "sources/articles/2026-04-18_anthropic_quantifying-infrastructure-noise.md"
 ---
 
 # Quantifying infrastructure noise in agentic coding evals — Summary

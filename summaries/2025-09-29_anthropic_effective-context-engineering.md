@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai
 pillar: "understanding"
 tags: [context-engineering, agents, prompt-engineering, context-rot, compaction, sub-agents]
 ingested: "2026-04-20"
-source_file: "sources/article/2025-09-29_anthropic_effective-context-engineering.md"
+source_file: "sources/articles/2025-09-29_anthropic_effective-context-engineering.md"
 ---
 
 # Effective Context Engineering for AI Agents — Summary

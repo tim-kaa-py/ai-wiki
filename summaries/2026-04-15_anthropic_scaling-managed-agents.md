@@ -7,7 +7,7 @@ url: "https://www.anthropic.com/engineering/managed-agents"
 pillar: "ecosystem"
 tags: [managed-agents, claude, agents, harness, architecture, sandbox]
 ingested: "2026-04-20"
-source_file: "sources/article/2026-04-15_anthropic_scaling-managed-agents.md"
+source_file: "sources/articles/2026-04-15_anthropic_scaling-managed-agents.md"
 ---
 
 # Scaling Managed Agents — Summary
