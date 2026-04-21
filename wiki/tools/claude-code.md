@@ -24,7 +24,9 @@ sources:
   - "summaries/2025-10-16_anthropic_agent-skills.md"
   - "summaries/2026-02-05_anthropic_building-c-compiler.md"
   - "summaries/2025-06-13_anthropic_multi-agent-research-system.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-04-20_chase-ai_only-claude-design-guide-you-should-watch.md"
+  - "summaries/2026-04-18_jono-catliff_how-i-built-insane-claude-design-websites-in-10-minutes.md"
+last_updated: "2026-04-21"
 ---
 
 # Claude Code
@@ -219,6 +221,16 @@ Claude Code supports a custom status line configured via `settings.json`. A well
 
 See [Claude Code Status Line Setup](../how-tos/claude-code-status-line.md) for the full setup guide. *(Source: self)*
 
+## Front-End Work: Hand Off to Claude Design
+
+For front-end / landing-page / slide-deck work, Claude Code is **not** the fastest path to ~90% of the final design. Chase AI's argument: one-shot output from Claude Code and [Claude Design](claude-design.md) is comparable, but Claude Design lets you iterate via *tweaks* on an already-rendered page, while Claude Code re-generates from a blank state on every prompt.
+
+**Recommended split:** use Claude Design to nail the visual design (design system → variants → tweaks), export HTML, then bring it into Claude Code for production build-out — routing, state management, backend wiring, deploy. Don't pick one tool for the whole job.
+
+**Deploy pipeline (Jono Catliff):** After the Claude Design Export → Handoff to Claude Code command, append a one-shot build prompt naming **Next.js + GSAP + CLAUDE.md**. Then: Claude Code pushes to a fresh GitHub repo via a single instruction → Vercel imports the repo with **Framework Preset = Next.js** (the only non-default field) → custom domain via Vercel Domains tab. A prepared CLAUDE.md at the project root is the linchpin — without it you get generic scaffolding on the one-shot. See [Claude Design § Export → Claude Code → Deploy Pipeline](claude-design.md#export--claude-code--deploy-pipeline-jono-catliff).
+
+See [Claude Design](claude-design.md) for the workflow, pitfalls (usage burn, variant/tweak ordering), and mobile handling. *(Source: Chase AI, Jono Catliff)*
+
 ## Orchestration Layers: GSD, Superpowers, and Why Vanilla Wins
 
 Third-party orchestration layers like [GSD](gsd.md) and [Superpowers](superpowers.md) sit on top of Claude Code and restructure how it approaches complex projects — adding planning rigor, sub-agent-driven development, and context management. Chase AI's head-to-head benchmark (same AI agency website built by all three) found that vanilla Claude Code won decisively:
@@ -375,6 +387,7 @@ Contrast with the hierarchical **orchestrator-worker** pattern of the multi-agen
 - [Claude Code Sandboxing](../how-tos/claude-code-sandboxing.md)
 - [Agent Skills](../concepts/agent-skills.md)
 - [Parallel Agent Patterns](../concepts/parallel-agent-patterns.md)
+- [Claude Design](claude-design.md) — browser-based front-end generator; hand off its HTML export to Claude Code
 - [Claude Routines](claude-routines.md)
 - [Claude Routines vs n8n](../comparisons/claude-routines-vs-n8n.md)
 - [Claude Code Orchestration Layers](../comparisons/claude-code-orchestration-layers.md)
