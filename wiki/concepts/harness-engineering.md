@@ -10,6 +10,7 @@ sources:
   - "summaries/2025-11-26_anthropic_effective-harnesses-long-running-agents.md"
   - "summaries/2026-03-24_anthropic_harness-design-long-running-apps.md"
   - "summaries/2026-04-15_anthropic_scaling-managed-agents.md"
+  - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
 last_updated: "2026-04-20"
 ---
 
@@ -88,8 +89,32 @@ Every harness component encodes an assumption about what the model can't do — 
 - **Anthropic dropped context resets** once Opus 4.6 no longer needed them.
 - **Vercel removed 80% of an agent's tools** and got better results.
 - **Manus rewrote their harness 5x in 6 months.**
+- **Notion rewrote their agent harness five times** across ~3.5 years: JS coding-agent → XML representation → Notion-flavored markdown → SQLite → progressive disclosure with 100+ tools. Simon Last's framing: "I'm basically just doing that [rewriting everything] in a loop every six months."
 
 The harness space doesn't shrink as models improve — it moves. Re-audit the harness on every model upgrade and actively delete scaffolding that no longer earns its keep.
+
+## Give the Model What It Wants
+
+Notion's crystallization of a cross-era harness principle: don't cater your wire format to *your* system's data model — cater to what the model was pretrained on. Any mismatch tax is paid on every single token of every single call.
+
+Two Notion case studies:
+
+- **XML that losslessly mapped Notion blocks failed.** The model didn't natively know the dialect; it had to be prompt-taught on every call. Replaced with a **Notion-flavored markdown** — simple markdown at the core plus minimal enhancements, *not* lossless.
+- **Custom JSON query format lost to SQLite.** Bespoke query DSL underperformed; switching to SQLite (which models handle fluently) worked immediately.
+
+Rule of thumb: prototype new tool interfaces in the most vanilla format a frontier model already handles; only add custom structure when evals justify it.
+
+## Progressive Disclosure Past Dozens of Tools
+
+Notion's harness crossed 100 tools and every new tool "nerfed the overall model" — tokens ballooned and unrelated tools got over-called on unrelated prompts. The fix is progressive disclosure: reveal tools incrementally rather than dumping the full catalog into the system prompt.
+
+- **CLIs get this for free** — the wrapper is the initial surface; `--help` and reading files expose capability on demand.
+- **MCP does not get this by default** — the protocol is not inherently progressive; the harness has to layer search/help/namespacing on top (see [MCP](mcp.md) Tool Search).
+- **Distributed tool ownership.** Few-shot-based systems force a center-of-excellence gate because every engineer edits one shared order-sensitive system prompt. Crisp per-tool goal descriptions let feature teams ship tools independently.
+
+## Don't Hide the System Prompt
+
+Notion explicitly doesn't treat its system prompt or tool list as secret sauce. Exposing the agent's tool surface builds user trust and turns power users into better prompters — they know what the agent can actually do. The "secret sauce" narrative is usually a rationalization for friction.
 
 ## Representation as a Lever
 

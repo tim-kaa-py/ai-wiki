@@ -6,6 +6,7 @@ tags: [tool-design, agents, mcp, aci, evaluation, claude-code, best-practices]
 sources:
   - "summaries/2025-09-11_anthropic_writing-tools-for-agents.md"
   - "summaries/2024-12-19_anthropic_building-effective-agents.md"
+  - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
 last_updated: "2026-04-20"
 ---
 
@@ -37,8 +38,21 @@ Treat tools as artifacts that need iteration, not one-shot writes:
 
 The loop is the method: tools improve by being used and measured, not by upfront design.
 
+## Goals Over Few-Shots (Distributed Tool Ownership)
+
+Notion's evolution (April 2026) past a handful of tools into 100+: **few-shot-based tool specification doesn't scale organizationally.** With few-shots, every engineer editing a tool ends up editing one shared, order-sensitive system-prompt string — which forces a center-of-excellence gating function and bottlenecks feature teams.
+
+Shift to **crisp per-tool goal descriptions** — what the tool accomplishes, when to use it, when not to. Teams then own their own tools end-to-end. This is a discipline consistent with Principle 5 (prompt-engineer the description) but sharpened for multi-team scale.
+
+Practical implication: stop investing in curated few-shots for new capabilities. Invest in goal-focused descriptions plus progressive disclosure (see [MCP](./mcp.md#mcp-vs-cli--not-a-dichotomy) Tool Search).
+
+## Don't Hide Your Tool List
+
+Notion's position: "we don't think our system prompt is our secret sauce." Users benefit from knowing the tool surface — it builds trust and turns power users into better prompters. Hiding the system prompt and tool catalog is usually a rationalization, not actual moat.
+
 ## Related
 
 - [MCP](./mcp.md) — the protocol most of these tools ship over, including advanced features (Tool Search, Programmatic Tool Calling, Tool Use Examples) that extend these principles.
 - [Think Tool](./think-tool.md) — a tool-design pattern for mid-chain reasoning in long tool-use loops.
 - [Desktop Extensions (.mcpb)](../how-tos/desktop-extensions-mcpb.md) — packaging format for distributing agent tools.
+- [MCP vs CLI](../comparisons/mcp-vs-cli.md) — the tool-surface decision beyond individual tool design.

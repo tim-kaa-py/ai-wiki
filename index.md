@@ -97,6 +97,7 @@
 | Date | Title | Type | Tags |
 |------|-------|------|------|
 | 2026-04-18 | [Anthropic Built It. OpenAI and LangChain Just Responded (The AI Automators)](summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md) | youtube | managed-agents, claude, openai, langchain, agents, harness, sandbox, agent-frameworks, infrastructure, comparison |
+| 2026-04-15 | [Notion's Token Town: 5 Rebuilds, 100+ Tools, MCP vs CLIs, Software Factory (Latent Space)](summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md) | podcast | agents, mcp, notion, tool-use, architecture, software-factory, evals, harness-design |
 | 2026-04-15 | [Scaling Managed Agents: Decoupling brain from hands (Anthropic)](summaries/2026-04-15_anthropic_scaling-managed-agents.md) | article | managed-agents, claude, agents, harness, architecture, sandbox |
 | 2026-01-21 | [Designing AI-resistant technical evaluations (Anthropic)](summaries/2026-01-21_anthropic_designing-ai-resistant-evaluations.md) | article | hiring, evaluation, claude, performance-engineering, ai-resistance |
 | 2025-11-24 | [Advanced tool use on the Claude Developer Platform (Anthropic)](summaries/2025-11-24_anthropic_advanced-tool-use.md) | article | tool-use, claude-api, tool-search, programmatic-tool-calling, context-management |
@@ -113,6 +114,9 @@
 - [OpenAI Agents SDK](wiki/tools/openai-agents-sdk.md) — OpenAI's next-evolution agent SDK with baked-in harness, sandbox integrations
 - [Managed Agent Platforms](wiki/comparisons/managed-agent-platforms.md) — head-to-head: Claude Managed Agents vs Deep Agents Deploy vs OpenAI Agents SDK
 - [AI-Resistant Evaluation Design](wiki/comparisons/ai-resistant-evaluation-design.md) — comparison: V1/V2/V3 take-home arc, why Zachtronics-style puzzles resist model pattern-matching
+- [MCP vs CLI](wiki/comparisons/mcp-vs-cli.md) — comparison: permissions, self-repair, progressive disclosure, token economics; per-capability decision framework
+- [Software Factory](wiki/concepts/software-factory.md) — concept: coding agents as AGI kernel, automated develop/debug/review/merge/maintain loop
+- [Model Behavior Engineer (MBE)](wiki/concepts/model-behavior-engineer.md) — concept: Notion's non-engineering career track for eval authoring and LLM-judge calibration
 
 ## My Lab
 
@@ -125,4 +129,4 @@
 
 ---
 
-**39 sources** | **45 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**40 sources** | **48 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)

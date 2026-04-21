@@ -1,7 +1,7 @@
 # My Agentic Coding Playbook
 
 > A living document. Auto-updated when new relevant sources are ingested.
-> Last updated: 2026-04-19 (harness engineering principles added)
+> Last updated: 2026-04-20 (Notion Token Town / Latent Space — software factory, MCP vs CLI, three-tier evals)
 
 ## Core Principles
 
@@ -54,6 +54,26 @@ Principles from the 2026 harness-engineering research (PY, NLH paper, Meta Harne
 33. **Design parent agents as thin dispatchers; put reasoning budget into the children.** ~90% of compute in orchestrator-worker setups flows through delegated child agents, not the parent. The harness is an orchestration pattern, not a reasoning pattern — decompose, delegate, and bind children with contracts rather than loading the parent up. *(Source: PY — Rise of Harness Engineering)*
 
 34. **Treat community agent skills / AGENTS.md / shared tools like third-party dependencies.** 1-in-4 community-contributed agent skills contains a vulnerability; prompt injection can live in harness text. Review, pin, and isolate blast radius before you graft a shared skill into your system prompt or tool set. *(Source: PY — Rise of Harness Engineering)*
+
+35. **Rebuild your harness on a cadence (~6 months).** Simon Last rewrote Notion's harness five times across ~3.5 years: JS coding-agent → XML → Notion-flavored markdown → SQLite → progressive disclosure with 100+ tools. "I'm basically just doing that [rewriting everything] in a loop every six months." Low-ego teams that delete their own code move faster on the frontier; budget for periodic framework rewrites and hire managers who don't care about team-structure territoriality. *(Source: Sarah Sachs & Simon Last — Latent Space / Notion Token Town)*
+
+36. **Give the model what it wants, not your data model.** Cater your wire format to what the model was pretrained on, not to your system's internal representation. Notion's XML format that losslessly mapped to their block model failed — the model had to be prompt-taught every call. Simple markdown worked immediately. Same pattern: custom JSON query DSL lost to SQLite. Any mismatch tax is paid on every single token of every single call. *(Source: Sarah Sachs & Simon Last — Latent Space / Notion Token Town)*
+
+37. **Progressive disclosure is non-negotiable past ~dozens of tools.** At 100+ tools, Notion found every new tool "nerfed the overall model" — tokens ballooned and unrelated tools got over-called. Do not ship a harness that front-loads the full tool catalog; gate tool visibility behind search, help, and namespacing. CLIs get this for free; MCP needs the harness to layer it on (see MCP Tool Search). *(Source: Sarah Sachs & Simon Last — Latent Space / Notion Token Town)*
+
+38. **Choose MCP vs CLI per capability and per token economics.** Not a dichotomy. MCP wins for narrow, permissioned, deterministic work without a compute runtime. CLI wins for open-ended, self-healing capability — the agent can write/fix tools in the same environment. Under usage-based pricing, using an LLM to drive a deterministic third-party API is wasteful (token fees per call, worse outside the cache window); CLIs let one LLM turn write a script that then runs many times. Commit to both platforms; pick per quality need. *(Source: Sarah Sachs & Simon Last — Latent Space / Notion Token Town — see [MCP vs CLI](wiki/comparisons/mcp-vs-cli.md))*
+
+39. **Run three eval tiers, not one.** CI regression (must pass within stochastic error rate) + launch report card (80-90% per user journey, gates launches) + frontier / headroom tier (deliberately tuned to ~30% pass rate). If all your evals are ≥90% pass, you've saturated — a better model is indistinguishable from a worse one. Build a tier too hard for current frontier models; that's the only tier that keeps producing signal through capability cycles. *(Source: Sarah Sachs — Latent Space / Notion Token Town)*
+
+40. **Turn evals into an agent harness.** An agent downloads the dataset, runs the eval, inspects failures, proposes and implements fixes — humans observe the outer loop. Wire your eval framework so it's driveable from a CLI, then let a coding agent write your next eval the way it writes your next unit test. *(Source: Sarah Sachs — Latent Space / Notion Token Town)*
+
+41. **Define tools by goals, not few-shots, once you pass a handful of tools.** With few-shots, every engineer ends up editing one shared, order-sensitive system-prompt string — which forces a center-of-excellence gating function. Crisp per-tool goal descriptions ("what it does, when to use it, when not to") let feature teams own their own tools. *(Source: Sarah Sachs & Simon Last — Latent Space / Notion Token Town)*
+
+42. **Don't try to hide your system prompt or tool list.** Notion explicitly doesn't — "we don't think our system prompt is our secret sauce." Exposing the tool surface builds user trust and turns power users into better prompters who actually know what the agent can do. *(Source: Sarah Sachs & Simon Last — Latent Space / Notion Token Town)*
+
+43. **Two-skill discipline for frontier work.** (a) Know whether the blocker is model capability or your own harness/context exposure. (b) Read which direction capability is heading and pre-build product for that direction before the capability fully arrives. The trick is doing speculative work, but not doing it for too long when signals stay flat. Before a multi-month push, ask: "is this the model or our harness?" If model, time-box and park; if harness, keep pushing. *(Source: Sarah Sachs — Latent Space / Notion Token Town)*
+
+44. **Treat coding agents as the kernel; build toward the software factory.** Most capabilities collapse into "coding agent with the right tools and a sandbox." When adding a capability (e.g., PDF export), prefer giving the agent a sandbox + filesystem + code-writing ability over building a bespoke deterministic tool — unless the token economics argue otherwise (see #38). *(Source: Simon Last — Latent Space / Notion Token Town — see [Software Factory](wiki/concepts/software-factory.md))*
 
 ## Workflow Patterns
 
@@ -260,3 +280,8 @@ When picking an agent platform (Claude Managed Agents, LangChain Deep Agents Dep
 - **Adding modules before pruning the ones that stopped earning their keep.** In the NLH ablation, verifiers and multi-candidate search *actively hurt* benchmark scores. Mature harness work is subtraction first — delete assumptions the newer model no longer needs before stacking on new structure. *(Source: PY — Rise of Harness Engineering)*
 - **Keeping only trace summaries for agents you plan to iterate on.** Meta Harness accuracy drops almost as far with summaries (34.9%) as with no traces at all (34.6%) vs 50% with raw traces. Summaries destroy the signal future optimizers need. *(Source: PY — Rise of Harness Engineering)*
 - **Grafting community-contributed skills into your harness without review.** 1-in-4 contains a vulnerability; prompt injection can live in harness text. Pin and review like any third-party dependency. *(Source: PY — Rise of Harness Engineering)*
+- **Front-loading the full tool catalog into the system prompt.** Past ~dozens of tools, showing everything inflates tokens and causes over-calling of niche tools on unrelated prompts — Notion saw every new tool "nerfing the overall model" at 100+ tools. Gate visibility behind search/help/namespacing. *(Source: Sarah Sachs & Simon Last — Latent Space / Notion Token Town)*
+- **Catering your tool wire format to your own data model.** Notion's XML format that losslessly mapped their block model failed; simple markdown worked immediately. A custom JSON query DSL lost to SQLite. Mismatch tax is paid on every token of every call — give the model the formats it already knows. *(Source: Sarah Sachs & Simon Last — Latent Space / Notion Token Town)*
+- **Using an LLM to drive deterministic third-party API calls under usage-based pricing.** Token fees on every call, worse outside the cache window. For deterministic narrow work, generate a script once and run it many times instead of doing an MCP tool-call-per-action. *(Source: Sarah Sachs & Simon Last — Latent Space / Notion Token Town)*
+- **Treating a single eval suite as "the evals."** Conflating CI regression with launch gating with frontier/headroom is "like calling all testing 'unit tests'." Once all tiers sit at ≥90% pass you've saturated — you can't distinguish a better model from a worse one. *(Source: Sarah Sachs — Latent Space / Notion Token Town)*
+- **Shared few-shot system prompts as the tool-spec mechanism past a handful of tools.** Order sensitivity plus one-shared-string forces a center-of-excellence gate and bottlenecks feature teams. Replace with per-tool goal descriptions. *(Source: Sarah Sachs & Simon Last — Latent Space / Notion Token Town)*

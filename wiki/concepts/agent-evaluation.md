@@ -9,6 +9,7 @@ sources:
   - "summaries/2025-09-17_anthropic_postmortem-three-recent-issues.md"
   - "summaries/2026-04-18_anthropic_quantifying-infrastructure-noise.md"
   - "summaries/2026-03-06_anthropic_eval-awareness-browsecomp.md"
+  - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
 last_updated: "2026-04-20"
 ---
 
@@ -72,6 +73,32 @@ Evaluation itself has failure modes covered on sibling pages:
 - **Eval awareness** means capable models can recognize and game benchmarks — see [eval-awareness](./eval-awareness.md).
 - **AI-resistant design** is an open problem for hiring/skill evaluations — see [ai-resistant-evaluation-design](../comparisons/ai-resistant-evaluation-design.md).
 
+## Three-Tier Eval Stack (Notion, April 2026)
+
+Sarah Sachs (Notion) explicitly rejects the "evals = quality" conflation — "that's like calling all testing 'unit tests'." Notion runs three distinct eval tiers, each with a different purpose and pass-rate target:
+
+| Tier | Analogy | Target | Role |
+|------|---------|--------|------|
+| **CI regression** | Unit test | Must pass within stochastic error rate | Gate merges; lives in CI |
+| **Launch report card** | Product eval | 80–90% per user journey | Gates launches; per-journey thresholds |
+| **Frontier / headroom** | Too-hard exam | **~30% pass rate** (deliberately tuned) | Keep producing signal after the other tiers saturate — branded internally as *Notion's Last Exam* |
+
+Why the 30% tier matters: once all evals sit at ≥90% pass, they can't distinguish a better model from a worse one — you've saturated. The frontier tier is the only tier that keeps giving signal through capability cycles, and Notion built theirs in partnership with Anthropic and OpenAI for exactly that reason.
+
+**Apply:** audit your suite; if nothing fails routinely, you've saturated. Build a deliberately-too-hard tier and staff it.
+
+## Eval System as Agent Harness
+
+Notion's operational move: treat the eval system itself as an agent harness. An agent downloads the dataset, runs the eval, inspects failures, proposes fixes, and implements them end-to-end — humans observe the *outer* loop rather than the per-task inner loop. Deliberately general: "it's just CLI tools," not coupled to a specific coding agent.
+
+**Apply:** wire your eval framework so it's driveable from a CLI, then let a coding agent write your next eval the way it writes your next unit test.
+
+## Model Behavior Engineer (MBE)
+
+Non-engineering career track Notion has formalized. Origin: "data specialists" (linguistics PhD dropout, recent-grad) who manually inspected outputs. Today MBEs author evals and LLM judges — increasingly driven through coding agents themselves. Role mix: data scientist + PM + prompt engineer. Notion's conviction: an engineering background is *not* required — it's taste and instinct about model behavior.
+
+This is a concrete staffing pattern for organizations that have internalized eval-driven development: make "model behavior" a career track, not a hat worn by engineers on the side.
+
 ## Sources
 
 - *Demystifying evals for AI agents* — Anthropic, 2026-01-09
@@ -79,3 +106,4 @@ Evaluation itself has failure modes covered on sibling pages:
 - *A postmortem of three recent issues* — Anthropic, 2025-09-17
 - *Quantifying infrastructure noise in agentic coding evals* — Anthropic, 2026-04-18
 - *Eval awareness in Opus 4.6's BrowseComp performance* — Anthropic, 2026-03-06
+- *Notion's Token Town: 5 Rebuilds, 100+ Tools, MCP vs CLIs and the Software Factory Future* — Latent Space, 2026-04-15

@@ -8,6 +8,7 @@ sources:
   - "summaries/2025-11-24_anthropic_advanced-tool-use.md"
   - "summaries/2025-06-26_anthropic_desktop-extensions.md"
   - "summaries/2025-09-11_anthropic_writing-tools-for-agents.md"
+  - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
 last_updated: "2026-04-20"
 ---
 
@@ -56,8 +57,25 @@ Concrete example calls attached to tool definitions. JSON Schema can't express u
 
 `.mcpb` is the packaging format for shipping MCP servers to Claude Desktop as one-click installs. See [Desktop Extensions how-to](../how-tos/desktop-extensions-mcpb.md).
 
+## MCP vs CLI — Not a Dichotomy
+
+Notion's framing (Latent Space, April 2026): MCP vs CLIs is a **per-capability tradeoff**, not a winner-takes-all. Neither is strictly better; you commit to both and pick per quality need. See [MCP vs CLI](../comparisons/mcp-vs-cli.md) for the full treatment.
+
+Sketch of the tradeoff:
+
+| Dimension | MCP | CLI |
+|-----------|-----|-----|
+| Permission model | Strong by construction — "all you can do is call the tools" | Murkier — token exfiltration, sandbox questions |
+| Self-repair | If transport breaks, the agent is stuck | Agent can write/fix tools in the same env (example: 100-LOC Chromium wrapper) |
+| Progressive disclosure | Not inherent; harness layers it on | Free — `--help`, grep, pagination all built in |
+| Token economics | Pays LLM fees on every deterministic call — wasteful under usage-based pricing | One-time code generation amortizes cost |
+| Best for | Narrow, permissioned, deterministic work without a compute runtime | Open-ended, self-healing capability with a terminal |
+
+Key decision heuristic: *"Does this task need open-endedness and self-repair, or narrow permissioned determinism?"*
+
 ## Related
 
 - [Tool Design for Agents](./tool-design-for-agents.md) — principles for writing the tools that MCP exposes.
 - [Desktop Extensions (.mcpb)](../how-tos/desktop-extensions-mcpb.md) — packaging and enterprise deployment.
 - [Think Tool](./think-tool.md) — a reasoning tool that works well inside long MCP tool chains.
+- [MCP vs CLI](../comparisons/mcp-vs-cli.md) — per-capability decision framework.
