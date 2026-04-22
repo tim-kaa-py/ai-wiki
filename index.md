@@ -6,6 +6,8 @@
 
 | Date | Title | Type | Tags |
 |------|-------|------|------|
+| 2026-04-17 | [Harness Engineering: How to Build Software When Humans Steer, Agents Execute — Ryan Lopopolo, OpenAI](summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md) | youtube | harness-engineering, agents, agentic-coding-workflow, workflow, best-practices, code-review, monorepo, strategy |
+| 2026-02-11 | [Harness Engineering: Leveraging Codex in an Agent-First World (OpenAI)](summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md) | article | harness-engineering, agents, agentic-coding-workflow, workflow, best-practices, code-review, monorepo, strategy |
 | 2026-02-12 | [How to Code with AI Agents (Peter Steinberger)](summaries/2026-02-12_lex-clips_how-to-code-with-ai-agents-advice-from-openclaw-creator.md) | youtube | agentic-engineering, workflow, prompt-craft, soul-md, voice-input |
 | 2026-03-30 | [Claude Code 2.0 & Hidden Features](summaries/2026-03-30_aicodeking_claude-code-2-0-hidden-features-new-version.md) | youtube | claude-code, automation, hooks, worktrees, custom-agents |
 | 2026-04-02 | [LLM Wiki (Karpathy Gist)](summaries/2026-04-02_karpathy_llm-wiki.md) | articles | karpathy, wiki, knowledge-management, rag, obsidian |

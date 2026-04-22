@@ -12,7 +12,9 @@ sources:
   - "summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
   - "summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md"
   - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
-last_updated: "2026-04-16"
+  - "summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md"
+  - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
+last_updated: "2026-04-22"
 ---
 
 # Agentic Coding Workflow
@@ -71,6 +73,155 @@ A step-by-step guide to productive agentic coding, synthesized from Peter Steinb
 7. Ship or defer
 
 Still manually review for security — "I don't trust people."
+
+## Removing Humans from PR Review (Ryan Lopopolo, OpenAI)
+
+At OpenAI scale (3-5 PRs/engineer/day, ~1B output tokens/day), synchronous human review is the merge bottleneck. Ryan's team removed humans from the critical path by converting every recurring review comment into a durable repo artifact:
+
+1. **Reviewer agents per persona, triggered on every push.** One agent per durable concern — reliability, front-end architecture, product-minded, scalability. Each reads a "what good looks like" persona doc + the diff and posts P2+ issues. Replaces synchronous human review as the merge gate. See [Reviewer Agents](../concepts/reviewer-agents.md).
+2. **Code-as-text structural tests.** Assert properties of the source code itself — files ≤350 lines, no duplicate zod schemas, one canonical async helper, package privacy, dependency direction. Sits between lints and unit tests. See [Code-as-Text Structural Tests](../concepts/code-as-text-structural-tests.md).
+3. **Error messages as prompts.** Every lint/test failure is a free prompt-injection surface. Rewrite diagnostics as remediation-oriented prompts: "Don't X here because Y. Do Z instead, using helper W." Include the *why* so the agent generalizes.
+4. **Garbage collection day (weekly).** Dedicate a full day per week where every engineer converts the week's repeated review comments into durable artifacts: a lint, a structural test, a reviewer-agent rule, or a persona-doc update. This is what makes reviewer agents compound instead of stagnate.
+5. **QA plans as rubrics.** Every user-facing PR attaches a QA plan — features, critical user journeys, required PR media (screenshots, recordings). A product-reviewer agent asserts the plan was followed. Lets humans stop shoulder-surfing.
+
+**Order of preference for encoding review knowledge** (deterministic → judgment-based): lint rule → structural test → reviewer agent → persona doc read by a human. Push every concern as far down the ladder as it will go.
+
+**Non-blocking by design.** Not every reviewer comment blocks merge. The implementation agent can acknowledge, defer, or reject — bias toward acceptance, not perfection.
+
+*(Source: Ryan Lopopolo, OpenAI — AI Engineer 2026)*
+
+## Repo Architecture for Agents (Ryan Lopopolo, OpenAI)
+
+A 2-person team with agents needs "10,000-engineer-org" architecture — because the agent lacks the tacit domain knowledge a small human team would share verbally. Scale is set by agent cognition, not headcount.
+
+- **Monorepo with many small packages** isolated by business-domain and stack-layer. Ryan's team runs a 750-package PNPM workspace.
+- **Package privacy as an enforceable invariant**, not a convention. Lint (or structural-test) cross-package internal imports.
+- **Filesystem-encoded domain boundaries.** The agent can't see what's not in the filesystem. If two domains need to stay separate, split them into separate packages with explicit public APIs.
+- **Uniformity across the repo.** One way to do bounded concurrency. One ORM. One CI-script style. Appoint a dictator for one uniformity decision per month; fire off parallel agents to migrate the rest — migrations no longer hang open, because code is free.
+- **Outside-in harness (agent as entry point).** Build the repo so the coding agent (Codex, Claude Code) is the entry point, not a guest in a dev shell. Skills — 5-10, not thousands — hide local tooling churn from the human.
+
+*(Source: Ryan Lopopolo, OpenAI — AI Engineer 2026)*
+
+## Repo Knowledge Base (Ryan Lopopolo, OpenAI — written article)
+
+The companion OpenAI article adds a specific pattern for how the knowledge an agent-generated repo needs is organized. AGENTS.md is demoted to a ~100-line **table of contents**, not an encyclopedia. The real knowledge lives in a structured `docs/` tree treated as a **system of record**.
+
+Why the monolithic AGENTS.md failed (four modes the team lived through):
+
+1. **Context is a scarce resource.** A giant instruction file crowds out the task, the code, and the relevant docs.
+2. **Too much guidance becomes non-guidance.** When everything is "important," nothing is — the agent pattern-matches locally instead of navigating intentionally.
+3. **It rots instantly.** A monolithic manual turns into a graveyard of stale rules the agent can't verify and humans stop maintaining.
+4. **It's hard to verify.** A single blob doesn't admit mechanical coverage / freshness / ownership / cross-link checks.
+
+Template `docs/` layout (from the article):
+
+```
+AGENTS.md                     # ~100 lines, map into docs/
+ARCHITECTURE.md               # domain + layer map
+docs/
+├── design-docs/              # indexed, with verification status
+│   ├── index.md
+│   └── core-beliefs.md       # agent operating principles
+├── exec-plans/               # first-class versioned execution plans
+│   ├── active/
+│   ├── completed/
+│   └── tech-debt-tracker.md
+├── generated/                # auto-generated reference (db-schema, etc.)
+├── product-specs/
+├── references/               # *-llms.txt snapshots of third-party docs
+├── DESIGN.md
+├── FRONTEND.md
+├── PLANS.md
+├── PRODUCT_SENSE.md
+├── QUALITY_SCORE.md          # grades per domain/layer, gap tracking
+├── RELIABILITY.md
+└── SECURITY.md
+```
+
+A **doc-gardening agent** runs on a cadence, scans `docs/` for content that no longer reflects real code behavior, and opens fix-up PRs. CI linters block merges when cross-links or freshness metadata break.
+
+*(Source: Ryan Lopopolo, OpenAI — Harness Engineering article, Feb 2026)*
+
+## Architectural Layering for Agent-Generated Code (Ryan Lopopolo, OpenAI)
+
+Within each business domain, enforce forward-only dependency flow through a named layer sequence:
+
+```
+Types → Config → Repo → Service → Runtime → UI
+```
+
+Cross-cutting concerns (auth, connectors, telemetry, feature flags) enter through a single explicit **Providers** seam. Every other edge is disallowed and enforced mechanically via custom linters (generated by Codex itself) and structural tests.
+
+Ryan's framing: "this is the kind of architecture you usually postpone until you have hundreds of engineers. With coding agents, it's an early prerequisite: the constraints are what allows speed without decay or architectural drift."
+
+Pair with **taste invariants** — static checks for structured logging, naming conventions for schemas and types, file size limits, platform-specific reliability requirements. Because the lints are custom, remediation instructions are embedded directly in the error text so the agent can self-correct on the next pass.
+
+*(Source: Ryan Lopopolo, OpenAI — Harness Engineering article, Feb 2026)*
+
+## Golden Principles + Continuous Garbage Collection
+
+The article names the mechanism the talk calls "garbage collection Fridays": **golden principles** — opinionated, mechanical rules codified into the repo to keep the codebase legible. Examples:
+
+1. Prefer shared utility packages over hand-rolled helpers (keeps invariants centralized).
+2. Don't probe data "YOLO-style" — validate boundaries or rely on typed SDKs so the agent can't build on guessed shapes.
+
+**The mechanism:** a background Codex task scans for deviations, updates quality grades in `docs/QUALITY_SCORE.md`, and opens small refactoring PRs. Most are reviewable in under a minute and automerged. "Technical debt is like a high-interest loan: it's almost always better to pay it down continuously in small increments than to let it compound."
+
+This replaced the team's original manual Friday ritual (20% of the week spent cleaning AI slop) with a continuous agent-driven process. Use the Friday ritual to *seed* golden principles; promote each recurring rule into a scheduled enforcement agent.
+
+*(Source: Ryan Lopopolo, OpenAI — Harness Engineering article, Feb 2026)*
+
+## Per-Worktree Bootable App + Observability
+
+Make the app bootable per git worktree so agents can launch one isolated instance per change. Wire Chrome DevTools Protocol into the agent runtime (DOM snapshots, screenshots, navigation). Expose logs/metrics/traces via an **ephemeral observability stack** (LogQL for logs, PromQL for metrics) torn down with the worktree.
+
+This enables agent-verifiable prompts like "ensure service startup completes in under 800ms" or "no span in these four critical user journeys exceeds two seconds." Ryan's team regularly sees single Codex runs work a task for 6+ hours (often overnight).
+
+*(Source: Ryan Lopopolo, OpenAI — Harness Engineering article, Feb 2026)*
+
+## Reimplement Opaque Dependencies
+
+When a third-party library's behavior is illegible to the agent and it keeps misusing the API, have Codex reimplement the subset the repo actually needs. Ryan's example: instead of `p-limit`, the team shipped their own `map-with-concurrency` — tightly integrated with OpenTelemetry, 100% test coverage, behaves exactly the way the runtime expects.
+
+General principle: "boring" tech wins for agent-generated codebases because of composability, API stability, and training-set representation. When a dep doesn't fit that mold, reimplementation is often cheaper than ongoing workarounds.
+
+*(Source: Ryan Lopopolo, OpenAI — Harness Engineering article, Feb 2026)*
+
+## Throughput Changes the Merge Philosophy
+
+At 3-5 PRs per engineer per day with agent execution, conventional merge norms become counterproductive:
+
+- **Minimal blocking merge gates.** Reduce blocking checks to the ones with near-zero flake.
+- **Short-lived PRs.** Long-lived branches guarantee merge conflicts in a high-velocity repo.
+- **Handle flakes with retries, not blocks.** Re-run over re-investigating unless a pattern emerges.
+
+"In a system where agent throughput far exceeds human attention, corrections are cheap, and waiting is expensive." This is irresponsible at low throughput and right at high throughput — pick based on your actual throughput, not inherited norms.
+
+*(Source: Ryan Lopopolo, OpenAI — Harness Engineering article, Feb 2026)*
+
+## Plan-Mode Skepticism (Ryan Lopopolo, OpenAI)
+
+A counterpoint to Boris Cherny's "start every session in Plan mode." Ryan argues:
+
+- Plans are long; most of the time the engineer won't read every line.
+- Approving a plan is equivalent to approving every instruction in it.
+- Unread approved plans encode unwanted instructions that the rollout faithfully follows — wasting tokens on bad work.
+
+**Remedy if you must use plans:** ship the plan as its own PR, require line-by-line review, block on merge, then execute. This turns the plan into a durable, reviewed artifact rather than an ephemeral approval click.
+
+**Default stance (Ryan):** skip the plan. Drop the ticket in. Let the agent implement. A well-specified ticket + a good harness should be sufficient — and if they aren't, the fix is in the harness, not the plan.
+
+These two perspectives are not fully reconcilable. Reading the sources: Boris's context is interactive single-session work where the human-in-the-loop reads the plan. Ryan's context is high-velocity agentic execution where plans are often skimmed. Use Plan mode when you'll actually read it line by line; skip it when you won't.
+
+*(Source: Ryan Lopopolo, OpenAI — AI Engineer 2026; contrast with Boris Cherny, Creator of Claude Code)*
+
+## Remove Yourself From the Loop
+
+Every manual "continue" or "yes" click is a harness failure — the agent lacked the context to proceed autonomously. When you catch yourself clicking through a checkpoint, stop and ask: what context was missing? Encode that context in a skill, CLAUDE.md, a persona doc, or a structural test so the agent proceeds autonomously next time.
+
+**Token budget split.** Ryan's rough split is a third planning/ticket curation, a third implementation, a third CI. Writing code is no longer the hard part; getting it accepted is. If your CI token spend is <20% of total, you're under-investing in acceptance.
+
+*(Source: Ryan Lopopolo, OpenAI — AI Engineer 2026)*
 
 ## Core Principles
 
@@ -168,3 +319,6 @@ See [Claude Code Orchestration Layers](../comparisons/claude-code-orchestration-
 - [Peter Steinberger](../people/peter-steinberger.md)
 - [Claude Code Status Line Setup](claude-code-status-line.md)
 - [Auto Research](../concepts/auto-research.md)
+- [Reviewer Agents](../concepts/reviewer-agents.md)
+- [Code-as-Text Structural Tests](../concepts/code-as-text-structural-tests.md)
+- [Harness Engineering](../concepts/harness-engineering.md)

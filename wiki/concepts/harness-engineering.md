@@ -11,7 +11,9 @@ sources:
   - "summaries/2026-03-24_anthropic_harness-design-long-running-apps.md"
   - "summaries/2026-04-15_anthropic_scaling-managed-agents.md"
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md"
+  - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
+last_updated: "2026-04-22"
 ---
 
 # Harness Engineering
@@ -196,6 +198,35 @@ Failure modes mapped to fixes:
 
 The persistence layer is git itself — commit-per-feature lets the next session reconstruct progress without reading prior chat history.
 
+## Harness as Repo Artifacts (Ryan Lopopolo, OpenAI)
+
+Ryan Lopopolo's April 2026 AI Engineer talk frames the harness not as wrapper code around the model, but as *the repo itself* — the lints, structural tests, reviewer agents, persona docs, error messages, and package layout that collectively tell the agent what "acceptable" means. The mental model is LLM-as-fuzzy-compiler: the constraints live in the harness, the code is a disposable build artifact, swapping models is like swapping LLVM for Cranelift.
+
+Concrete techniques from an OpenAI team spending ~1B output tokens/day:
+
+- **Code-as-text structural tests.** Assert properties of the source code, not behavior: files ≤350 lines, no duplicate zod schemas, single canonical async helper, package privacy, dependency direction. The codebase adapts to the harness. See [Code-as-Text Structural Tests](code-as-text-structural-tests.md).
+- **Error messages as prompts.** Every lint/test failure is a free prompt-injection surface. Rewrite "unknown type not allowed" as "`unknown` is not allowed in domain code — we parse-don't-validate at the edge, derive a type from the zod schema in `packages/schemas/<entity>.ts`." Include the *why* so the agent generalizes.
+- **Reviewer agents per persona, triggered on every push.** One agent per durable concern (reliability, front-end architecture, product, scalability) reads a "what good looks like" doc for its domain and surfaces P2+ issues. These replace synchronous human review as the merge gate. See [Reviewer Agents](reviewer-agents.md).
+- **Garbage collection day.** A weekly ritual where the whole team's full-day job is to convert every recurring review comment from the week into a durable artifact — a lint, a structural test, a reviewer-agent rule, or a persona doc. Closes the loop that turns human review into compounding repo infrastructure.
+- **Outside-in harness (Codex as entry point).** Build the repo so the coding agent is the entry point, not a guest in a dev shell. Skills (5-10, not thousands) hide local tooling churn so humans don't track internal changes.
+- **Agent-driven monorepo architecture.** Ryan's team runs a 750-package PNPM workspace on a small team — because the agent lacks tacit domain knowledge a human team would share verbally. Package privacy and filesystem-encoded boundaries are how the agent *sees* the architecture. Scale is set by agent cognition, not headcount.
+- **Plan-mode skepticism.** Unread approved plans encode unwanted instructions that the rollout faithfully follows. Either skip plans and let a well-specified ticket drop into implementation, or ship the plan as its own PR reviewed line-by-line before execution.
+- **Remove yourself from the loop.** Every manual "continue" click is a harness failure — the agent lacked context to proceed. Encode the missing context in a skill or CLAUDE.md so it proceeds autonomously next time.
+- **Spend tokens in CI, not just in-editor.** Ryan's rough split is a third planning/ticket curation, a third implementation, a third CI. If CI is <20% of your token spend, you're under-investing in acceptance (which is the new bottleneck — writing code is no longer hard).
+- **LLM as fuzzy compiler.** Harness context (lints, tests, reviewer prompts) is to an LLM what LLVM static-analysis and optimization passes are to a Rust compiler. Swapping GPT-5 for GPT-6 is like swapping LLVM for Cranelift: different generated instructions, same soundness guarantees, because the constraints on acceptable output are defined outside the generation backend. This is Ryan's version of the bitter-lesson hedge — invest in constraint-surfacing, not hand-tuned orchestration.
+
+The February 2026 written article adds the founding context and several artifacts the talk doesn't cover:
+
+- **Agent legibility doctrine (stated directly).** "From the agent's point of view, anything it can't access in-context while running effectively doesn't exist." Justifies pulling Google Docs / Slack / tribal knowledge into the repo, and justifies reimplementing opaque dependencies (e.g., a bespoke `map-with-concurrency` helper instead of `p-limit`) when upstream behavior is illegible.
+- **AGENTS.md as table of contents, not encyclopedia.** The team's "one big AGENTS.md" approach failed in four specific ways — context scarcity, prioritization collapse ("when everything is important, nothing is"), instant rot into a graveyard of stale rules, and unverifiability (no coverage / freshness / cross-link checks on a blob). The fix: ~100-line AGENTS.md that serves as a map into a structured `docs/` tree.
+- **`docs/` as system of record.** Concrete publicly-shared layout with `design-docs/` (indexed with verification status + `core-beliefs.md`), `exec-plans/active|completed/` + `tech-debt-tracker.md`, `product-specs/`, `references/` (`*-llms.txt` reference snapshots), `generated/` (e.g., `db-schema.md`), and top-level `DESIGN.md`, `FRONTEND.md`, `QUALITY_SCORE.md`, `RELIABILITY.md`, `SECURITY.md`. Treats plans as first-class versioned artifacts.
+- **Named architectural layer rule.** Within each business domain, dependencies flow forward only through `Types → Config → Repo → Service → Runtime → UI`. Cross-cutting concerns (auth, connectors, telemetry, feature flags) enter through a single explicit `Providers` interface; every other edge is disallowed and mechanically enforced. Ryan: "this is the kind of architecture you usually postpone until you have hundreds of engineers — with coding agents, it's an early prerequisite."
+- **"Golden principles" as the named mechanism.** Opinionated mechanical rules codified into the repo (e.g., "prefer shared utility packages over hand-rolled helpers," "no YOLO data probing — parse at the boundary"). A background Codex task scans for deviations, updates quality grades in `QUALITY_SCORE.md`, and opens small auto-mergeable refactoring PRs. This replaced the team's original Friday-cleanup ritual with a continuous agent-driven process.
+- **Doc-gardening agent.** A recurring Codex task that scans `docs/` for content no longer reflecting real code behavior and opens fix-up PRs. Pairs with CI linters that block merges when cross-links or freshness metadata break.
+- **Per-worktree bootable app + CDP + ephemeral LogQL/PromQL stack.** The app boots per git worktree; Codex drives one isolated instance per change via Chrome DevTools Protocol (DOM snapshots, screenshots, navigation); logs/metrics/traces are exposed via an ephemeral local observability stack torn down with the worktree. Agents query logs with LogQL and metrics with PromQL, enabling prompts like "no span in these four critical user journeys exceeds two seconds." Single Codex runs regularly work a task for 6+ hours.
+- **Changed merge philosophy under high throughput.** Minimal blocking merge gates, short-lived PRs, flakes handled with retries rather than blocking. "In a system where agent throughput far exceeds human attention, corrections are cheap, and waiting is expensive." Irresponsible at low throughput; right at high throughput.
+- **End-to-end autonomy threshold.** A single prompt now drives Codex through: validate state → reproduce bug → record failure video → implement fix → validate → record fix video → open PR → respond to feedback → resolve build failures → escalate only when judgment required → merge. Ryan is explicit this is repo-specific and shouldn't be assumed to generalize without similar harness investment.
+
 ## Related Pages
 
 - [Natural Language Harness](natural-language-harness.md) — NLH, execution contracts, three-layer separation
@@ -207,3 +238,5 @@ The persistence layer is git itself — commit-per-feature lets the next session
 - [Auto Research](auto-research.md) — self-improving loop related to self-evolution findings
 - [Context Engineering](context-engineering.md) — the prior-era discipline the harness now absorbs
 - [Generator-Evaluator Harness](generator-evaluator-harness.md) — production variant of evaluator-optimizer
+- [Code-as-Text Structural Tests](code-as-text-structural-tests.md) — tests that assert properties of the source code itself
+- [Reviewer Agents](reviewer-agents.md) — persona-based CI reviewers that replace human PR review
