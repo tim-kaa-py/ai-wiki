@@ -10,12 +10,48 @@ sources:
   - "summaries/2026-04-18_anthropic_quantifying-infrastructure-noise.md"
   - "summaries/2026-03-06_anthropic_eval-awareness-browsecomp.md"
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-04-22_anthropic-docs_define-success-criteria-and-build-evaluations.md"
+last_updated: "2026-04-22"
 ---
 
 # Agent Evaluation
 
 Canonical synthesis of how Anthropic frames evaluation for LLM agents: the vocabulary, the grader taxonomy, non-determinism metrics, per-agent-class patterns, and a practical roadmap.
+
+## Success Criteria Design
+
+Before building any eval, define what "good" means precisely. Anthropic's guidance: success criteria must be **specific, measurable, achievable, and relevant** — vague goals can't be tested.
+
+### Eight criteria dimensions
+
+Most production use cases require multidimensional evaluation across several of these:
+
+| Dimension | What to ask |
+|-----------|-------------|
+| **Task fidelity** | How close to correct does the output need to be? Include edge case targets. |
+| **Consistency** | If a user asks the same question twice, how similar do answers need to be? |
+| **Relevance/coherence** | Does it directly address the question in a logical structure? |
+| **Tone/style** | Does the output match audience expectations? |
+| **Privacy preservation** | Does it correctly handle sensitive/personal information? |
+| **Context utilization** | Does it reference and build on conversation history? |
+| **Latency** | What response time is acceptable? |
+| **Price** | What is the cost budget per call/per day? |
+
+### Making "soft" criteria measurable
+
+Even safety and ethics can be quantified. "Safe outputs" is not a criterion; "< 0.1% of outputs flagged for toxicity across 10,000 trials" is. The discipline: for every qualitative goal, state a threshold, a test set size, and a measurement method.
+
+Example (multidimensional, sentiment analysis):
+
+> On a held-out test set of 10,000 diverse posts: F1 ≥ 0.85, 99.5% non-toxic outputs, 90% of errors are "inconvenience" not "egregious," 95% response time < 200ms.
+
+### Eval design principles
+
+1. **Mirror real task distribution.** Include edge cases: irrelevant input, very long input, sarcasm, typos, implicit PHI, abrupt topic shifts.
+2. **Automate when possible.** Structure tasks for string match, code-graded, or LLM-graded output.
+3. **Volume over quality.** 1,000 automated cases with noisy signal beats 100 hand-graded ones. Scale requires automation.
+
+---
 
 ## Vocabulary
 
@@ -39,6 +75,32 @@ Treat these as distinct objects. A grader scores *outcomes* based on criteria in
 | **Human** | Gold standard for nuanced judgment | Slow, expensive, doesn't scale — use as the anchor, not the loop |
 
 Rule of thumb: code where you can, model where you must, human to calibrate.
+
+### LLM-as-judge tips (Anthropic official guidance)
+
+- **Use a different model as judge.** If you're evaluating Claude Sonnet, grade with Claude Opus. Grading with the same model measures self-consistency, not quality.
+- **Write detailed, specific rubrics.** "The answer must mention 'Acme Inc.' in the first sentence; if it does not, grade as incorrect." Vague rubrics produce noisy graders.
+- **Empirical output only.** Ask the judge to output `correct/incorrect` or a `1-5` integer — not free-form prose. Prose grades don't aggregate.
+- **Encourage chain-of-thought before the verdict.** Ask the judge to reason in `<thinking>` tags, then emit the score in `<result>` tags and discard the reasoning. This meaningfully improves grader accuracy on complex tasks.
+
+```python
+def build_grader_prompt(answer, rubric):
+    return f"""Grade this answer based on the rubric:
+    <rubric>{rubric}</rubric>
+    <answer>{answer}</answer>
+    Think through your reasoning in <thinking> tags, then output 'correct' or 'incorrect' in <result> tags."""
+```
+
+### Eval method × criteria mapping
+
+| Success dimension | Recommended eval method |
+|-------------------|------------------------|
+| Classification / exact tasks | Exact match (`output == golden_answer`) |
+| Paraphrase consistency | Cosine similarity via SBERT embeddings |
+| Summarization quality | ROUGE-L F1 against reference summaries |
+| Tone / empathy | LLM Likert scale (1–5) |
+| PHI / privacy | LLM binary classification |
+| Context utilization | LLM ordinal scale (1–5) across conversation turns |
 
 ## Non-Determinism: pass@k vs pass^k
 

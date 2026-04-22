@@ -30,6 +30,7 @@
 | 2025-10-20 | [Claude Code sandboxing (Anthropic)](summaries/2025-10-20_anthropic_claude-code-sandboxing.md) | articles | claude-code, sandbox, security, permissions, bubblewrap, seatbelt |
 | 2025-10-16 | [Agent Skills (Anthropic)](summaries/2025-10-16_anthropic_agent-skills.md) | articles | agent-skills, claude, skills, progressive-disclosure, mcp |
 | 2025-09-11 | [Writing effective tools for agents (Anthropic)](summaries/2025-09-11_anthropic_writing-tools-for-agents.md) | articles | tool-design, agents, mcp, evaluation, namespacing, best-practices |
+| 2026-04-22 | [Define success criteria and build evaluations (Anthropic)](summaries/2026-04-22_anthropic-docs_define-success-criteria-and-build-evaluations.md) | docs | evaluation, testing, best-practices, how-to, prompt-engineering |
 | 2025-04-18 | [Claude Code Best Practices (Anthropic)](summaries/2025-04-18_anthropic_claude-code-best-practices.md) | docs | claude-code, best-practices, claude-md, plan-mode, sub-agents, hooks, skills |
 
 ### Wiki Pages
