@@ -6,7 +6,8 @@ tags: [claude-design, claude-code, front-end, design-system, workflow, ui]
 sources:
   - "summaries/2026-04-20_chase-ai_only-claude-design-guide-you-should-watch.md"
   - "summaries/2026-04-18_jono-catliff_how-i-built-insane-claude-design-websites-in-10-minutes.md"
-last_updated: "2026-04-21"
+  - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
+last_updated: "2026-04-22"
 ---
 
 # Claude Design
@@ -122,6 +123,20 @@ Tweaks are scoped to the variant you invoke them on. If you **tweak first, then 
 
 ### Tweak-All-Variants Trap
 Asking Claude Design to apply a tweak across N existing variants causes N full regenerations. The fastest way to burn daily usage. Tweak each variant manually instead.
+
+### Opus 4.7 Has a Persistent Default House Style
+
+Anthropic's April 2026 prompting guidance documents a strong, persistent Opus 4.7 default: warm cream/off-white backgrounds (~`#F4F1EA`), serif display type (Georgia, Fraunces, Playfair), italic word-accents, and a terracotta/amber accent. Fits editorial, hospitality, and portfolio briefs — feels wrong for dashboards, dev tools, fintech, healthcare, or enterprise apps. Applies to slide decks too, not just web.
+
+This default is *persistent*. Generic negations ("don't use cream," "make it clean and minimal") tend to shift Opus 4.7 to a different fixed palette rather than produce variety. Two approaches reliably break it:
+
+1. **Specify a concrete alternative palette + typography.** Opus 4.7 follows explicit specs precisely. Example override from Anthropic's own docs: `#E9ECEC, #C9D2D4, #8C9A9E, #44545B, #11171B` with square angular sans-serif, wider letter spacing, 4px corner radius.
+2. **Ask for 4 distinct directions before building.** Replaces `temperature` as the variety lever:
+    ```text
+    Before building, propose 4 distinct visual directions tailored to this brief (each as: bg hex / accent hex / typeface — one-line rationale). Ask the user to pick one, then implement only that direction.
+    ```
+
+Opus 4.7 also needs less anti-"AI slop" prompting than 4.6 did. The long `<frontend_aesthetics>` snippet can be replaced with a minimal NEVER-list when paired with the variety lever above. *(Source: Anthropic, Claude Prompting Best Practices.)*
 
 ### Design System Cost
 ~20–25% of daily usage on the design-system build alone. Budget before starting; don't assume you have a full day of iteration left afterward.

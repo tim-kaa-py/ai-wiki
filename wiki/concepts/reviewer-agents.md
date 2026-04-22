@@ -6,6 +6,7 @@ tags: [harness-engineering, code-review, agents, ci, agentic-coding-workflow, wo
 sources:
   - "summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md"
   - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
+  - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
 last_updated: "2026-04-22"
 ---
 
@@ -71,6 +72,20 @@ Push every review concern as far down the ladder as possible. A reviewer agent t
 ## The Garbage Collection Feedback Loop
 
 Ryan's team dedicates Fridays to "garbage collection" — every engineer's full-day job is to take every review pattern observed during the week and convert it into a durable artifact: a lint, a structural test, a reviewer-agent rule, or an update to a persona doc. This is what closes the loop. Without it, reviewer agents stay static while the kinds of slop the team is seeing evolve.
+
+## Coverage-First Prompting on Opus 4.7
+
+Opus 4.7 is meaningfully better at finding bugs than prior models — Anthropic measured +11pp recall on one of their hardest bug-finding evals based on real Anthropic PRs. But reviewer-agent harnesses tuned for 4.6 often see *measured* recall drop on 4.7 upgrade. This is a harness effect, not a capability regression. When the persona prompt says "only report high-severity issues," "be conservative," or "don't nitpick," Opus 4.7 follows that more faithfully than 4.6 did — it investigates the code the same depth, identifies the bugs, then drops findings below the stated bar. Precision rises while recall falls.
+
+The fix is to split coverage from filtering. At the finding stage, tell the reviewer its job is coverage and to attach confidence + severity per finding. A separate verification / ranking / deduplication stage does the filtering:
+
+```text
+Report every issue you find, including ones you are uncertain about or consider low-severity. Do not filter for importance or confidence at this stage — a separate verification step will do that. Your goal here is coverage: it is better to surface a finding that later gets filtered out than to silently drop a real bug. For each finding, include your confidence level and an estimated severity so a downstream filter can rank them.
+```
+
+This prompt works even without an actually separate second stage — moving the filter *conceptually* out of the finding step is often enough. If you must self-filter in one pass, replace qualitative language ("important", "nitpick") with a concrete bar: *"report any bugs that could cause incorrect behavior, a test failure, or a misleading result; only omit pure style or naming preferences."*
+
+Practical implication for a persona harness: the persona doc and "what good looks like" bar is still valuable — that's precision guidance. But the conservatism lives in the filter stage, not the finding stage. *(Source: Anthropic, Claude Prompting Best Practices.)*
 
 ## QA Plans as the Product-Reviewer's Rubric
 

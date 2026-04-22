@@ -26,7 +26,7 @@ sources:
   - "summaries/2025-06-13_anthropic_multi-agent-research-system.md"
   - "summaries/2026-04-20_chase-ai_only-claude-design-guide-you-should-watch.md"
   - "summaries/2026-04-18_jono-catliff_how-i-built-insane-claude-design-websites-in-10-minutes.md"
-last_updated: "2026-04-21"
+last_updated: "2026-04-22"
 ---
 
 # Claude Code
@@ -273,14 +273,30 @@ Practical implication for Claude Code users: Claude Code is already the tool-of-
 
 See [Meta Harness](../concepts/meta-harness.md) and [Harness Engineering](../concepts/harness-engineering.md). *(Source: PY — Rise of Harness Engineering)*
 
-## Prompting for Claude 4.6
+## Prompting for Claude 4.6 and 4.7
 
 Claude 4.6 models are significantly more proactive than predecessors. Key adjustments from Anthropic's official guidance:
 
 - **Dial back aggressive prompting.** "CRITICAL: You MUST use this tool" → "Use this tool when...". Anti-laziness prompts that were needed for older models now cause overtriggering.
-- **Adaptive thinking replaces budget_tokens.** Use `thinking: {type: "adaptive"}` with `effort` parameter (high/medium/low) instead of manual `budget_tokens`.
-- **Subagent overuse is the new risk.** Claude 4.6 spawns subagents proactively. Add guardrails for when direct work is faster.
+- **Adaptive thinking replaces budget_tokens.** Use `thinking: {type: "adaptive"}` with `effort` parameter instead of manual `budget_tokens`.
+- **Subagent overuse is the risk on 4.6.** Claude 4.6 spawns subagents proactively. Add guardrails for when direct work is faster.
 - **Prefills are deprecated.** Use structured outputs or explicit instructions instead of prefilled assistant turns.
+
+### Opus 4.7 adjustments (April 2026)
+
+Opus 4.7 runs well on existing 4.6 prompts but inverts several defaults. Re-audit any prompt that was tuned for 4.6.
+
+- **New effort levels `xhigh` and `max`.** `xhigh` is the recommended default for coding and agentic use cases; `high` is the minimum for intelligence-sensitive work. `max` can win on the hardest tasks but is prone to overthinking. Set `max_tokens: 64000` at `xhigh`/`max` so the model has room to reason across subagents and tool calls.
+- **Effort is respected strictly.** Unlike 4.6, Opus 4.7 at `low`/`medium` scopes work narrowly. If you see shallow reasoning, raise effort — don't prompt around it.
+- **More literal instruction following.** Opus 4.7 does not silently generalize. State scope explicitly ("apply this to *every* section").
+- **Fewer subagents by default** (reverse of 4.6). Steer the other direction: *"Spawn multiple subagents when fanning out across items or reading multiple files."*
+- **Uses tools less, reasons more.** Raise effort or describe *why and when* a tool should fire to lift tool usage.
+- **Better user-facing updates by default.** Remove any "after every N tool calls, summarize" scaffolding.
+- **Tone is more direct, fewer emoji, less validation-forward.** Re-prompt for warmth if the product wants it.
+- **Interactive coding uses more tokens than autonomous runs.** Specify the task fully upfront in the first turn, use `xhigh`/`high`, and add auto-mode-style features to minimize required user interactions. See [Claude Code Auto Mode](../how-tos/claude-code-auto-mode.md).
+- **Code review: split coverage from filtering.** "Be conservative" prompts on 4.7 silently drop real bugs. Tell the finding stage its job is coverage + confidence + severity tags; filter in a separate stage. See [Reviewer Agents](../concepts/reviewer-agents.md).
+- **Computer use** now supports up to 2576px / 3.75MP; 1080p is the recommended cost/performance balance.
+- **Frontend defaults are opinionated and persistent** (cream/serif/terracotta). See [Claude Design](claude-design.md) and the [Prompt Engineering for Claude](../concepts/prompt-engineering-claude.md) page for override techniques — specify a concrete palette or ask for 4 proposed directions before building.
 
 See [Prompt Engineering for Claude](../concepts/prompt-engineering-claude.md) for the full set of patterns.
 

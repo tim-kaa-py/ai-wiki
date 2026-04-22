@@ -13,6 +13,7 @@ sources:
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md"
   - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
+  - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
 last_updated: "2026-04-22"
 ---
 
@@ -226,6 +227,12 @@ The February 2026 written article adds the founding context and several artifact
 - **Per-worktree bootable app + CDP + ephemeral LogQL/PromQL stack.** The app boots per git worktree; Codex drives one isolated instance per change via Chrome DevTools Protocol (DOM snapshots, screenshots, navigation); logs/metrics/traces are exposed via an ephemeral local observability stack torn down with the worktree. Agents query logs with LogQL and metrics with PromQL, enabling prompts like "no span in these four critical user journeys exceeds two seconds." Single Codex runs regularly work a task for 6+ hours.
 - **Changed merge philosophy under high throughput.** Minimal blocking merge gates, short-lived PRs, flakes handled with retries rather than blocking. "In a system where agent throughput far exceeds human attention, corrections are cheap, and waiting is expensive." Irresponsible at low throughput; right at high throughput.
 - **End-to-end autonomy threshold.** A single prompt now drives Codex through: validate state → reproduce bug → record failure video → implement fix → validate → record fix video → open PR → respond to feedback → resolve build failures → escalate only when judgment required → merge. Ryan is explicit this is repo-specific and shouldn't be assumed to generalize without similar harness investment.
+
+## Re-Audit on Model Upgrade: Opus 4.7 Example
+
+When upgrading the model inside your harness, re-audit prompts that encoded workarounds for the *prior* model. Anthropic's Opus 4.7 guidance (April 2026) gives a concrete case: review harnesses tuned for Opus 4.6 with prompts like "only report high-severity issues" or "be conservative" *still work* on 4.7 but now over-filter — Opus 4.7 follows the conservatism more literally, investigating just as thoroughly and then dropping real findings below the stated bar. Measured recall falls even though capability improved (+11pp on Anthropic's bug-finding eval). The fix is harness-side, not model-side: split coverage from filtering across two stages, and keep the conservatism only in the filter stage. See [Reviewer Agents](reviewer-agents.md) for the concrete split.
+
+Generalization: every prompt in the harness encodes an assumption about the prior model's behavior. Upgrades can invert those assumptions (4.6 over-spawned subagents and over-called tools; 4.7 under-spawns and under-calls). Dial-downs in one era become dial-ups in the next. This is the craft of subtraction in reverse — deletions and additions both need a re-audit cycle per model.
 
 ## Related Pages
 
