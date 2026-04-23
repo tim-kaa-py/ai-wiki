@@ -32,6 +32,7 @@
 | 2025-09-11 | [Writing effective tools for agents (Anthropic)](summaries/2025-09-11_anthropic_writing-tools-for-agents.md) | articles | tool-design, agents, mcp, evaluation, namespacing, best-practices |
 | 2026-04-22 | [Define success criteria and build evaluations (Anthropic)](summaries/2026-04-22_anthropic-docs_define-success-criteria-and-build-evaluations.md) | docs | evaluation, testing, best-practices, how-to, prompt-engineering |
 | 2025-04-18 | [Claude Code Best Practices (Anthropic)](summaries/2025-04-18_anthropic_claude-code-best-practices.md) | docs | claude-code, best-practices, claude-md, plan-mode, sub-agents, hooks, skills |
+| 2026-04-22 | [Karpathy's Wiki vs. Open Brain — Strengths & Limits of the LLM Wiki (Nate B Jones)](summaries/2026-04-22_nate-b-jones_karpathy-wiki-vs-open-brain.md) | youtube | karpathy, wiki, knowledge-management, memory, context-engineering, limits, comparison |
 
 ### Wiki Pages
 
@@ -136,4 +137,4 @@
 
 ---
 
-**43 sources** | **49 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**44 sources** | **49 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)

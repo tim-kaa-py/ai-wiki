@@ -7,7 +7,8 @@ sources:
   - "summaries/2026-04-02_karpathy_llm-wiki.md"
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
-last_updated: "2026-04-13"
+  - "summaries/2026-04-22_nate-b-jones_karpathy-wiki-vs-open-brain.md"
+last_updated: "2026-04-23"
 ---
 
 # LLM Wiki Pattern
@@ -21,6 +22,8 @@ Instead of querying raw documents via retrieval-augmented generation, let the LL
 > "I thought I had to reach out for some fancy RAG, but the LLM has been pretty good about auto-maintaining the index files and brief summaries of all the documents." — Karpathy
 
 Karpathy frames this as shifting token throughput from "manipulating code" to "manipulating knowledge stored as markdown and images."
+
+Nate B Jones sharpens the implicit reframing: the pattern moves AI **from oracle to maintainer**. The AI is no longer something you ask one-shot questions — it has an ongoing job, maintaining a knowledge artifact that compounds. Jones treats this as the real payoff of the pattern, independent of any specific implementation. *(Source: Nate B Jones)*
 
 ## Three-Layer Architecture
 
@@ -96,6 +99,18 @@ From Karpathy's original description:
 **Why it works:** The tedious part of knowledge management isn't reading or thinking — it's the bookkeeping. LLMs handle maintenance at near-zero cost. Humans direct analysis and ask good questions. Related in spirit to Vannevar Bush's Memex (1945) — a personal knowledge store with associative trails between documents. Bush couldn't solve who does the maintenance. The LLM handles that. *(Source: Karpathy gist)*
 
 **Scalability limit:** Works well at ~100 sources, hundreds of pages. For larger scale, consider adding search tooling like [qmd](https://github.com/tobi/qmd) — a local markdown search engine with hybrid BM25/vector search and LLM re-ranking, available as both CLI and MCP server. *(Source: Karpathy gist)*
+
+### Limitations (Named Failure Modes)
+
+Nate B Jones gives the most developed critique of the pattern. His framing: the architecture is correct, but it introduces named failure modes most adopters don't see coming. *(Source: Nate B Jones)*
+
+- **Wiki staleness is active misinformation, not ignorance.** A stale database manifests as *gaps* — the reader perceives "I don't know this" and goes looking. A stale wiki manifests as *confidently-written prose that is now wrong* — the reader perceives "I know this" and moves on. For equivalent levels of neglect, a wiki is more hazardous than a database because the failure doesn't trigger the reader's skepticism. **Mitigation:** visible `last_updated` stamps, scheduled drift audits, distrust of confident prose on long-untouched pages.
+- **Editorial / synthesis decisions are silent — the dashboard trap.** Every page encodes framing choices about what connects to what and what matters. Important nuance drops invisibly, and "you wouldn't know what's missing because the wiki reads so cleanly." **Mitigation:** periodically audit wiki pages against their source summaries; look for what the synthesis dropped, not just what it asserted.
+- **Source-of-truth drift from raw to synthesis.** The architecture preserves raw sources in their own folders, but in practice adopters rarely maintain the discipline of going back to them — the wiki reads cleanly, raw sources are fragmented. Over time, the source of truth quietly shifts from raw material to AI summary, which may be 80–90% right. **Mitigation:** build friction that sends you back to raw sources on high-stakes reads; treat wiki claims as citations-required, not authoritative.
+- **Multi-agent concurrent writes break the model.** Two agents editing the same markdown page is a mess. The wiki presupposes a single agent writing on your behalf. If you need Claude Code + ChatGPT + Cursor + automation all touching the same store, the wiki is the wrong substrate — use structured storage.
+- **Team use fractures.** Person A's evolving understanding conflicts with person B's; agents with different approaches update the same page. You get "a weird merge that doesn't reflect deep personal understanding." Keep the wiki personal; for team knowledge, pick a different architecture.
+- **Speed-of-business mismatch — paper pace vs ticket pace.** Every ingest potentially ripples updates across multiple pages (cross-refs, contradictions, resynthesis), so resynthesis cost scales with ingest frequency. Paper/article cadence (weekly-ish) absorbs that cost; Slack/ticket/deal-flow cadence (many per day) does not. Adopting the wiki is implicitly a bet on which data velocities you intend to capture — misapply it to operational data and it degrades.
+- **CLAUDE.md is the highest-leverage but most under-invested document.** The organizing prompt tells the AI how to synthesize, what to flag, what to cross-reference. Under-invest and the wiki degrades silently — you are "betting your career" on a single markdown file. Treat CLAUDE.md as the most-reviewed, most-iterated file in the repo; revisit it whenever synthesis quality slips.
 
 ## Internal vs External Knowledge Bases
 

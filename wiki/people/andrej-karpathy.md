@@ -8,7 +8,8 @@ sources:
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
   - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
-last_updated: "2026-04-16"
+  - "summaries/2026-04-22_nate-b-jones_karpathy-wiki-vs-open-brain.md"
+last_updated: "2026-04-23"
 ---
 
 # Andrej Karpathy
@@ -55,6 +56,12 @@ Karpathy's Auto Research framework, originally built for ML optimization, has be
 The key adaptation insight: Auto Research's ML optimization loop maps directly onto any skill that can be decomposed into boolean success criteria — even creative/subjective tasks like copywriting. The bottleneck is not the framework's rigidity but the user's ability to articulate what makes their output theirs. *(Source: Ben AI)*
 
 See [Auto Research](../concepts/auto-research.md) for the full concept breakdown.
+
+## Critique: Nate B Jones on the Wiki's Named Limits
+
+Nate B Jones has articulated the sharpest critique of Karpathy's wiki pattern: the architecture is correct, but it introduces named failure modes beyond the scalability cliff Karpathy himself acknowledged. Notably: wiki staleness as *active misinformation* (vs database staleness as ignorance), editorial/synthesis drift, raw-vs-synthesis source-of-truth drift, multi-agent write conflicts, team fracture, and a speed-of-business mismatch between paper-pace ingests and ticket/Slack-pace operational data. Jones also credits Karpathy with the deeper reframing the gist only hints at — AI from oracle to maintainer. *(Source: Nate B Jones)*
+
+See [LLM Wiki Pattern § Limitations](../concepts/llm-wiki-pattern.md#limitations-named-failure-modes).
 
 ## Related Pages
 
