@@ -97,13 +97,13 @@ Do not skip a channel heading even if it has no new videos.
 
 ## Step 3 — Trending: Claude Code
 
-Goal: surface 3 YouTube videos about Claude Code that have gained traction,
+Goal: surface 10 YouTube videos about Claude Code that have gained traction,
 not already seen in prior reports.
 
 1. Call the YouTube Data API v3 search endpoint using the key in env var
    YOUTUBE_API_KEY:
    ```
-   curl "https://www.googleapis.com/youtube/v3/search?part=snippet&q=claude+code&type=video&order=date&maxResults=10&key=$YOUTUBE_API_KEY"
+   curl "https://www.googleapis.com/youtube/v3/search?part=snippet&q=claude+code&type=video&order=date&maxResults=20&key=$YOUTUBE_API_KEY"
    ```
    If YOUTUBE_API_KEY is not set or the API call fails with an error: write
    "[YouTube API unavailable — skipping section]" and move to Step 4.
@@ -112,7 +112,7 @@ not already seen in prior reports.
 3. Filter out: videos with IDs in the already-seen set, and videos where
    publishedAt < LAST_DATE. Also filter out videos from the three watched
    channels (Chase-H-AI, NateBJones, nateherk) to avoid duplication.
-4. Take the first 3 remaining results.
+4. Take the first 10 remaining results.
 5. For each, fetch view count:
    ```
    curl "https://www.googleapis.com/youtube/v3/videos?part=statistics&id=VIDEO_ID&key=$YOUTUBE_API_KEY"
@@ -121,7 +121,7 @@ not already seen in prior reports.
    - **[Title]** — [Channel] — [URL]
    - Views: [viewCount] | Published: [publishedAt]
    - One sentence: what the video covers, based on title and description.
-7. If fewer than 3 new results exist after filtering: list what's available
+7. If fewer than 10 new results exist after filtering: list what's available
    and note "Only N new results found."
 
 ---
@@ -157,9 +157,10 @@ Goal: catch anything new from Karpathy — gists and YouTube videos.
 
 ## Step 5 — AI Headlines
 
-Goal: 2–3 significant new items from each feed — model releases, major
-research, notable industry developments. Skip minor updates, tutorials, and
-product marketing.
+Goal: 5 significant new items from each feed to give a broad picture of the
+day's AI news. Include model releases, research findings, industry
+developments, and notable tooling updates. Skip pure tutorials and
+product marketing with no news value.
 
 Fetch each source with WebFetch:
 - The Batch:      https://www.deeplearning.ai/the-batch/
@@ -168,9 +169,9 @@ Fetch each source with WebFetch:
 
 For each source:
 1. Scan for items published on or after LAST_DATE.
-2. Select the 2–3 most significant items. Significance criteria (in order):
+2. Select up to 5 items. Significance criteria (in order):
    major model release > important research finding > notable company/industry
-   development > everything else.
+   development > notable tooling update > everything else.
 3. If the source fetch fails: write "[Source unavailable]" and continue.
 4. If no new items meet the significance bar: write "Nothing significant
    since last report."
