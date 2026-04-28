@@ -33,6 +33,9 @@
 | 2026-04-22 | [Define success criteria and build evaluations (Anthropic)](summaries/2026-04-22_anthropic-docs_define-success-criteria-and-build-evaluations.md) | docs | evaluation, testing, best-practices, how-to, prompt-engineering |
 | 2025-04-18 | [Claude Code Best Practices (Anthropic)](summaries/2025-04-18_anthropic_claude-code-best-practices.md) | docs | claude-code, best-practices, claude-md, plan-mode, sub-agents, hooks, skills |
 | 2026-04-22 | [Karpathy's Wiki vs. Open Brain — Strengths & Limits of the LLM Wiki (Nate B Jones)](summaries/2026-04-22_nate-b-jones_karpathy-wiki-vs-open-brain.md) | youtube | karpathy, wiki, knowledge-management, memory, context-engineering, limits, comparison |
+| 2026-04-25 | [Extend Claude with skills (Claude Code Docs)](summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md) | docs | claude-code, skills, how-to, reference, workflow, configuration, subagents |
+| 2026-04-25 | [Create plugins (Claude Code Docs)](summaries/2026-04-25_claude-code-docs_create-plugins.md) | article | claude-code, plugins, skills, agents, hooks, mcp, workflow, reference, how-to |
+| 2026-04-25 | [Create custom subagents (Claude Code Docs)](summaries/2026-04-25_claude-code-docs_create-custom-subagents.md) | docs | claude-code, subagents, agents, configuration, how-to, reference, hooks, permissions, mcp, context-management |
 
 ### Wiki Pages
 
@@ -62,6 +65,9 @@
 - [MCP (Model Context Protocol)](wiki/concepts/mcp.md) — concept: MCP overview, code-execution pattern (-98.7% tokens), Tool Search / Programmatic Tool Calling / Tool Use Examples
 - [Desktop Extensions (.mcpb)](wiki/how-tos/desktop-extensions-mcpb.md) — how-to: one-click MCP install, manifest schema, enterprise MDM/Group Policy
 - [Claude Design](wiki/tools/claude-design.md) — tool reference: visual mock-up tool (cloud.ai/design), tweaks + variants for fast iteration, design systems, export to Claude Code
+- [Claude Code Skills](wiki/how-tos/claude-code-skills.md) — how-to: SKILL.md authoring, frontmatter reference, invocation control, forked subagents, dynamic injection, lifecycle/compaction
+- [Claude Code Plugins](wiki/how-tos/claude-code-plugins.md) — how-to: standalone-vs-plugin decision, manifest, layout, `--plugin-dir` dev loop, monitors, default-agent override, migration
+- [Claude Code Custom Subagents](wiki/how-tos/claude-code-custom-subagents.md) — how-to: subagent file schema, description-as-routing-key, model resolution, persistent memory, scoped MCP, hooks, forks vs named, no-nesting constraint
 
 ## Understanding AI
 
@@ -137,4 +143,4 @@
 
 ---
 
-**44 sources** | **49 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**46 sources** | **51 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
