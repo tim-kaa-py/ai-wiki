@@ -1,7 +1,7 @@
 # My Agentic Coding Playbook
 
 > A living document. Auto-updated when new relevant sources are ingested.
-> Last updated: 2026-04-22 (Ryan Lopopolo, OpenAI — harness as repo artifacts, reviewer agents, structural tests)
+> Last updated: 2026-04-25 (Claude Code Docs — Create custom subagents: description-as-routing-key, model resolution, scoped MCP, subagent memory, validation hooks)
 
 ## Core Principles
 
@@ -34,6 +34,58 @@
 14. **Auto-format with a PostToolUse hook.** Run your formatter after every Write/Edit tool call to handle the last 10% of formatting issues silently and prevent CI failures. Add to `.claude/settings.json`: `"PostToolUse": [{"matcher": "Write|Edit", "hooks": [{"type": "command", "command": "<formatter> || true"}]}]` *(Source: Boris Cherny, Creator of Claude Code)*
 
 15. **Give Claude real tools via MCP.** Connect Slack, BigQuery, Sentry (or your equivalents) via `.mcp.json`. Check `.mcp.json` into the team repo so all team members get the same tool access. *(Source: Boris Cherny, Creator of Claude Code)*
+
+## Skills (Claude Code)
+
+S1. **Move repeating playbooks out of CLAUDE.md and into skills.** CLAUDE.md is paid every turn; a skill body loads only when invoked. Any CLAUDE.md section that reads like a step-by-step procedure belongs in `.claude/skills/<name>/SKILL.md`. Keep CLAUDE.md for factual project context. *(Source: Claude Code Docs — Skills)*
+
+S2. **Lock down side-effect skills with `disable-model-invocation: true`.** Deploys, commits, Slack messages, anything irreversible — flag them so only the user can trigger. Removes the skill from Claude's context entirely. Combine with a `Skill(deploy *)` deny rule in `/permissions` for defense in depth. *(Source: Claude Code Docs — Skills)*
+
+S3. **Hide context-loader skills from the `/` menu with `user-invocable: false`.** Background-knowledge skills (legacy-system-context, internal-glossary) should be Claude-only — the user shouldn't see them in autocomplete; Claude pulls them in when relevant. *(Source: Claude Code Docs — Skills)*
+
+S4. **Cap `SKILL.md` at ~500 lines; spill detail into sibling files.** Past that, the body crowds out other context. Move long reference into `reference.md`/`examples.md` next to `SKILL.md` and link from the body — Level 3 progressive disclosure. *(Source: Claude Code Docs — Skills)*
+
+S5. **Pre-approve tools in skill frontmatter (`allowed-tools`) to kill permission prompts.** A commit skill with `allowed-tools: Bash(git add *) Bash(git commit *)` runs without interruptions. Scoped per-skill, not session-wide — safer than a broad `/permissions` allowlist. *(Source: Claude Code Docs — Skills)*
+
+S6. **Use `` !`command` `` for live data — preprocessing beats a tool turn.** When a skill needs the current PR diff, branch, or log tail, embed `` !`gh pr diff` `` in the body. The shell command runs *before* Claude sees the prompt; output replaces the placeholder. Saves a tool call and avoids racing model judgment. *(Source: Claude Code Docs — Skills)*
+
+S7. **Run heavy or untrusted skills in a forked subagent (`context: fork`).** The subagent inherits no conversation history; the skill body becomes its task prompt. Use for big-read explorations, security review of unknown code, or anything you don't want polluting the main context. Pick the `agent` type (`Explore`, `Plan`, `general-purpose`, custom). *(Source: Claude Code Docs — Skills)*
+
+S8. **Write the skill `description` for discovery, not for humans.** Claude decides whether to auto-invoke based on `description` + `when_to_use` (combined, capped at 1,536 chars in the listing). Front-load the trigger condition. "Helps with PRs" never fires; "Summarize the diff and changed files for the current PR via `gh`" does. *(Source: Claude Code Docs — Skills)*
+
+## Subagents (Claude Code)
+
+SA1. **Treat the `description` field as the routing key, not a label.** Claude reads descriptions to decide when to delegate. Vague description = no delegation. Anchor the description in the *situation* you want delegation to trigger ("Expert code review specialist. Use immediately after writing or modifying code"). Add the phrase "use proactively" to encourage automatic invocation. *(Source: Claude Code Docs — Create custom subagents)*
+
+SA2. **Match model to subagent role: `haiku` for read-only research, `sonnet` for analysis, `inherit` for the rest.** Model resolution priority: `CLAUDE_CODE_SUBAGENT_MODEL` env var → per-invocation → frontmatter → main session. Cheap models on exploration agents pay for themselves; default-inherit on agents that need full capability. *(Source: Claude Code Docs — Create custom subagents)*
+
+SA3. **Scope MCP servers inline to the subagent that needs them.** Define `mcpServers` in the subagent frontmatter rather than globally in `.mcp.json`. The server (and all its tool descriptions) only loads when the subagent is active — keeps the parent context clean. Especially valuable for high-tool-count servers like Playwright. *(Source: Claude Code Docs — Create custom subagents)*
+
+SA4. **Use `memory: project` to give a subagent compounding institutional knowledge.** First 200 lines of `MEMORY.md` auto-load. Instruct the subagent to update its memory with patterns it observes (e.g., codebase quirks for a code-reviewer). Over time it builds repo-specific expertise without polluting your main session. Three scopes: `user`, `project`, `local`. *(Source: Claude Code Docs — Create custom subagents)*
+
+SA5. **Use `PreToolUse` hooks for fine-grained tool gating.** When `tools: Bash` is too coarse — you want some commands but not others — attach a hook script that reads stdin JSON and exits 2 to block. Canonical example: a `db-reader` subagent allows `SELECT` but blocks writes via a validator script. *(Source: Claude Code Docs — Create custom subagents)*
+
+SA6. **Forks for context-aware side tasks; named subagents for independent ones.** `/fork <directive>` (with `CLAUDE_CODE_FORK_SUBAGENT=1`) inherits the full conversation and shares the prompt cache — cheap and context-aware. Named subagents start fresh — right when the task is independent. Pick by whether the task needs session history. *(Source: Claude Code Docs — Create custom subagents)*
+
+SA7. **Subagents cannot spawn other subagents — chain from the main conversation or use Skills.** No nested delegation. For multi-step decomposition, sequence subagent calls from the orchestrator session, or use Skills (which run in main context and can be invoked from anywhere). *(Source: Claude Code Docs — Create custom subagents)*
+
+SA8. **`bypassPermissions` does not bypass `.git`, `.claude`, `.vscode`, `.idea`, `.husky`.** Even with bypass mode set, writes to those directories still prompt — except `.claude/commands`, `.claude/agents`, `.claude/skills`. Parent's bypass takes precedence over subagent settings; you cannot make a subagent stricter than its parent. *(Source: Claude Code Docs — Create custom subagents)*
+
+## Plugins (Claude Code)
+
+P1. **Default to standalone `.claude/` — convert to a plugin only when you actually share.** The conversion is mechanical (`cp -r .claude/skills my-plugin/` + add `plugin.json`) and takes minutes. Don't pay namespacing/manifest overhead until a teammate or another machine needs the bundle. *(Source: Claude Code Docs — Create plugins)*
+
+P2. **Functional directories live at the plugin root, not inside `.claude-plugin/`.** Only `plugin.json` lives in `.claude-plugin/`. `skills/`, `agents/`, `hooks/`, `monitors/`, `bin/`, `.mcp.json`, `.lsp.json`, `settings.json` all sit at the plugin root. Misplacing them is the most common authoring mistake. *(Source: Claude Code Docs — Create plugins)*
+
+P3. **Use `--plugin-dir` as the local dev loop; `/reload-plugins` between edits.** `claude --plugin-dir ./my-plugin` loads a plugin without installing. Local copies override installed marketplace plugins of the same name — useful for testing patches before publishing. No need to restart Claude Code between edits. *(Source: Claude Code Docs — Create plugins)*
+
+P4. **Use `monitors/monitors.json` for passive awareness, not skills.** When you want Claude to react to a log line, file change, or external status without the user having to ask, wrap it in a monitor (e.g., `tail -F ./logs/error.log`) rather than a skill. Each stdout line is delivered as a notification; Claude Code starts monitors automatically when the plugin is active. Filter at the source (`grep ERROR`) to avoid flooding context. *(Source: Claude Code Docs — Create plugins)*
+
+P5. **`settings.json` `agent` field replaces Claude Code's default agent — document it loudly.** Setting `"agent": "security-reviewer"` makes every session start with that agent's system prompt and tool restrictions. Only plugins can replace the default; standalone agents can only be invoked. Powerful for opinionated tooling, but if a user activates the plugin without realizing this, they'll think Claude Code itself has changed behavior. Spell it out in the README. *(Source: Claude Code Docs — Create plugins)*
+
+P6. **Set explicit `version` (semver) for stable installs; omit it for rolling private/team plugins.** Without `version`, every git commit becomes a new version and users always pull latest. With explicit `version`, semver-pinned users only get what you ship. Pick deliberately — accidental rolling updates on a shared plugin will break teammates. *(Source: Claude Code Docs — Create plugins)*
+
+P7. **Migrate hooks into `hooks/hooks.json` when packaging — they become portable.** The format mirrors the `settings.json` `hooks` object. Hooks in a project's `settings.json` are local-only; hooks in a plugin ship with the plugin. Lift the block; don't leave duplicates in `settings.json` or both will fire. *(Source: Claude Code Docs — Create plugins)*
 
 ## Harness Engineering
 
@@ -321,3 +373,6 @@ When picking an agent platform (Claude Managed Agents, LangChain Deep Agents Dep
 - **Approving long plans without reading them line by line.** Unread plans encode unwanted instructions that the rollout faithfully executes, wasting tokens on bad work. Either skip plan mode and let a well-specified ticket + good harness suffice, or ship the plan as its own PR and review it line-by-line. *(Source: Ryan Lopopolo, OpenAI)*
 - **Sizing repo architecture by team headcount instead of agent cognition.** A 2-person team with agents needs heavy-org architecture because the agent can't see domain boundaries that aren't in the filesystem. Starting blank with a single-package Electron app produces a mess: no package privacy, no filesystem hooks for domain boundaries, optimization for local coherence over shared utilities. *(Source: Ryan Lopopolo, OpenAI)*
 - **Spending all your tokens in-editor and skimping on CI.** Writing code is no longer the hard part — getting it accepted is. If your CI token spend is <20% of total, you're under-investing in reviewer agents, structural-test generation, and PR-commentary agents. *(Source: Ryan Lopopolo, OpenAI)*
+- **Wrapping a personal workflow as a plugin before you've shared it.** Plugin namespacing, manifests, and version semantics are overhead that pay off only once another machine or another person needs the bundle. Build in `.claude/` first; convert when you actually need to share. *(Source: Claude Code Docs — Create plugins)*
+- **Putting `skills/` or `agents/` inside `.claude-plugin/`.** Functional directories belong at the plugin **root**; only `plugin.json` lives in `.claude-plugin/`. Misplacement is the most common plugin authoring failure and silently breaks discovery. *(Source: Claude Code Docs — Create plugins)*
+- **Shipping a plugin with a default-agent override and no README warning.** A plugin's `settings.json` `agent` field replaces Claude Code's main-thread agent on activation — users who don't read the README will think Claude Code itself changed. Always document. *(Source: Claude Code Docs — Create plugins)*
