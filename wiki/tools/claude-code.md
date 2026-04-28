@@ -26,7 +26,10 @@ sources:
   - "summaries/2025-06-13_anthropic_multi-agent-research-system.md"
   - "summaries/2026-04-20_chase-ai_only-claude-design-guide-you-should-watch.md"
   - "summaries/2026-04-18_jono-catliff_how-i-built-insane-claude-design-websites-in-10-minutes.md"
-last_updated: "2026-04-22"
+  - "summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
+  - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
+  - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
+last_updated: "2026-04-25"
 ---
 
 # Claude Code
@@ -93,6 +96,8 @@ Press **Shift+Tab twice** to enter Plan mode. Boris Cherny starts almost every s
 Define in `.claude/agents/my-agent.md` with frontmatter controlling name, tools, model, and permissions. Use for specialized workflows: code review, debugging, documentation, read-only analysis.
 
 Boris Cherny's personal agent set: `build-validator.md`, `code-architect.md`, `code-simplifier.md`, `oncall-guide.md`, `verify-app.md`. Each encodes detailed instructions for a specific task run at a consistent point in the workflow (e.g. code-simplifier runs after Claude finishes, verify-app runs before shipping). *(Source: Boris Cherny, Creator of Claude Code)*
+
+The full configuration surface — `description` as routing key, 4-level model resolution, persistent `memory` field, scoped `mcpServers`, `PreToolUse` validation hooks, fork vs named subagent, the no-nested-subagents rule — is documented separately. See [Claude Code Custom Subagents](../how-tos/claude-code-custom-subagents.md). *(Source: Claude Code Docs — Create custom subagents)*
 
 ### Permissions: Three Strategies
 Anthropic's canonical guidance: Claude Code offers **three complementary permission strategies**, not one right answer. Compose them.
@@ -386,7 +391,45 @@ description: Specific, action-oriented description — what it does and when to 
 
 The description is the discovery signal. A vague description means the skill never triggers. Put deterministic work into bundled scripts (Anthropic's PDF skill uses Python) instead of burning tokens. **Audit unfamiliar skills before installing** — malicious skills can introduce vulnerabilities.
 
-See [Agent Skills](../concepts/agent-skills.md) for the concept. *(Source: Anthropic Engineering)*
+### Skills in Claude Code: Invocation Control, Forking, Live Data
+
+Beyond `name`/`description`, Claude Code skills support several frontmatter levers:
+
+- `disable-model-invocation: true` — only the user can invoke. Skill is removed from Claude's context entirely. Use for side-effect actions (`/deploy`, `/commit`, `/send-slack-message`) you never want Claude to fire spontaneously.
+- `user-invocable: false` — only Claude can invoke. Hidden from the `/` menu. Use for background-knowledge skills (context-loaders, glossaries).
+- `allowed-tools: Bash(git *) Bash(gh *)` — pre-approve tools for the skill's session, so a commit/PR-summary skill runs without per-call permission prompts.
+- `context: fork` + `agent: Explore|Plan|general-purpose|<custom>` — run the skill body as the task prompt of an isolated subagent that has no access to conversation history. Useful for heavy reads or untrusted code.
+- `` !`command` `` inside the skill body runs a shell command **before Claude sees anything**; output replaces the placeholder. Lets skills ship live data (PR diff, branch info, log tail) without spending a tool turn.
+- `Skill` / `Skill(name)` / `Skill(name *)` rules in `/permissions` allow- or deny-list skill invocation across the project.
+
+Lifecycle inside a session: once invoked, `SKILL.md` content stays in context for the rest of the session. After compaction, the most recently invoked skills are re-attached (first 5,000 tokens each, 25,000-token total budget, newest first). Editing a skill file mid-session affects the **next** invocation, not the already-loaded copy.
+
+Keep `SKILL.md` under ~500 lines — split detailed reference into sibling files and reference them from `SKILL.md` (Level 3 progressive disclosure).
+
+See [Claude Code Skills](../how-tos/claude-code-skills.md) for the how-to and [Agent Skills](../concepts/agent-skills.md) for the concept. *(Source: Anthropic Engineering, Claude Code Docs)*
+
+## Plugins: Packaging Layer
+
+Plugins are the distribution channel for everything below the project: skills, agents, hooks, MCP servers, LSP definitions, and a new **monitors** primitive (background shell commands whose stdout streams to Claude as notifications).
+
+| | Standalone (`.claude/`) | Plugin (`.claude-plugin/plugin.json`) |
+|--|------------------------|----------------------------------------|
+| Slash names | `/deploy` | `/my-plugin:deploy` (namespaced) |
+| Sharing | Commit to project repo | Versioned, installable via marketplace |
+| Conversion | — | `cp -r .claude/skills my-plugin/` + add `plugin.json` |
+
+**Default to standalone, migrate when you share.** The conversion is mechanical and takes minutes. The most common plugin authoring mistake is putting functional directories inside `.claude-plugin/` — only `plugin.json` lives there; `skills/`, `agents/`, `hooks/`, `monitors/`, `.mcp.json` all sit at the **plugin root**.
+
+**Local dev loop:** `claude --plugin-dir ./my-plugin` loads a plugin without installing. Local copies override marketplace plugins of the same name. `/reload-plugins` picks up edits without restarting.
+
+**Plugin-only powers:**
+- **`monitors/monitors.json`** — passive background awareness (e.g., `tail -F ./logs/error.log`); Claude Code auto-starts these when the plugin is active.
+- **`settings.json` `agent` field** — replace Claude Code's *default* main-thread agent (e.g., a `security-review` plugin that forces every session into review mode). Standalone agents can be invoked but cannot replace the default; only plugins can.
+- **Portable hooks** — `hooks/hooks.json` mirrors the `settings.json` hooks object but ships with the plugin.
+
+**Versioning:** explicit `version` (semver) for stable installs; omit `version` and every git commit is a new version (rolling updates).
+
+See [Claude Code Plugins](../how-tos/claude-code-plugins.md) for the full how-to. *(Source: Claude Code Docs — Create plugins)*
 
 ## Parallel Claudes: Lock-File Agent Teams
 
@@ -402,6 +445,9 @@ Contrast with the hierarchical **orchestrator-worker** pattern of the multi-agen
 - [Claude Code Auto Mode](../how-tos/claude-code-auto-mode.md)
 - [Claude Code Sandboxing](../how-tos/claude-code-sandboxing.md)
 - [Agent Skills](../concepts/agent-skills.md)
+- [Claude Code Skills](../how-tos/claude-code-skills.md) — authoring how-to
+- [Claude Code Plugins](../how-tos/claude-code-plugins.md) — packaging skills + agents + hooks + monitors for distribution
+- [Claude Code Custom Subagents](../how-tos/claude-code-custom-subagents.md) — full subagent configuration reference
 - [Parallel Agent Patterns](../concepts/parallel-agent-patterns.md)
 - [Claude Design](claude-design.md) — browser-based front-end generator; hand off its HTML export to Claude Code
 - [Claude Routines](claude-routines.md)

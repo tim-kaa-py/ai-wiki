@@ -10,7 +10,7 @@ last_updated: "2026-04-15"
 
 # Superpowers
 
-A Claude Code plugin (installable via `/plugin` inside Claude Code) that adds orchestration, visual design iteration, and TDD-driven development on top of vanilla Claude Code. Lighter and more fluid than [GSD](gsd.md).
+A Claude Code plugin (installable via `/plugin` inside Claude Code) that adds orchestration, visual design iteration, and TDD-driven development on top of vanilla Claude Code. Lighter and more fluid than [GSD](gsd.md). For the underlying plugin packaging mechanics — `plugin.json`, namespacing, `--plugin-dir` dev loop, monitors — see [Claude Code Plugins](../how-tos/claude-code-plugins.md).
 
 ## Why It Exists
 

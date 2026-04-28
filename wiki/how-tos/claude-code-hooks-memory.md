@@ -6,7 +6,8 @@ tags: [claude-code, hooks, memory, llm-knowledge-bases, agents, workflow, automa
 sources:
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
   - "summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md"
-last_updated: "2026-04-15"
+  - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
+last_updated: "2026-04-25"
 ---
 
 # Claude Code Hooks for Memory
@@ -160,8 +161,18 @@ For tasks that run unattended, Boris Cherny recommends adding deterministic veri
 
 *(Source: Boris Cherny, Creator of Claude Code)*
 
+## Subagent-Scoped Hooks and Memory
+
+Hooks and memory are also configurable **per subagent** — declared inline in the subagent's frontmatter rather than globally in `settings.json`. Two patterns:
+
+- **`PreToolUse` validation hooks** scoped to the subagent. Lets you allow `tools: Bash` while still blocking specific commands — e.g., a `db-reader` subagent that allows `SELECT` and rejects writes by exiting 2 from a validator script.
+- **Persistent subagent memory** via the `memory` field (`user`, `project`, or `local` scope). The first 200 lines of `MEMORY.md` auto-load into the subagent's context. Instruct the subagent to update its memory after each run — over time it builds institutional knowledge specific to its task.
+
+See [Claude Code Custom Subagents](claude-code-custom-subagents.md) for the full configuration. *(Source: Claude Code Docs — Create custom subagents)*
+
 ## Related Pages
 
+- [Claude Code Custom Subagents](claude-code-custom-subagents.md) -- subagent-scoped hooks and `memory` field
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md) -- the underlying pattern
 - [Claude Code](../tools/claude-code.md) -- the tool this configures
 - [Claude Code Permissions](claude-code-permissions.md) -- permissions configuration

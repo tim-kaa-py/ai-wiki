@@ -7,7 +7,9 @@ sources:
   - "summaries/2025-10-16_anthropic_agent-skills.md"
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
-last_updated: "2026-04-21"
+  - "summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
+  - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
+last_updated: "2026-04-25"
 ---
 
 # Agent Skills
@@ -80,12 +82,55 @@ Implication for skill authors: once this lands, server authors can push updated 
 
 See [MCP — Future of MCP / 2026 Roadmap](mcp.md#future-of-mcp--2026-roadmap).
 
+## Invocation Control (Claude Code Specifics)
+
+Skill frontmatter in Claude Code exposes two flags that gate **who** can trigger a skill:
+
+| Flag | Effect |
+|------|--------|
+| `disable-model-invocation: true` | Only the user can invoke. Skill is removed from Claude's context entirely. Use for side-effect actions (`/deploy`, `/commit`). |
+| `user-invocable: false` | Only Claude can invoke. Hidden from the `/` menu. Use for background-knowledge skills (context-loaders). |
+| (default — both) | Description is always in context; body loads on invocation by either party. |
+
+This is orthogonal to L1/L2/L3 progressive disclosure: invocation control decides *who can pull the skill in*, progressive disclosure decides *how much loads when they do*.
+
+## Skill Lifecycle Inside a Session
+
+Once invoked, `SKILL.md` content enters the conversation as a single message and **persists for the rest of the session**. Implications:
+
+- Mid-session edits to a skill file affect the **next** invocation, not the already-loaded copy.
+- After auto-compaction, the most recently invoked skills are re-attached: first 5,000 tokens each, total budget 25,000 tokens, newest first.
+- A brand-new top-level `skills/` directory needs a Claude Code restart; everything else is live.
+
+## Subagent Execution: `context: fork`
+
+A skill can run in an isolated subagent by setting `context: fork`. The subagent inherits no conversation history — the skill body becomes its task prompt. The `agent` field selects the execution environment (`Explore`, `Plan`, `general-purpose`, or any custom subagent from `.claude/agents/`).
+
+Use forking when the skill should not see prior conversation, or when its execution would otherwise blow up the main context (large reads, untrusted code).
+
+## Dynamic Context Injection
+
+The `` !`command` `` syntax in skill content runs a shell command **before Claude sees anything**; the output replaces the placeholder. This is preprocessing, not a Claude tool call. It lets a skill ship live data (PR diff, current branch, log tail) into the prompt without spending a tool turn.
+
 ## Relation to Broader Patterns
 
 Progressive disclosure generalizes beyond skills — it's the same pattern as MCP tool descriptions, lazy-loaded memory, and the [Harness Engineering](harness-engineering.md) principle of keeping context small. Skills are the Anthropic-productized version.
 
+## Distribution: Standalone vs Plugin
+
+Skills travel through two channels in Claude Code:
+
+| Channel | Location | When to use |
+|---------|----------|-------------|
+| **Standalone** | `.claude/skills/` (project) or `~/.claude/skills/` (personal) | Iteration, personal workflow, project-only skills |
+| **Plugin** | `skills/` at the root of a plugin package (alongside `.claude-plugin/plugin.json`) | Sharing across machines or with teammates; namespaced as `/<plugin-name>:<skill>` |
+
+Plugins also bundle agents, hooks, MCP server definitions, LSP definitions, and a new **monitors** primitive (background commands streaming notifications to Claude). The conversion path standalone → plugin is mechanical: copy `skills/`, `agents/`, and the `hooks` block into a plugin root and add a `plugin.json`. Default to standalone until you actually need to share. See [Claude Code Plugins](../how-tos/claude-code-plugins.md).
+
 ## Related Pages
 
 - [Claude Code](../tools/claude-code.md)
+- [Claude Code Skills](../how-tos/claude-code-skills.md) — how-to: authoring, invocation control, forking, permissions
+- [Claude Code Plugins](../how-tos/claude-code-plugins.md) — packaging skills + agents + hooks + monitors
 - [Prompt Engineering for Claude](prompt-engineering-claude.md)
 - [Harness Engineering](harness-engineering.md)

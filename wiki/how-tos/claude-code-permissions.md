@@ -8,7 +8,8 @@ sources:
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
   - "summaries/2026-03-25_anthropic_claude-code-auto-mode.md"
   - "summaries/2025-10-20_anthropic_claude-code-sandboxing.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
+last_updated: "2026-04-25"
 ---
 
 # Claude Code Permissions
@@ -103,6 +104,25 @@ OS-level isolation — bubblewrap on Linux, seatbelt on macOS — restricting fi
 
 See [Claude Code Sandboxing](claude-code-sandboxing.md) for the full how-to.
 
+## Scoping Skill Invocation
+
+Skills can be allow- or deny-listed in `/permissions` using the same pattern syntax as bash commands:
+
+```
+# Deny all skills
+Skill
+
+# Allow only a specific skill
+Skill(commit)
+
+# Deny a specific skill (and any sub-arguments)
+Skill(deploy *)
+```
+
+This composes with skill-frontmatter flags (`disable-model-invocation`, `user-invocable`) for defense in depth — the frontmatter governs *who* can invoke; `/permissions` governs *whether the invocation goes through at all*. Lock down side-effect skills (`deploy`, `commit`, `send-slack-message`) with both layers.
+
+Skills can also pre-approve their own tools via `allowed-tools` in frontmatter (e.g. `allowed-tools: Bash(git add *) Bash(git commit *)`), so a commit skill runs without per-call prompts. See [Claude Code Skills](claude-code-skills.md).
+
 ## Related Pages
 
 - [Claude Code Auto Mode](claude-code-auto-mode.md) -- classifier-gated permission mode
@@ -110,3 +130,4 @@ See [Claude Code Sandboxing](claude-code-sandboxing.md) for the full how-to.
 - [Claude Code](../tools/claude-code.md) -- the tool this configures
 - [Claude Code Hooks for Memory](claude-code-hooks-memory.md) -- other `.claude/settings.json` configuration
 - [Agentic Coding Workflow](agentic-coding-workflow.md) -- workflow incorporating these practices
+- [Claude Code Skills](claude-code-skills.md) -- frontmatter-level invocation control and tool allowlists

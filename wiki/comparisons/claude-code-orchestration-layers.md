@@ -5,7 +5,8 @@ pillar: "ecosystem"
 tags: [claude-code, comparison, orchestration, gsd, superpowers, agents, sub-agents, workflow]
 sources:
   - "summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
-last_updated: "2026-04-15"
+  - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
+last_updated: "2026-04-25"
 ---
 
 # Claude Code Orchestration Layers
@@ -16,7 +17,7 @@ A head-to-head comparison of three approaches to building with Claude Code: vani
 
 Both GSD and Superpowers are "orchestration layers that sit on top of Claude Code and change the way Claude Code approaches complex projects." They introduce:
 
-- **Sub-agent-driven development** — Each task gets a separate agent with a clean context window, avoiding "context rot" (degradation as a single session fills its context window)
+- **Sub-agent-driven development** — Each task gets a separate agent with a clean context window, avoiding "context rot" (degradation as a single session fills its context window). Native Claude Code now supports this directly via custom subagents — see [Claude Code Custom Subagents](../how-tos/claude-code-custom-subagents.md). Much of what GSD/Superpowers add can be assembled from a few well-scoped subagent files in `.claude/agents/`.
 - **Planning rigor** — More structured research and planning phases before execution
 - **Context management** — Mechanisms to maintain coherence across sub-agent boundaries
 
