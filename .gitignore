@@ -11,3 +11,6 @@
 
 # Author-private modules (see docs/private-modules.md)
 linkedin/
+
+# Local secrets — never commit
+.env
