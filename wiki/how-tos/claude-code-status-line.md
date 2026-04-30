@@ -6,16 +6,28 @@ tags: [claude-code, terminal, configuration, workflow, status-line, how-to, refe
 sources:
   - "summaries/2026-04-16_self_claude-code-statusline-setup.md"
   - "summaries/2026-04-15_claude-docs_optimize-your-terminal-setup.md"
-last_updated: "2026-04-16"
+last_updated: "2026-04-30"
 ---
 
 # Claude Code Status Line Setup
 
-How to configure a two-line status bar at the bottom of Claude Code that provides live situational awareness: context window usage, session cost, rate limit sustainability, git branch, and code velocity.
+How to configure a three-line status bar at the bottom of Claude Code that provides live situational awareness: context window usage, session cost, rate limit sustainability, git branch, and code velocity.
 
 ## Why This Matters
 
 Claude Code sessions can hit context limits and rate limits without warning. A status line dashboard makes these invisible constraints visible, letting you make informed decisions about when to wrap up, slow down, or start a new session. It is the terminal equivalent of a car's instrument cluster.
+
+## Layout
+
+Three lines, organized by information priority:
+
+| Line | Content | Purpose |
+|------|---------|---------|
+| **1** | `Model · effort │ [ctx bar] % │ 5h [bar] % reset Xh Ym ⚡` | Highest-signal: identity + critical limits at a glance |
+| **2** | `(Xh left)  │  X.X kT ~X.XX€ │ 7d [bar] % ~Xd │ API X%` | 5h burn warning leads when active; cost + weekly limit + API% follow |
+| **3** | `Xm  │  branch  ~/full/path/to/project` | Session timer + path — no overflow risk |
+
+The path lives alone on line 3 to prevent it from crowding critical rate-limit info on deep project paths (e.g. `~/local_dev/ProjectA/sub/module`).
 
 ## Setup
 
@@ -38,13 +50,17 @@ echo '{"model":{"display_name":"Test"},"context_window":{"used_percentage":42}}'
 
 ## Dashboard Indicators
 
-### Context Window (Color-Coded Zones)
+### Context Window (Model-Aware Color Zones)
 
-| Zone | Range | Meaning | Tuned for |
-|------|-------|---------|-----------|
-| Green | 0-19% | Standard 200k window, plenty of headroom | Opus 1M context |
-| Yellow | 20-69% | Extended context / compaction territory | Consider wrapping up |
-| Red | 70%+ | Approaching limit | Start a new session soon |
+The thresholds differ by model — Opus has a smaller effective context window so it warns earlier; Sonnet and Haiku stay green longer.
+
+| Zone | Opus | Sonnet / Haiku | Meaning |
+|------|------|----------------|---------|
+| Green | 0–19% | 0–49% | Plenty of headroom |
+| Yellow | 20–69% | 50–89% | Extended context / compaction territory |
+| Red | 70%+ | 90%+ | Approaching limit — start a new session soon |
+
+Detection: the model display name (e.g. `"Sonnet 4.6"`) is already in scope when the bar is built; a simple string match selects the threshold pair.
 
 ### Rate Limit Sustainability
 
@@ -83,6 +99,16 @@ Lines added (green) and removed (red), tracked across the full session. A lightw
 | Lightning bolt appears | The last prompt was heavy; break subsequent tasks into smaller steps |
 | API wait % drops below 50% | You are the bottleneck — prepare and batch your next set of prompts |
 | Session cost spikes | Review whether the current approach is efficient; consider a more targeted prompt |
+
+## Renderer Capabilities and Limits
+
+Claude Code's statusbar renderer passes the script's stdout directly to the UI with the following constraints:
+
+- **ANSI color codes**: fully supported — use freely for coloring bars, labels, indicators
+- **ANSI cursor movement codes** (`\033[1A`, `\033[NG`, etc.): **stripped** — the renderer concatenates remaining text inline, so any attempt to reposition the cursor produces garbled output rather than cross-line alignment
+- **Number of lines**: **unlimited** — each `echo` in the script adds one row. The 2- or 3-line convention is a design choice, not a technical limit.
+
+Practical implication: if you need a new display element, add a new `echo` line rather than trying to interleave content across existing lines via cursor tricks.
 
 ## Related Pages
 

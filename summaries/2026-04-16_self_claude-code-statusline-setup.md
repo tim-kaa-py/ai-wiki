@@ -16,11 +16,11 @@ source_file: "sources/articles/2026-04-16_self_claude-code-statusline-setup.md"
 
 ## TL;DR
 
-A ready-to-paste prompt that sets up a two-line status bar at the bottom of Claude Code showing context window usage, session cost in EUR, rate limit burn rates with sustainability indicators, git branch, and code velocity — giving you live situational awareness without leaving the terminal.
+A ready-to-paste prompt that sets up a three-line status bar at the bottom of Claude Code showing context window usage, session cost in EUR, rate limit burn rates with sustainability indicators, git branch, and code velocity — giving you live situational awareness without leaving the terminal. Three lines prevent path overflow on deep project directories by giving each tier of information its own line.
 
 ## Key Takeaways
 
-1. **Context window has three zones** — green (0-19%, standard 200k window), yellow (20-69%, extended context / compaction territory), red (70%+, approaching limit). The thresholds are tuned for Opus's 1M context window.
+1. **Context window thresholds are model-aware** — Opus warns earlier (green 0-19%, yellow 20-69%, red 70%+); Sonnet/Haiku stay green longer (green 0-49%, yellow 50-89%, red 90%+). Detected via string match on the model display name.
    - **How to apply:** Watch the bar color; yellow means consider wrapping up or starting a new session soon.
 
 2. **Rate limit sustainability matters more than current percentage** — The status line calculates burn rate (usage% / elapsed hours) and colors the reset timer green (sustainable, <20%/h) or red (unsustainable) with a "hours left" estimate.
@@ -36,6 +36,11 @@ A ready-to-paste prompt that sets up a two-line status bar at the bottom of Clau
    - **How to apply:** High API% (>70%) means you're efficiently keeping the model busy. Low API% means you're the bottleneck — batch your prompts.
 
 6. **Code velocity (+lines/-lines) gives a productivity pulse** — Green for additions, red for removals, tracked across the full session.
+
+7. **ANSI color codes work; cursor movement codes don't** — Claude Code's statusbar renderer strips `\033[1A` and similar cursor-repositioning codes. Text ends up concatenated inline instead of moving. Add a new `echo` line for new display elements.
+   - **How to apply:** Don't attempt cross-line layout tricks with cursor codes — they silently break output.
+
+8. **The statusbar supports unlimited lines** — Each `echo` in the script adds one row. 3-line is a design choice, not a technical limit.
 
 ## Notable Commands / Code Snippets
 
