@@ -2,14 +2,15 @@
 title: "Agent Skills"
 type: "concept"
 pillar: "building"
-tags: [agent-skills, claude, skills, progressive-disclosure, agents, mcp, claude-code]
+tags: [agent-skills, claude, skills, progressive-disclosure, agents, mcp, claude-code, skills-as-packages, supply-chain]
 sources:
   - "summaries/2025-10-16_anthropic_agent-skills.md"
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
   - "summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
   - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
-last_updated: "2026-04-25"
+  - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
+last_updated: "2026-05-05"
 ---
 
 # Agent Skills
@@ -66,6 +67,22 @@ Skills can bundle executable scripts (Anthropic's PDF skill uses Python). The pa
 ## Security: Audit Before Installing
 
 Skills are code + instructions that enter Claude's trusted context. **Malicious skills can introduce vulnerabilities** — prompt injections, backdoored scripts, exfiltration. Treat third-party skills like you would any dependency: audit before installing, prefer skills from known sources, review SKILL.md and bundled scripts.
+
+### Why Sandboxes Don't Catch Prompt Injection in Skills
+
+Patrick Debois's load-bearing point in *Context Is the New Code* (AI Engineer, May 2026): coding agents **auto-load** `agent.md` / `skill.md` files into the prompt on download, before any user code runs. A sandbox boundary kicks in when the agent *executes* something — not when it *reads context* into the model. By the time the sandbox is enforcing anything, the malicious instructions are already in the LLM's context window and may have already steered the agent's plan. [Source: 2026-05-03_ai-engineer_context-is-the-new-code]
+
+The defense has to live **upstream of the LLM** — a perimeter scanner that filters incoming context for prompt-injection patterns *before* it reaches the model. Debois's framing: this is the AI equivalent of a Web Application Firewall. See [Context Filter](context-filter.md) for the full pattern.
+
+## Skills as a Package Format
+
+Once skills are bundled context + scripts + docs + (optionally) MCP server definitions, they have all the surface area of an npm package — and the same problems. Debois's framing in *Context Is the New Code*: skill distribution is a package-management problem, with the usual cast of issues: [Source: 2026-05-03_ai-engineer_context-is-the-new-code]
+
+- **Public registries are mostly noise.** Debois's blunt take: 99.9% of public skills are crap. Public registries are good for learning patterns; production-quality skills live in private registries.
+- **Version pinning matters.** A skill that wraps a library needs to pin to library versions, or it drifts the moment the library updates.
+- **Dependency hell ports across.** Skills that depend on other skills (or shared MCP servers) inherit the transitive-dependency problems of any package ecosystem.
+- **Supply-chain scanning is not optional.** Snyk-style scanners need to look for credential leakage, injection patterns, and third-party exposure inside skill bundles. See [AI SBOM](ai-sbom.md) for the bill-of-materials half of this.
+- **Run a private registry, not the public marketplace.** Even a Git repo with a manifest is enough to start. Treat each skill like an npm package: versioned, scanned, SBOM'd, eval'd before publish.
 
 ## How to Design a Skill
 
@@ -134,3 +151,7 @@ Plugins also bundle agents, hooks, MCP server definitions, LSP definitions, and 
 - [Claude Code Plugins](../how-tos/claude-code-plugins.md) — packaging skills + agents + hooks + monitors
 - [Prompt Engineering for Claude](prompt-engineering-claude.md)
 - [Harness Engineering](harness-engineering.md)
+- [Context Development Life Cycle](context-development-life-cycle.md) — Debois's CDLC, where skills are the Distribute phase
+- [Context Filter](context-filter.md) — perimeter scanner for prompt injection in `skill.md` / `agent.md`
+- [AI SBOM](ai-sbom.md) — bill of materials for context packages
+- [Patrick Debois](../people/patrick-debois.md) — DevOps originator framing context as code

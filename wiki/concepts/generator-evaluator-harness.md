@@ -2,12 +2,13 @@
 title: "Generator-Evaluator Harness"
 type: "concept"
 pillar: "understanding"
-tags: [generator-evaluator, harness-engineering, agents, multi-agent, sprint-contracts, evaluation, gan]
+tags: [generator-evaluator, harness-engineering, agents, multi-agent, sprint-contracts, evaluation, gan, judge-as-agent]
 sources:
   - "summaries/2026-03-24_anthropic_harness-design-long-running-apps.md"
   - "summaries/2024-12-19_anthropic_building-effective-agents.md"
   - "summaries/2025-11-26_anthropic_effective-harnesses-long-running-agents.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
+last_updated: "2026-05-05"
 ---
 
 # Generator-Evaluator Harness
@@ -90,6 +91,12 @@ For user-facing apps, the evaluator must **run** the product, not read its code.
 - **Puppeteer MCP** — the initializer/coding-agent harness (Nov 2025)
 
 Unit tests are not a substitute here: a feature can pass unit tests and still be broken end-to-end. The evaluator's E2E run is what prevents false "done" claims.
+
+## Judge-as-Agent: Generalizing the Evaluator
+
+Patrick Debois (Tessl, AI Engineer 2026-05-03) frames the same pattern at the eval-tier level: the standard *LLM-as-judge* (ask an LLM whether output meets a criterion) extends to *judge-as-agent* once you give the judge tools and a sandbox — `curl`, a browser, the running endpoint. At that point the eval stops grading the file and starts grading the running system. Anthropic's Planner/Generator/Evaluator harness *is* this pattern productized as a long-running loop; Debois generalizes it as the top tier of any context-eval stack. [Source: 2026-05-03_ai-engineer_context-is-the-new-code]
+
+Practical implication: the same evaluator infrastructure (Playwright, Puppeteer MCP, ephemeral sandboxes) that powers the generator-evaluator harness can drop into your CI as the top-tier eval grader for context artifacts (`agent.md`, skills) — see [Agent Evaluation § Four-Tier Context-Eval Pyramid](agent-evaluation.md#four-tier-context-eval-pyramid-debois). The harness is reusable; what changes is what you point it at.
 
 ## When to Reach for This Pattern
 

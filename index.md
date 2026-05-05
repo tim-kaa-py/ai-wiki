@@ -36,6 +36,7 @@
 | 2026-04-25 | [Extend Claude with skills (Claude Code Docs)](summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md) | docs | claude-code, skills, how-to, reference, workflow, configuration, subagents |
 | 2026-04-25 | [Create plugins (Claude Code Docs)](summaries/2026-04-25_claude-code-docs_create-plugins.md) | article | claude-code, plugins, skills, agents, hooks, mcp, workflow, reference, how-to |
 | 2026-04-25 | [Create custom subagents (Claude Code Docs)](summaries/2026-04-25_claude-code-docs_create-custom-subagents.md) | docs | claude-code, subagents, agents, configuration, how-to, reference, hooks, permissions, mcp, context-management |
+| 2026-05-03 | [Context Is the New Code – Patrick Debois, Tessl](summaries/2026-05-03_ai-engineer_context-is-the-new-code.md) | youtube | context-engineering, agents, evaluation, workflow, skills, harness-engineering, best-practices |
 
 ### Wiki Pages
 
@@ -68,6 +69,9 @@
 - [Claude Code Skills](wiki/how-tos/claude-code-skills.md) — how-to: SKILL.md authoring, frontmatter reference, invocation control, forked subagents, dynamic injection, lifecycle/compaction
 - [Claude Code Plugins](wiki/how-tos/claude-code-plugins.md) — how-to: standalone-vs-plugin decision, manifest, layout, `--plugin-dir` dev loop, monitors, default-agent override, migration
 - [Claude Code Custom Subagents](wiki/how-tos/claude-code-custom-subagents.md) — how-to: subagent file schema, description-as-routing-key, model resolution, persistent memory, scoped MCP, hooks, forks vs named, no-nesting constraint
+- [Context Development Life Cycle (CDLC)](wiki/concepts/context-development-life-cycle.md) — concept: Debois's five-phase loop (Generate → Test → Distribute → Observe → Adapt) ported from DevOps SDLC to context as a first-class artifact
+- [Context Filter](wiki/concepts/context-filter.md) — concept: WAF-for-context — pre-agent perimeter scanner for prompt injection in auto-loaded `agent.md` / `skill.md`; sandboxes can't catch this
+- [AI SBOM](wiki/concepts/ai-sbom.md) — concept: software-bill-of-materials for context packages — authoring model, source corpus, eval lineage, permissions footprint; Snyk-for-context
 
 ## Understanding AI
 
@@ -122,6 +126,7 @@
 
 - [Andrej Karpathy](wiki/people/andrej-karpathy.md) — AI researcher, creator of the LLM wiki pattern
 - [Peter Steinberger](wiki/people/peter-steinberger.md) — OpenClaw creator, agentic coding pioneer
+- [Patrick Debois](wiki/people/patrick-debois.md) — DevOps originator (2009) now at Tessl; coined "Context Development Life Cycle" (CDLC) and the WAF-for-context pattern
 - [Agent Platform Tiers](wiki/concepts/agent-platform-tiers.md) — 5-tier build-to-buy spectrum for agentic systems, lock-in surfaces, tier selection heuristics
 - [Claude Managed Agents](wiki/tools/claude-managed-agents.md) — Anthropic's fully hosted agent platform: brain/hands, meta-harness, shipped vs research-preview
 - [Deep Agents & Deep Agents Deploy](wiki/tools/deep-agents-deploy.md) — LangChain's open-source harness + SaaS deployment; open-license-but-not-open-deployment critique
@@ -143,4 +148,4 @@
 
 ---
 
-**46 sources** | **51 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**47 sources** | **55 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)

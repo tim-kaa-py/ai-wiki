@@ -2,7 +2,7 @@
 title: "Agent Evaluation"
 type: "concept"
 pillar: "understanding"
-tags: [evaluation, agents, graders, pass-at-k, benchmarks, best-practices]
+tags: [evaluation, agents, graders, pass-at-k, benchmarks, best-practices, error-budgets, llm-as-judge]
 sources:
   - "summaries/2026-01-09_anthropic_demystifying-evals-for-ai-agents.md"
   - "summaries/2025-01-06_anthropic_swe-bench-sonnet.md"
@@ -11,7 +11,8 @@ sources:
   - "summaries/2026-03-06_anthropic_eval-awareness-browsecomp.md"
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2026-04-22_anthropic-docs_define-success-criteria-and-build-evaluations.md"
-last_updated: "2026-04-22"
+  - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
+last_updated: "2026-05-05"
 ---
 
 # Agent Evaluation
@@ -161,6 +162,29 @@ Non-engineering career track Notion has formalized. Origin: "data specialists" (
 
 This is a concrete staffing pattern for organizations that have internalized eval-driven development: make "model behavior" a career track, not a hat worn by engineers on the side.
 
+## Four-Tier Context-Eval Pyramid (Debois)
+
+Patrick Debois's four-tier framework for evaluating *context artifacts* (`agent.md`, skills, prompts) layers cleanly on top of the Anthropic grader taxonomy and is worth quoting directly: [Source: 2026-05-03_ai-engineer_context-is-the-new-code]
+
+| Tier | Mechanism | Catches |
+|------|-----------|---------|
+| **Linter** | Schema/length validation on the context file itself | Missing `description`, oversized SKILL.md, malformed frontmatter — milliseconds, deterministic |
+| **Grammarly for context** | LLM critiques the prose for clarity, ambiguity, contradictions | Vague rules, conflicting instructions, dead phrasing |
+| **LLM-as-judge** | Run the agent against a fixed prompt, judge output against a company-specific rubric | Missed company rules (e.g., "every endpoint starts with `/awesome/`") that no general-purpose model enforces |
+| **Judge-as-agent** | Give the judge tools + a sandbox so it can `curl` the running endpoint or click the running app | Behavior that file-grading misses — the eval becomes end-to-end |
+
+The progression is the same logic as the test pyramid: cheap-and-deterministic at the base, expensive-and-end-to-end at the top. **Don't skip tiers** — each catches different failure modes. The judge-as-agent variant is the natural extension of [LLM-as-judge tips](#llm-as-judge-tips-anthropic-official-guidance) above; once your judge has tools, the file/runtime distinction collapses.
+
+This pyramid maps onto Notion's [Three-Tier Eval Stack](#three-tier-eval-stack-notion-april-2026) but at a different unit of analysis: Notion's tiers stratify by *purpose* (CI gate / launch gate / frontier signal), Debois's by *capability* (what the grader can see). Use both axes.
+
+## Error Budgets per Eval (Debois)
+
+Because evals are non-deterministic, "did it pass?" is the wrong question. Debois's framing: run each eval N times (he uses 5), track the success rate, and assign each eval an **error budget proportional to how much you care about it** — critical evals get tight budgets (e.g., 5/5), nice-to-haves can fail more often without blocking merges. [Source: 2026-05-03_ai-engineer_context-is-the-new-code]
+
+This is per-eval SLOs rather than aggregate metrics. It diverges from common framings that average over a suite: when one eval is critical and another is nice-to-have, averaging hides the signal. Pair this with [pass@k vs pass^k](#non-determinism-passk-vs-passk) above — pass^k is the limiting case (budget = N/N), pass@k is "any one passes" (budget = 1/N), and most production evals sit somewhere in between with explicit per-eval thresholds.
+
+Operational rule: in CI, fail the build only if a critical eval drops *below its budget*, not on any individual flake. Allow nice-to-have evals to be flaky without blocking merges; surface them as warnings.
+
 ## Sources
 
 - *Demystifying evals for AI agents* — Anthropic, 2026-01-09
@@ -169,3 +193,4 @@ This is a concrete staffing pattern for organizations that have internalized eva
 - *Quantifying infrastructure noise in agentic coding evals* — Anthropic, 2026-04-18
 - *Eval awareness in Opus 4.6's BrowseComp performance* — Anthropic, 2026-03-06
 - *Notion's Token Town: 5 Rebuilds, 100+ Tools, MCP vs CLIs and the Software Factory Future* — Latent Space, 2026-04-15
+- *Context Is the New Code* — Patrick Debois, AI Engineer, 2026-05-03

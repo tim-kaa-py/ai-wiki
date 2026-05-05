@@ -14,7 +14,8 @@ sources:
   - "summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md"
   - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
-last_updated: "2026-04-22"
+  - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
+last_updated: "2026-05-05"
 ---
 
 # Harness Engineering
@@ -141,6 +142,8 @@ Two threats from the research:
 - **1-in-4 community-contributed agent skills contains a vulnerability.**
 
 Treat third-party skills / AGENTS.md / tool packages like third-party code dependencies: review, pin, isolate blast radius.
+
+Patrick Debois (Tessl, AI Engineer 2026-05-03) sharpens the threat model: sandboxes don't catch this class of injection because coding agents auto-load `agent.md` / `skill.md` files into the prompt on download — by the time the sandbox boundary is enforced, the malicious instructions are already inside the LLM's context. The defense has to live **upstream of the LLM**, not around its execution. He frames this as a Web Application Firewall for context. See [Context Filter](context-filter.md). The bill-of-materials counterpart is [AI SBOM](ai-sbom.md). [Source: 2026-05-03_ai-engineer_context-is-the-new-code]
 
 ## Anthropic's Primary Sources (2024-2026)
 

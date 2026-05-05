@@ -2,12 +2,13 @@
 title: "Claude Code Skills"
 type: "how-to"
 pillar: "building"
-tags: [claude-code, skills, how-to, configuration, subagents, workflow]
+tags: [claude-code, skills, how-to, configuration, subagents, workflow, supply-chain]
 sources:
   - "summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
   - "summaries/2025-10-16_anthropic_agent-skills.md"
   - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
-last_updated: "2026-04-25"
+  - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
+last_updated: "2026-05-05"
 ---
 
 # Claude Code Skills
@@ -225,6 +226,7 @@ Combine with `disable-model-invocation` for defense in depth on side-effect skil
 - **Forgetting `disable-model-invocation` on side-effect skills.** Claude will eventually trigger `/deploy` on its own initiative. Lock it down.
 - **Mixing live data and inline text without `` !`command` ``.** Asking Claude to "first run X then..." costs a tool turn that preprocessing would have skipped.
 - **Plan mode skills with `context: fork`.** The fork has no conversation history — if you depend on the main thread's plan, do not fork.
+- **Installing public-marketplace skills without review.** Patrick Debois (Tessl, AI Engineer 2026-05-03): "99.9% of public skills are crap" — and that's before adversarial pressure scales up. Prefer a private registry; treat each skill like an npm package — versioned, scanned, eval'd before publish. See [AI SBOM](../concepts/ai-sbom.md) and [Context Filter](../concepts/context-filter.md). [Source: 2026-05-03_ai-engineer_context-is-the-new-code]
 
 ## Related Pages
 
