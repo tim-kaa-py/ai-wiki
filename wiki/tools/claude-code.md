@@ -29,7 +29,8 @@ sources:
   - "summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
   - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
   - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
-last_updated: "2026-04-25"
+  - "summaries/2026-05-05_genai-works_complete-anatomy-of-claude-code-project.md"
+last_updated: "2026-05-05"
 ---
 
 # Claude Code

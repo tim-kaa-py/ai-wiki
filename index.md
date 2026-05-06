@@ -37,6 +37,7 @@
 | 2026-04-25 | [Create plugins (Claude Code Docs)](summaries/2026-04-25_claude-code-docs_create-plugins.md) | article | claude-code, plugins, skills, agents, hooks, mcp, workflow, reference, how-to |
 | 2026-04-25 | [Create custom subagents (Claude Code Docs)](summaries/2026-04-25_claude-code-docs_create-custom-subagents.md) | docs | claude-code, subagents, agents, configuration, how-to, reference, hooks, permissions, mcp, context-management |
 | 2026-05-03 | [Context Is the New Code – Patrick Debois, Tessl](summaries/2026-05-03_ai-engineer_context-is-the-new-code.md) | youtube | context-engineering, agents, evaluation, workflow, skills, harness-engineering, best-practices |
+| 2026-05-05 | [The Complete Anatomy of a Claude Code Project - 2026 (GenAI Works)](summaries/2026-05-05_genai-works_complete-anatomy-of-claude-code-project.md) | article | claude-code, project-structure, cheatsheet, reference, hooks, skills, subagents, plugins, mcp, agent-teams |
 
 ### Wiki Pages
 
@@ -148,4 +149,4 @@
 
 ---
 
-**47 sources** | **55 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**48 sources** | **55 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
