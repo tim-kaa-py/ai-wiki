@@ -8,6 +8,7 @@ How to use this LLM-maintained knowledge wiki. Written for a human, but structur
 
 - Drop a URL or file, the agent handles the rest.
 - Ask questions, the agent searches the wiki and answers with citations.
+- Save reusable Claude Code prompts as "gists" — the agent files them under `gists/` with a confidentiality scan.
 - Say "lint" periodically to keep the wiki healthy.
 - The agent maintains `index.md`, `log.md`, and cross-links automatically.
 
@@ -25,9 +26,12 @@ Three layers:
 | **Summaries** (`summaries/`) | One opinionated summary per source, biased to your interests | Agent generates and regenerates |
 | **Wiki** (`wiki/`) | Synthesized pages spanning multiple sources (concepts, tools, how-tos, people, comparisons) | Agent creates and updates over time |
 
+Plus a parallel track for **gists** (`gists/`) — your own reusable Claude Code prompts, intended to be shared. Gists are not summarized or cross-linked into the wiki. See [Save a gist](#5-save-a-gist).
+
 Plus:
 
 - `index.md` — master index. Your browse-entry.
+- `gists/index.md` — index of your authored gists.
 - `log.md` — chronological record of every ingest.
 - `playbook.md` — living practices/patterns the system has learned.
 - `inbox/` — drop unprocessed files here.
@@ -96,13 +100,33 @@ Examples:
 
 If the answer reveals a new insight worth keeping, the agent offers to create or update a wiki page.
 
-### 5. Lint the wiki
+### 5. Save a gist
+
+Paste a Claude Code prompt and ask to save it as a gist:
+
+> Save this as a gist:
+>
+> [paste prompt]
+
+Or describe an idea and ask the agent to draft and save it:
+
+> Make a gist for: a Claude Code prompt that scaffolds a new Python CLI project with uv, ruff, and pytest.
+
+The agent will:
+
+1. Confirm title, intent, target model, tags.
+2. Run a confidentiality scan (gists often inline project paths or tool names — these get caught here).
+3. Save to `gists/<slug>.md` and append to `gists/index.md`.
+
+Gists are *yours* — they're not summarized, not cross-linked into the wiki, and they don't count as knowledge ingests. They live in their own track so the wiki stays clean. See `CLAUDE.md` → "Gists Workflow" for the full contract.
+
+### 6. Lint the wiki
 
 Monthly-ish hygiene. The agent checks for orphan sources, stale pages, index drift, contradictions, and tag gaps. You approve fixes before they execute.
 
 > Lint the wiki.
 
-### 6. Override the agent
+### 7. Override the agent
 
 You are in charge. Useful overrides:
 

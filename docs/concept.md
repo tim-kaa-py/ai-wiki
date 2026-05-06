@@ -51,6 +51,7 @@ Before writing any files, interview the user to define the topic-specific shape 
 5. **Primary interest lens.** "When I summarize a source, what should I bias toward capturing? (e.g., actionable how-tos, argument structures, tool comparisons, historical context.)"
 6. **Model routing preference.** "Do you have access to more than one Claude model (e.g., Sonnet + Opus)? If yes I'll route mechanical steps to the faster/cheaper model and deep analysis to the stronger one. If no, I'll use your single model for everything."
 7. **Repo visibility.** "Public or private GitHub repo? What account/org?" If public, flag the **Confidentiality Scan (Step 0)** from the reference `CLAUDE.md` — it gates non-public content before it lands in `sources/` or `summaries/` and scans every generated summary before CONNECT. If private, the scan is optional (see §4.1).
+8. **Reusable prompts (optional).** "Will you author and share reusable Claude Code prompts ('gists')?" If yes, scaffold `gists/` and `gists/index.md`. Gists are a separate artifact track — not summarized, not cross-linked into the wiki. See the reference `CLAUDE.md` → "Gists Workflow".
 
 Record the answers. You will inject them into the `CLAUDE.md` template in Step 4.
 
@@ -95,6 +96,13 @@ Create the following directory structure in the working directory:
 ```
 
 Adjust `sources/` subdirectories to match the source types declared in the bootstrap interview (drop `papers/` if the user isn't ingesting papers, add others if needed).
+
+If the user said yes to bootstrap Q8 (gists), also create:
+
+```
+gists/
+└── index.md
+```
 
 ---
 
@@ -206,6 +214,23 @@ An LLM-maintained knowledge wiki about **<topic>**.
 - **Operating contract for Claude Code:** see [CLAUDE.md](CLAUDE.md)
 - **Browse sources:** [index.md](index.md)
 - **Living playbook:** [playbook.md](playbook.md)
+```
+
+### 4.8 `gists/index.md` (only if Q8 = yes)
+
+```markdown
+# Gists
+
+Reusable Claude Code prompts. Each gist is self-contained — copy the file (or just the prompt block), paste into a fresh Claude Code session, run.
+
+These are author-authored *artifacts*, not ingested knowledge. They are not summarized or cross-linked into the wiki. See `CLAUDE.md` → "Gists Workflow" for the contract.
+
+| Date | Title | Intent | Model | Tags |
+|------|-------|--------|-------|------|
+
+---
+
+**0 gists** | [back to wiki index](../index.md)
 ```
 
 ---

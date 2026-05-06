@@ -4,12 +4,15 @@ An LLM-maintained knowledge wiki about AI. The agent handles all bookkeeping: su
 
 ## Architecture
 
-Three layers:
+Three layers (knowledge ingest pipeline):
 1. **Sources** (`sources/`) — Raw, verbatim material. Never modified after saving.
 2. **Summaries** (`summaries/`) — One-per-source, opinionated summaries focused on the user's interests.
 3. **Wiki** (`wiki/`) — Synthesized pages that aggregate knowledge from multiple sources. LLM-maintained.
 
-Plus: `playbook.md` (living agentic coding practices), `index.md` (master index), `log.md` (chronological ingest log), `inbox/` (unprocessed items).
+Plus a parallel artifact track:
+- **Gists** (`gists/`) — Standalone, user-authored Claude Code prompts shareable with others. Not derived from sources, not synthesized into the wiki. See [Gists Workflow](#gists-workflow).
+
+Plus: `playbook.md` (living agentic coding practices), `index.md` (master index of sources/wiki), `gists/index.md` (gists index), `log.md` (chronological action log), `inbox/` (unprocessed items).
 
 ## Model Routing
 
@@ -27,6 +30,7 @@ Default model: **Sonnet**. The main session runs on Sonnet for orchestration and
 | Tier 1 Quick Clip | Sonnet (all steps) | Simpler content, no deep analysis needed |
 | Query | Sonnet | Reading + synthesis over existing wiki pages |
 | Lint | Sonnet | Structural checks, no deep reasoning |
+| Gists Workflow (capture/scan/save/index) | Sonnet | Mechanical — save user-authored prompt + Step 0 scan via Sonnet sub-agent |
 
 **How to delegate:** Use the Agent tool with `model: "opus"`. Pass file paths in the prompt — let the sub-agent read files itself. Include the relevant CLAUDE.md template/instructions in the prompt so the sub-agent knows the expected output format.
 
@@ -116,6 +120,21 @@ sources:
 last_updated: "<YYYY-MM-DD>"
 ---
 ```
+
+### Gist (`gists/<slug>.md`)
+
+```yaml
+---
+title: "<title>"
+intent: "<one-line: what running this prompt achieves>"
+prerequisites: ["<tool/access/file needed>"]   # optional, omit if none
+model: "sonnet|opus|haiku"
+tags: [tag1, tag2]
+created: "<YYYY-MM-DD>"
+---
+```
+
+Slug format: `YYYY-MM-DD_short-slug.md`. No source-slug component — gists are user-authored. Keep `short-slug` under 50 chars; lowercase, hyphenated.
 
 ## Step 0 — Confidentiality Scan
 
@@ -423,6 +442,61 @@ This is the step that makes the wiki compound. Run after every ingest (both tier
    - Do NOT remove existing playbook content without user approval
 6. **Report what was updated** — tell the user which wiki pages were created or modified
 
+## Gists Workflow
+
+Gists are reusable Claude Code prompts authored by the user, stored for sharing and reuse. They are NOT ingested knowledge — no source, no summary, no wiki synthesis, no CONNECT step.
+
+**Model: Sonnet (all steps).** No deep analysis required.
+
+### When to invoke
+
+- User says "save this as a gist", "make a gist", "/gist", or pastes a prompt and asks to file it as a gist.
+- User describes an idea and explicitly asks for a gist (the agent drafts the prompt, then runs the workflow after the user confirms the body).
+
+### Workflow
+
+1. **CAPTURE** — Confirm with the user: title, one-line intent, target model (sonnet/opus/haiku), prerequisites (if any), tags. If the user pasted a prompt, reuse the body verbatim. If the user described an idea, draft the prompt and confirm before saving.
+2. **SLUG** — Generate `YYYY-MM-DD_short-slug` from intent + today's date.
+3. **SCAN (Step 0)** — Gists are user-authored content; treat as non-public by default. Spawn the Step 0 Sonnet sub-agent on the gist content. Resolve any FLAGGED issues with the user before saving. Pay extra attention to internal tool names, project paths, and client identifiers — prompt bodies leak these easily.
+4. **SAVE** — Write to `gists/<slug>.md` using the template below.
+5. **INDEX** — Append a row to `gists/index.md`: `| <date> | [title](slug.md) | <intent> | <model> | <tags> |`. Increment the count at the bottom.
+6. **LOG** — Append entry to `log.md` with action `gist`.
+
+### Gist file template
+
+````markdown
+---
+title: "<title>"
+intent: "<one-line>"
+prerequisites: ["<thing>"]
+model: "sonnet"
+tags: [tag1, tag2]
+created: "<YYYY-MM-DD>"
+---
+
+# <Title>
+
+**How to use:** Copy the prompt block below and paste it into a fresh Claude Code session. <Any setup notes — files to have open, working directory, etc.>
+
+---
+
+```
+<prompt body — verbatim, ready to paste>
+```
+````
+
+Cross-references to wiki pages, if relevant, go inline in the body as plain Markdown links — not as a frontmatter field. Most gists will not need them.
+
+### What gists are NOT
+
+- Not summarized — the prompt body is the deliverable.
+- Not connected to the wiki via CONNECT — gists may *reference* wiki pages, but wiki pages must not reference gists.
+- Not folded into the master `index.md` — they have their own `gists/index.md`.
+
+### Manual edits
+
+Same rule as for sources/summaries: if the user edits a gist by hand, ask the agent to run a Step 0 confidentiality pass on the edited file before committing.
+
 ## Query Workflow
 
 When the user asks a question (not providing a URL to ingest):
@@ -436,7 +510,7 @@ When the user asks a question (not providing a URL to ingest):
 
 When the user says "lint", "check wiki health", or similar:
 
-1. **ORPHANS** — Sources with no summary, summaries not referenced by any wiki page
+1. **ORPHANS** — Sources with no summary, summaries not referenced by any wiki page, gists in `gists/` not listed in `gists/index.md` (or vice versa)
 2. **STALE** — Wiki pages not updated in 90+ days that have active related topics
 3. **INDEX SYNC** — Entries in `index.md` that don't match actual files, and vice versa
 4. **LOG SYNC** — Sources not recorded in `log.md`
@@ -472,7 +546,8 @@ Use existing tags when possible. Create new tags sparingly. Keep tags lowercase,
 - **Log every ingest** to `log.md`
 - **Report CONNECT updates** — always tell the user which wiki pages were created or modified
 - **This repo is public** — run the **Confidentiality Scan (Step 0)** on every non-public source before extract/summarize, and on every generated summary before CONNECT. When in doubt whether something is public, run the scan.
-- **Manual edits are not scanned automatically** — if the user (or Claude) edits a source, summary, or wiki page by hand outside the ingest workflow, ask Claude to run a confidentiality pass on the edited file before committing. The Step 0 workflow only runs when a workflow runs.
+- **Manual edits are not scanned automatically** — if the user (or Claude) edits a source, summary, wiki page, or gist by hand outside the ingest/gist workflow, ask Claude to run a confidentiality pass on the edited file before committing. The Step 0 workflow only runs when a workflow runs.
+- **Gists are not ingests** — never run CONNECT, summarize, or fold a gist into wiki pages. Gists may reference wiki pages, but wiki pages must not reference gists.
 - **Keep docs in sync with CLAUDE.md** — when CLAUDE.md is functionally extended or changed, update `docs/user-documentation.md` and `docs/concept.md` in the same response. See [Self-Documentation Rule](#self-documentation-rule) for what counts as a functional change and which doc receives which update.
 
 ## Self-Documentation Rule
