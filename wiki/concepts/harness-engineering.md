@@ -15,7 +15,9 @@ sources:
   - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-last_updated: "2026-05-05"
+  - "summaries/2026-05-06_claude-code-docs_how-claude-code-works.md"
+  - "summaries/2026-05-06_claude-code-docs_features-overview.md"
+last_updated: "2026-05-06"
 ---
 
 # Harness Engineering
@@ -66,6 +68,42 @@ Each era swallows the prior one. Harness engineering absorbs prompt + context wo
 5. **Representation alone can move a benchmark 16.8 points.** OS Symphony rewritten as NLH (same strategy, different expression) went 30.4% → 47.2%, 361 → 141 min runtime, 1,200 → 34 LLM calls.
 6. **A harness optimized on one model transfers to five others and improves all of them.**
 7. **Smaller model + optimized harness beats larger model.** Haiku + Meta Harness outranks Opus + Meta Harness (76.4% on terminal-bench 2).
+
+## The Agentic Loop and Tool Categories (Anthropic Canonical)
+
+Anthropic's "How Claude Code works" doc gives the canonical agentic loop and tool taxonomy that the harness coordinates:
+
+**The loop:** `gather context → take action → verify results`, repeated as needed.
+
+**Five tool categories** — every agentic capability is one of these:
+
+| Category | Examples |
+|----------|----------|
+| File operations | Read, Write, Edit, Glob |
+| Search | Grep |
+| Execution | Bash |
+| Web | WebFetch, WebSearch |
+| Code intelligence | (LSP-based — language servers) |
+
+**Operational consequence:** if Claude can't do something, it's usually because no tool covers it. That's the gap MCP, hooks, or skills fill. Before adding harness complexity, check whether a built-in tool already covers the need.
+
+**Verify-first prompting** is the highest-leverage harness improvement. Anthropic's framing: providing test cases, screenshots, or runnable checks gives Claude a feedback loop. "Fix the bug" is weak; "fix the bug and verify tests pass" is strong. Add "verify by running X" to every task prompt — this is harness work expressed in the prompt.
+
+## Extension Decision Map (Friction-Driven)
+
+The May 2026 features-overview doc gives Anthropic's canonical decision map for which harness extension to add when. Each plugs into a different part of the agentic loop and carries different context costs:
+
+| Friction signal | Add |
+|-----------------|-----|
+| Convention wrong twice | CLAUDE.md entry |
+| Same prompt every time | Skill |
+| Side task floods context | Subagent |
+| Subagents need to share findings | Agent team (peer-to-peer) |
+| Missing external data | MCP server |
+| Must-happen automatically | Hook |
+| Second repo needs same setup | Plugin |
+
+**Don't design the extension layer upfront — let friction accumulate and respond.** This is the practical operationalization of the "craft of subtraction" above: every extension encodes an assumption, which means every extension is something to potentially prune later.
 
 ## Two Failure Modes of Naive Harnesses
 

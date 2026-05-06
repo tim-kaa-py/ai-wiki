@@ -2,12 +2,14 @@
 title: "Claude Code Hooks for Memory"
 type: "how-to"
 pillar: "building"
-tags: [claude-code, hooks, memory, llm-knowledge-bases, agents, workflow, automation]
+tags: [claude-code, hooks, memory, llm-knowledge-bases, agents, workflow, automation, hook-types, json-output]
 sources:
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
   - "summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md"
   - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
-last_updated: "2026-04-25"
+  - "summaries/2026-05-06_claude-code-docs_hooks-guide.md"
+  - "summaries/2026-05-06_claude-code-docs_memory.md"
+last_updated: "2026-05-06"
 ---
 
 # Claude Code Hooks for Memory
@@ -169,6 +171,120 @@ Hooks and memory are also configurable **per subagent** — declared inline in t
 - **Persistent subagent memory** via the `memory` field (`user`, `project`, or `local` scope). The first 200 lines of `MEMORY.md` auto-load into the subagent's context. Instruct the subagent to update its memory after each run — over time it builds institutional knowledge specific to its task.
 
 See [Claude Code Custom Subagents](claude-code-custom-subagents.md) for the full configuration. *(Source: Claude Code Docs — Create custom subagents)*
+
+## Hooks Reference (Anthropic Docs — May 2026)
+
+The Cole Medin pattern above is one application of Claude Code hooks. The full reference below covers everything else hooks can do — formatting, permission enforcement, context re-injection, deterministic guardrails.
+
+### Why Hooks Exist: Deterministic vs Advisory
+
+**CLAUDE.md instructions are advisory** — Claude may or may not follow them. **Hooks are deterministic** — they fire regardless of what Claude decides. This is the fundamental rule for choosing between them: if something *must* happen (format after edit, block .env edits, re-inject context after compaction), it needs to be a hook, not an instruction. Anthropic's blunt phrasing: **"Put guardrails in hooks."**
+
+### Exit Codes Control Behavior
+
+| Exit code | Effect |
+|-----------|--------|
+| `0` | Proceed. For `UserPromptSubmit` and `SessionStart`, stdout is added to Claude's context (the only way to inject text from a hook). |
+| `2` | Block the action. For `PreToolUse`, the tool call is blocked and stderr is sent as feedback to Claude. |
+| Other | Log error. The action proceeds. |
+
+When writing a blocking hook, write the reason to stderr — Claude uses that as feedback to adjust its approach.
+
+### Structured JSON Output for Fine-Grained Control
+
+Exit 0 + JSON to stdout enables behavior beyond allow/block:
+
+- **PreToolUse:** `permissionDecision: "deny" | "allow" | "ask"` to override the default decision
+- **PostToolUse / UserPromptSubmit:** `hookSpecificOutput.additionalContext` injects text into Claude's context (the **only** way to pass info from a `PostToolUse` hook to Claude — bare stdout goes only to debug log)
+
+Each `additionalContext` entry costs ~100-120 tokens — keep them tight.
+
+### Four Hook Types
+
+| Type | What it does |
+|------|-------------|
+| `command` (default) | Run a shell command |
+| `http` | POST to an HTTP endpoint |
+| `prompt` | Single LLM call; returns `{"ok": true/false}` |
+| `agent` | Multi-turn subagent with tools |
+
+Practical pairings:
+- `prompt` hook on `Stop` event to verify task completion
+- `agent` hook when verification needs to read files
+
+### Matcher Patterns (Scope Hooks Narrowly)
+
+| Matcher | Fires on |
+|---------|----------|
+| `"Edit\|Write"` | Only those tools |
+| `"compact"` on SessionStart | Only after compaction |
+| `"mcp__github__.*"` | All GitHub MCP tools |
+
+The `if` field (v2.1.85+) adds **argument-level filtering** — e.g. `"Bash(git *)"` for only git commands. Always scope hooks as narrowly as possible — broad matchers fire more than expected.
+
+### Hooks vs `bypassPermissions`
+
+Hooks fire **before** permission checks even in `bypassPermissions` mode. A `PreToolUse` hook returning `deny` blocks the tool even when bypass is active. Conversely, a hook returning `"allow"` cannot bypass deny rules from settings. **Hooks tighten but cannot loosen restrictions past policy.**
+
+This makes `PreToolUse` hooks the right tool for org-level policy enforcement that users cannot bypass by changing their permission mode.
+
+### Six Scope Levels for Hook Placement
+
+| Scope | Path | Audience |
+|-------|------|----------|
+| Global | `~/.claude/settings.json` | Personal, all projects |
+| Project | `.claude/settings.json` | Team — commit to git |
+| Local | `.claude/settings.local.json` | Personal — gitignored |
+| Managed policy | Org-deployed | Org-wide enforcement |
+| Plugin | `<plugin>/hooks/hooks.json` | Wherever the plugin is installed |
+| Skill/agent | Frontmatter `hooks:` | Scoped to that skill/subagent only |
+
+### Canonical Patterns
+
+**Auto-format with prettier after every edit:**
+```json
+{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Edit|Write",
+      "hooks": [{"type": "command", "command": "jq -r '.tool_input.file_path' | xargs npx prettier --write"}]
+    }]
+  }
+}
+```
+
+**Re-inject context after compaction:**
+```json
+{
+  "hooks": {
+    "SessionStart": [{
+      "matcher": "compact",
+      "hooks": [{"type": "command", "command": "echo 'Reminder: use Bun, not npm. Current sprint: auth refactor.'"}]
+    }]
+  }
+}
+```
+
+**Block edits to protected files:**
+```bash
+#!/bin/bash
+FILE_PATH=$(cat | jq -r '.tool_input.file_path // empty')
+for pattern in ".env" "package-lock.json" ".git/"; do
+  [[ "$FILE_PATH" == *"$pattern"* ]] && echo "Blocked: $FILE_PATH" >&2 && exit 2
+done
+```
+
+**Stop-hook infinite-loop prevention:**
+```bash
+INPUT=$(cat)
+[ "$(echo "$INPUT" | jq -r '.stop_hook_active')" = "true" ] && exit 0
+```
+
+**Debug a misbehaving hook:**
+```bash
+claude --debug-file /tmp/claude.log
+tail -f /tmp/claude.log
+```
 
 ## Related Pages
 

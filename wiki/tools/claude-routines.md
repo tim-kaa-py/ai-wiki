@@ -2,10 +2,11 @@
 title: "Claude Routines"
 type: "tool"
 pillar: "building"
-tags: [claude-code, agents, automation, workflow, routines, connectors, managed-sessions, webhooks]
+tags: [claude-code, agents, automation, workflow, routines, connectors, managed-sessions, webhooks, github-events, api-triggers]
 sources:
   - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
-last_updated: "2026-04-15"
+  - "summaries/2026-05-06_claude-code-docs_routines.md"
+last_updated: "2026-05-06"
 ---
 
 # Claude Routines
@@ -22,14 +23,15 @@ Access the routines interface at: `claude.ai/code/routines`
 
 ### Triggers
 
-Four ways to invoke a routine:
+Three canonical trigger types per Anthropic's docs (May 2026), each combinable in a single routine:
 
-| Trigger | Use case |
-|---------|----------|
-| **Schedule** | Recurring tasks (daily email triage, weekly reports) |
-| **Webhook** | Event-driven (incoming transcript, form submission) |
-| **API call** | Programmatic invocation from other services or routines |
-| **GitHub event** | CI/CD and repo-driven automation |
+| Trigger | Use case | Notes |
+|---------|----------|-------|
+| **Schedule** | Recurring tasks (daily email triage, weekly reports) | Cron expression; minimum interval **1 hour** via `/schedule update` |
+| **API** | Programmatic invocation from monitoring tools, CI, Zapier, other routines | Each routine gets a dedicated HTTPS endpoint with bearer token; pass run-specific context via the `text` field |
+| **GitHub event** | PR + release reactions | Filterable by author, title/body regex, branch pattern, labels, `is_draft`, `is_merged` |
+
+A single routine can fire on a schedule **and** respond to API calls **and** react to GitHub events. Design routines around a *task* (e.g., "PR review"), then attach all relevant triggers.
 
 ### Connectors
 
@@ -108,11 +110,56 @@ However, porting is not always worthwhile -- evaluate whether the natural-langua
 
 ## Triggering a Routine via API
 
+Each routine exposes a dedicated `/fire` endpoint with a bearer token. Pass run-specific context via the `text` field — alert body, PR number, transcript, etc.
+
 ```bash
-curl -X POST <routine-api-endpoint> \
-  -H "Authorization: Bearer <routine-token>" \
+curl -X POST https://api.anthropic.com/v1/claude_code/routines/trig_01.../fire \
+  -H "Authorization: Bearer sk-ant-oat01-xxxxx" \
+  -H "anthropic-beta: experimental-cc-routine-2026-04-01" \
   -H "Content-Type: application/json" \
-  -d '{"transcript": "<full transcript text>"}'
+  -d '{"text": "Sentry alert SEN-4521 fired in prod. Stack trace attached."}'
+```
+
+Practical wiring: connect alerting/monitoring to a routine API trigger for automated triage and draft PRs.
+
+## GitHub Event Triggers — Filter Operators
+
+Filter PR events with **AND-combined** filters: author, title/body regex, base/head branch pattern, labels, `is_draft`, `is_merged`. Supported events:
+
+| Event | Actions |
+|-------|---------|
+| `pull_request` | opened, closed, assigned, labeled, synchronized, updated |
+| `release` | created, published, edited, deleted |
+
+Canonical pattern: `pull_request.opened` + `is_draft: false` + branch filter to trigger review only on real PRs to main. This is the trigger layer behind [Code Review](../how-tos/claude-code-review.md) wired to the routines runtime.
+
+## Branch Permissions and Identity
+
+| Setting | Default | When to change |
+|---------|---------|----------------|
+| Branch prefix | `claude/`-prefixed branches only; cannot push to existing branches | Enable **"Allow unrestricted branch pushes"** only on repos where you've verified routine behavior |
+| Commit identity | Your GitHub user identity | Same as if you committed yourself — review accordingly |
+
+Keep the `claude/`-prefix default for most repos; relax it only for automated workflows you trust.
+
+## Autonomous-Run Discipline
+
+Routines are autonomous — no permission-mode picker, no approval prompts during a run. Two implications:
+
+1. **Prompts must be self-contained.** Brief them like an autonomous contractor: explicit scope, success criteria, what to do if ambiguous. Same discipline as [Agent Teams](../how-tos/claude-code-agent-teams.md) spawn prompts.
+2. **Test with "Run Now" before scheduling.** Validate behavior interactively before committing to autonomous execution.
+
+## Pricing & Daily Run Cap
+
+Routines draw subscription usage like interactive sessions, **plus** a per-account daily run cap. Orgs with extra usage enabled continue on metered overage when the cap is hit. **One-off runs don't count against the daily cap.**
+
+Monitor usage at `claude.ai/code/routines` before adding high-frequency triggers like "after every push."
+
+## CLI Management
+
+```
+/schedule              # Create/manage routines from CLI
+/schedule update       # Edit routine including custom cron expressions (min interval: 1h)
 ```
 
 ## Related Pages

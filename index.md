@@ -38,6 +38,18 @@
 | 2026-04-25 | [Create custom subagents (Claude Code Docs)](summaries/2026-04-25_claude-code-docs_create-custom-subagents.md) | docs | claude-code, subagents, agents, configuration, how-to, reference, hooks, permissions, mcp, context-management |
 | 2026-05-03 | [Context Is the New Code – Patrick Debois, Tessl](summaries/2026-05-03_ai-engineer_context-is-the-new-code.md) | youtube | context-engineering, agents, evaluation, workflow, skills, harness-engineering, best-practices |
 | 2026-05-05 | [The Complete Anatomy of a Claude Code Project - 2026 (GenAI Works)](summaries/2026-05-05_genai-works_complete-anatomy-of-claude-code-project.md) | article | claude-code, project-structure, cheatsheet, reference, hooks, skills, subagents, plugins, mcp, agent-teams |
+| 2026-05-06 | [How Claude Code works (Anthropic)](summaries/2026-05-06_claude-code-docs_how-claude-code-works.md) | docs | claude-code, agentic-loop, harness-engineering, tools, sessions, context-management, best-practices |
+| 2026-05-06 | [How Claude remembers your project (Anthropic)](summaries/2026-05-06_claude-code-docs_memory.md) | docs | claude-code, claude-md, auto-memory, memory, context-management, best-practices, configuration |
+| 2026-05-06 | [Extend Claude Code (Anthropic)](summaries/2026-05-06_claude-code-docs_features-overview.md) | docs | claude-code, claude-md, skills, subagents, hooks, mcp, plugins, agent-teams, context-management, decision-framework |
+| 2026-05-06 | [Explore the context window (Anthropic)](summaries/2026-05-06_claude-code-docs_context-window.md) | docs | claude-code, context-window, tokens, compaction, memory, skills, hooks, subagents, mcp |
+| 2026-05-06 | [Automate workflows with hooks (Anthropic)](summaries/2026-05-06_claude-code-docs_hooks-guide.md) | docs | claude-code, hooks, automation, workflow, settings, json, shell, notifications, formatting, permissions, compaction |
+| 2026-05-06 | [Orchestrate teams of Claude Code sessions (Anthropic)](summaries/2026-05-06_claude-code-docs_agent-teams.md) | docs | claude-code, agent-teams, multi-agent, parallel-agents, orchestration, subagents, coordination |
+| 2026-05-06 | [Best practices for Claude Code (Anthropic)](summaries/2026-05-06_claude-code-docs_best-practices.md) | docs | claude-code, best-practices, context-management, claude-md, skills, hooks, subagents, workflow, agentic-engineering |
+| 2026-05-06 | [Automate work with routines (Anthropic)](summaries/2026-05-06_claude-code-docs_routines.md) | docs | claude-code, routines, automation, scheduling, github-webhooks, api-triggers, cloud-infrastructure |
+| 2026-05-06 | [Agent SDK overview (Anthropic)](summaries/2026-05-06_claude-code-docs_agent-sdk-overview.md) | docs | agent-sdk, claude-code, python, typescript, agents, tools, mcp, subagents, permissions, sessions, production |
+| 2026-05-06 | [Work with sessions — Agent SDK (Anthropic)](summaries/2026-05-06_claude-code-docs_agent-sdk-sessions.md) | docs | agent-sdk, sessions, context-management, resume, fork, multi-turn, python, typescript |
+| 2026-05-06 | [Code Review (Anthropic)](summaries/2026-05-06_claude-code-docs_code-review.md) | docs | claude-code, code-review, github, multi-agent, pr-automation, review-md, claude-md, workflow |
+| 2026-05-06 | [Find bugs with ultrareview (Anthropic)](summaries/2026-05-06_claude-code-docs_ultrareview.md) | docs | claude-code, ultrareview, code-review, multi-agent, cloud, pr-automation, research-preview |
 
 ### Wiki Pages
 
@@ -73,6 +85,10 @@
 - [Context Development Life Cycle (CDLC)](wiki/concepts/context-development-life-cycle.md) — concept: Debois's five-phase loop (Generate → Test → Distribute → Observe → Adapt) ported from DevOps SDLC to context as a first-class artifact
 - [Context Filter](wiki/concepts/context-filter.md) — concept: WAF-for-context — pre-agent perimeter scanner for prompt injection in auto-loaded `agent.md` / `skill.md`; sandboxes can't catch this
 - [AI SBOM](wiki/concepts/ai-sbom.md) — concept: software-bill-of-materials for context packages — authoring model, source corpus, eval lineage, permissions footprint; Snyk-for-context
+- [Claude Agent SDK](wiki/tools/claude-agent-sdk.md) — tool: programmatic Claude Code (Python/TypeScript library); same tools/agent loop as CLI; hooks, subagents, MCP, sessions; vs Client SDK / CLI / Managed Agents
+- [Claude Code Agent Teams](wiki/how-tos/claude-code-agent-teams.md) — how-to: experimental peer-to-peer multi-session coordination; scientific-debate use case; TeammateIdle/TaskCreated/TaskCompleted hooks
+- [Claude Code Review (Managed Service)](wiki/how-tos/claude-code-review.md) — how-to: GitHub PR inline comments via multi-agent fleet; REVIEW.md customization; severity levels; CI gate wiring; Team/Enterprise only
+- [Claude Code Ultrareview](wiki/how-tos/claude-code-ultrareview.md) — how-to: /ultrareview CLI command; remote multi-agent independent verification; background execution; non-interactive CI mode
 
 ## Understanding AI
 

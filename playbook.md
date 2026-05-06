@@ -1,7 +1,7 @@
 # My Agentic Coding Playbook
 
 > A living document. Auto-updated when new relevant sources are ingested.
-> Last updated: 2026-04-25 (Claude Code Docs — Create custom subagents: description-as-routing-key, model resolution, scoped MCP, subagent memory, validation hooks)
+> Last updated: 2026-05-06 (Claude Code Docs — May 2026 set: How Claude Code Works, Memory, Features Overview, Context Window, Hooks Guide, Agent Teams, Best Practices, Routines, Agent SDK Overview, Agent SDK Sessions, Code Review, Ultrareview)
 
 ## Core Principles
 
@@ -34,6 +34,62 @@
 14. **Auto-format with a PostToolUse hook.** Run your formatter after every Write/Edit tool call to handle the last 10% of formatting issues silently and prevent CI failures. Add to `.claude/settings.json`: `"PostToolUse": [{"matcher": "Write|Edit", "hooks": [{"type": "command", "command": "<formatter> || true"}]}]` *(Source: Boris Cherny, Creator of Claude Code)*
 
 15. **Give Claude real tools via MCP.** Connect Slack, BigQuery, Sentry (or your equivalents) via `.mcp.json`. Check `.mcp.json` into the team repo so all team members get the same tool access. *(Source: Boris Cherny, Creator of Claude Code)*
+
+60. **Add "verify by X" to every task prompt — this is the single highest-leverage prompt change.** Anthropic's Best Practices doc reiterates Boris Cherny's verification rule: "Implement X" is weak; "Implement X, test cases are A→true B→false, run the tests" is strong. Don't end a prompt without naming how Claude can close its own feedback loop. *(Source: Claude Code Docs — Best Practices)*
+
+61. **Don't conflate CLAUDE.md and auto memory.** CLAUDE.md is **instructions you write** (rules: "always use pnpm"). Auto memory at `~/.claude/projects/<project>/memory/` is **learnings Claude writes** ("this project uses port 3001 for dev server, learned 2026-03-12"). Curate the first, let the second grow organically. Run `/memory` to audit auto memory; edit or delete stale entries. *(Source: Claude Code Docs — Memory)*
+
+62. **CLAUDE.md hard rule: under 200 lines per file, four scopes loaded in order.** Managed policy > User (`~/.claude/CLAUDE.md`) > Project (`./CLAUDE.md`) > Local (`./CLAUDE.local.md`, gitignored). Adherence degrades past 200 lines. If yours is growing, move reference material to `.claude/rules/` with `paths:` frontmatter, or to skills. *(Source: Claude Code Docs — Memory)*
+
+63. **Path-scoped rules pay zero context tax until matched — but don't survive `/compact`.** Rules in `.claude/rules/` with `paths:` frontmatter only load when Claude reads a matching file. After `/compact` they're lost until the matching file is read again. Project-root CLAUDE.md re-injects automatically; nested files don't. Compaction-critical rules go in project-root CLAUDE.md. *(Source: Claude Code Docs — Memory)*
+
+64. **Know your baseline: ~7,850 tokens are spent before you type.** System prompt (~4,200) + project CLAUDE.md (~1,800) + user CLAUDE.md (~320) + auto memory (~680) + env info (~280) + skill descriptions (~450) + MCP tool names (~120). A bloated CLAUDE.md or skill-description bloat pushes this much higher. Run `/context` to see your real numbers. *(Source: Claude Code Docs — Context Window)*
+
+65. **Subagents are a 14× context savings, not just "tidier."** A subagent's 6,100+ tokens of file reads → ~420-token summary back to your main window. Any task phrased as "investigate / explore / research" should explicitly route through a subagent. The math, not just the aesthetics, makes this the right default. *(Source: Claude Code Docs — Context Window, Best Practices)*
+
+66. **Set `disable-model-invocation: true` on side-effect skills — it costs zero context until invoked.** Their descriptions don't appear in the skill index; they stay completely out of context until you type `/name`. For commit, deploy, send-message — anything irreversible — this is both the safety lever and the context lever. *(Source: Claude Code Docs — Context Window, Skills)*
+
+67. **PostToolUse hook stdout does NOT reach Claude — use `additionalContext` JSON.** Bare stdout on exit 0 from a PostToolUse hook goes to the debug log only. To pass info to Claude, return JSON with `hookSpecificOutput.additionalContext`. Each one costs ~100-120 tokens — keep them tight. *(Source: Claude Code Docs — Hooks Guide)*
+
+68. **Hook exit codes: 0 proceed, 2 block, other = log error.** For `PreToolUse`, exit 2 blocks the tool call and sends stderr as feedback to Claude. For `UserPromptSubmit` and `SessionStart`, exit-0 stdout is added to Claude's context (the only way to inject text from a hook). When writing a blocking hook, write the reason to stderr — Claude uses that as feedback. *(Source: Claude Code Docs — Hooks Guide)*
+
+69. **Hooks fire BEFORE permission checks, even in `bypassPermissions` mode.** A `PreToolUse` hook returning `deny` blocks the tool even when bypass is active. Use `PreToolUse` hooks for org-level policy enforcement that users cannot bypass by changing their permission mode. Hooks tighten but cannot loosen restrictions past policy. *(Source: Claude Code Docs — Hooks Guide)*
+
+70. **Four hook types beyond shell commands: command / http / prompt / agent.** `command` (default), `http` (POST to endpoint), `prompt` (single LLM call returning `{"ok": true/false}`), `agent` (multi-turn subagent with tools). Use `prompt` hooks on `Stop` for "is the task really done?" checks; use `agent` hooks when verification needs to read files. *(Source: Claude Code Docs — Hooks Guide)*
+
+71. **Use the friction-driven extension map: don't design the extension layer upfront.** Convention wrong twice → CLAUDE.md. Same prompt every time → skill. Side task floods context → subagent. Subagents need to share findings → agent team. Missing external data → MCP. Must-happen automatically → hook. Second repo needs same setup → plugin. Each plugs into a different part of the loop and carries different context costs. *(Source: Claude Code Docs — Features Overview)*
+
+72. **Five canonical extension tradeoffs to internalize.** (1) CLAUDE.md vs Skills: CLAUDE.md is paid every turn; skill bodies load only when invoked. (2) Skills vs Subagents: skills add to your main window; subagents return only a summary. (3) CLAUDE.md vs Hooks: advisory vs deterministic. (4) MCP vs Skills: MCP gives capability; skills give knowledge of how to use it. (5) Subagents vs Agent Teams: hub-and-spoke vs peer-to-peer. *(Source: Claude Code Docs — Features Overview)*
+
+73. **Graduate from subagents to agent teams when subagents need to share findings.** Subagents only report to the main agent (hub-and-spoke). Agent teammates can message each other directly via shared mailbox (peer-to-peer). Strongest use case: competing-hypotheses debugging — spawn 3-5 teammates with different theories and prompt them to disprove each other (Anthropic's "scientific debate" pattern). Token cost is **linear in teammate count** — start at 3-5. Enable via `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. *(Source: Claude Code Docs — Agent Teams)*
+
+74. **Write agent-team spawn prompts as if briefing someone with no conversation context.** Teammates do NOT inherit the lead's conversation history — each gets only the spawn prompt, project CLAUDE.md, and the same MCP/skills setup. Self-contained briefs are critical. Same discipline as routine prompts. *(Source: Claude Code Docs — Agent Teams)*
+
+75. **Know which Claude SDK you're using: Agent SDK vs Client SDK.** The Anthropic **Client SDK** requires you to implement the tool loop yourself. The **Agent SDK** (formerly Claude Code SDK) has Claude execute tools autonomously — same harness as Claude Code as a programmable library in Python and TypeScript. Use Agent SDK for CI/CD, custom production apps, audit-logging hooks. Use Claude Code CLI for daily interactive work. Use Managed Agents to offload sandbox infrastructure. *(Source: Claude Code Docs — Agent SDK Overview)*
+
+76. **Agent SDK loads `.claude/` features automatically — your skill library is "free."** Skills in `.claude/skills/*/SKILL.md`, slash commands in `.claude/commands/*.md`, memory in `CLAUDE.md`, plugins via the `plugins` option. Build your skill library once for the CLI; it's automatically available to SDK agents in the same project. *(Source: Claude Code Docs — Agent SDK Overview)*
+
+77. **Always specify `allowed_tools` explicitly in production SDK code.** Don't give an agent more tool surface than the task requires. The Bash tool alone covers most shell automation needs but is also the broadest. *(Source: Claude Code Docs — Agent SDK Overview)*
+
+78. **Sessions in the Agent SDK persist conversation, NOT filesystem.** The JSONL file under `~/.claude/projects/<encoded-cwd>/` captures every prompt, tool call, tool result, response. It does NOT snapshot file changes. To revert files across sessions, use file checkpointing — a separate mechanism. Resuming a session does NOT restore file state. *(Source: Claude Code Docs — Agent SDK Sessions)*
+
+79. **Mismatched cwd is the #1 cause of "resume returned a fresh session."** Sessions are keyed by encoded cwd path. In production, always set cwd explicitly — never rely on the current working directory being consistent. For multi-user apps, capture the session ID from `ResultMessage` and pass it explicitly via `resume=`; don't use `continue=true`, which finds the most recent session globally. *(Source: Claude Code Docs — Agent SDK Sessions)*
+
+80. **Fork sessions for A/B exploration; isolate file state with worktrees.** `fork_session=True` branches the conversation history but NOT the filesystem — if a forked agent edits files, those changes are real. For "implement with JWT" vs "implement with OAuth2" parallel runs, run each in a separate git worktree or branch. *(Source: Claude Code Docs — Agent SDK Sessions)*
+
+81. **Default to vanilla `/review` for iteration; reserve `/ultrareview` for pre-merge confidence.** `/review` is local, single-pass, seconds-to-minutes — quick feedback while iterating. `/ultrareview` is remote, multi-agent fleet with **independent verification** of every finding, 5-10 minutes, ~$5-20 per run. Use ultrareview when you want to ship confidently, not as a fast feedback loop. *(Source: Claude Code Docs — Ultrareview)*
+
+82. **For CI gates, use `claude ultrareview --json --timeout` non-interactively.** Add `claude ultrareview 1234 --json` to CI as a gate that parses bug severity and fails the build on critical findings. Exit codes: 0 success, 1 failure, 130 Ctrl-C (the remote keeps running — Ctrl-C does NOT cancel). *(Source: Claude Code Docs — Ultrareview)*
+
+83. **Code Review (managed) requires REVIEW.md or you'll get generic findings.** REVIEW.md at the repo root is injected as highest-priority into every agent in the review pipeline. Tune what "Important" means for your repo, the nit volume cap, paths to skip, repo-specific checks ("new API routes must have integration tests"). Without it, the service can't match your team's standards. *(Source: Claude Code Docs — Code Review)*
+
+84. **Start Code Review on Manual trigger; promote to "Once after PR creation" once you trust the signal.** Manual (`@claude review`) gives full control on cost and quality. "After every push" multiplies cost by push count. The check completes with `neutral` conclusion and never blocks merge — wire your own CI gate using `gh api ... bughunter-severity` JSON if you want enforcement. *(Source: Claude Code Docs — Code Review)*
+
+85. **Three trigger types per Claude Routine — combinable in one routine.** Schedule (cron, min interval **1h**), API (HTTPS endpoint with bearer token, run-specific context via `text` field), GitHub events (PR + release, AND-combinable filters: author / regex / branch / labels / `is_draft` / `is_merged`). Design routines around a *task* (e.g., "PR review"); attach all relevant triggers. *(Source: Claude Code Docs — Routines)*
+
+86. **Default branch policy on routines: `claude/`-prefixed branches only.** Routines cannot push to existing branches by default. Enable "Allow unrestricted branch pushes" only on repos where you've verified routine behavior. Commits carry your GitHub identity — review accordingly. *(Source: Claude Code Docs — Routines)*
+
+87. **Routines are autonomous — prompts must be self-contained SOPs.** No permission-mode picker, no approval prompts during a run. Same discipline as agent-team spawn prompts: explicit scope, success criteria, what to do if ambiguous. Test with "Run Now" before scheduling. *(Source: Claude Code Docs — Routines)*
 
 ## Skills (Claude Code)
 

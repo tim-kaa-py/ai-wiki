@@ -9,7 +9,9 @@ sources:
   - "summaries/2026-03-24_anthropic_harness-design-long-running-apps.md"
   - "summaries/2025-06-13_anthropic_multi-agent-research-system.md"
   - "summaries/2026-02-05_anthropic_building-c-compiler.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-05-06_claude-code-docs_agent-teams.md"
+  - "summaries/2026-05-06_claude-code-docs_features-overview.md"
+last_updated: "2026-05-06"
 ---
 
 # Agent Orchestration Patterns (Anthropic's Five Canonical)
@@ -78,6 +80,19 @@ Anthropic's multi-agent research system is the canonical real-world instantiatio
 - **15× more tokens than chat** — the cost floor for this pattern
 
 The 15× cost rule: orchestrator-worker is only worth it when task value exceeds 15× baseline AND the work is genuinely parallelizable. For a flat, peer-to-peer alternative (Carlini's lock-file C compiler team — 16 parallel Claudes, no lead agent, ~2,000 sessions, 99% test pass rate), see [Parallel Agent Patterns](parallel-agent-patterns.md). *(Source: Anthropic Engineering)*
+
+## Hub-and-Spoke vs Peer-to-Peer (Subagents vs Agent Teams)
+
+Anthropic's May 2026 Claude Code docs draw an explicit architectural line between two flavors of orchestrator-worker:
+
+| | Subagents (hub-and-spoke) | Agent Teams (peer-to-peer) |
+|--|---------------------------|----------------------------|
+| Communication | Children only report back to main | Teammates can message each other directly via shared mailbox |
+| Coordination | Main agent dispatches and synthesizes | Shared task list + peer messaging |
+| Trigger to use | Side task that returns one result | Multiple workers need to share / challenge findings |
+| Maturity | GA in Claude Code | Experimental flag (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) |
+
+The graduation rule: when you find yourself wishing subagents could share findings with each other, you've hit the limit of hub-and-spoke and need peer-to-peer. See [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md) and [Parallel Agent Patterns](parallel-agent-patterns.md).
 
 ## The ~90% Rule
 

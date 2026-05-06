@@ -7,7 +7,9 @@ sources:
   - "summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md"
   - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
-last_updated: "2026-04-22"
+  - "summaries/2026-05-06_claude-code-docs_code-review.md"
+  - "summaries/2026-05-06_claude-code-docs_ultrareview.md"
+last_updated: "2026-05-06"
 ---
 
 # Reviewer Agents
@@ -91,9 +93,27 @@ Practical implication for a persona harness: the persona doc and "what good look
 
 For user-facing PRs, Ryan requires a QA plan — a checklist of features, critical user journeys, and required PR media (screenshots, recordings). The product-minded reviewer agent reads the QA plan + the attached media and asserts the plan was followed. This is what lets humans stop shoulder-surfing user-facing changes.
 
+## Anthropic's Managed Reviewer-Agent Products
+
+Anthropic ships two productized reviewer-agent fleets that implement this pattern out of the box — different on/off ramps for the same idea.
+
+| Product | Trigger | Where it runs | Plan | Cost | Best for |
+|---------|---------|---------------|------|------|----------|
+| **[Code Review](../how-tos/claude-code-review.md)** | Automatic on PR per repo config | Anthropic infra | Team/Enterprise | ~$15-25 / review | Continuous PR-review automation |
+| **[Ultrareview](../how-tos/claude-code-ultrareview.md)** | Manual (`/ultrareview` or `claude ultrareview`) | Remote sandbox | Pro/Max + extra usage | ~$5-20 / review | Pre-merge confidence on substantial changes |
+
+Both run **independent verification fleets** — every finding is reproduced by a separate agent before being surfaced. This is the "fresh-context-per-reviewer" principle from above, scaled into a managed product.
+
+**REVIEW.md** (Code Review) is the analogue of the persona docs from Ryan's pattern: a top-of-repo file injected as highest-priority into every agent in the review pipeline. Without it, you get generic findings. Tune what "Important" means for your repo, what to skip, what to always check. **Code Review reads CLAUDE.md and surfaces newly-introduced violations as nits** — keep CLAUDE.md current to avoid noisy nit findings.
+
+The `gh api` JSON severity counts (Code Review) and `claude ultrareview --json` output let you wire either into a CI gate that fails the build on Important findings — Code Review itself completes with `neutral` conclusion and never blocks merge by itself.
+
 ## Related Pages
 
 - [Harness Engineering](harness-engineering.md) — the parent discipline
 - [Code-as-Text Structural Tests](code-as-text-structural-tests.md) — the deterministic counterpart
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — where reviewer agents fit in daily practice
 - [Claude Code](../tools/claude-code.md) — writer/reviewer pattern, agent SDK for wiring
+- [Code Review (Claude Code)](../how-tos/claude-code-review.md) — Anthropic's managed PR-review service
+- [Ultrareview](../how-tos/claude-code-ultrareview.md) — multi-agent verified bug-finding fleet
+- [Claude Routines](../tools/claude-routines.md) — the routines runtime that powers GitHub-event triggers

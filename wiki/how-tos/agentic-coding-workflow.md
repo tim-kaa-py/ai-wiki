@@ -14,7 +14,9 @@ sources:
   - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
   - "summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md"
   - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
-last_updated: "2026-04-22"
+  - "summaries/2026-05-06_claude-code-docs_best-practices.md"
+  - "summaries/2026-05-06_claude-code-docs_how-claude-code-works.md"
+last_updated: "2026-05-06"
 ---
 
 # Agentic Coding Workflow
@@ -291,6 +293,87 @@ Orchestration layers (GSD, Superpowers) sit on top of Claude Code and add planni
 Claude Code has natively absorbed many features (auto context clearing, context management) that originally justified orchestration layers. Re-evaluate periodically — the gap keeps shrinking.
 
 See [Claude Code Orchestration Layers](../comparisons/claude-code-orchestration-layers.md) for the full benchmark and analysis. *(Source: Chase AI)*
+
+## Anthropic's Canonical Best Practices (May 2026)
+
+Anthropic's official Best Practices doc reorganizes the field's lessons around one root constraint: **context fills fast and performance degrades as it does.** The highest-leverage patterns:
+
+### Verification Criteria — The Single Highest-Leverage Improvement
+
+"Implement X" is weak. "Implement X, test cases are A→true, B→false, run the tests" is strong. Claude performs dramatically better when it can close its own feedback loop. Every task prompt should end with a verification instruction: "verify by running X" or "take a screenshot and compare to the design."
+
+### Explore → Plan → Code → Commit (Canonical Workflow)
+
+Use plan mode (read-only tools only) for exploration. **`Ctrl+G`** opens the plan in your editor. Then switch to implementation. Planning pays off most when you're unfamiliar with the code or the change spans multiple files. **For any change touching 3+ files or unfamiliar code, start in plan mode.**
+
+### CLAUDE.md Quality Rules
+
+| Include | Exclude |
+|---------|---------|
+| Bash commands Claude can't guess | Things Claude can figure out from reading code |
+| Style rules that differ from defaults | Standard conventions |
+| Test runners | Frequently-changing info |
+| Repo etiquette | Reference material that loads-when-needed |
+
+Add **"IMPORTANT"** or **"YOU MUST"** for high-adherence rules. Run `/init` to generate a starter. **Prune aggressively** — every line that doesn't change behavior wastes context.
+
+### Course-Correct Early, Not Late
+
+| Control | When to use |
+|---------|-------------|
+| `Esc` | Stop Claude mid-action with context preserved |
+| `Esc Esc` / `/rewind` | Revert code |
+| `/clear` | Reset context between tasks |
+
+**The After-2-Corrections Rule:** if you've corrected Claude on the same issue twice, stop, `/clear`, and write a better prompt. Trying to fix in a polluted context is worse than restarting clean.
+
+### Subagents for Investigation
+
+"Use subagents to investigate X" keeps large file reads out of your main context. The subagent explores and returns a summary. Any task phrased as "investigate / explore / research" should explicitly use subagents.
+
+### `/btw` for Side Questions, `/clear` Between Tasks
+
+| Command | Purpose |
+|---------|---------|
+| `/btw <question>` | Answer in dismissible overlay without adding to context |
+| `/clear` | Reset between unrelated tasks |
+| `/compact <instructions>` | Compaction with custom focus |
+
+Treat `/clear` like `git stash` — use between logically distinct tasks even when context isn't full.
+
+### Fan-Out for Batch Operations
+
+```bash
+# Process multiple files in parallel sessions with restricted scope
+for file in $(cat files.txt); do
+  claude -p "Migrate $file from React to Vue." \
+    --allowedTools "Edit,Bash(git commit *)"
+done
+```
+
+**Test on 2-3 inputs before fanning out** to catch prompt issues cheaply.
+
+### Writer / Reviewer Pattern
+
+A fresh-context reviewer beats self-review. After the writer Claude finishes, spawn a reviewer Claude with a clean context and the output. The writer can't see its own blind spots; a fresh context can.
+
+### Common Failure Patterns and the Fix
+
+| Failure | Fix |
+|---------|-----|
+| Kitchen-sink session | `/clear` |
+| Endless corrections | `/clear` + rewrite prompt |
+| Over-specified CLAUDE.md | Prune aggressively |
+| Trust-then-verify gap | Always include "and verify by X" |
+| Infinite exploration | Scope, or delegate to subagent |
+
+### Useful Side-Channel Commands
+
+```bash
+claude --continue            # resume most recent session
+claude --resume              # pick from session list
+claude -p "prompt" --output-format json   # one-off with structured output
+```
 
 ## Anti-Patterns to Avoid
 

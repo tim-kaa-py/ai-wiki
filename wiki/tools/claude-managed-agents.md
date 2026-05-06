@@ -7,7 +7,8 @@ sources:
   - "summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md"
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
   - "summaries/2026-04-15_anthropic_scaling-managed-agents.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-05-06_claude-code-docs_agent-sdk-overview.md"
+last_updated: "2026-05-06"
 ---
 
 # Claude Managed Agents
@@ -87,6 +88,20 @@ Behind a **research-preview form** (not generally available):
 
 The AI Automators' take: the announcement oversold the capability side — what remains usable today "looks very similar to a lot of other agent builders." The product is primarily an **infrastructure play**, not a capability leap.
 
+## Agent SDK vs Managed Agents — The Common Path
+
+The Claude Agent SDK (formerly Claude Code SDK) is the **programmable library** version of the same harness — Claude Code as a library in Python and TypeScript. The two products solve adjacent problems:
+
+| | [Claude Agent SDK](claude-agent-sdk.md) | Claude Managed Agents |
+|--|----------------------------------------|----------------------|
+| Where it runs | **Your infrastructure** | **Anthropic's sandbox per session** |
+| Filesystem | Full local filesystem | Sandboxed |
+| Interface | Python / TypeScript library | REST API |
+| Sandbox responsibility | You manage | Anthropic manages |
+| Best for | CI/CD, custom apps that need filesystem | Production where you want zero infra |
+
+Anthropic's recommended path: **prototype with Agent SDK, then move to Managed Agents for production** when you want to offload sandbox infrastructure. Use Agent SDK when you need filesystem access or want to keep agents on your own infrastructure.
+
 ## When to Use It
 
 Good fit if:
@@ -119,6 +134,7 @@ Bad fit if:
 - [Managed Agent Platforms](../comparisons/managed-agent-platforms.md) — head-to-head vs Deep Agents Deploy and OpenAI Agents SDK
 - [Deep Agents Deploy](deep-agents-deploy.md) — LangChain's Tier-3 competitor
 - [OpenAI Agents SDK](openai-agents-sdk.md) — OpenAI's Tier-2 SDK
+- [Claude Agent SDK](claude-agent-sdk.md) — your-infrastructure programmable counterpart
 - [Claude Routines](claude-routines.md) — Claude Code's own managed-runtime offering (different product, overlapping space)
 - [Harness Engineering](../concepts/harness-engineering.md) — the discipline whose findings frame the meta-harness trade
 - [Meta Harness](../concepts/meta-harness.md) — the research framework that shares the name but is a different thing

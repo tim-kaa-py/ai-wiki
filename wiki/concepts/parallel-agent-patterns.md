@@ -6,7 +6,8 @@ tags: [agent-teams, parallel-agents, multi-agent, orchestrator-worker, claude-co
 sources:
   - "summaries/2026-02-05_anthropic_building-c-compiler.md"
   - "summaries/2025-06-13_anthropic_multi-agent-research-system.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-05-06_claude-code-docs_agent-teams.md"
+last_updated: "2026-05-06"
 ---
 
 # Parallel Agent Patterns
@@ -82,16 +83,42 @@ Required for any real deployment:
 - Rainbow deployments (swap prompts without dropping in-flight sessions)
 - Source-quality steering (agents preferred SEO content farms until prompts forced otherwise)
 
+## Pattern 3: Claude Code Agent Teams (Productized Peer-to-Peer)
+
+**Source: Claude Code Docs — Agent Teams (2026-05).**
+
+The May 2026 docs ship an experimental productized version of peer-to-peer parallelism inside Claude Code itself: **agent teams** coordinate multiple full Claude Code sessions with a shared task list and a shared mailbox. Architecturally distinct from subagents:
+
+- **Subagents = hub-and-spoke** — children only report back to the main agent.
+- **Agent teams = peer-to-peer** — teammates can message each other directly.
+
+The trigger to graduate from subagents to agent teams: when you find yourself wishing subagents could share findings with each other.
+
+### Strongest Use Case: Competing Hypotheses Debugging
+
+Anthropic explicitly recommends the **scientific debate** pattern: spawn 3-5 teammates with different hypotheses, prompt them to actively try to disprove each other, converge faster than sequential investigation. This is a productized version of what Carlini's lock-file team would do informally — but with built-in messaging instead of just shared filesystem.
+
+### Constraints
+
+- Token cost scales **linearly** with teammate count (each is a full Claude Code instance).
+- Recommended starting point: 3-5 teammates.
+- Teammates do NOT inherit the lead's conversation history — spawn prompts must be self-contained.
+- One team per session; no nested teams; lead is fixed for the session's lifetime.
+- Three new hooks for control: `TeammateIdle`, `TaskCreated`, `TaskCompleted`.
+
+See [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md) for the full how-to including `Shift+Down` cycling and the `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` enable flag.
+
 ## When to Use Which
 
-| Dimension | Lock-file agent teams | Orchestrator-worker |
-|-----------|----------------------|---------------------|
-| Coordination | Flat, peer-to-peer | Hierarchical |
-| Task fit | Large codebase of independent units | Research / decomposable questions |
-| State | Shared git repo | Transient, per-query |
-| Verification | Tests in CI | LLM judge on outputs |
-| Human loop | None during run | None during run |
-| Primary risk | Verifier gaps → drift | Token cost / false parallelism |
+| Dimension | Lock-file agent teams | Orchestrator-worker | Claude Code Agent Teams |
+|-----------|----------------------|---------------------|------------------------|
+| Coordination | Flat, peer-to-peer | Hierarchical | Peer-to-peer with shared task list + mailbox |
+| Task fit | Large codebase of independent units | Research / decomposable questions | Multi-domain debugging, parallel reviews, cross-layer features |
+| State | Shared git repo | Transient, per-query | Per-session + shared task list |
+| Verification | Tests in CI | LLM judge on outputs | Whatever you wire into the team |
+| Human loop | None during run | None during run | Active steering recommended (status can lag) |
+| Primary risk | Verifier gaps → drift | Token cost / false parallelism | Linear cost in teammate count |
+| Maturity | Production research demo | Production at Anthropic | Experimental, disabled by default |
 
 ## Shared Principles
 
@@ -104,4 +131,6 @@ Required for any real deployment:
 
 - [Agent Orchestration Patterns](agent-orchestration-patterns.md) — the five canonical patterns these instantiate
 - [Claude Code](../tools/claude-code.md)
+- [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md) — how-to for the productized peer-to-peer pattern
+- [Claude Code Custom Subagents](../how-tos/claude-code-custom-subagents.md) — the hub-and-spoke alternative
 - [Harness Engineering](harness-engineering.md)

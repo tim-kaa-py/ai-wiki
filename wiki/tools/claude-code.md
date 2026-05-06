@@ -30,12 +30,130 @@ sources:
   - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
   - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
   - "summaries/2026-05-05_genai-works_complete-anatomy-of-claude-code-project.md"
-last_updated: "2026-05-05"
+  - "summaries/2026-05-06_claude-code-docs_how-claude-code-works.md"
+  - "summaries/2026-05-06_claude-code-docs_memory.md"
+  - "summaries/2026-05-06_claude-code-docs_features-overview.md"
+  - "summaries/2026-05-06_claude-code-docs_context-window.md"
+  - "summaries/2026-05-06_claude-code-docs_best-practices.md"
+last_updated: "2026-05-06"
 ---
 
 # Claude Code
 
 Anthropic's CLI-based AI coding agent. Not just a terminal chat — a full operating environment for agentic engineering spanning mobile, web, desktop, and terminal.
+
+## Harness, Not Model — Anthropic's Own Framing
+
+Anthropic's "How Claude Code works" doc states it directly: Claude Code is a **harness around Claude models**. The model reasons; the harness provides tools, manages context, and handles execution. Everything Claude can do comes from tools — without them it can only output text. The five tool categories that power all agentic behavior: **file operations, search, execution, web, code intelligence**. When something fails, the failure is usually in the harness layer (which context was provided, which tools were allowed) — not the model. See [Harness Engineering](../concepts/harness-engineering.md).
+
+The agentic loop is **gather context → take action → verify results**, repeated as needed. **Verify-first prompting** dramatically improves results — providing test cases, screenshots, or runnable checks gives Claude a feedback loop. "Fix the bug" is weak; "fix the bug and verify tests pass" is strong. Add "verify by running X" to every task prompt.
+
+## Sessions and Persistence
+
+Sessions are independent by default — each new session starts fresh. Persistence comes from two complementary mechanisms:
+
+| Mechanism | Who writes | What it carries |
+|-----------|-----------|-----------------|
+| **CLAUDE.md files** | You | Rules, conventions, "always do X" instructions |
+| **Auto memory** (`~/.claude/projects/<project>/memory/`) | Claude | Learnings, build commands, debugging patterns Claude discovered |
+
+Don't conflate them: **CLAUDE.md is instructions, auto memory is learnings.** Curate CLAUDE.md deliberately; let auto memory grow organically. Run `/memory` to audit auto memory; run `/init` to generate a starter CLAUDE.md.
+
+### CLAUDE.md Scoping (Four Levels)
+
+Loaded in order, more specific overrides:
+1. **Managed policy** (org-wide, MDM-deployed)
+2. **User** (`~/.claude/CLAUDE.md`)
+3. **Project** (`./CLAUDE.md`) — commit to git
+4. **Local** (`./CLAUDE.local.md`) — gitignored
+
+All are concatenated and loaded every session. Hard rule: **under 200 lines per file** — adherence degrades with length. Use `@AGENTS.md` syntax inside CLAUDE.md to import another file.
+
+### Path-Scoped Rules
+
+Rules in `.claude/rules/` with `paths:` frontmatter only load when Claude reads a matching file — not every session. Saves context budget. Language-specific conventions (`paths: ["src/api/**/*.ts"]`) belong here, not in CLAUDE.md.
+
+**Compaction caveat:** path-scoped rules and nested CLAUDE.md files are lost after `/compact` — they live in message history, not outside it. Project-root CLAUDE.md re-injects automatically; nested files don't until Claude reads a matching file again. Rules that must survive compaction belong in project-root CLAUDE.md.
+
+### Auto Memory's 200-Line / 25KB Limit
+
+The MEMORY.md index loads every session and is capped at **200 lines / 25KB**. Detailed topic files (`debugging.md`, `api-conventions.md`) load on demand. This limit does **not** apply to CLAUDE.md files — those load in full.
+
+## Checkpoints and Permission Modes
+
+| Control | What it does |
+|---------|-------------|
+| `Esc` (single) | Stop mid-action with context preserved |
+| `Esc Esc` / `/rewind` | Restore previous conversation + code state (snapshot per file edit) |
+| `Shift+Tab` | Cycle permission modes (default → auto-accept → plan) |
+
+Checkpoints enable safe experimentation — every file edit is snapshotted before execution. Work boldly; the safety net means you can undo anything Claude does.
+
+## Context Window Token Budget
+
+Anthropic's "Explore the context window" doc gives token-level numbers for what Claude Code loads into context — the key revelation is that **~7,850 tokens are consumed before you type a single character**.
+
+| Component | Approx. tokens |
+|-----------|----------------|
+| System prompt | ~4,200 |
+| Project CLAUDE.md (well-tuned) | ~1,800 |
+| `~/.claude/CLAUDE.md` | ~320 |
+| Auto memory (MEMORY.md index) | ~680 |
+| Environment info | ~280 |
+| Skill descriptions | ~450 |
+| MCP tool names | ~120 |
+| **Baseline total** | **~7,850** |
+| Each file read | ~1,000–3,000 |
+| Each hook `additionalContext` | ~100–120 |
+| Subagent summary back to main | ~420 (vs 6,100+ for its file reads) |
+
+**File reads dominate context mid-session** — and they're hidden (you see only "Read auth.ts" notices). Three files + path-scoped rules + grep results easily add 6,000 tokens. **Subagents are the primary context-protection mechanism** — a subagent's reads stay entirely in its context; only the summary returns to your main window.
+
+### What Survives `/compact`
+
+| Lives where | Re-injected after compact? |
+|-------------|---------------------------|
+| Project-root CLAUDE.md | ✓ automatically |
+| Auto memory | ✓ automatically |
+| Path-scoped rules | ✗ (until matching file read again) |
+| Nested CLAUDE.md | ✗ (until matching file read again) |
+| Skill descriptions | ✗ (only invoked skill bodies survive — capped 5K tokens/skill, 25K total, newest first) |
+
+Important skill instructions go **near the top of SKILL.md** (truncation keeps the start). Skills with `disable-model-invocation: true` cost **zero context** until invoked — use for any side-effect skill (commit, deploy, send messages).
+
+### Inspection Commands
+
+```
+/context    # Live breakdown of context usage by category with optimization suggestions
+/memory     # See which CLAUDE.md and auto memory files loaded at startup
+/compact    # Summarize conversation to free context space (supports /compact "<focus>")
+```
+
+## Extension Decision Map (Anthropic Official)
+
+The features-overview doc gives Anthropic's canonical "which extension when" map. Each extension plugs into a different part of the agentic loop and carries different context costs.
+
+| Friction signal | Extension to add |
+|-----------------|------------------|
+| Convention wrong twice | CLAUDE.md entry |
+| Same prompt every time | Skill |
+| Side task floods context | Subagent |
+| Subagents need to share findings | Agent team |
+| Missing external data | MCP server |
+| Must-happen automatically | Hook |
+| Second repo needs same setup | Plugin |
+
+**Build the extension layer incrementally — don't design it upfront.** Let friction accumulate and respond to each trigger.
+
+Five context-vs-determinism tradeoffs to internalize:
+
+1. **CLAUDE.md vs Skills.** CLAUDE.md is paid every turn; skill bodies load only when invoked. Anything that's only sometimes needed belongs in a skill or path-scoped rule.
+2. **Skills vs Subagents.** Skills add content to your main window; subagents run their own context and only return a summary. 5+ file reads → subagent.
+3. **CLAUDE.md vs Hooks.** CLAUDE.md is **advisory**; hooks are **deterministic**. Critical rules ("don't modify .env", "always format before commit") are hooks, not instructions.
+4. **MCP vs Skills.** MCP gives Claude the *capability* to interact with external systems; skills give *knowledge of how to use them*. Pair them.
+5. **Subagents vs Agent Teams.** Subagents = hub-and-spoke (children → main only). Agent teams = peer-to-peer (teammates can message each other). See [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md).
+
+Plugins bundle extensions for reuse: skills + agents + hooks + MCP — managed > user > project name overrides for skills/subagents; hooks always merge.
 
 ## Why It Matters
 
@@ -449,6 +567,10 @@ Contrast with the hierarchical **orchestrator-worker** pattern of the multi-agen
 - [Claude Code Skills](../how-tos/claude-code-skills.md) — authoring how-to
 - [Claude Code Plugins](../how-tos/claude-code-plugins.md) — packaging skills + agents + hooks + monitors for distribution
 - [Claude Code Custom Subagents](../how-tos/claude-code-custom-subagents.md) — full subagent configuration reference
+- [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md) — peer-to-peer multi-session coordination (experimental)
+- [Claude Agent SDK](claude-agent-sdk.md) — programmatic library version of the same harness
+- [Code Review (Claude Code)](../how-tos/claude-code-review.md) — managed PR-review service
+- [Ultrareview](../how-tos/claude-code-ultrareview.md) — multi-agent verified bug-finding
 - [Parallel Agent Patterns](../concepts/parallel-agent-patterns.md)
 - [Claude Design](claude-design.md) — browser-based front-end generator; hand off its HTML export to Claude Code
 - [Claude Routines](claude-routines.md)

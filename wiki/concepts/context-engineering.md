@@ -8,7 +8,9 @@ sources:
   - "summaries/2026-03-24_anthropic_harness-design-long-running-apps.md"
   - "summaries/2025-11-26_anthropic_effective-harnesses-long-running-agents.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-last_updated: "2026-05-05"
+  - "summaries/2026-05-06_claude-code-docs_context-window.md"
+  - "summaries/2026-05-06_claude-code-docs_memory.md"
+last_updated: "2026-05-06"
 ---
 
 # Context Engineering
@@ -67,6 +69,59 @@ Pattern: commit-per-feature + progress file + `init.sh` (see [Harness Engineerin
 3. **Push state outside the window.** Files, progress logs, commits.
 4. **Tools must not overlap.** Each tool has one clear purpose.
 5. **Re-audit on every model upgrade.** Newer models handle more natively; subtract scaffolding that's no longer needed (see craft of subtraction in [Harness Engineering](harness-engineering.md)).
+
+## Token Data: What Claude Code Actually Loads
+
+Anthropic's May 2026 "Explore the context window" doc gives concrete token budgets for Claude Code — turning the abstract context-engineering principles above into operational numbers:
+
+| Component | Approx. tokens |
+|-----------|----------------|
+| System prompt | ~4,200 |
+| Project CLAUDE.md (well-tuned) | ~1,800 |
+| `~/.claude/CLAUDE.md` | ~320 |
+| Auto memory (MEMORY.md index) | ~680 |
+| Environment info | ~280 |
+| Skill descriptions | ~450 |
+| MCP tool names | ~120 |
+| **Baseline before first prompt** | **~7,850** |
+| Each file read | ~1,000–3,000 |
+| Each hook `additionalContext` | ~100–120 |
+| Subagent summary back to main | ~420 (vs 6,100+ for its file reads) |
+
+Two operational consequences:
+
+1. **File reads dominate mid-session** — and they're hidden (terminal shows only "Read auth.ts"). Three files + path-scoped rules + grep results easily add 6,000 tokens.
+2. **Subagents are the mathematical justification of the architectural pattern.** A subagent's 6,100 tokens of file reads → 420-token summary back. The subagent isn't just "tidier" — it's an order of magnitude cheaper for the parent's context.
+
+### What Survives `/compact`
+
+The `/compact` command isn't symmetrical — it preserves things differently depending on **where instructions live**:
+
+| Lives where | Re-injected after compact? |
+|-------------|---------------------------|
+| Project-root CLAUDE.md | ✓ automatically |
+| Auto memory (MEMORY.md) | ✓ automatically |
+| Path-scoped rules in `.claude/rules/` | ✗ until the matching file is read again |
+| Nested CLAUDE.md files | ✗ until the matching file is read again |
+| Skill descriptions | ✗ — only invoked skill bodies survive (capped 5K tokens/skill, 25K total budget, newest first) |
+
+**Operational rules:**
+- Rules that must survive compaction → project-root CLAUDE.md.
+- Important skill instructions → near the top of `SKILL.md` (truncation keeps the start).
+- Skills with `disable-model-invocation: true` → **zero context cost** until invoked. Use for any skill with side effects (commit, deploy, send messages).
+
+### Path-Scoped Rules as a Context Lever
+
+Rules in `.claude/rules/` with `paths:` frontmatter only load when Claude reads a matching file. Language-specific conventions (`paths: ["src/api/**/*.ts"]`) belong here, not in CLAUDE.md — they don't pay context tax on every session, only when relevant.
+
+### Inspection
+
+```
+/context    # Live breakdown of context usage by category with optimization suggestions
+/memory     # See which CLAUDE.md and auto memory files loaded at startup
+```
+
+This is the practical instrument panel for the abstract context-engineering discipline above.
 
 ## Relationship to Harness Engineering
 
