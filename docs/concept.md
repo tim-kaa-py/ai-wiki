@@ -21,7 +21,6 @@ An LLM-maintained personal knowledge wiki. The human curates sources (URLs, file
 - `CLAUDE.md` — the operating contract. Defines workflows, templates, guardrails. (You will generate this.)
 - `index.md` — master index of sources and wiki pages, grouped by pillar.
 - `log.md` — append-only chronological ingest log.
-- `playbook.md` — living document of practices/patterns discovered while working in the topic.
 - `inbox/` — drop zone for unprocessed URLs/files.
 - `notes/` — per-source ingest notes capturing the user's focus.
 - `scripts/` — helper scripts (transcript extraction, etc.).
@@ -69,7 +68,6 @@ Create the following directory structure in the working directory:
 ├── .gitignore
 ├── index.md
 ├── log.md
-├── playbook.md
 ├── docs/
 │   ├── concept.md              # (copy this file)
 │   └── user-documentation.md   # (copy sibling doc)
@@ -141,7 +139,7 @@ Use the reference implementation in this repo as your template: [`CLAUDE.md`](..
 
 ---
 
-**0 sources** | **0 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**0 sources** | **0 wiki pages** | [Ingest Log](log.md)
 ```
 
 As sources get ingested, you will add `### Sources` and `### Wiki Pages` subsections under each pillar, with markdown tables for sources and bulleted lists for wiki pages. See the reference [`index.md`](../index.md) for the exact format.
@@ -157,27 +155,7 @@ As sources get ingested, you will add `### Sources` and `### Wiki Pages` subsect
 |------|--------|--------|------|------|---------|
 ```
 
-### 4.4 `playbook.md`
-
-Start with empty section headers. Fill in as patterns emerge from actual work.
-
-```markdown
-# <Topic> Playbook
-
-Living document. Append only; do not remove content without user approval.
-
-## Workflows
-
-## Principles
-
-## Commands & Tool Tips
-
-## Anti-Patterns
-
-## Open Questions
-```
-
-### 4.5 `.gitignore`
+### 4.4 `.gitignore`
 
 ```
 # Intermediate subtitle files
@@ -196,11 +174,11 @@ Living document. Append only; do not remove content without user approval.
 Thumbs.db
 ```
 
-### 4.6 `LICENSE`
+### 4.5 `LICENSE`
 
 Default to **CC BY 4.0** for a knowledge repo (content, not code). Fetch the text from https://creativecommons.org/licenses/by/4.0/legalcode.txt or use `gh api` to copy from an existing CC BY 4.0 repo. If the user prefers MIT or another license, use that instead.
 
-### 4.7 `README.md`
+### 4.6 `README.md`
 
 Minimal pointer file:
 
@@ -213,10 +191,9 @@ An LLM-maintained knowledge wiki about **<topic>**.
 - **How it was built / how to recreate it:** see [docs/concept.md](docs/concept.md)
 - **Operating contract for Claude Code:** see [CLAUDE.md](CLAUDE.md)
 - **Browse sources:** [index.md](index.md)
-- **Living playbook:** [playbook.md](playbook.md)
 ```
 
-### 4.8 `gists/index.md` (only if Q8 = yes)
+### 4.7 `gists/index.md` (only if Q8 = yes)
 
 ```markdown
 # Gists
@@ -295,7 +272,6 @@ If pillars feel wrong after the first 2–3 ingests, that's normal — rename th
 ## 8. What NOT To Do
 
 - **Never modify sources after saving.** Re-extraction with better tooling is allowed; editorial changes are not.
-- **Never remove playbook content without user approval.**
 - **Never skip the CONNECT step** — the wiki only compounds if new sources are cross-linked into existing pages.
 - **Never download video/audio** — transcript extraction uses `--skip-download` internally.
 - **Never pre-populate wiki pages** during scaffolding. Wiki pages are only born from real sources.

@@ -6,7 +6,8 @@ tags: [claude-code, permissions, auto-mode, safety, prompt-injection, classifier
 sources:
   - "summaries/2026-03-25_anthropic_claude-code-auto-mode.md"
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
+last_updated: "2026-05-08"
 ---
 
 # Claude Code Auto Mode
@@ -50,6 +51,31 @@ After **3 consecutive** or **20 total** denials, the agent halts. This prevents 
 claude --permission-mode auto
 claude --permission-mode auto -p "fix all lint errors"
 ```
+
+### `accept-edits` for Ralph Loops
+
+Distinct from auto mode but in the same family of permission strategies, `--permission-mode accept-edits` is the mode Matt Pocock's Ralph-loop pipeline uses for its single-iteration runner. Unlike `auto`, this mode does not invoke the prompt-injection / transcript classifiers — it simply auto-approves edit operations. Use it inside a tightly bounded harness where:
+
+- The work surface is a freshly-created git worktree (per-issue isolation; see [Parallel Agent Patterns § Sandcastle](../concepts/parallel-agent-patterns.md#pattern-4-sandcastle--worktreesandbox-afk-pipeline-pocock))
+- The implementer prompt is hard-coded with a priority order (critical bug → dev infra → tracer bullet → polish)
+- The loop has explicit termination ("no more tasks" sentinel)
+
+Example shape from Matt's `once.sh`:
+
+```bash
+claude --permission-mode accept-edits "$(cat <<EOF
+$LOOP_PROMPT
+
+## Backlog
+$(cat issues/*.md)
+
+## Recent commits
+$(git log -5 --oneline)
+EOF
+)"
+```
+
+This is **not** a substitute for `auto` on a general-purpose session — it skips the classifier. Reach for it specifically inside a sandboxed AFK harness, not for interactive use. *(Source: Matt Pocock, AI Engineer 2026)*
 
 ## Published Classifier Metrics
 

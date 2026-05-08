@@ -12,7 +12,7 @@ Three layers (knowledge ingest pipeline):
 Plus a parallel artifact track:
 - **Gists** (`gists/`) — Standalone, user-authored Claude Code prompts shareable with others. Not derived from sources, not synthesized into the wiki. See [Gists Workflow](#gists-workflow).
 
-Plus: `playbook.md` (living agentic coding practices), `index.md` (master index of sources/wiki), `gists/index.md` (gists index), `log.md` (chronological action log), `inbox/` (unprocessed items).
+Plus: `index.md` (master index of sources/wiki), `gists/index.md` (gists index), `log.md` (chronological action log), `inbox/` (unprocessed items).
 
 ## Model Routing
 
@@ -411,7 +411,7 @@ Focus on what the USER found interesting, not a generic overview.
 
 **Model: Opus sub-agent.** Spawn via Agent tool with `model: "opus"`. Prompt the sub-agent with:
 - Path to the new summary
-- Instructions: "Read the summary. Search wiki/ for relevant pages. For each relevant page, merge new information. Create new wiki pages if needed. Update playbook.md if applicable. Report what was updated."
+- Instructions: "Read the summary. Search wiki/ for relevant pages. For each relevant page, merge new information. Create new wiki pages if needed. Report what was updated."
 
 The sub-agent handles all wiki reads, searches, and writes. Returns a report of changes to the Sonnet orchestrator.
 
@@ -435,12 +435,9 @@ This is the step that makes the wiki compound. Run after every ingest (both tier
 4. **New wiki page needed?** If the source introduces a substantial topic not yet covered:
    - Create a new page in the appropriate `wiki/` subdirectory
    - Concepts → `wiki/concepts/`, Tools → `wiki/tools/`, How-tos → `wiki/how-tos/`, People → `wiki/people/`, Comparisons → `wiki/comparisons/`
-5. **Playbook update?** If the source contains actionable agentic coding practices, workflows, or tool tips:
-   - Read `playbook.md`
-   - Add new principles, workflows, commands, or anti-patterns
-   - Attribute the source
-   - Do NOT remove existing playbook content without user approval
-6. **Report what was updated** — tell the user which wiki pages were created or modified
+5. **Report what was updated** — tell the user which wiki pages were created or modified
+
+**Note:** Actionable practices, workflows, and anti-patterns belong inside the relevant wiki page (e.g., a context-window discipline tactic goes into `wiki/concepts/context-engineering.md`, not into a central principles file). The wiki itself is the system's living playbook.
 
 ## Gists Workflow
 
@@ -541,7 +538,6 @@ Use existing tags when possible. Create new tags sparingly. Keep tags lowercase,
 - **Sources are verbatim** — never modify source content after saving. Exception: re-extraction with upgraded tooling is allowed (same content, better formatting).
 - **Summaries are opinionated** — focus on the user's interests, not exhaustive coverage
 - **Wiki pages are synthesized** — combine multiple sources, maintain over time
-- **Playbook updates are additive** — don't remove content without user approval
 - **Always confirm metadata** with user before proceeding (Tier 2 only)
 - **Log every ingest** to `log.md`
 - **Report CONNECT updates** — always tell the user which wiki pages were created or modified
@@ -602,7 +598,6 @@ After editing the docs:
 
 ### Out of this rule's scope
 
-- `playbook.md` — user-approval required for changes; not auto-updated.
 - `MEMORY.md` — session-side memory, not repo documentation.
 - `README.md` — minimal pointer file; update only if links break or top-level structure changes.
 

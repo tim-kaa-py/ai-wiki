@@ -33,7 +33,6 @@ Plus:
 - `index.md` — master index. Your browse-entry.
 - `gists/index.md` — index of your authored gists.
 - `log.md` — chronological record of every ingest.
-- `playbook.md` — living practices/patterns the system has learned.
 - `inbox/` — drop unprocessed files here.
 
 ---
@@ -165,9 +164,9 @@ You can force a tier with "deep dive" or "quick clip".
 
 You rarely need to think about this. The agent places and you correct if it's wrong.
 
-### What goes in `playbook.md`
+### Where actionable practices live
 
-Durable agentic-coding practices, workflows, and anti-patterns that survived contact with real work. The agent appends; it does not remove without your approval.
+Durable practices, workflows, and anti-patterns belong **inside the relevant wiki page** — a context-window discipline tactic goes into `wiki/concepts/context-engineering.md`, not into a central principles file. There is no separate playbook; the wiki itself is the living playbook.
 
 ---
 
@@ -296,7 +295,6 @@ $ claude
 - [`concept.md`](concept.md) — architecture + recreation guide for a different topic.
 - [`index.md`](../index.md) — browse everything.
 - [`log.md`](../log.md) — chronological ingest history.
-- [`playbook.md`](../playbook.md) — accumulated practices.
 - [`scripts/extract-transcript.py`](../scripts/extract-transcript.py) — YouTube/podcast transcript extractor.
 - [`docs/private-modules.md`](private-modules.md) — pattern for author-private extensions mounted inside this repo (some skills may not be available in a public clone).
 

@@ -50,6 +50,7 @@
 | 2026-05-06 | [Work with sessions — Agent SDK (Anthropic)](summaries/2026-05-06_claude-code-docs_agent-sdk-sessions.md) | docs | agent-sdk, sessions, context-management, resume, fork, multi-turn, python, typescript |
 | 2026-05-06 | [Code Review (Anthropic)](summaries/2026-05-06_claude-code-docs_code-review.md) | docs | claude-code, code-review, github, multi-agent, pr-automation, review-md, claude-md, workflow |
 | 2026-05-06 | [Find bugs with ultrareview (Anthropic)](summaries/2026-05-06_claude-code-docs_ultrareview.md) | docs | claude-code, ultrareview, code-review, multi-agent, cloud, pr-automation, research-preview |
+| 2026-04-24 | [Full Walkthrough: Workflow for AI Coding — Matt Pocock](summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md) | youtube | claude-code, workflow, prd, kanban, ralph-loop, deep-modules, context-engineering, dumb-zone, tdd, sandcastle |
 
 ### Wiki Pages
 
@@ -89,6 +90,9 @@
 - [Claude Code Agent Teams](wiki/how-tos/claude-code-agent-teams.md) — how-to: experimental peer-to-peer multi-session coordination; scientific-debate use case; TeammateIdle/TaskCreated/TaskCompleted hooks
 - [Claude Code Review (Managed Service)](wiki/how-tos/claude-code-review.md) — how-to: GitHub PR inline comments via multi-agent fleet; REVIEW.md customization; severity levels; CI gate wiring; Team/Enterprise only
 - [Claude Code Ultrareview](wiki/how-tos/claude-code-ultrareview.md) — how-to: /ultrareview CLI command; remote multi-agent independent verification; background execution; non-interactive CI mode
+- [Smart Zone](wiki/concepts/smart-zone.md) — concept: ~100K-token operational threshold even on 1M-context models, `/clear` over `/compact` discipline, exact-token status line, why bigger windows ship more dumb zone
+- [Deep Modules](wiki/concepts/deep-modules.md) — concept: Ousterhout's deep/shallow distinction with the AI-specific test-boundary + dependency-graph argument; `/improve-code-base-architecture` skill; design-interfaces / delegate-implementations rule; PRD module maps
+- [Matt Pocock](wiki/people/matt-pocock.md) — AI Hero educator; structured-Kanban variant of Ralph; Sandcastle author; key contributions, open problems he names, retracted earlier advice
 
 ## Understanding AI
 
@@ -165,4 +169,4 @@
 
 ---
 
-**48 sources** | **55 wiki pages** | [Ingest Log](log.md) | [Playbook](playbook.md)
+**67 sources** | **66 wiki pages** | [Ingest Log](log.md)

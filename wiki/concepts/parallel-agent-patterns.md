@@ -7,7 +7,8 @@ sources:
   - "summaries/2026-02-05_anthropic_building-c-compiler.md"
   - "summaries/2025-06-13_anthropic_multi-agent-research-system.md"
   - "summaries/2026-05-06_claude-code-docs_agent-teams.md"
-last_updated: "2026-05-06"
+  - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
+last_updated: "2026-05-08"
 ---
 
 # Parallel Agent Patterns
@@ -108,17 +109,79 @@ Anthropic explicitly recommends the **scientific debate** pattern: spawn 3-5 tea
 
 See [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md) for the full how-to including `Shift+Down` cycling and the `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` enable flag.
 
+## Pattern 4: Sandcastle — Worktree+Sandbox AFK Pipeline (Pocock)
+
+**Source: Matt Pocock — AI Engineer 2026.**
+
+A TypeScript library for parallelized AFK ("Away From Keyboard") execution. Each Kanban issue runs in its own **git worktree** inside a **Docker sandbox**; the run loop is `planner → per-issue implementer → reviewer → merger`. Public TS library.
+
+### Pipeline
+
+```typescript
+// Planner reads the Kanban DAG, returns the next batch with no unmet blockers
+const issues = await planner.run({ prompt: planPrompt, backlog })
+
+// Per-issue implementer in worktree+sandbox, Sonnet
+const branches = await Promise.all(issues.map(issue =>
+  sandbox.run({
+    issue,
+    branch: `issue-${issue.number}`,
+    model: "sonnet",
+    prompt: implementerPrompt,         // pull-style: skills available on demand
+  })
+))
+
+// Reviewer with FRESH CONTEXT and pushed coding standards, Opus
+const reviewed = await reviewer.run({
+  prompt: reviewPrompt,                // push-style: standards in the prompt
+  model: "opus",
+  branches,
+})
+
+// Merger resolves conflicts, type errors, test failures across branches
+await merger.run({ prompt: mergePrompt, branches: reviewed, issues })
+```
+
+### Why It Differs from the Other Three Patterns
+
+| Dimension | Sandcastle |
+|-----------|------------|
+| Coordination | Hierarchical (planner dispatches, reviewer gates, merger settles) |
+| Isolation | One worktree + Docker sandbox per issue |
+| Verification | Reviewer is a separate agent invocation with fresh context — not self-review |
+| Model split | Sonnet for implementation, Opus for review (inverted from intuition) |
+| Trigger | Kanban DAG with `blocked_by` frontmatter — work fans out only along the next "phase" of the DAG |
+
+Architecturally a variant of orchestrator-worker, but the evaluator-optimizer loop is structurally explicit: the reviewer can reject, and the merger can defer. The DAG (rather than a numbered phase plan) is what admits the parallelism — see [Agentic Coding Workflow § The Pocock Pipeline](../how-tos/agentic-coding-workflow.md#the-pocock-pipeline-grill--prd--kanban--loop).
+
+### Push vs Pull Rule for Coding Standards
+
+A representational decision worth quoting:
+
+- **Implementer pulls** — skills sit in the repo; the agent reaches for them on demand.
+- **Reviewer gets pushed** — standards inlined into the review prompt verbatim, because a reviewer with fresh context can't be relied on to discover the "what good looks like" doc.
+
+This is the same fresh-context-reviewer principle from [Reviewer Agents](reviewer-agents.md), implemented as a prompt-construction policy rather than a CI configuration.
+
+### When to Reach for Sandcastle
+
+- You have a real Kanban DAG with multiple unblocked issues.
+- Each issue is small enough to fit comfortably inside the smart zone (~100K tokens; see [Smart Zone](smart-zone.md)).
+- You can afford the merge cost — at high parallelism, merges become a sub-problem of their own.
+
+When you can't, fall back to single-stream Ralph or the lock-file pattern.
+
 ## When to Use Which
 
-| Dimension | Lock-file agent teams | Orchestrator-worker | Claude Code Agent Teams |
-|-----------|----------------------|---------------------|------------------------|
-| Coordination | Flat, peer-to-peer | Hierarchical | Peer-to-peer with shared task list + mailbox |
-| Task fit | Large codebase of independent units | Research / decomposable questions | Multi-domain debugging, parallel reviews, cross-layer features |
-| State | Shared git repo | Transient, per-query | Per-session + shared task list |
-| Verification | Tests in CI | LLM judge on outputs | Whatever you wire into the team |
-| Human loop | None during run | None during run | Active steering recommended (status can lag) |
-| Primary risk | Verifier gaps → drift | Token cost / false parallelism | Linear cost in teammate count |
-| Maturity | Production research demo | Production at Anthropic | Experimental, disabled by default |
+| Dimension | Lock-file agent teams | Orchestrator-worker | Claude Code Agent Teams | Sandcastle |
+|-----------|----------------------|---------------------|------------------------|-----------|
+| Coordination | Flat, peer-to-peer | Hierarchical | Peer-to-peer with shared task list + mailbox | Hierarchical with explicit reviewer gate |
+| Task fit | Large codebase of independent units | Research / decomposable questions | Multi-domain debugging, parallel reviews, cross-layer features | Implementing a vertical-slice DAG of feature tickets |
+| State | Shared git repo | Transient, per-query | Per-session + shared task list | Per-issue worktree + Docker sandbox |
+| Verification | Tests in CI | LLM judge on outputs | Whatever you wire into the team | Fresh-context Opus reviewer + merger |
+| Human loop | None during run | None during run | Active steering recommended (status can lag) | None during run (AFK) |
+| Primary risk | Verifier gaps → drift | Token cost / false parallelism | Linear cost in teammate count | Merge complexity at high parallelism |
+| Maturity | Production research demo | Production at Anthropic | Experimental, disabled by default | Public TS library, demoed |
 
 ## Shared Principles
 
@@ -134,3 +197,6 @@ See [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md) for the ful
 - [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md) — how-to for the productized peer-to-peer pattern
 - [Claude Code Custom Subagents](../how-tos/claude-code-custom-subagents.md) — the hub-and-spoke alternative
 - [Harness Engineering](harness-engineering.md)
+- [Smart Zone](smart-zone.md) — why each stage runs in its own fresh context
+- [Reviewer Agents](reviewer-agents.md) — fresh-context-per-reviewer principle Sandcastle implements
+- [Matt Pocock](../people/matt-pocock.md) — Sandcastle author

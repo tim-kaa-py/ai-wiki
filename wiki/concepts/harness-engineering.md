@@ -17,7 +17,8 @@ sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
   - "summaries/2026-05-06_claude-code-docs_how-claude-code-works.md"
   - "summaries/2026-05-06_claude-code-docs_features-overview.md"
-last_updated: "2026-05-06"
+  - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
+last_updated: "2026-05-08"
 ---
 
 # Harness Engineering
@@ -269,6 +270,75 @@ The February 2026 written article adds the founding context and several artifact
 - **Changed merge philosophy under high throughput.** Minimal blocking merge gates, short-lived PRs, flakes handled with retries rather than blocking. "In a system where agent throughput far exceeds human attention, corrections are cheap, and waiting is expensive." Irresponsible at low throughput; right at high throughput.
 - **End-to-end autonomy threshold.** A single prompt now drives Codex through: validate state → reproduce bug → record failure video → implement fix → validate → record fix video → open PR → respond to feedback → resolve build failures → escalate only when judgment required → merge. Ryan is explicit this is repo-specific and shouldn't be assumed to generalize without similar harness investment.
 
+## Ralph Loops and the Single-Prompt Implementer (Pocock)
+
+Matt Pocock's pipeline (AI Engineer 2026) instantiates a class of community-vocabulary harnesses called **Ralph loops** — named (after Ralph Wiggum) for their dumb relentlessness. Instead of writing a multi-phase plan, you loop a single prompt that says "make a small change toward the destination" and run it until done. Vanilla Ralph "works okay"; Matt's variant adds structure (PRD + Kanban DAG + priority order) over it.
+
+### Implementer Prompt Priority Order
+
+Matt's loop prompt hard-codes the next-task pick — this is the load-bearing structural addition over vanilla Ralph:
+
+```
+Pick the next task using this priority:
+1. Critical bug fixes
+2. Development infrastructure
+3. Tracer bullets (vertical slices marked AFK)
+4. Polishing, quick wins, refactors
+
+If no AFK tasks remain, output: "no more tasks"
+```
+
+Why this matters as harness work: it prevents the agent from spending an overnight loop polishing while a broken test rots. Every Ralph harness needs a similar priority scaffold or it drifts toward whatever's easiest.
+
+### `once.sh` First, Loop Second
+
+Matt's pattern: ship `ralph-once.sh` (single-iteration runner) **before** `ralph-loop.sh` (the `while true` wrapper). New contributors run `once.sh` manually one issue at a time before letting it loop overnight. Reason: prompt-tuning needs that an autonomous loop will hide.
+
+Shape of `once.sh`:
+
+```bash
+#!/usr/bin/env bash
+issues=$(cat issues/*.md)
+recent_commits=$(git log -5 --oneline)
+
+claude --permission-mode accept-edits "$(cat <<EOF
+$LOOP_PROMPT
+
+## Backlog
+$issues
+
+## Recent commits
+$recent_commits
+EOF
+)"
+```
+
+The loop is just `while true; do once.sh; done` with checkpointing. The *harness* lives in the prompt, the priority scaffold, the Kanban DAG, and the `accept-edits` permission mode — not in the bash wrapper.
+
+### Sandcastle — Pocock's Parallel AFK Runner
+
+For parallel AFK execution Matt published **Sandcastle**, a TypeScript library that runs the four-stage pipeline `planner → per-issue implementer → reviewer → merger`:
+
+- **Planner** reads the Kanban DAG and returns the next batch of issues with no unmet blockers.
+- **Implementer** runs **on Sonnet**, one process per issue, each in its own git worktree inside a Docker sandbox.
+- **Reviewer** runs **on Opus** with **fresh context** and pushed coding standards. Inverted from intuition — review is where you need the smarts, implementation can grind.
+- **Merger** resolves conflicts, type errors, and test failures across branches.
+
+Push vs pull rule for coding standards: implementer **pulls** (skills sit in repo, agent reaches for them), reviewer gets standards **pushed** into the prompt verbatim. This is a representational decision about what each stage should and shouldn't have to discover. See also [Reviewer Agents § Coverage-First Prompting](reviewer-agents.md#coverage-first-prompting-on-opus-47).
+
+Sandcastle is a working example of [Parallel Agent Patterns](parallel-agent-patterns.md) — specifically the orchestrator-worker variant with an evaluator-optimizer twist (the reviewer can reject and the merger can defer).
+
+### "Feedback-Loop Quality Is the AI Ceiling"
+
+Matt's compressed framing of why every loop in this section earns its place: **feedback-loop quality is the AI ceiling.** The harness's job is to construct that feedback loop:
+
+- Verifier-as-tests inside the implementer loop ([Code-as-Text Structural Tests](code-as-text-structural-tests.md))
+- Fresh-context reviewer on Opus ([Reviewer Agents](reviewer-agents.md))
+- E2E browser verification (Anthropic's Puppeteer pattern, above)
+- Per-worktree bootable app + observability (Lopopolo's pattern, above)
+
+These all converge on the same operational rule: invest in feedback before you invest in capability. *(Source: Matt Pocock, AI Engineer 2026)*
+
 ## Re-Audit on Model Upgrade: Opus 4.7 Example
 
 When upgrading the model inside your harness, re-audit prompts that encoded workarounds for the *prior* model. Anthropic's Opus 4.7 guidance (April 2026) gives a concrete case: review harnesses tuned for Opus 4.6 with prompts like "only report high-severity issues" or "be conservative" *still work* on 4.7 but now over-filter — Opus 4.7 follows the conservatism more literally, investigating just as thoroughly and then dropping real findings below the stated bar. Measured recall falls even though capability improved (+11pp on Anthropic's bug-finding eval). The fix is harness-side, not model-side: split coverage from filtering across two stages, and keep the conservatism only in the filter stage. See [Reviewer Agents](reviewer-agents.md) for the concrete split.
@@ -288,3 +358,6 @@ Generalization: every prompt in the harness encodes an assumption about the prio
 - [Generator-Evaluator Harness](generator-evaluator-harness.md) — production variant of evaluator-optimizer
 - [Code-as-Text Structural Tests](code-as-text-structural-tests.md) — tests that assert properties of the source code itself
 - [Reviewer Agents](reviewer-agents.md) — persona-based CI reviewers that replace human PR review
+- [Smart Zone](smart-zone.md) — the operational frame Pocock's harness is built around
+- [Parallel Agent Patterns](parallel-agent-patterns.md) — Sandcastle as a worked example
+- [Matt Pocock](../people/matt-pocock.md) — author of the structured Ralph variant

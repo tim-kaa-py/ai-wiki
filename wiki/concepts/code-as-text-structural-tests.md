@@ -6,7 +6,8 @@ tags: [harness-engineering, testing, structural-tests, monorepo, agentic-coding-
 sources:
   - "summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md"
   - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
-last_updated: "2026-04-22"
+  - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
+last_updated: "2026-05-08"
 ---
 
 # Code-as-Text Structural Tests
@@ -58,6 +59,16 @@ A structural test that fails with "files under 350 lines: src/foo/bar.ts has 412
 > `src/foo/bar.ts` has 412 lines (cap is 350). Split it along the natural seam between the two responsibilities — extract the `X` concerns into `src/foo/bar-x.ts` and keep `src/foo/bar.ts` focused on `Y`. See `docs/file-decomposition.md`.
 
 Every diagnostic is a prompt-injection surface. Treat error text as a prompt template, not a log line. See the error-messages-as-prompts discussion in [Harness Engineering](harness-engineering.md).
+
+## Why Structural Tests Pay: Feedback-Loop Quality Is the AI Ceiling
+
+Matt Pocock's compressed framing (AI Engineer 2026): **feedback-loop quality is the AI ceiling.** Without good feedback loops the agent codes blind; with them, capability rises. Structural tests are exactly the kind of check that pays into this:
+
+- They run on every push.
+- They produce remediation-oriented diagnostics that the agent can act on directly.
+- They catch the class of drift (shallow modules, duplicate schemas, broken package boundaries) that erodes the dependency-graph navigability AI specifically depends on. See [Deep Modules](deep-modules.md) for why a sparse, deep dependency graph raises AI's effective coding ability.
+
+This is the structural-test counterpart to "design interfaces, delegate implementations": the human writes the invariant once (in a structural test), the agent gets one-shot feedback every time it drifts. *(Source: Matt Pocock, AI Engineer 2026)*
 
 ## Where to Put Them
 

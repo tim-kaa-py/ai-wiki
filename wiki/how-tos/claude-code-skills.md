@@ -8,7 +8,8 @@ sources:
   - "summaries/2025-10-16_anthropic_agent-skills.md"
   - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-last_updated: "2026-05-05"
+  - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
+last_updated: "2026-05-08"
 ---
 
 # Claude Code Skills
@@ -218,6 +219,40 @@ Combine with `disable-model-invocation` for defense in depth on side-effect skil
 3. If the command was a side effect (deploy, commit), add `disable-model-invocation: true`.
 4. If the command needed pre-approved tools, add `allowed-tools:`.
 5. Verify both forms still resolve — if you keep the old command file, the skill takes precedence.
+
+## Worked Example: A Planning Skill Stack (Pocock)
+
+Matt Pocock's coding pipeline (AI Engineer 2026) is a worked example of using skills as a coordinated stack rather than as scattered helpers. Four project-local skills, each a Playbook skill, none with side effects:
+
+```
+.claude/skills/
+├── grill-me/SKILL.md             # interview-me-relentlessly prompt body
+├── write-a-PRD/SKILL.md          # destination-doc generation, module list first
+├── PRD-to-issues/SKILL.md        # generates issues/*.md with blocked_by frontmatter
+└── improve-code-base-architecture/SKILL.md   # finds shallow-module clusters to collapse
+```
+
+Minimal `grill-me` SKILL.md body — useful as a sanity check on how compact a high-leverage skill can be:
+
+```markdown
+---
+name: grill-me
+description: Interview the user about a feature plan to reach a shared design concept. Use when the user starts a new piece of work and has not yet been grilled.
+---
+
+Interview me relentlessly about every aspect of this plan until we reach a
+shared understanding. Walk down each branch of the decision tree resolving
+dependencies one by one. For each question, provide your recommended answer.
+Ask the questions one at a time.
+```
+
+Why this works as a skill rather than a one-shot prompt:
+
+- The description ("Use when the user starts a new piece of work and has not yet been grilled") gives Claude a discovery signal so it can auto-invoke at the right moment.
+- The body persists for the rest of the session — once invoked, `grill-me`'s instructions don't have to be re-issued on every grilling turn.
+- It composes with the next skill (`/write-a-PRD`) without losing the 25K tokens of grilling conversation, because the conversation history *is* the asset (see [Smart Zone](../concepts/smart-zone.md) on why you do NOT clear between grill and PRD).
+
+See [Agent Skills § Skill Kit as Owned Planning Stack](../concepts/agent-skills.md#skill-kit-as-owned-planning-stack-pocock) for the bigger thesis.
 
 ## Common Pitfalls
 

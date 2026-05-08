@@ -14,9 +14,9 @@ and continue; never abort the full run over a partial failure.
   State:          The most recent file in ai-research\ is your record of what
                   was already reported. Read it first. If none exists, treat
                   everything as new and set LAST_DATE to 7 days ago.
-  Scope boundary: Never touch sources\, summaries\, wiki\, index.md, log.md,
-                  or playbook.md. This is a discovery tool — nothing gets
-                  ingested into the wiki.
+  Scope boundary: Never touch sources\, summaries\, wiki\, index.md, or
+                  log.md. This is a discovery tool — nothing gets ingested
+                  into the wiki.
 </context>
 
 ## Step 0 — Orient

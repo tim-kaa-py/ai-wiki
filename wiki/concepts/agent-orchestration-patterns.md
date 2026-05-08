@@ -11,7 +11,8 @@ sources:
   - "summaries/2026-02-05_anthropic_building-c-compiler.md"
   - "summaries/2026-05-06_claude-code-docs_agent-teams.md"
   - "summaries/2026-05-06_claude-code-docs_features-overview.md"
-last_updated: "2026-05-06"
+  - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
+last_updated: "2026-05-08"
 ---
 
 # Agent Orchestration Patterns (Anthropic's Five Canonical)
@@ -80,6 +81,10 @@ Anthropic's multi-agent research system is the canonical real-world instantiatio
 - **15× more tokens than chat** — the cost floor for this pattern
 
 The 15× cost rule: orchestrator-worker is only worth it when task value exceeds 15× baseline AND the work is genuinely parallelizable. For a flat, peer-to-peer alternative (Carlini's lock-file C compiler team — 16 parallel Claudes, no lead agent, ~2,000 sessions, 99% test pass rate), see [Parallel Agent Patterns](parallel-agent-patterns.md). *(Source: Anthropic Engineering)*
+
+## Concrete Example: Sandcastle (Pocock)
+
+A second worked example of orchestrator-worker, this time with an explicit evaluator-optimizer twist baked in: Matt Pocock's **Sandcastle** TypeScript library runs `planner → per-issue implementer in worktree+sandbox → reviewer → merger`. Sonnet for the implementers (one per issue), Opus for the reviewer with a fresh context. The reviewer can reject and the merger can defer, so the loop is structurally evaluator-optimizer rather than fire-and-forget orchestrator-worker. See [Parallel Agent Patterns § Sandcastle](parallel-agent-patterns.md#pattern-4-sandcastle--worktreesandbox-afk-pipeline-pocock). *(Source: Matt Pocock, AI Engineer 2026)*
 
 ## Hub-and-Spoke vs Peer-to-Peer (Subagents vs Agent Teams)
 

@@ -16,7 +16,8 @@ sources:
   - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
   - "summaries/2026-05-06_claude-code-docs_best-practices.md"
   - "summaries/2026-05-06_claude-code-docs_how-claude-code-works.md"
-last_updated: "2026-05-06"
+  - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
+last_updated: "2026-05-08"
 ---
 
 # Agentic Coding Workflow
@@ -375,6 +376,98 @@ claude --resume              # pick from session list
 claude -p "prompt" --output-format json   # one-off with structured output
 ```
 
+## The Pocock Pipeline (Grill → PRD → Kanban → Loop)
+
+Matt Pocock's end-to-end pipeline (AI Engineer 2026) is the most explicit named instance of a full daily workflow. Every stage is justified, every handoff is named, and the whole thing is built around keeping each stage inside the [smart zone](../concepts/smart-zone.md).
+
+```
+/clear → grill-me → /write-a-PRD → /PRD-to-issues → once.sh → ralph-loop → reviewer → QA
+                                                                                       ↓
+                                                                               new Kanban tickets
+```
+
+### Stage 1 — Grill-Me (interview, not plan)
+
+Open with `/clear` then invoke a `grill-me` skill — a tiny prompt body that says "interview me relentlessly about every aspect of this plan… ask one question at a time… for each question provide your recommended answer." 22-100 questions is normal. The deliverable is a **shared design concept** (Brooks), not a plan document.
+
+**Critical handoff:** do NOT clear context between grill and PRD. The 25K tokens of conversation are the asset, not a side-effect. See [Smart Zone](../concepts/smart-zone.md).
+
+### Stage 2 — `/write-a-PRD` (destination doc, not journey doc)
+
+Generate the PRD via skill. The PRD is a **destination document** — where we're going + definition of done — not a step-by-step plan. Two divergences from typical PRD practice:
+
+- **Don't read it.** Reading the PRD tests the LLM's summarization ability, which is reliably strong. The alignment was established in grilling. See [PRD-as-Prompt § Don't Review the PRD](../concepts/prd-as-prompt.md).
+- **Module list first.** Have the skill return the module map (new modules + modules to modify) before drafting prose, and confirm only that. See [Deep Modules § Module Maps in PRDs](../concepts/deep-modules.md#module-maps-in-prds).
+- **Out-of-scope section.** Capture rejected options from grilling so future loops don't re-introduce them.
+
+### Stage 3 — `/PRD-to-issues` (DAG, not phase plan)
+
+Convert the PRD into local markdown issue files with explicit `blocked_by:` frontmatter. Form a DAG, not a numbered phase list. Why the DAG dominates:
+
+- A numbered phase plan can only be picked up by one agent — degree-1 parallelism.
+- A DAG admits multiple agents on independent branches.
+- The DAG naturally encodes vertical slices ("tracer bullets" — Pragmatic Programmer); a phase plan naturally encodes horizontal layers.
+
+**First-slice horizontal pushback:** The first draft typically over-clusters into horizontal slices ("all the schema first"). One round of "the first slice is too horizontal" usually fixes it without re-prompting from scratch. Keep that exact phrase as a paste-ready correction.
+
+**Vertical-slice rule:** each issue must touch at least one new schema element AND one user-visible surface. The first ticket should produce a working end-to-end spine; subsequent tickets add to it.
+
+### Stage 4 — Implementer Loop (`once.sh` first, then `ralph-loop`)
+
+The implementer is a single prompt running in `--permission-mode accept-edits` (see [Claude Code Auto Mode](claude-code-auto-mode.md) for the related but distinct auto-mode classifier). Run `once.sh` manually one issue at a time before letting it loop. Why: prompt-tuning needs that an autonomous loop will hide.
+
+**Implementer prompt priority order — hard-coded, in this order:**
+
+```
+Pick the next task using this priority:
+1. Critical bug fixes
+2. Development infrastructure
+3. Tracer bullets (vertical slices marked AFK)
+4. Polishing, quick wins, refactors
+
+If no AFK tasks remain, output: "no more tasks"
+```
+
+This is so the agent never spends a night polishing while a broken test rots.
+
+**AFK as a ticket category:** The Kanban issues carry an `AFK` tag. The night-shift loop only picks AFK-tagged tickets. AFK is a formal label inside the ticket schema, not just a vibe.
+
+**Once-then-loop:** Ship `ralph-once.sh` to new contributors first, `ralph-loop.sh` second. The loop is just `while true; do once.sh; done` with checkpointing.
+
+### Stage 5 — Reviewer (fresh context, Opus)
+
+Critical: reviewer needs **fresh context**. If the implementer also reviews, the review happens in the dumb zone after implementation burned the smart zone. Clear before review.
+
+**Model split (counter-intuitive):** Sonnet for implementation, Opus for review. Review is where you need the smarts; implementation can grind. See [Reviewer Agents § Fresh Context per Reviewer](../concepts/reviewer-agents.md).
+
+### Stage 6 — QA (return to human, produce next batch)
+
+QA is not the end of the loop — it's the source of the next batch of tickets. During QA, write findings directly as `issues/NN-bug-X.md` files with `blocked_by:` set to the implementation issue. The Kanban board accepts new blocking issues indefinitely.
+
+### Don't AFK-Optimize the PRD
+
+Anti-takeaway from Matt himself: putting deep-think cycles into PRD polishing is wrong — push that work into QA instead. Hard limit on how far the destination doc should be pushed.
+
+### Skill Kit Behind the Pipeline
+
+The pipeline is a stack of skills in `.claude/skills/`:
+
+- `grill-me/` — the interview prompt body
+- `write-a-PRD/` — destination-doc generation
+- `PRD-to-issues/` — DAG generation with `blocked_by`
+- `improve-code-base-architecture/` — the architecture lever (see [Deep Modules](../concepts/deep-modules.md))
+
+The pipeline owns its planning stack as repo-local skills rather than depending on closed planning products. See [Agent Skills](../concepts/agent-skills.md).
+
+### Unresolved Tensions
+
+Matt names two open problems in his own pipeline:
+
+- **Review batch size.** Ralph batched commits push toward larger PRs; the keep-PRs-small dictum pushes the other way. Verbatim: "I don't honestly know what the answer to this yet" [0:59:18].
+- **PRD retention.** He recommends closing/deleting PRDs after implementation to avoid doc rot, but the migrations analogy ("are migrations also transient process artifacts?") is unresolved [1:24:40] — Matt: "I don't know… let's talk about it afterwards." Treat the always-delete rule as a working heuristic, not a verified principle.
+
+*(Source: Matt Pocock, AI Engineer 2026)*
+
 ## Anti-Patterns to Avoid
 
 - Over-engineering prompt pipelines (the "agentic trap")
@@ -405,3 +498,6 @@ claude -p "prompt" --output-format json   # one-off with structured output
 - [Reviewer Agents](../concepts/reviewer-agents.md)
 - [Code-as-Text Structural Tests](../concepts/code-as-text-structural-tests.md)
 - [Harness Engineering](../concepts/harness-engineering.md)
+- [Smart Zone vs Dumb Zone](../concepts/smart-zone.md) — the context-discipline frame holding the Pocock pipeline together
+- [Deep Modules](../concepts/deep-modules.md) — architecture lever powered by `/improve-code-base-architecture`
+- [Matt Pocock](../people/matt-pocock.md) — pipeline author

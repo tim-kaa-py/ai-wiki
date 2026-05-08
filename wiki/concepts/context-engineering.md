@@ -10,7 +10,8 @@ sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
   - "summaries/2026-05-06_claude-code-docs_context-window.md"
   - "summaries/2026-05-06_claude-code-docs_memory.md"
-last_updated: "2026-05-06"
+  - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
+last_updated: "2026-05-08"
 ---
 
 # Context Engineering
@@ -26,6 +27,10 @@ Transformer attention is O(n²) over tokens. As context fills, each token gets a
 Pre-loading reference docs, chat history, and tool output into the system prompt is usually worse than loading nothing and retrieving on demand.
 
 Related failure mode documented in Anthropic's long-running-apps work (March 2026): **context anxiety** — models prematurely conclude work as their context fills. The window pressure itself biases the agent toward declaring "done."
+
+### Smart Zone vs Dumb Zone
+
+The operational shorthand for context rot, popularized by Dex Hardy and Matt Pocock: every session has a **smart zone** where the model still reasons well and a **dumb zone** where competence has degraded. Treat ~100K tokens as the practical ceiling for coding tasks regardless of advertised window size. Matt's framing on 1M context: "they shipped a lot more dumb zone" — the bigger window helps retrieval (sparse-attention) but not the dense reasoning coding requires. See [Smart Zone vs Dumb Zone](smart-zone.md) for the full operational discipline (`/clear` over `/compact`, exact-token status line, tiny system prompts).
 
 ## The "Right Altitude" for System Prompts
 
@@ -144,3 +149,4 @@ The hidden cost (from Debois's Q&A): the time you save by writing context instea
 - [Prompt Engineering for Claude](prompt-engineering-claude.md) — prior-era techniques
 - [Context Filter](context-filter.md) — WAF-style perimeter scanner for prompt injection in skills/agent.md
 - [AI SBOM](ai-sbom.md) — supply-chain bill of materials for context packages
+- [Smart Zone vs Dumb Zone](smart-zone.md) — operational ~100K threshold and `/clear` discipline

@@ -10,7 +10,8 @@ sources:
   - "summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
   - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-last_updated: "2026-05-05"
+  - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
+last_updated: "2026-05-08"
 ---
 
 # Agent Skills
@@ -129,6 +130,23 @@ Use forking when the skill should not see prior conversation, or when its execut
 
 The `` !`command` `` syntax in skill content runs a shell command **before Claude sees anything**; the output replaces the placeholder. This is preprocessing, not a Claude tool call. It lets a skill ship live data (PR diff, current branch, log tail) into the prompt without spending a tool turn.
 
+## Skill Kit as Owned Planning Stack (Pocock)
+
+Matt Pocock's pipeline (AI Engineer 2026) uses skills as the **owned planning stack** that replaces closed planning products — every stage of his grill-me → PRD → Kanban → loop pipeline is a project-local skill in `.claude/skills/`:
+
+| Skill | Stage | What it does |
+|-------|-------|--------------|
+| `grill-me` | Stage 1 | Tiny prompt body — "interview me relentlessly… one at a time… provide your recommended answer." Produces a shared design concept. |
+| `write-a-PRD` | Stage 2 | Generates the destination doc. Returns module list first, full prose second. |
+| `PRD-to-issues` | Stage 3 | Splits the PRD into vertical-slice Kanban issues with explicit `blocked_by:` relationships. |
+| `improve-code-base-architecture` | Architecture | Surfaces shallow-module clusters to collapse into [Deep Modules](deep-modules.md). |
+
+The thesis: planning is too important to outsource to a closed product, and skills are now expressive enough to own the stack repo-locally. Each skill is small, paste-able, and tunable — Matt's `grill-me` body is four sentences.
+
+Pairing this with [Claude Code Skills § Skill Authoring Patterns](../how-tos/claude-code-skills.md#skill-authoring-patterns), all four are **Playbook skills** (repeating procedures); none need `disable-model-invocation` because they have no side effects until the loop fires.
+
+See [Agentic Coding Workflow § The Pocock Pipeline](../how-tos/agentic-coding-workflow.md#the-pocock-pipeline-grill--prd--kanban--loop) for the end-to-end use.
+
 ## Relation to Broader Patterns
 
 Progressive disclosure generalizes beyond skills — it's the same pattern as MCP tool descriptions, lazy-loaded memory, and the [Harness Engineering](harness-engineering.md) principle of keeping context small. Skills are the Anthropic-productized version.
@@ -155,3 +173,6 @@ Plugins also bundle agents, hooks, MCP server definitions, LSP definitions, and 
 - [Context Filter](context-filter.md) — perimeter scanner for prompt injection in `skill.md` / `agent.md`
 - [AI SBOM](ai-sbom.md) — bill of materials for context packages
 - [Patrick Debois](../people/patrick-debois.md) — DevOps originator framing context as code
+- [Deep Modules](deep-modules.md) — `/improve-code-base-architecture` skill content
+- [PRD-as-Prompt Pattern](prd-as-prompt.md) — destination-doc generation via `/write-a-PRD`
+- [Matt Pocock](../people/matt-pocock.md) — skill-kit-as-planning-stack thesis

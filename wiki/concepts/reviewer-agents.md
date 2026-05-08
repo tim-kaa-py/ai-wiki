@@ -9,7 +9,8 @@ sources:
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
   - "summaries/2026-05-06_claude-code-docs_code-review.md"
   - "summaries/2026-05-06_claude-code-docs_ultrareview.md"
-last_updated: "2026-05-06"
+  - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
+last_updated: "2026-05-08"
 ---
 
 # Reviewer Agents
@@ -89,6 +90,31 @@ This prompt works even without an actually separate second stage — moving the 
 
 Practical implication for a persona harness: the persona doc and "what good looks like" bar is still valuable — that's precision guidance. But the conservatism lives in the filter stage, not the finding stage. *(Source: Anthropic, Claude Prompting Best Practices.)*
 
+## Fresh Context per Reviewer (Pocock)
+
+Matt Pocock's pipeline (AI Engineer 2026) makes the fresh-context principle concrete and load-bearing inside the AFK loop, not just inside CI:
+
+> "If you let the implementer also review, the review happens in the dumb zone after the implementation burned the smart zone."
+
+The reviewer must be a **separate agent invocation with its own clean context**, not a continuation of the implementer's session. This keeps the review inside the [smart zone](smart-zone.md) (~100K tokens) instead of operating on whatever sediment the implementation left behind.
+
+### Inverted Model Split
+
+A counter-intuitive operational consequence: **Sonnet for implementation, Opus for review.** Most teams instinctively put the bigger model on implementation; Matt argues the inverse — review is where you need the smarts, implementation can grind. Tying back to the same fresh-context point: a fresh-context Opus review on a Sonnet-implemented branch is qualitatively different from "the same Claude session reviewing what it just wrote."
+
+This pairs cleanly with the unresolved tension Matt names at [0:59:18]: "more code review under AI is unavoidable. I don't honestly know what the answer to this yet" — Ralph batched commits push toward bigger PRs; the keep-PRs-small dictum pushes the other way. The Pocock answer doesn't resolve that, but it does ensure the review that *does* happen runs in fresh context on the smarter model.
+
+In Sandcastle (his published TS library — see [Parallel Agent Patterns § Sandcastle](parallel-agent-patterns.md#pattern-4-sandcastle--worktreesandbox-afk-pipeline-pocock)), this is wired in directly: `model: "opus"` on the reviewer call, and the reviewer takes the branch as its sole input — no implementer history.
+
+### Push vs Pull for Coding Standards
+
+A representational decision sharper than "fresh context":
+
+- **Implementer pulls** — skills sit in repo; agent reaches for them.
+- **Reviewer gets pushed** — coding standards inlined into the review prompt verbatim.
+
+Why: a fresh-context reviewer can't be relied on to discover the "what good looks like" doc on its own. Push the standards into the prompt, even if it duplicates what's in `docs/review-personas/`. The duplication is intentional — it's the price of a clean reviewer context.
+
 ## QA Plans as the Product-Reviewer's Rubric
 
 For user-facing PRs, Ryan requires a QA plan — a checklist of features, critical user journeys, and required PR media (screenshots, recordings). The product-minded reviewer agent reads the QA plan + the attached media and asserts the plan was followed. This is what lets humans stop shoulder-surfing user-facing changes.
@@ -117,3 +143,6 @@ The `gh api` JSON severity counts (Code Review) and `claude ultrareview --json` 
 - [Code Review (Claude Code)](../how-tos/claude-code-review.md) — Anthropic's managed PR-review service
 - [Ultrareview](../how-tos/claude-code-ultrareview.md) — multi-agent verified bug-finding fleet
 - [Claude Routines](../tools/claude-routines.md) — the routines runtime that powers GitHub-event triggers
+- [Smart Zone](smart-zone.md) — why fresh-context reviewer beats self-review
+- [Parallel Agent Patterns](parallel-agent-patterns.md) — Sandcastle wires the fresh-context reviewer into AFK loops
+- [Matt Pocock](../people/matt-pocock.md) — fresh-context-per-reviewer + inverted model split

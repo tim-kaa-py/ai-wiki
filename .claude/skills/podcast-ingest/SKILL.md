@@ -200,7 +200,6 @@ Same as the standard CONNECT step in CLAUDE.md:
 - Search `wiki/` for overlapping tags and topics
 - Merge new information into relevant wiki pages
 - Create new wiki pages if a substantial new topic is introduced
-- Update `playbook.md` if actionable agentic coding practices appear
 - Report all changes
 
 ## Step 9 — Index & Log
