@@ -16,6 +16,8 @@
 | 2026-02-18 | [The 5 Levels of AI Coding (Nate B Jones)](summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md) | youtube | ai-coding, agentic-engineering, dark-factory, agentic-loop, software-engineering |
 | 2026-04-13 | [Claude Prompting Best Practices (Anthropic)](summaries/2026-04-13_anthropic_claude-prompting-best-practices.md) | docs | prompt-engineering, claude, agents, tool-use, thinking, agentic-engineering, best-practices |
 | 2026-04-14 | [Claude Routines Just Dropped, And It's Perfect (Nick Saraev)](summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md) | youtube | claude-code, agents, workflow, automation, how-to |
+| 2026-04-06 | [Planning In Claude Code Just Got a Huge Upgrade (Nate Herk)](summaries/2026-04-06_nate-herk_planning-in-claude-code-just-got-a-huge-upgrade.md) | youtube | claude-code, agents, workflow, planning, how-to |
+| 2026-04-24 | [Claude Code Ultraplan — Official Documentation (Anthropic)](summaries/2026-04-24_anthropic_claude-code-ultraplan-official-documentation.md) | docs | claude-code, planning, how-to, reference, workflow |
 | 2026-04-15 | [Optimize your terminal setup (Anthropic)](summaries/2026-04-15_claude-docs_optimize-your-terminal-setup.md) | docs | claude-code, terminal, configuration, how-to, reference |
 | 2026-04-13 | [GSD vs Superpowers vs Claude Code (Chase AI)](summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md) | youtube | claude-code, comparison, agents, workflow, gsd, superpowers, orchestration |
 | 2026-04-20 | [The ONLY Claude Design Guide You Should Watch (Chase AI)](summaries/2026-04-20_chase-ai_only-claude-design-guide-you-should-watch.md) | youtube | claude-design, claude-code, front-end, design-system, tutorial, workflow |
@@ -93,6 +95,9 @@
 - [Smart Zone](wiki/concepts/smart-zone.md) — concept: ~100K-token operational threshold even on 1M-context models, `/clear` over `/compact` discipline, exact-token status line, why bigger windows ship more dumb zone
 - [Deep Modules](wiki/concepts/deep-modules.md) — concept: Ousterhout's deep/shallow distinction with the AI-specific test-boundary + dependency-graph argument; `/improve-code-base-architecture` skill; design-interfaces / delegate-implementations rule; PRD module maps
 - [Matt Pocock](wiki/people/matt-pocock.md) — AI Hero educator; structured-Kanban variant of Ralph; Sandcastle author; key contributions, open problems he names, retracted earlier advice
+- [Code-as-Text Structural Tests](wiki/concepts/code-as-text-structural-tests.md) — concept: third testing tier (lints → structural → unit/integration); assertions run against source code as text to keep agent-authored codebases legible (Ryan Lopopolo, OpenAI)
+- [Reviewer Agents](wiki/concepts/reviewer-agents.md) — concept: persona-based agents (reliability, front-end, product, scalability) running in CI; convert repeated human review feedback into durable parallel artifacts
+- [Claude Code Ultra Plan](wiki/how-tos/claude-code-ultra-plan.md) — how-to: cloud-hosted multi-agent planner (Opus 4.6 + 3 explorers + critique); plan in browser, teleport back or execute remotely; CLI-only, GitHub-synced repo, Pro/Max subscription
 
 ## Understanding AI
 
