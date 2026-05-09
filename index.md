@@ -54,6 +54,7 @@
 | 2026-05-06 | [Find bugs with ultrareview (Anthropic)](summaries/2026-05-06_claude-code-docs_ultrareview.md) | docs | claude-code, ultrareview, code-review, multi-agent, cloud, pr-automation, research-preview |
 | 2026-04-24 | [Full Walkthrough: Workflow for AI Coding — Matt Pocock](summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md) | youtube | claude-code, workflow, prd, kanban, ralph-loop, deep-modules, context-engineering, dumb-zone, tdd, sandcastle |
 | 2026-04-30 | [FULL Guide to Becoming a Principled Agentic Engineer (Cole Medin)](summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md) | youtube | agentic-engineering, claude-code, workflow, planning, prompt-engineering |
+| 2026-05-02 | [Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban](summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md) | youtube | agents, agentic-coding-workflow, claude-code, codex, parallel-agents, plan-and-review, workflow, anti-patterns |
 
 ### Wiki Pages
 
@@ -103,6 +104,9 @@
 - [System Evolution](wiki/concepts/system-evolution.md) — concept: outer-loop AI-layer RCA pattern; bug = defect in rules/commands, not just code; rules/commands in source control with PR review as the compounding mechanism
 - [AI Layer](wiki/concepts/ai-layer.md) — concept: the rules + commands + skills triad as a unified, version-controlled artifact; the 3+ times rule; framework-skepticism vs. owned primitives
 - [Cole Medin](wiki/people/cole-medin.md) — AI engineering educator; self-evolving Claude Code memory adaptation of Karpathy's LLM wiki; principled-agentic-engineer pipeline (Ideate → PIV → Evolve)
+- [Plan and Review](wiki/concepts/plan-and-review.md) — concept: Knight-Webb's thesis-level frame; 5-min/30-min heuristic, work-type matrix (front-end vs back-end × feature vs migration), 5-minute threshold for parallelism, the four IDE jobs
+- [Focus Maxing](wiki/concepts/focus-maxing.md) — concept: Knight-Webb's named anti-pattern — tools that pull humans in/out of context every 30s; the failure mode the parallelism + tier-2 tooling agenda is the cure for
+- [Louis Knight-Webb](wiki/people/louis-knight-webb.md) — Vibe Kanban founder; coined "focus maxing"; author of the displacement argument and the 5-min/30-min heuristic
 
 ## Understanding AI
 
@@ -179,4 +183,4 @@
 
 ---
 
-**68 sources** | **70 wiki pages** | [Ingest Log](log.md)
+**69 sources** | **73 wiki pages** | [Ingest Log](log.md)

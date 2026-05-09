@@ -8,12 +8,23 @@ sources:
   - "summaries/2025-06-13_anthropic_multi-agent-research-system.md"
   - "summaries/2026-05-06_claude-code-docs_agent-teams.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+  - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
+last_updated: "2026-05-09"
 ---
 
 # Parallel Agent Patterns
 
 Two complementary patterns for running many Claude agents in parallel. They differ in coordination model — **lock-file agent teams** (flat, peer-to-peer) versus **orchestrator-worker** (hierarchical, single lead) — but share the same enabling constraints: parallelizable work, strong verification, and value that justifies high token cost.
+
+## Why Parallelism Becomes Necessary: The 5-Minute Threshold
+
+Louis Knight-Webb's framing (Vibe Kanban, AI Engineer 2026) gives the *trigger condition* for reaching for any of the patterns below: once a single agent run routinely exceeds **~5 minutes of wall-clock time**, single-stream workflows break.
+
+Run-length has been climbing fast — Copilot (seconds) → Cursor (~30s) → Claude Code 2024 (~1–2 min) → Claude Code 2025 (5–10 min). Humans can passively wait ~5 minutes (browse Twitter); beyond that, sitting and watching logs is wasteful enough to **destroy the productivity gain that long agent runs were supposed to deliver.** The fix is parallelism — the developer becomes a *manager of multiple parallel streams*, reviewing each in rotation rather than babysitting one.
+
+This is the **time-axis** counterpart to the **context-axis** [Smart Zone](smart-zone.md) ~100K threshold. Smart-zone discipline tells you when to clear; the 5-minute threshold tells you when to parallelize. Vibe Kanban is Knight-Webb's productized worktree-based instantiation, in the same family as Sandcastle (Pattern 4 below).
+
+The corollary is the [Focus Maxing](focus-maxing.md) anti-pattern — splitting tasks into 30-second prompts to keep yourself "in control" violates the threshold from below and produces the worst of both worlds: short runs *and* fragmented attention. The fix is to extend the run-length, not shorten it.
 
 ## Pattern 1: Agent Teams with Lock-File Coordination
 
@@ -115,6 +126,8 @@ See [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md) for the ful
 
 A TypeScript library for parallelized AFK ("Away From Keyboard") execution. Each Kanban issue runs in its own **git worktree** inside a **Docker sandbox**; the run loop is `planner → per-issue implementer → reviewer → merger`. Public TS library.
 
+> **Sibling instantiation:** **Vibe Kanban** (Louis Knight-Webb, BloopAI) implements the same family of pattern — worktree-based parallel agents with a Kanban-style review queue — but as an interactive UI rather than a TS library. Both target the [5-minute threshold](#why-parallelism-becomes-necessary-the-5-minute-threshold) condition above. The difference is shape: Sandcastle is a programmable AFK pipeline; Vibe Kanban is a real-time multi-stream review surface. Pick by whether your work is genuinely AFK or genuinely interactive.
+
 ### Pipeline
 
 ```typescript
@@ -200,3 +213,6 @@ When you can't, fall back to single-stream Ralph or the lock-file pattern.
 - [Smart Zone](smart-zone.md) — why each stage runs in its own fresh context
 - [Reviewer Agents](reviewer-agents.md) — fresh-context-per-reviewer principle Sandcastle implements
 - [Matt Pocock](../people/matt-pocock.md) — Sandcastle author
+- [Plan and Review](plan-and-review.md) — Knight-Webb's frame; the 5-minute threshold lives here
+- [Focus Maxing](focus-maxing.md) — the anti-pattern parallelism is the cure for
+- [Louis Knight-Webb](../people/louis-knight-webb.md) — Vibe Kanban author

@@ -163,3 +163,4 @@ The hidden cost (from Debois's Q&A): the time you save by writing context instea
 - [Context Filter](context-filter.md) — WAF-style perimeter scanner for prompt injection in skills/agent.md
 - [AI SBOM](ai-sbom.md) — supply-chain bill of materials for context packages
 - [Smart Zone vs Dumb Zone](smart-zone.md) — operational ~100K threshold and `/clear` discipline
+- [Plan and Review](plan-and-review.md) — Knight-Webb's time-axis discipline (5-minute threshold) that complements this context-axis frame

@@ -18,6 +18,7 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_how-claude-code-works.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
+  - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
 last_updated: "2026-05-09"
 ---
 
@@ -547,6 +548,58 @@ Cole's argument [04:53-06:43]: these frameworks bake opinionated end-to-end stra
 
 *(Source: Cole Medin)*
 
+## Plan and Review (Knight-Webb's Default Stance)
+
+Louis Knight-Webb (Vibe Kanban, AI Engineer 2026) gives the **thesis-level** justification for everything above: as AI accelerates coding, the displaced time migrates into planning and reviewing, and the workflow question is which side of that ledger you spend your time on, **per task**. Knight-Webb provides three operational handles that sit above the specific pipelines (Cherny's plan-mode, Pocock's grill→PRD, Medin's PIV).
+
+### The 5-Minute / 30-Minute Heuristic
+
+> **"5 minutes of planning saves 30 minutes of reviewing."**
+
+The default rule. When tempted to skip the plan, set a 5-minute timer for spec writing and ship the plan to the agent at the buzzer. It pays back in nearly all cases — the matrix below names the one that doesn't.
+
+### The Work-Type Matrix
+
+| | **Feature** | **Migration / Refactor** |
+|--|------------|--------------------------|
+| **Front-end** | **In-the-loop wins** — animations, interactions, styles, transitions; edge cases explode and can't be specced | Plan-heavy |
+| **Back-end** | Plan-heavy / near-TDD — well-defined I/O | Plan-heavy — the canonical case |
+
+**Front-end feature work is the named exception.** It is too stateful to spec exhaustively, so in-the-loop iteration is the lesser evil. Everything else: spec it, stay out of the loop.
+
+The deeper rule: **don't pick a workflow style and apply it everywhere.** Pick per task using the matrix.
+
+### The 5-Minute Threshold for Parallelism
+
+The wall-clock duration of a single agent run has been climbing: Copilot (seconds) → Cursor (~30s) → Claude Code 2024 (~1–2 min) → Claude Code 2025 (5–10 min). Humans can passively wait ~5 minutes; beyond that, single-stream workflows break.
+
+The fix is **parallel worktrees** (Vibe Kanban, Sandcastle, Cherny's two-pane setup). Once a task family routinely exceeds 5 minutes per run, run multiple agents in parallel and rotate review attention. See [Parallel Agent Patterns](../concepts/parallel-agent-patterns.md).
+
+This is the time-axis counterpart to the context-axis [Smart Zone](../concepts/smart-zone.md) ~100K threshold. Smart-zone tells you when to clear; the 5-minute threshold tells you when to parallelize.
+
+### The Latency-vs-Accuracy Trade
+
+Each tier of tooling raises run-length but improves accuracy: returning code (fast) → type-checker loop (slower) → Playwright/Chrome MCP for front-end QA (order of magnitude slower). Knight-Webb's framing: **the trade is worthwhile because the scarce resource is your time, not the agent's wall-clock.** Wire up the type-check loop; experiment with Playwright/Chrome MCP for front-end QA — Knight-Webb predicts it as the next major breakthrough within ~9 months from May 2026.
+
+### The Four Jobs of the New Coding-Agent IDE
+
+Most current tooling addresses **code generation** well and these four poorly:
+
+1. **Task writing / planning** — author the spec the agent runs from.
+2. **QA** — verify the change works, especially front-end behavior.
+3. **Code review** — stays a human job for anyone with money on the line.
+4. **Shepherding to deploy** — monitor PR comments, react to CI signals, drive "done" → "deployed."
+
+Audit your own setup; the weakest surface is usually shepherd-to-deploy or front-end QA. Invest there next.
+
+### Focus Maxing (Anti-Pattern)
+
+Knight-Webb explicitly coins **"focus maxing"** as an **anti-pattern, not an aspiration** — tools and workflows that pull a human in and out of context every 30 seconds to babysit short agent runs. The right tool design lets each agent run **as long as possible and yield back cleanly.** If a workflow forces you to check on an agent more than once every 5 minutes, redesign it. See [Focus Maxing](../concepts/focus-maxing.md).
+
+See [Plan and Review](../concepts/plan-and-review.md) for the full thesis page including the displacement argument and reconciliation with adjacent stances.
+
+*(Source: Louis Knight-Webb, Vibe Kanban — AI Engineer 2026)*
+
 ## Anti-Patterns to Avoid
 
 - Over-engineering prompt pipelines (the "agentic trap")
@@ -561,6 +614,8 @@ Cole's argument [04:53-06:43]: these frameworks bake opinionated end-to-end stra
 - **Trusting subjective AI productivity assessments** — the METR study shows developers are confidently wrong about both direction and magnitude of AI's impact on their speed *(Source: Nate B Jones / Dan Shapiro)*
 - **Using `--dangerously-skip-permissions`** — this is a blanket bypass with no granularity; use `/permissions` to pre-allow safe commands by pattern instead, and check `.claude/settings.json` into the team repo *(Source: Boris Cherny, Creator of Claude Code)*
 - **Skipping the verification feedback loop** — without tests/typecheck/lint in the loop, Claude is "basically guessing"; with a feedback loop quality is 2-3x higher *(Source: Boris Cherny, Creator of Claude Code)*
+- **Focus maxing** — tools and workflows that pull you in and out of context every 30 seconds to babysit short agent runs. Optimize for *contiguous* attention blocks, not 30-second bursts; redesign the harness if a workflow demands attention more than once every 5 minutes. See [Focus Maxing](../concepts/focus-maxing.md). *(Source: Louis Knight-Webb, Vibe Kanban)*
+- **Defaulting to one workflow style for all tasks** — plan-heavy is wrong for front-end feature work (too stateful); in-the-loop is wrong for everything else. Use [the work-type matrix](#the-work-type-matrix) per task, not as a global default. *(Source: Louis Knight-Webb, Vibe Kanban)*
 
 ## Related Pages
 
@@ -584,3 +639,6 @@ Cole's argument [04:53-06:43]: these frameworks bake opinionated end-to-end stra
 - [PIV Loop](../concepts/piv-loop.md) — per-ticket Plan-Implement-Validate primitive
 - [System Evolution](../concepts/system-evolution.md) — outer-loop AI-layer RCA pattern
 - [AI Layer](../concepts/ai-layer.md) — global rules + commands + skills as one unit
+- [Plan and Review](../concepts/plan-and-review.md) — Knight-Webb's thesis-level frame: 5-min/30-min, work-type matrix, time horizon
+- [Focus Maxing](../concepts/focus-maxing.md) — the named anti-pattern from Knight-Webb's talk
+- [Louis Knight-Webb](../people/louis-knight-webb.md) — Vibe Kanban founder; author of the plan-and-review framing

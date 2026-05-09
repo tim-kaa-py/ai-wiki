@@ -69,3 +69,4 @@ Smart-zone discipline is the underlying constraint that shapes the rest of Matt 
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — where smart-zone discipline fits in daily practice
 - [Reviewer Agents](reviewer-agents.md) — fresh-context-per-reviewer as a smart-zone application
 - [Matt Pocock](../people/matt-pocock.md) — popularized the framing
+- [Plan and Review](plan-and-review.md) — the time-axis counterpart (5-minute threshold) to this context-axis (~100K) discipline
