@@ -10,7 +10,8 @@ sources:
   - "summaries/2025-09-11_anthropic_writing-tools-for-agents.md"
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
-last_updated: "2026-04-21"
+  - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
+last_updated: "2026-05-09"
 ---
 
 # MCP (Model Context Protocol)
@@ -109,9 +110,36 @@ From David Soria Parra's AI Engineer talk (April 2026). Headline: June 2026 spec
 - **SDK v2 (TypeScript + Python).** Redesigned SDKs shipping with the June spec.
 - **Async task primitive.** Experimental slot for agent-to-agent communication. Few clients support it today; Anthropic plans to broaden support and refine semantics.
 
+## Atlassian MCP for Jira-Backed PIV Loops
+
+Cole Medin's principled-agentic-engineer pipeline (April 2026) is the canonical worked example of MCP-as-integration-backbone for established SDLCs where Jira is non-negotiable. The Atlassian MCP server is the seam between the [PIV loop](piv-loop.md) commands and the team's existing ticket system:
+
+| Command | Atlassian MCP usage |
+|---------|--------------------|
+| `/create-stories` | Pushes generated stories to Jira as tickets, with technical-notes added as ticket comments |
+| `/prime` | Reads ticket context for the picked issue(s); detects blockers and dependencies from Jira state |
+| `/implement` | Posts an implementation summary as a Jira comment and updates ticket status when work is complete |
+
+This is exactly the MCP-earns-its-cost case Parra describes above: the integration is **narrow, permissioned, and deterministic** (push/pull tickets, post comments) and benefits from MCP's strong-by-construction permission model. A 1:1 REST wrapper of the Atlassian API would underperform — but the actual usage here collapses multi-call workflows ("look up project, look up epic, create issue, set fields, attach technical notes") into single high-level command invocations.
+
+### Setup as a Claude Code task
+
+Cole's recommended setup approach is itself meta: *"Help me set up the Atlassian MCP server."* Claude Code searches the web, pulls the config, creates `mcp.json`, and wires up authentication. The setup is a Claude Code task, not a manual one. The point isn't that this is faster — it's that the bar for adding MCP servers to a project should be that low, given how often they're worth adding.
+
+### Operational notes from the talk
+
+- The implement command's auto-generated Jira comment is *too verbose* in Cole's current iteration [01:03:01]; he flags it as the natural first thing to tune as a team adopts the pipeline.
+- Local-only mode is supported by skipping the Jira args on `/create-stories` — useful for OSS projects or trial runs where you haven't earned the team buy-in to add a Jira step yet.
+
+This pattern generalizes: any ticket system or system-of-record (Linear, Asana, GitHub Issues, ServiceNow) can sit behind the same `/create-stories` → `/prime` → `/implement` chain via an appropriate MCP server. The pipeline is what's reusable; the MCP server is what adapts it to the team's reality.
+
+*(Source: Cole Medin)*
+
 ## Related
 
 - [Tool Design for Agents](./tool-design-for-agents.md) — principles for writing the tools that MCP exposes.
 - [Desktop Extensions (.mcpb)](../how-tos/desktop-extensions-mcpb.md) — packaging and enterprise deployment.
 - [Think Tool](./think-tool.md) — a reasoning tool that works well inside long MCP tool chains.
 - [MCP vs CLI](../comparisons/mcp-vs-cli.md) — per-capability decision framework.
+- [PIV Loop](./piv-loop.md) — the per-ticket workflow that consumes the Atlassian MCP server.
+- [Agentic Coding Workflow § The Cole Medin Pipeline](../how-tos/agentic-coding-workflow.md#the-cole-medin-pipeline-ideate--piv--evolve) — full pipeline context.

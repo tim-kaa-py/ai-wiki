@@ -53,6 +53,7 @@
 | 2026-05-06 | [Code Review (Anthropic)](summaries/2026-05-06_claude-code-docs_code-review.md) | docs | claude-code, code-review, github, multi-agent, pr-automation, review-md, claude-md, workflow |
 | 2026-05-06 | [Find bugs with ultrareview (Anthropic)](summaries/2026-05-06_claude-code-docs_ultrareview.md) | docs | claude-code, ultrareview, code-review, multi-agent, cloud, pr-automation, research-preview |
 | 2026-04-24 | [Full Walkthrough: Workflow for AI Coding — Matt Pocock](summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md) | youtube | claude-code, workflow, prd, kanban, ralph-loop, deep-modules, context-engineering, dumb-zone, tdd, sandcastle |
+| 2026-04-30 | [FULL Guide to Becoming a Principled Agentic Engineer (Cole Medin)](summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md) | youtube | agentic-engineering, claude-code, workflow, planning, prompt-engineering |
 
 ### Wiki Pages
 
@@ -98,6 +99,10 @@
 - [Code-as-Text Structural Tests](wiki/concepts/code-as-text-structural-tests.md) — concept: third testing tier (lints → structural → unit/integration); assertions run against source code as text to keep agent-authored codebases legible (Ryan Lopopolo, OpenAI)
 - [Reviewer Agents](wiki/concepts/reviewer-agents.md) — concept: persona-based agents (reliability, front-end, product, scalability) running in CI; convert repeated human review feedback into durable parallel artifacts
 - [Claude Code Ultra Plan](wiki/how-tos/claude-code-ultra-plan.md) — how-to: cloud-hosted multi-agent planner (Opus 4.6 + 3 explorers + critique); plan in browser, teleport back or execute remotely; CLI-only, GitHub-synced repo, Pro/Max subscription
+- [PIV Loop](wiki/concepts/piv-loop.md) — concept: Cole Medin's Plan-Implement-Validate inner loop; two-layer planning (project vs. task) in separate context windows; fresh-session firewall for `/implement`
+- [System Evolution](wiki/concepts/system-evolution.md) — concept: outer-loop AI-layer RCA pattern; bug = defect in rules/commands, not just code; rules/commands in source control with PR review as the compounding mechanism
+- [AI Layer](wiki/concepts/ai-layer.md) — concept: the rules + commands + skills triad as a unified, version-controlled artifact; the 3+ times rule; framework-skepticism vs. owned primitives
+- [Cole Medin](wiki/people/cole-medin.md) — AI engineering educator; self-evolving Claude Code memory adaptation of Karpathy's LLM wiki; principled-agentic-engineer pipeline (Ideate → PIV → Evolve)
 
 ## Understanding AI
 
@@ -174,4 +179,4 @@
 
 ---
 
-**67 sources** | **66 wiki pages** | [Ingest Log](log.md)
+**68 sources** | **70 wiki pages** | [Ingest Log](log.md)

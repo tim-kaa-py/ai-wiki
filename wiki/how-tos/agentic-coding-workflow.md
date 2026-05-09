@@ -17,7 +17,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_best-practices.md"
   - "summaries/2026-05-06_claude-code-docs_how-claude-code-works.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+  - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
+last_updated: "2026-05-09"
 ---
 
 # Agentic Coding Workflow
@@ -468,6 +469,84 @@ Matt names two open problems in his own pipeline:
 
 *(Source: Matt Pocock, AI Engineer 2026)*
 
+## The Cole Medin Pipeline (Ideate → PIV → Evolve)
+
+Cole Medin's principled-agentic-engineer system (April 2026) is a complete, productised SDLC built as a chain of Claude Code commands plus an Atlassian MCP backbone for Jira integration. Every step is a Markdown procedure file in `.claude/commands/`; the AI layer (rules + commands + skills) is checked into source control with PR review.
+
+```
+brain dump → /create-prd → /create-stories  →   pick ticket → /prime → /plan → fresh session → /implement
+                              (Atlassian MCP                                                        ↓
+                               → Jira)                                                          outer loop
+                                                                                            (system evolution)
+                                                                                                    ↑
+                                                                                       defect shipped or QA'd
+```
+
+### Three phases, two loops
+
+The whole system fits in **three phases**: Ideate (brain dump → PRD → stories) → [PIV](../concepts/piv-loop.md) (per-ticket plan-implement-validate, pronounced "pivot") → Evolve ([system evolution](../concepts/system-evolution.md), retroactive AI-layer RCA when the agent slips).
+
+Inside the three phases there are exactly **two loops**:
+
+- **Inner loop (PIV).** Mode of normal forward progress. Per-ticket plan-implement-validate, no system intervention.
+- **Outer loop (System Evolution).** Triggered when the agent ships a defect. Step *out* of the next PIV, patch the AI layer (rules / commands / on-demand context / plan-PRD templates), then re-enter PIV.
+
+### The command chain
+
+| Command | Phase | What it produces |
+|---------|-------|------------------|
+| `/create-prd <output-path>` | Ideate | A single PRD markdown file with executive summary, mission, target users, in-scope, out-of-scope, success criteria |
+| `/create-stories <prd-path> <project-id> <epic-id>` | Ideate | Stories saved as markdown AND pushed to Jira via Atlassian MCP (or local-only if you skip the Jira args) |
+| `/prime <ticket-ids>` | PIV (Plan) | Loads codebase context (recent commits, app routes, key features) + Jira-issue context for the picked ticket(s); detects blockers and dependencies |
+| `/plan <description or ticket id>` | PIV (Plan) | `plan.md` — summary, locked decisions, files to create/update, task list, self-validation strategy (lint / type / unit / integration / e2e) |
+| `/implement <plan-path>` | PIV (Implement + Validate) | **Always run in a fresh Claude session.** Branch + code + run validation + post implementation summary as Jira comment + open PR |
+
+### Two-layer planning [38:54]
+
+Project-level planning (PRD + stories) and task-level planning (`plan.md`) live in **separate context windows** with separate commands. Layer 1 is high-level (features, business logic, no code); layer 2 is in-the-weeds (codebase analysis, files to touch, validation strategy). Treat `/clear` as **mandatory** between the two — `plan.md` is the only thing that legitimately crosses. See [PIV Loop § Two-Layer Planning](../concepts/piv-loop.md#two-layer-planning-3854).
+
+### Fresh session for `/implement` [52:43]
+
+Even after a long, productive planning conversation, do not continue it for `/implement`. Open a new session, run `/implement plan.md`, and let the implementer re-derive intent from the artifact alone. Accumulated planning bias is the #1 cause of agents drifting from their own plan.
+
+The deeper rule: **artifacts are the only legitimate input.** PRD, stories, `plan.md`, Jira ticket — those are the inputs to the next stage. Conversation history is not. If you can't run a step from artifacts alone in a fresh session, the artifact is incomplete; iterate the command, not the conversation.
+
+### The 3+ times rule
+
+> Anytime you find yourself prompting something more than three times, it becomes a command or skill.
+
+Manual prompting on the fourth try is a smell. See [AI Layer § The 3+ Times Rule](../concepts/ai-layer.md#the-3-times-rule).
+
+### The outer loop — bug = defect in the AI layer [57:45]
+
+When the agent ships a defect, **do not start the next ticket.** Step out of PIV and run the [System Evolution](../concepts/system-evolution.md) outer-loop pass first. Cole's reusable trigger prompt:
+
+> *"Claude, you allowed this problem to creep into my codebase. Dive into your AI layer — your rules, commands, and skills, the workflow I brought you through — and identify things we could improve so this kind of issue doesn't happen again."*
+
+Ship the AI-layer-fix PR alongside the bug-fix PR. PR-review both. Skipping the AI-layer fix surrenders the compounding mechanism — every defect becomes a one-time cleanup instead of a permanent improvement to the layer.
+
+### Atlassian MCP for Jira shops
+
+The Atlassian MCP server is the integration backbone for teams where Jira is non-negotiable:
+
+- `/create-stories` writes tickets with technical-notes comments
+- `/prime` reads them and detects blockers / dependencies
+- `/implement` posts an implementation summary as a comment and updates ticket status
+
+**Set up via Claude Code itself:** *"Help me set up the Atlassian MCP server"* — Claude searches the web, pulls the config, creates `mcp.json`, sets it up. The setup itself is a Claude Code task, not a manual one. See [MCP § Atlassian MCP for Jira-backed PIV Loops](../concepts/mcp.md#atlassian-mcp-for-jira-backed-piv-loops).
+
+### Sub-agents as context buffers
+
+Cole's framing diverges from the common "sub-agents = parallelism" pitch: sub-agents exist primarily for **context budgeting**. A research task burns 30k–100k tokens; the parent only needs the 2k-token summary. With million-token windows now available, the discipline matters *more*, not less — *"just because you can fit a million tokens doesn't mean you should."* See [Context Engineering § Sub-Agents as Context Buffers](../concepts/context-engineering.md#sub-agents-as-context-buffers).
+
+### Why off-the-shelf frameworks (BMAD / GSD / Cloudflow / spec-kit) are wrong for established SDLCs
+
+Cole's argument [04:53-06:43]: these frameworks bake opinionated end-to-end strategies with their own conventions; established teams have processes they're not willing to throw out; the frameworks are bloated enough that adapting them is harder than starting simple.
+
+**Recommendation:** start with **simple primitives** (rules + commands + skills) and *grow* the system into the team's existing process. The simplicity is the point — it's the only path to ownership. This is the AI-layer counterpart to the [orchestration-layer skepticism](../comparisons/claude-code-orchestration-layers.md): same instinct, applied one layer down.
+
+*(Source: Cole Medin)*
+
 ## Anti-Patterns to Avoid
 
 - Over-engineering prompt pipelines (the "agentic trap")
@@ -501,3 +580,7 @@ Matt names two open problems in his own pipeline:
 - [Smart Zone vs Dumb Zone](../concepts/smart-zone.md) — the context-discipline frame holding the Pocock pipeline together
 - [Deep Modules](../concepts/deep-modules.md) — architecture lever powered by `/improve-code-base-architecture`
 - [Matt Pocock](../people/matt-pocock.md) — pipeline author
+- [Cole Medin](../people/cole-medin.md) — author of the Ideate → PIV → Evolve pipeline
+- [PIV Loop](../concepts/piv-loop.md) — per-ticket Plan-Implement-Validate primitive
+- [System Evolution](../concepts/system-evolution.md) — outer-loop AI-layer RCA pattern
+- [AI Layer](../concepts/ai-layer.md) — global rules + commands + skills as one unit

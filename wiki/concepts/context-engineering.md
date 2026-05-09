@@ -11,7 +11,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_context-window.md"
   - "summaries/2026-05-06_claude-code-docs_memory.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+  - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
+last_updated: "2026-05-09"
 ---
 
 # Context Engineering
@@ -127,6 +128,18 @@ Rules in `.claude/rules/` with `paths:` frontmatter only load when Claude reads 
 ```
 
 This is the practical instrument panel for the abstract context-engineering discipline above.
+
+## Sub-Agents as Context Buffers
+
+Cole Medin's framing (April 2026) diverges from the common "sub-agents = parallelism" pitch: for him, sub-agents exist primarily for **context budgeting**, not concurrency. A research task (codebase exploration, web search, dependency analysis) burns 30k–100k tokens; the parent agent only needs the 2k-token summary. Push the research into a sub-agent that burns those tokens in *its own* context window and returns a condensed result.
+
+The reframing has a corollary that matters more as windows grow:
+
+> *"They get overwhelmed just like people do. Just because you can fit a million tokens doesn't mean you should."* — Cole Medin
+
+A 1M-token window does **not** eliminate context overload — the dense-reasoning ceiling for coding stays roughly where it was (see [Smart Zone vs Dumb Zone](smart-zone.md) for Matt Pocock's parallel argument). The bigger the model's window gets, the more important explicit context-budgeting discipline becomes, because the *temptation* to dump everything in is greater.
+
+This complements the token-budget table above: the subagent's 6,100 tokens of file reads → 420-token summary back isn't merely "tidier" — it's an order-of-magnitude protection of the parent's smart zone. The architectural pattern is justified by the math, regardless of the advertised window size. *(Source: Cole Medin)*
 
 ## Relationship to Harness Engineering
 

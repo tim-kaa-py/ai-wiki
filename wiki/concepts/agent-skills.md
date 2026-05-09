@@ -11,7 +11,8 @@ sources:
   - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+  - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
+last_updated: "2026-05-09"
 ---
 
 # Agent Skills
@@ -147,6 +148,25 @@ Pairing this with [Claude Code Skills § Skill Authoring Patterns](../how-tos/cl
 
 See [Agentic Coding Workflow § The Pocock Pipeline](../how-tos/agentic-coding-workflow.md#the-pocock-pipeline-grill--prd--kanban--loop) for the end-to-end use.
 
+## Command Chain as Owned SDLC (Cole Medin)
+
+Cole Medin's principled-agentic-engineer system (April 2026) is the parallel worked example with a different emphasis: where Pocock owns the **planning stack** as repo-local skills, Cole owns the **whole SDLC** as a chain of repo-local **commands** in `.claude/commands/`. The talk uses commands rather than skills throughout — they predate skills in his workflow — but the conceptual claim ("the AI layer is rules + commands + skills, all in source control with PR review") generalizes to either Claude-Code-era primitive.
+
+| Command | SDLC stage | What it does |
+|---------|-----------|--------------|
+| `/create-prd` | Ideate | Brain dump → PRD with mission, in-scope, out-of-scope, success criteria |
+| `/create-stories` | Ideate | PRD → markdown stories pushed to Jira via the Atlassian MCP server |
+| `/prime` | PIV (Plan) | Loads codebase + Jira-issue context for the picked ticket(s); detects blockers |
+| `/plan` | PIV (Plan) | `plan.md` with locked decisions, files to touch, task list, validation strategy |
+| `/implement` | PIV (Implement + Validate) | Fresh session — branch, code, validate, post Jira comment, open PR |
+
+The thesis is the same as Pocock's, one layer up: **the SDLC is too important to outsource to a closed framework, and the AI layer (rules + commands + skills) is now expressive enough to own it repo-locally.** Two opinionated additions Cole brings:
+
+- **The 3+ times rule.** Anytime you find yourself prompting something more than three times, it becomes a command or skill. Manual prompting on the fourth try is a smell.
+- **PR-review the AI layer.** `.claude/` is in source control with the same review rigor as production code. A `CODEOWNERS` entry for the directory; reject command changes without a PR description naming the failure mode they address.
+
+See [AI Layer](ai-layer.md) for the unified rules + commands + skills concept and [Agentic Coding Workflow § The Cole Medin Pipeline](../how-tos/agentic-coding-workflow.md#the-cole-medin-pipeline-ideate--piv--evolve) for the end-to-end use.
+
 ## Relation to Broader Patterns
 
 Progressive disclosure generalizes beyond skills — it's the same pattern as MCP tool descriptions, lazy-loaded memory, and the [Harness Engineering](harness-engineering.md) principle of keeping context small. Skills are the Anthropic-productized version.
@@ -176,3 +196,5 @@ Plugins also bundle agents, hooks, MCP server definitions, LSP definitions, and 
 - [Deep Modules](deep-modules.md) — `/improve-code-base-architecture` skill content
 - [PRD-as-Prompt Pattern](prd-as-prompt.md) — destination-doc generation via `/write-a-PRD`
 - [Matt Pocock](../people/matt-pocock.md) — skill-kit-as-planning-stack thesis
+- [Cole Medin](../people/cole-medin.md) — command-chain-as-SDLC thesis
+- [AI Layer](ai-layer.md) — global rules + commands + skills as a unified concept
