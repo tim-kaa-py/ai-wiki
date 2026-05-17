@@ -2,7 +2,7 @@
 title: "Agent Skills"
 type: "concept"
 pillar: "building"
-tags: [agent-skills, claude, skills, progressive-disclosure, agents, mcp, claude-code, skills-as-packages, supply-chain]
+tags: [agent-skills, claude, skills, progressive-disclosure, agents, mcp, claude-code, skills-as-packages, supply-chain, memory]
 sources:
   - "summaries/2025-10-16_anthropic_agent-skills.md"
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
@@ -12,7 +12,8 @@ sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
-last_updated: "2026-05-09"
+  - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
+last_updated: "2026-05-17"
 ---
 
 # Agent Skills
@@ -171,6 +172,17 @@ See [AI Layer](ai-layer.md) for the unified rules + commands + skills concept an
 
 Progressive disclosure generalizes beyond skills — it's the same pattern as MCP tool descriptions, lazy-loaded memory, and the [Harness Engineering](harness-engineering.md) principle of keeping context small. Skills are the Anthropic-productized version.
 
+## Skills in Anthropic's Primitives Progression
+
+Mahes (Anthropic Platform team, May 2026) places Skills in a deliberate progression of Anthropic primitives — **MCP** (external tools/data) → **harnesses** like Claude Code and the Agent SDK → **Skills** (the October 2025 launch — agent- or human-authored capability packs) → **Memory** (continuous self-learning). The framing is that each primitive "gets out of the model's way" and hands the model more of its environment to manage:
+
+- **MCP** hands the model access to external systems.
+- **Harnesses** hand the model an orchestration loop.
+- **Skills** hand the model a packaged way to do a specific task.
+- **Memory** closes the loop on long-horizon improvement — what the previous primitives let the agent *do* once, memory lets the agent *learn* across runs.
+
+This is the cleanest external articulation of where Skills sit in Anthropic's primitive stack. Skills are also referenced as "**procedural memory**" inside the three-layer memory framing — they encode *how* to do things, alongside whatever declarative memory the file-system layer captures. See [Agent Memory Systems § The Platform View](agent-memory-systems.md#the-platform-view-memory-as-a-primitive-anthropic) for the full progression.
+
 ## Distribution: Standalone vs Plugin
 
 Skills travel through two channels in Claude Code:
@@ -198,3 +210,5 @@ Plugins also bundle agents, hooks, MCP server definitions, LSP definitions, and 
 - [Matt Pocock](../people/matt-pocock.md) — skill-kit-as-planning-stack thesis
 - [Cole Medin](../people/cole-medin.md) — command-chain-as-SDLC thesis
 - [AI Layer](ai-layer.md) — global rules + commands + skills as a unified concept
+- [Agent Memory Systems](agent-memory-systems.md) — the next primitive after Skills; same progressive-disclosure design lineage
+- [Dreaming](dreaming.md) — companion to memory; out-of-band consolidation pattern

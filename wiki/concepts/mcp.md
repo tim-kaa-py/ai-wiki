@@ -11,7 +11,8 @@ sources:
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
-last_updated: "2026-05-09"
+  - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
+last_updated: "2026-05-17"
 ---
 
 # MCP (Model Context Protocol)
@@ -135,6 +136,10 @@ This pattern generalizes: any ticket system or system-of-record (Linear, Asana, 
 
 *(Source: Cole Medin)*
 
+## MCP's Place in the Primitives Progression
+
+Mahes (Anthropic Platform team, May 2026) places MCP as the **first** in a deliberate progression of Anthropic primitives — **MCP** (external tools/data) → **harnesses** like Claude Code and the Agent SDK → **[Agent Skills](agent-skills.md)** (October 2025 — agent- or human-authored capability packs) → **[Memory](agent-memory-systems.md)** (May 2026 — continuous self-learning). Each primitive "gets out of the model's way" and hands the model more of its environment to manage; MCP is the entry point in the stack, the one that hands the model access to external systems. See [Agent Memory Systems § The Platform View](agent-memory-systems.md#the-platform-view-memory-as-a-primitive-anthropic) for the full progression.
+
 ## Related
 
 - [Tool Design for Agents](./tool-design-for-agents.md) — principles for writing the tools that MCP exposes.
@@ -143,3 +148,5 @@ This pattern generalizes: any ticket system or system-of-record (Linear, Asana, 
 - [MCP vs CLI](../comparisons/mcp-vs-cli.md) — per-capability decision framework.
 - [PIV Loop](./piv-loop.md) — the per-ticket workflow that consumes the Atlassian MCP server.
 - [Agentic Coding Workflow § The Cole Medin Pipeline](../how-tos/agentic-coding-workflow.md#the-cole-medin-pipeline-ideate--piv--evolve) — full pipeline context.
+- [Agent Skills](agent-skills.md) — the next primitive after MCP in Anthropic's progression.
+- [Agent Memory Systems](agent-memory-systems.md) — the May 2026 capstone of the primitives progression.

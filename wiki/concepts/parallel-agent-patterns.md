@@ -2,14 +2,15 @@
 title: "Parallel Agent Patterns"
 type: "concept"
 pillar: "building"
-tags: [agent-teams, parallel-agents, multi-agent, orchestrator-worker, claude-code, verification]
+tags: [agent-teams, parallel-agents, multi-agent, orchestrator-worker, claude-code, verification, memory, dreaming]
 sources:
   - "summaries/2026-02-05_anthropic_building-c-compiler.md"
   - "summaries/2025-06-13_anthropic_multi-agent-research-system.md"
   - "summaries/2026-05-06_claude-code-docs_agent-teams.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
-last_updated: "2026-05-09"
+  - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
+last_updated: "2026-05-17"
 ---
 
 # Parallel Agent Patterns
@@ -203,6 +204,22 @@ When you can't, fall back to single-stream Ralph or the lock-file pattern.
 - **Keep coordination thin.** Lock files or lead-agent dispatch — not elaborate messaging protocols.
 - **Most effort is not in the agent.** It's in tests, tool descriptions, and the evaluation loop.
 
+## Shared Memory Across the Fleet
+
+Once you have many agents running in parallel, *shared state* becomes its own problem. The lock-file pattern uses Git as the coordination surface; orchestrator-worker keeps workers transient; agent teams add a shared task list and mailbox. But none of those address the *learning* question: how do agents share what they discover with the next batch and with each other?
+
+Anthropic's May 2026 memory work (Mahes, Platform team) gives this its own primitive layer with three multi-agent-specific concerns:
+
+| Concern | Mechanism | When it matters |
+|---------|-----------|-----------------|
+| **Access control** | Permission scopes per memory store. Canonical pattern: read-only org-wide knowledge + read-write per-task working memory. | Any setup where some agents shouldn't be able to overwrite shared knowledge — i.e., most multi-agent deployments. |
+| **Concurrent writes** | Optimistic concurrency: content-hash preconditions; mismatched writes rejected. | Hundreds-to-thousands of agents writing the same store. Locks would serialize; OCC lets them race and retry. |
+| **Cross-session patterns** | **[Dreaming](dreaming.md)** — out-of-band consolidator that mines transcripts across sessions. Surfaces patterns invisible from any one session ("five agents all hit the same 60-second retry"). | Past the point where ad-hoc on-task writes can't keep the store coherent. |
+
+The architectural point: a working agent only sees its own session. Cross-agent patterns are **invisible from inside any one session** — they only exist when you look at a corpus of sessions together. Dreaming is the named instantiation of the out-of-band consolidator that owns that perspective; the same pattern is buildable without the product (cron job + single agent reading N transcripts → diff against memory store).
+
+**Practical implication for the patterns above:** Carlini's 16-agent lock-file C compiler, Anthropic's orchestrator-worker research system, Claude Code agent teams, and Sandcastle's worktree pipeline all benefit from a separate consolidation pass over recent transcripts — even when each individual agent's task is well-bounded. The consolidator is what keeps a shared memory store usable past the toy-deployment phase. See [Agent Memory Systems § The Platform View](agent-memory-systems.md#the-platform-view-memory-as-a-primitive-anthropic) and [Dreaming](dreaming.md).
+
 ## Related Pages
 
 - [Agent Orchestration Patterns](agent-orchestration-patterns.md) — the five canonical patterns these instantiate
@@ -216,3 +233,5 @@ When you can't, fall back to single-stream Ralph or the lock-file pattern.
 - [Plan and Review](plan-and-review.md) — Knight-Webb's frame; the 5-minute threshold lives here
 - [Focus Maxing](focus-maxing.md) — the anti-pattern parallelism is the cure for
 - [Louis Knight-Webb](../people/louis-knight-webb.md) — Vibe Kanban author
+- [Agent Memory Systems](agent-memory-systems.md) — multi-agent memory primitives: permission scopes, OCC, version history
+- [Dreaming](dreaming.md) — out-of-band consolidator that owns the cross-session perspective

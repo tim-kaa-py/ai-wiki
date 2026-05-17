@@ -2,7 +2,7 @@
 title: "Harness Engineering"
 type: "concept"
 pillar: "understanding"
-tags: [harness-engineering, agents, agent-architecture, orchestration, evaluation, prompt-engineering, context-engineering, meta-harness, nlh, dspy]
+tags: [harness-engineering, agents, agent-architecture, orchestration, evaluation, prompt-engineering, context-engineering, meta-harness, nlh, dspy, memory, dreaming]
 sources:
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
   - "summaries/2024-12-19_anthropic_building-effective-agents.md"
@@ -18,7 +18,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_how-claude-code-works.md"
   - "summaries/2026-05-06_claude-code-docs_features-overview.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+  - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
+last_updated: "2026-05-17"
 ---
 
 # Harness Engineering
@@ -195,6 +196,7 @@ The harness-engineering discipline has a documented lineage in Anthropic's own e
 | 2025-11-26 | Effective harnesses for long-running agents | **Initializer / coding agent split** — initializer writes `init.sh`, progress file, and a 200+ failing-feature checklist; coding agent picks one feature at a time. Commit-per-feature as the cross-window persistence layer. **Puppeteer MCP** for E2E verification over unit tests |
 | 2026-03-24 | Harness design for long-running apps | **GAN-style Planner / Generator / Evaluator** harness. Named **context anxiety** and **self-evaluation bias**. Introduced **sprint contracts**. Documented the 20× cost delta ($200 vs $9) for generator-evaluator runs |
 | 2026-04-15 | Scaling managed agents | **Brain / Hands / Session decoupling** — OS-style virtualization of the agent. Credentials outside the sandbox, lazy container provisioning (-90% p95 TTFT). See [Claude Managed Agents](../tools/claude-managed-agents.md) |
+| 2026-05-08 | Memory and dreaming for self-learning agents | **Memory as a primitive** alongside MCP / harnesses / Skills. File-system memory the model curates with bash/grep (Opus 4.7 SOTA). Multi-agent: permission scopes, optimistic concurrency, version history, portable API. **Dreaming**: out-of-band batch consolidator that mines transcripts for cross-agent patterns. See [Agent Memory Systems](agent-memory-systems.md), [Dreaming](dreaming.md) |
 
 ## Context Engineering Inside the Harness
 
@@ -339,6 +341,20 @@ Matt's compressed framing of why every loop in this section earns its place: **f
 
 These all converge on the same operational rule: invest in feedback before you invest in capability. *(Source: Matt Pocock, AI Engineer 2026)*
 
+## One Objective Per Agent: The Memory-Curation Split
+
+A harness-design principle Anthropic's May 2026 memory work makes explicit: **agents perform best with one clear objective at a time.** Adding a second objective dilutes the first.
+
+Mahes's framing applies this to memory: a working agent shouldn't *also* be curating the shared memory store. "Complete this task" and "keep the shared memory store coherent" trade off against each other, and the trade-off favors the urgent objective (the task) over the durable one (the store quality). Outsource memory quality into its own agent loop with its own success criterion — the **[Dreaming](dreaming.md)** pattern.
+
+The principle generalizes. Three convergent arguments push the same direction for any "agent does X *and also* curates Y" setup:
+
+- **Perspective** — a working agent sees only its own session; cross-session patterns require a consolidator that operates *above* sessions.
+- **Harness design** — one objective per agent; splitting them lets each have its own success criterion.
+- **Latency / compute** — curation benefits from exploratory token spend; the task's hot path cannot afford that latency.
+
+The architectural take-away: **whenever you find a harness asking one agent to do task work and quality work in the same loop, that's a candidate for splitting.** Same logic that drives [Reviewer Agents](reviewer-agents.md), Anthropic's [Generator-Evaluator Harness](generator-evaluator-harness.md), and the [Sandcastle](parallel-agent-patterns.md#pattern-4-sandcastle--worktreesandbox-afk-pipeline-pocock) reviewer/merger split.
+
 ## Re-Audit on Model Upgrade: Opus 4.7 Example
 
 When upgrading the model inside your harness, re-audit prompts that encoded workarounds for the *prior* model. Anthropic's Opus 4.7 guidance (April 2026) gives a concrete case: review harnesses tuned for Opus 4.6 with prompts like "only report high-severity issues" or "be conservative" *still work* on 4.7 but now over-filter — Opus 4.7 follows the conservatism more literally, investigating just as thoroughly and then dropping real findings below the stated bar. Measured recall falls even though capability improved (+11pp on Anthropic's bug-finding eval). The fix is harness-side, not model-side: split coverage from filtering across two stages, and keep the conservatism only in the filter stage. See [Reviewer Agents](reviewer-agents.md) for the concrete split.
@@ -361,3 +377,5 @@ Generalization: every prompt in the harness encodes an assumption about the prio
 - [Smart Zone](smart-zone.md) — the operational frame Pocock's harness is built around
 - [Parallel Agent Patterns](parallel-agent-patterns.md) — Sandcastle as a worked example
 - [Matt Pocock](../people/matt-pocock.md) — author of the structured Ralph variant
+- [Agent Memory Systems](agent-memory-systems.md) — memory primitive at platform scale; permission scopes, OCC, audit
+- [Dreaming](dreaming.md) — operationalization of "one objective per agent" applied to memory curation

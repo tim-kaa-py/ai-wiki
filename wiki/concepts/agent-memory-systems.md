@@ -2,9 +2,10 @@
 title: "Agent Memory Systems: Storage / Injection / Recall"
 type: "concept"
 pillar: "building"
-tags: [memory, agents, claude-code, context-engineering, hooks, best-practices]
+tags: [memory, agents, claude-code, context-engineering, hooks, best-practices, managed-agents, multi-agent, dreaming]
 sources:
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
+  - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
 last_updated: "2026-05-17"
 ---
 
@@ -119,6 +120,58 @@ Both ride the hooks surface; both apply the storage/injection/recall lens; they 
 4. **Treat injection as a fixed per-session token budget.** Frozen snapshots cached at ~1,300–3,000 tokens are cheap; uncapped snippet files are not.
 5. **Build recall in tiers,** cheapest check first. In-context check → fast index → expand → raw transcript.
 
+## The Platform View: Memory as a Primitive (Anthropic)
+
+The Simon Scrapes lens above is the **user's framework** for evaluating memory plug-ins inside a single agent's context. Anthropic's May 2026 framing (Mahes, PM on the Platform team) adds the **platform view**: memory as an architectural primitive on par with MCP, harnesses, and Skills — what a managed-agent platform owes its operators when memory has to scale across hundreds of agents sharing state.
+
+### The Primitives Progression
+
+Mahes places memory in a deliberate progression: **MCP** (external tools/data) → **harnesses** like Claude Code and the Agent SDK → **[Skills](agent-skills.md)** (agent- or human-authored capability packs) → **Memory** (continuous self-learning). Each primitive "gets out of the model's way" and hands the model more of its environment to manage. Memory is the one that closes the loop on long-horizon improvement — the others let agents *act*; memory lets agents *learn*.
+
+### Memory as a File System (vs. a Tool Call)
+
+Anthropic's design progression mirrors the rest of the wiki's [Harness Engineering](harness-engineering.md) thesis:
+
+1. **`CLAUDE.md`** — a single file the agent and user both wrote to. Cheap, no API; ceiling is "one file."
+2. **Memory tool** — a well-specified tool call with fixed parameters. Stronger schema, but every constraint is a ceiling on what the model can express.
+3. **File-system memory** — model manages a hierarchical directory with **bash** and **grep**, the same tools that make it good at agentic coding. Claude Opus 4.7 is cited as state-of-the-art at this specifically.
+
+The argument is delegation: if Claude can manage a virtual file system, don't over-constrain memory's schema — let the model decide what to remember, how to split it, and how to keep it organized. This is the same "give the model what it wants" rule [Notion crystallized for tool format](harness-engineering.md#give-the-model-what-it-wants), applied to memory.
+
+### Multi-Agent Concerns That a Local Memory Plug-in Doesn't Touch
+
+When the same memory store is read and written by many concurrent agents — Anthropic itself runs hundreds-to-thousands — three concerns appear that the Simon framework above doesn't address:
+
+| Concern | Anthropic's mechanism |
+|---------|----------------------|
+| **Access control** | **Permission scopes per store.** Canonical pattern: read-only access to an org-wide runbook/best-practices store + read-write access to a per-task working store. Prevents the "juniors overwriting runbooks" failure mode without a separate retrieval pipeline. |
+| **Concurrent writes** | **Optimistic concurrency via content-hash preconditions.** Writes verify the precondition hash; if another agent has written in the meantime, the update is rejected rather than silently clobbering. Classic OCC applied to the memory API. |
+| **Provenance / audit** | **Version history with attribution metadata** — every mutation logged with which agent, which session, when, the diff. The agent can also be granted access to its own audit log so it can reason about *how* memory got to its current state, not just *what* it says. |
+| **Portability** | **Standalone API exposed independently of the managed-agent runtime** — for PII scanning, cleanup pipelines, cloning, external curation. Customer-driven requirement. |
+
+These aren't optional for an enterprise fleet. They're the access-control / concurrency / audit primitives that make memory safe across a multi-agent fleet — the equivalent of moving from "write to a shared text file" to "write to a database with ACLs and transactions."
+
+### Three Layers, Including a Process Layer
+
+Anthropic separates a frontier memory system into three layers:
+
+| Layer | What it covers |
+|-------|----------------|
+| **Storage** | Where data lives, metadata, attribution, version history |
+| **Structure / content** | How memory is shaped (file system; [Skills](agent-skills.md) as procedural memory) |
+| **Process** | When memory is updated, what triggers updates, what sources inform them |
+
+The Simon framework above lives mostly in the *structure/content* layer (what's in the snapshot? what does recall return?). The platform view adds the *process* layer — and **Dreaming** is its named instantiation. See [Dreaming](dreaming.md) for the out-of-band consolidation pattern that keeps a shared memory store usable past the toy-deployment phase.
+
+### How the Two Frames Compose
+
+The user's storage/injection/recall lens and Anthropic's storage/structure/process lens are not competing — they target different scales of the same problem:
+
+- **Single-agent / single-user (Simon's lens):** the question is "what does *this* session see, and how does it recall the rest?" Injection and recall are the levers.
+- **Multi-agent / shared store (Anthropic's lens):** the question is "what does the *fleet* see, and how does it stay coherent?" Permission scopes, optimistic concurrency, and a process layer become load-bearing.
+
+A small deployment can ignore the platform-view machinery. A large one needs both — Hermes-style curated injection inside each session, plus Dreaming-style consolidation across sessions.
+
 ## Related Pages
 
 - [Claude Code Hooks for Memory](../how-tos/claude-code-hooks-memory.md) — hooks reference and Cole Medin's compounding-wiki pattern
@@ -126,3 +179,7 @@ Both ride the hooks surface; both apply the storage/injection/recall lens; they 
 - [Smart Zone vs Dumb Zone](smart-zone.md) — operational ceiling that makes lean injection worth the engineering
 - [LLM Wiki Pattern](llm-wiki-pattern.md) — Cole Medin's adjacent compounding-knowledge pattern
 - [Claude Code](../tools/claude-code.md) — the harness that hosts the hook surface
+- [Dreaming](dreaming.md) — out-of-band consolidation; the process-layer pattern for multi-agent memory
+- [Claude Managed Agents](../tools/claude-managed-agents.md) — the platform that ships memory as a primitive with permission scopes, OCC, and a portable API
+- [Agent Skills](agent-skills.md) — Anthropic's prior primitive; Mahes positions memory as the successor in the same tier
+- [Harness Engineering](harness-engineering.md) — the discipline whose "give the model what it wants" rule justifies file-system memory over a structured tool call

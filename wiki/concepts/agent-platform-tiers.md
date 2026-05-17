@@ -2,12 +2,13 @@
 title: "Agent Platform Tiers (Build-to-Buy Spectrum)"
 type: "concept"
 pillar: "ecosystem"
-tags: [managed-agents, agent-frameworks, infrastructure, comparison, agents, sandbox, harness, harness-engineering, strategy]
+tags: [managed-agents, agent-frameworks, infrastructure, comparison, agents, sandbox, harness, harness-engineering, strategy, memory]
 sources:
   - "summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md"
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
   - "summaries/2026-04-15_anthropic_scaling-managed-agents.md"
-last_updated: "2026-04-20"
+  - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
+last_updated: "2026-05-17"
 ---
 
 # Agent Platform Tiers (Build-to-Buy Spectrum)
@@ -48,6 +49,8 @@ Migration cost scales with how much state the vendor owns. That is why moving of
 
 **The harness surface is the one whose value changed most in 2026.** Stanford and LangChain documented a 6x performance variation attributable to the harness alone, and an optimized harness transfers across five models and improves all of them (see [Harness Engineering](harness-engineering.md)). That reframes the Tier-3+ decision: ceding "harness" is no longer ceding orchestration glue — it's ceding the reusable, compounding asset that often matters more than model choice.
 
+**The memory surface is the one whose value changed most in May 2026.** Anthropic's memory-as-primitive launch (public beta, May 2026) reframes the *memory* lock-in surface the same way harness engineering reframed the harness surface. Memory used to mean "a JSON blob your agent reads and writes." It now means: file-system memory the model curates with bash/grep, permission scopes per store, optimistic concurrency via content-hash preconditions, version history with attribution, **and** an out-of-band consolidator ([Dreaming](dreaming.md)) that mines transcripts for cross-agent patterns. Building all of that yourself at Tier 1-2 is non-trivial. Mahes's framing (Anthropic Platform team): memory belongs in the same architectural tier as MCP, harnesses, and Skills — and the most sought-after enterprise feature on top of it is the version-history/attribution layer, not the storage itself. The Tier-3+ trade now cedes a substantially larger surface than the April-2026 launch suggested. See [Claude Managed Agents § Memory](../tools/claude-managed-agents.md#memory-public-beta-may-2026) and [Agent Memory Systems § The Platform View](agent-memory-systems.md#the-platform-view-memory-as-a-primitive-anthropic).
+
 ## Decision Heuristics
 
 Run these four checks in order. The first hard constraint narrows the tier; only then compare vendors within that tier.
@@ -87,3 +90,5 @@ See [Managed Agent Platforms](../comparisons/managed-agent-platforms.md) for the
 - [Claude Routines](../tools/claude-routines.md) — Claude Code's own Tier-3-ish managed execution for routines
 - [Claude Routines vs n8n](../comparisons/claude-routines-vs-n8n.md) — Tier 3 vs Tier 4 in practice
 - [Harness Engineering](harness-engineering.md) — what the "harness" lock-in surface actually is, and why it is increasingly the asset worth protecting
+- [Agent Memory Systems](agent-memory-systems.md) — what the "memory" lock-in surface looks like at platform scale
+- [Dreaming](dreaming.md) — the out-of-band consolidation pattern that makes the memory surface load-bearing at fleet scale
