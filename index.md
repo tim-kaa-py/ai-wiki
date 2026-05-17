@@ -28,6 +28,7 @@
 | 2026-04-19 | [VSCode Hotkey: Launch Claude Code in Editor Tab](summaries/2026-04-19_self_vscode-claude-code-hotkey.md) | articles | claude-code, vscode, configuration, workflow, how-to, reference |
 | 2026-03-25 | [Claude Code auto mode (Anthropic)](summaries/2026-03-25_anthropic_claude-code-auto-mode.md) | articles | claude-code, permissions, auto-mode, safety, prompt-injection, classifier |
 | 2026-02-05 | [Building a C compiler with parallel Claudes (Anthropic)](summaries/2026-02-05_anthropic_building-c-compiler.md) | articles | agent-teams, parallel-claude, claude-code, autonomous, multi-agent |
+| 2026-05-16 | [3 Claude Memory Systems to Get You Ahead of 99% of People (Simon Scrapes)](summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md) | youtube | claude-code, agents, workflow, memory, best-practices, hooks, context-engineering |
 | 2025-11-04 | [Code execution with MCP (Anthropic)](summaries/2025-11-04_anthropic_code-execution-with-mcp.md) | articles | mcp, code-execution, agents, context-management, progressive-disclosure |
 | 2025-10-20 | [Claude Code sandboxing (Anthropic)](summaries/2025-10-20_anthropic_claude-code-sandboxing.md) | articles | claude-code, sandbox, security, permissions, bubblewrap, seatbelt |
 | 2025-10-16 | [Agent Skills (Anthropic)](summaries/2025-10-16_anthropic_agent-skills.md) | articles | agent-skills, claude, skills, progressive-disclosure, mcp |

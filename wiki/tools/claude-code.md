@@ -35,7 +35,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_features-overview.md"
   - "summaries/2026-05-06_claude-code-docs_context-window.md"
   - "summaries/2026-05-06_claude-code-docs_best-practices.md"
-last_updated: "2026-05-06"
+  - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
+last_updated: "2026-05-17"
 ---
 
 # Claude Code
@@ -287,6 +288,10 @@ The pre-compact and session-end hooks call the **Claude Agent SDK** as a separat
 A daily **flush** process then promotes accumulated session logs into structured wiki pages — extracting concepts, connections, and decisions. This creates the compounding loop: every conversation makes the next one more informed. *(Source: Cole Medin)*
 
 See [Claude Code Hooks for Memory](../how-tos/claude-code-hooks-memory.md) for the full implementation guide.
+
+### Audit Default Automemory Against Storage/Injection/Recall
+
+Simon Scrapes' three-question framework (**storage / injection / recall** — see [Agent Memory Systems](../concepts/agent-memory-systems.md)) is the diagnostic to apply to Claude Code's defaults. The honest verdict: automemory writes silently to per-project MD files, injects `claude.md` + a pre-tool-use hook lookup, and has effectively **no recall mechanism** beyond trawling past sessions or `--resume` with a known session ID. **Recall is the weak link.** For multi-client / multi-project work, audit `~/.claude/memory/` to see how little is actually captured, then layer open-source memory plug-ins on top — memarch's `Stop` hook for complete turn-by-turn capture into a local vector DB, plus Hermes-style curated `memory.md` / `user.md` injected as a ~1,300-token frozen snapshot at session start. *(Source: Simon Scrapes)*
 
 ## Routines: Autonomous Scheduled Agents
 
@@ -585,6 +590,7 @@ Contrast with the hierarchical **orchestrator-worker** pattern of the multi-agen
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md)
 - [Obsidian](obsidian.md)
 - [Claude Code Hooks for Memory](../how-tos/claude-code-hooks-memory.md)
+- [Agent Memory Systems](../concepts/agent-memory-systems.md) — storage/injection/recall framework + memarch/Hermes hybrid blueprint
 - [Claude Code Status Line Setup](../how-tos/claude-code-status-line.md)
 - [Auto Research](../concepts/auto-research.md)
 - [Agent Platform Tiers](../concepts/agent-platform-tiers.md) — where Claude Code sits (off-spectrum: an agent product, not a platform)

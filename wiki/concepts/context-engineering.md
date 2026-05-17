@@ -12,7 +12,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_memory.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
-last_updated: "2026-05-09"
+  - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
+last_updated: "2026-05-17"
 ---
 
 # Context Engineering
@@ -141,6 +142,12 @@ A 1M-token window does **not** eliminate context overload — the dense-reasonin
 
 This complements the token-budget table above: the subagent's 6,100 tokens of file reads → 420-token summary back isn't merely "tidier" — it's an order-of-magnitude protection of the parent's smart zone. The architectural pattern is justified by the math, regardless of the advertised window size. *(Source: Cole Medin)*
 
+## Memory Systems as a Context-Engineering Surface
+
+Simon Scrapes (May 2026) frames any agent memory system around three questions — **storage, injection, recall** — and the framework is, at its core, a context-engineering lens. *Injection* is the fixed per-session token cost a memory layer imposes; *recall* is the on-demand retrieval cost. Lean injection (a curated ~1,300-token frozen snapshot, cached) beats fat injection (30k tokens of raw history) for the same reason just-in-time retrieval beats RAG pre-loading: the goal is "load the right small thing at the right time," not "load more."
+
+The pattern of tiered recall — Tier 0 in-context check → vector/keyword index → expansion → raw transcript — is the memory-system specialization of just-in-time retrieval: each tier costs more tokens, descend only when the cheaper tier fails. See [Agent Memory Systems](agent-memory-systems.md) for the storage/injection/recall framework, Simon's three-system comparison (Claude Code automemory vs memarch vs Hermes), and the hybrid blueprint. *(Source: Simon Scrapes)*
+
 ## Relationship to Harness Engineering
 
 Context engineering is the middle of the three eras (prompt → context → harness). Harness engineering absorbs context engineering — the harness is where compaction, note-taking, and sub-agent delegation are actually wired. See [Harness Engineering](harness-engineering.md) for the bigger picture.
@@ -164,3 +171,4 @@ The hidden cost (from Debois's Q&A): the time you save by writing context instea
 - [AI SBOM](ai-sbom.md) — supply-chain bill of materials for context packages
 - [Smart Zone vs Dumb Zone](smart-zone.md) — operational ~100K threshold and `/clear` discipline
 - [Plan and Review](plan-and-review.md) — Knight-Webb's time-axis discipline (5-minute threshold) that complements this context-axis frame
+- [Agent Memory Systems](agent-memory-systems.md) — storage/injection/recall framework applied to runtime memory layers

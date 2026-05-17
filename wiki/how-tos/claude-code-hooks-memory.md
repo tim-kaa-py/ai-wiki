@@ -9,7 +9,8 @@ sources:
   - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
   - "summaries/2026-05-06_claude-code-docs_hooks-guide.md"
   - "summaries/2026-05-06_claude-code-docs_memory.md"
-last_updated: "2026-05-06"
+  - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
+last_updated: "2026-05-17"
 ---
 
 # Claude Code Hooks for Memory
@@ -286,8 +287,41 @@ claude --debug-file /tmp/claude.log
 tail -f /tmp/claude.log
 ```
 
+## Alternative Memory Architectures: Memarch and Hermes
+
+The Cole Medin design above is a *knowledge-compounding* pattern — session summaries promote into a wiki. There is a parallel family of designs that uses the same hooks surface for a different job: **runtime memory for the agent during a session** (what it remembers about the user, environment, and prior actions). Two open-source systems sit at opposite ends of the design space, and the right Claude Code setup layers them under Cole's pattern.
+
+### Memarch / memsearch — completeness via the Stop hook
+
+Uses a `Stop` hook that fires after **every conversation turn**. The hook pipes the turn through Haiku to produce a bullet summary, appends it to a dated memory file with session anchors, and (periodically, via `memarch index`) chunks and embeds the bullets into a local **Milvus** vector DB running on CPU — zero API cost. No curation: it captures everything. Recall is **three-tier progressive disclosure**:
+
+| Tier | Command / behavior | What it returns |
+|------|-------------------|----------------|
+| 1 | `memsearch search` | Hybrid dense-vector (semantic) + BM25 keyword match — closest chunks |
+| 2 | `memsearch expand` | Surrounding metadata and a summary around the matched chunk |
+| 3 | Raw dialogue | Full session transcript — last resort |
+
+Each tier costs more tokens; the agent only descends if the previous tier did not answer.
+
+### Hermes — curation via agent-driven write tools
+
+Hermes gives the agent explicit `add` / `replace` / `remove` tools that write to **`memory.md`** (environment + actions) and **`user.md`** (user profile). A **character cap** on those files forces the agent to consolidate or drop when full, rather than appending indefinitely. Raw transcripts are saved in the background each turn, and a **curator** runs every 7 days to prune. At session start, Hermes injects a **frozen snapshot** — `claude.md` + `memory.md` + `user.md` + `soul.md` — into context (~1,300 tokens) and lets prompt caching cover the per-message cost. Anything written to those files during a session shows up in the *next* session, not the current one. Recall checks the injected `memory.md` first (Tier 0, in-context, zero cost), then falls back to keyword search.
+
+### The hybrid blueprint
+
+No single system answers all three of *storage / injection / recall* well — see [Agent Memory Systems](../concepts/agent-memory-systems.md) for the framework. Simon Scrapes' recommended Claude Code setup layers them:
+
+```
+Storage:    automemory + memarch Stop hook + Hermes curated memory.md/user.md
+Injection:  session-start frozen snapshot (~3,000 cached tokens)
+Recall:     Tier 0 (injected memory.md) → memarch hybrid search → expand → raw transcript
+```
+
+The diagnostic principle when adding any memory plug-in: ask which hook surface it rides on. If the answer is "none, it's a separate process," it probably will not compose cleanly with Claude Code. *(Source: Simon Scrapes)*
+
 ## Related Pages
 
+- [Agent Memory Systems](../concepts/agent-memory-systems.md) -- storage/injection/recall framework and the memarch + Hermes hybrid blueprint
 - [Claude Code Custom Subagents](claude-code-custom-subagents.md) -- subagent-scoped hooks and `memory` field
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md) -- the underlying pattern
 - [Claude Code](../tools/claude-code.md) -- the tool this configures
