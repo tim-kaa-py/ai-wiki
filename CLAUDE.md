@@ -121,6 +121,10 @@ last_updated: "<YYYY-MM-DD>"
 ---
 ```
 
+**Canonical sections.** Body structure is flexible, but two section names are reserved:
+- `## Unresolved Tensions` — the home for contradictions held under option `(c)` per [Contradiction Handling at Ingest](#contradiction-handling-at-ingest). Each entry quotes both positions with source citations and the date surfaced.
+- `## Related Pages` — outbound links to other wiki pages, kept at the bottom.
+
 ### Gist (`gists/<slug>.md`)
 
 ```yaml
@@ -411,9 +415,9 @@ Focus on what the USER found interesting, not a generic overview.
 
 **Model: Opus sub-agent.** Spawn via Agent tool with `model: "opus"`. Prompt the sub-agent with:
 - Path to the new summary
-- Instructions: "Read the summary. Search wiki/ for relevant pages. For each relevant page, merge new information. Create new wiki pages if needed. Report what was updated."
+- Instructions: "Read the summary. Search wiki/ for relevant pages. For each relevant page, **first detect tensions** before merging: for each new claim, find the existing claim on the page that most closely addresses the same question, quote both verbatim, and classify as *agree* (skip), *orthogonal* (merge normally), or *conflict* (do NOT merge — return for user decision). For each conflict, draft an AGENT'S READ block (confidence + recommended option + reasoning + strongest argument against). For non-conflicting additions, merge normally. Create new wiki pages if the source introduces a substantial topic not yet covered. Return a structured report: pages touched, merges performed, tensions detected (with AGENT'S READ), pages proposed."
 
-The sub-agent handles all wiki reads, searches, and writes. Returns a report of changes to the Sonnet orchestrator.
+The sub-agent does NOT write conflicts unilaterally — it returns them to the Sonnet orchestrator, which surfaces the user-facing menu (see [Contradiction Handling at Ingest](#contradiction-handling-at-ingest)). After the user picks a resolution per tension, the orchestrator spawns the sub-agent a second time with the resolution choices to perform the writes.
 
 See CONNECT step detail below.
 
@@ -427,17 +431,107 @@ This is the step that makes the wiki compound. Run after every ingest (both tier
 
 1. **Read the summary** just generated
 2. **Search existing wiki pages** — grep `wiki/` for overlapping tags and topics
-3. **For each relevant wiki page:**
-   - Read it
-   - Merge new information (add, don't replace existing content)
+3. **For each relevant wiki page, detect tensions before merging:**
+   - Read the page
+   - For each new claim from the summary, find the existing claim on the page that most closely addresses the same question
+   - Quote both verbatim (existing claim with line number; new claim with timestamp or section)
+   - Classify: **agree** (skip — already represented), **orthogonal** (merge normally in step 4), or **conflict** (do NOT merge — collect for surfacing)
+   - For each conflict, draft an `AGENT'S READ` block per [Contradiction Handling at Ingest](#contradiction-handling-at-ingest)
+4. **For non-conflicting additions, merge normally:**
+   - Add new information (don't replace existing content)
    - Add the new summary to the `sources` list in frontmatter
    - Update `last_updated`
-4. **New wiki page needed?** If the source introduces a substantial topic not yet covered:
+5. **Surface tensions to the user.** Present the batched menu per [Contradiction Handling at Ingest](#contradiction-handling-at-ingest). Apply the chosen resolution for each tension. Never silently merge a conflict.
+6. **New wiki page needed?** If the source introduces a substantial topic not yet covered:
    - Create a new page in the appropriate `wiki/` subdirectory
    - Concepts → `wiki/concepts/`, Tools → `wiki/tools/`, How-tos → `wiki/how-tos/`, People → `wiki/people/`, Comparisons → `wiki/comparisons/`
-5. **Report what was updated** — tell the user which wiki pages were created or modified
+7. **Report what was updated** — tell the user which wiki pages were created or modified, and which tensions were resolved, queued, or held.
 
 **Note:** Actionable practices, workflows, and anti-patterns belong inside the relevant wiki page (e.g., a context-window discipline tactic goes into `wiki/concepts/context-engineering.md`, not into a central principles file). The wiki itself is the system's living playbook.
+
+## Contradiction Handling at Ingest
+
+When the CONNECT step detects that a new claim conflicts with an existing claim on a wiki page, **do not silently merge.** Surface the tension to the user as a batched decision at the end of CONNECT. The user decides per tension; the agent then writes.
+
+This is the wiki's primary defence against the "active misinformation" failure mode: silent merges that read as confident prose but quietly drop or distort prior claims. The architecture deliberately favours visible deferral over invisible synthesis.
+
+### Sub-agent contract (detection)
+
+The Opus sub-agent does the detection during CONNECT (step 3). Phrase the detection prompt adversarially — LLMs default to synthesis and will smooth tensions away unless explicitly directed to surface them:
+
+> *"For each new claim from the summary, find the existing claim on the wiki page that most closely addresses the same question. Quote both verbatim. Decide: do they agree (skip), are they orthogonal (merge normally), or do they conflict (return for user decision)? If conflict, return them as-is — do NOT merge, do NOT synthesize."*
+
+For each conflict, the sub-agent drafts an `AGENT'S READ` block with four required fields:
+
+- **Confidence:** one of `strong recommendation`, `lean toward`, or `no strong recommendation — your call`. No in-between values.
+- **Recommended option:** one letter from `(a)`, `(b)`, `(c)`, `(d)`, or `(q)`. **Never recommend `(e)` split page** — splits are too consequential for the agent to propose as a default; the sub-agent may *mention* "this might warrant a split" in its reasoning but cannot recommend (e) as the primary choice.
+- **Why:** 1–2 sentences of reasoning grounded in the specific claims.
+- **Strongest argument against:** 1 sentence — the most credible reason the recommendation could be wrong. This is mandatory, not optional. It is the move that prevents recommendation-driven rubber-stamping.
+
+### User-facing menu
+
+For each conflict, the orchestrator presents:
+
+```
+TENSION <N> of <total> — <wiki page path>
+Topic: <one-line>
+
+Existing claim (line <N>, sources: <citations>):
+  "<verbatim quote>"
+
+New claim (source: <new slug>, <timestamp or section>):
+  "<verbatim quote>"
+
+Options:
+  (a) Accept new — replace old claim; old becomes deprecated footnote
+  (b) Keep old — drop new claim from wiki (still preserved in its summary)
+  (c) Hold both — add to "## Unresolved Tensions" with both attributions
+  (d) Synthesize — sub-agent drafts a resolving framing; you approve before write
+  (e) Split page — disagreement is structural; sub-agent proposes a split
+  (q) Queue for lint — defer; logged to meta/contradictions.md
+
+AGENT'S READ — <confidence> (<recommended option>)
+  Why: <reasoning>
+  Strongest argument against: <counter>
+```
+
+The user responds with one line per tension, e.g. `1c 2a 3q` or `all q`. The recommendation is a *hint*, not a default action — there is no implicit "press Enter to accept."
+
+### Resolution actions
+
+After the user picks, the orchestrator applies each resolution:
+
+| Letter | Effect |
+|--------|--------|
+| (a) Accept new | Replace existing claim on page. Add a footnote near the claim: *"Earlier versions of this page stated [old claim], per [source]; superseded by [new source] on [date]."* Update `sources:` and `last_updated`. |
+| (b) Keep old | Do not modify page body. Add the new summary to `sources:` frontmatter only if the summary contributes other non-conflicting content; otherwise leave the page untouched. |
+| (c) Hold both | Add an `## Unresolved Tensions` subsection to the page (or append to it if present) with both quotes, both citations, and the date the tension was surfaced. Update `sources:` and `last_updated`. |
+| (d) Synthesize | Sub-agent drafts a resolving rewrite and presents it to the user for `approve / amend / revert`. After approval, write the rewrite, update `sources:` and `last_updated`. |
+| (e) Split page | Sub-agent proposes a page split (new title, claim distribution, cross-link plan). User must explicitly approve before any write. Add the new page to `index.md`. |
+| (q) Queue for lint | Append an entry to `meta/contradictions.md` (see schema below). Insert one HTML-comment marker on the wiki page near the relevant claim: `<!-- TENSION YYYY-MM-DD: see meta/contradictions.md#<anchor> -->`. Do not modify the page body otherwise. |
+
+For (a)–(d), update `last_updated` and the `sources:` list. For (q), leave page body and frontmatter untouched apart from the HTML-comment marker — the queue *is* the deferral mechanism, and silent merge into frontmatter would defeat it.
+
+### `meta/contradictions.md` schema
+
+Append-only ledger at the repo root under `meta/`. Each tension is an H2 with a date-stamped anchor:
+
+```markdown
+## YYYY-MM-DD-<page-slug>-<topic-slug>
+- **Page:** wiki/<type>/<slug>.md
+- **Topic:** <one-line>
+- **Existing:** "<verbatim quote>" — <source citations>
+- **New:** "<verbatim quote>" — <new source citation>
+- **Status:** open | resolved
+- **Queued by:** ingest of <new-slug> on YYYY-MM-DD
+- **Resolution:** <empty until resolved; then: letter chosen + one-line note + date>
+```
+
+Resolved entries stay in the file as an audit trail. The `Status:` field flips from `open` to `resolved` when the lint pass closes them. Never delete entries.
+
+### Lint integration
+
+The [Lint Workflow](#lint-workflow) drains `meta/contradictions.md` before scanning for new tensions. For each `open` entry, lint re-presents the same menu with a fresh `AGENT'S READ` that considers any new sources accumulated since the tension was queued. This is where most deferred decisions get resolved — by the time you revisit them, more evidence has accumulated.
 
 ## Gists Workflow
 
@@ -511,7 +605,7 @@ When the user says "lint", "check wiki health", or similar:
 2. **STALE** — Wiki pages not updated in 90+ days that have active related topics
 3. **INDEX SYNC** — Entries in `index.md` that don't match actual files, and vice versa
 4. **LOG SYNC** — Sources not recorded in `log.md`
-5. **CONTRADICTIONS** — Wiki pages with conflicting claims from different sources
+5. **CONTRADICTIONS** — Drain `meta/contradictions.md` first: for each `Status: open` entry, re-present the same menu used at ingest, including a fresh `AGENT'S READ` that considers any new sources accumulated since the tension was queued (per [Contradiction Handling at Ingest](#contradiction-handling-at-ingest)). After the user picks, apply the resolution and flip the entry to `Status: resolved` with the chosen letter, a one-line note, and the resolution date. Then scan for additional conflicts not yet in the ledger (e.g., from manual edits or older ingests that pre-date this workflow) and surface them with the same menu.
 6. **GAPS** — Tags with many sources but no wiki page; suggest pages to create
 7. **REPORT** — Present findings as actionable items. User approves fixes before execution.
 
@@ -541,6 +635,7 @@ Use existing tags when possible. Create new tags sparingly. Keep tags lowercase,
 - **Always confirm metadata** with user before proceeding (Tier 2 only)
 - **Log every ingest** to `log.md`
 - **Report CONNECT updates** — always tell the user which wiki pages were created or modified
+- **Never silently merge contradicting claims** — the CONNECT step must surface tensions to the user (or queue them via option `(q)`) per [Contradiction Handling at Ingest](#contradiction-handling-at-ingest). Silent merge of a conflict is the wiki's primary degradation failure mode — a confidently-written page that has quietly dropped a prior claim reads like knowledge but is misinformation.
 - **This repo is public** — run the **Confidentiality Scan (Step 0)** on every non-public source before extract/summarize, and on every generated summary before CONNECT. When in doubt whether something is public, run the scan.
 - **Manual edits are not scanned automatically** — if the user (or Claude) edits a source, summary, wiki page, or gist by hand outside the ingest/gist workflow, ask Claude to run a confidentiality pass on the edited file before committing. The Step 0 workflow only runs when a workflow runs.
 - **Gists are not ingests** — never run CONNECT, summarize, or fold a gist into wiki pages. Gists may reference wiki pages, but wiki pages must not reference gists.

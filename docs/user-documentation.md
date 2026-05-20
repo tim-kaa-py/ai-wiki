@@ -121,7 +121,7 @@ Gists are *yours* — they're not summarized, not cross-linked into the wiki, an
 
 ### 6. Lint the wiki
 
-Monthly-ish hygiene. The agent checks for orphan sources, stale pages, index drift, contradictions, and tag gaps. You approve fixes before they execute.
+Monthly-ish hygiene. The agent drains the contradiction queue at `meta/contradictions.md` first (re-presenting each open tension with a fresh recommendation), then checks for orphan sources, stale pages, index drift, additional contradictions, and tag gaps. You approve fixes before they execute. See also [What Happens at a Contradiction](#what-happens-at-a-contradiction).
 
 > Lint the wiki.
 
@@ -136,6 +136,45 @@ You are in charge. Useful overrides:
 > Don't create a new wiki page — just merge into the existing \<page\>.
 >
 > Redo the summary — bias it toward \<angle\>.
+
+---
+
+## What Happens at a Contradiction
+
+Most ingests merge silently into the wiki. Some don't — when a new source disagrees with a claim already on a wiki page, the agent stops and asks you. **You decide per tension; the agent then writes.**
+
+### What you see
+
+At the end of CONNECT, if the agent detected one or more conflicts, you get a batched menu. Per tension:
+
+- The existing claim (verbatim, with file path + line number + which sources back it).
+- The new claim (verbatim, with the new source + timestamp/section).
+- Six options: `(a)` accept new, `(b)` keep old, `(c)` hold both, `(d)` synthesize, `(e)` split page, `(q)` queue for lint.
+- An `AGENT'S READ` block with the agent's recommended letter, its reasoning, and *its strongest argument against itself*. The recommendation is a hint, not a default — nothing happens until you type a letter.
+
+You reply with one line per tension, e.g. `1c 2a 3q` or `all q`.
+
+### Honest deferral with `(q)`
+
+`(q)` queues the tension to `meta/contradictions.md` and adds a small HTML comment on the affected page near the relevant claim. The wiki page body is **not** modified. This is the right answer when:
+
+- You don't have time to read both positions carefully.
+- You suspect a third source will clarify things.
+- The disagreement is interesting but not urgent.
+
+The next `lint the wiki` pass drains the queue and re-presents each open tension with a fresh agent recommendation that considers any sources you've added since. Most deferred tensions get resolved here, not at the original ingest.
+
+### What option `(c)` does to a wiki page
+
+`(c)` (hold both) adds an `## Unresolved Tensions` subsection to the wiki page with both quotes, both source citations, and the date the tension was surfaced. Pick this when you want the disagreement to be visible to a reader of the page, not just to your future self in the queue.
+
+### What option `(a)` does to the loser
+
+`(a)` (accept new) replaces the existing claim, **but the old claim doesn't disappear from the repo.** The wiki page gets a footnote near the new claim: *"Earlier versions of this page stated [old claim], per [source]; superseded by [new source] on [date]."* The original source and its summary are untouched. The wiki is lossy by design, but never silently lossy.
+
+### Why this exists
+
+Without this step, every ingest implicitly *resolves* tensions by merging — usually by smoothing them into bland prose that reads fine and drops the disagreement. After a hundred ingests, the wiki reads as confident knowledge but is quietly misinformed. The contradiction menu is the only thing standing between you and that failure mode. See `CLAUDE.md` → [Contradiction Handling at Ingest](../CLAUDE.md#contradiction-handling-at-ingest) for the full contract.
 
 ---
 

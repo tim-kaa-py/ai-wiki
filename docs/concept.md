@@ -73,6 +73,8 @@ Create the following directory structure in the working directory:
 │   └── user-documentation.md   # (copy sibling doc)
 ├── inbox/
 │   └── .gitkeep
+├── meta/
+│   └── contradictions.md
 ├── notes/
 │   └── .gitkeep
 ├── scripts/
@@ -92,6 +94,8 @@ Create the following directory structure in the working directory:
     ├── people/
     └── tools/
 ```
+
+`meta/contradictions.md` is the open-tensions ledger drained by the Lint Workflow. See §4.8 below for the template.
 
 Adjust `sources/` subdirectories to match the source types declared in the bootstrap interview (drop `papers/` if the user isn't ingesting papers, add others if needed).
 
@@ -120,7 +124,8 @@ Use the reference implementation in this repo as your template: [`CLAUDE.md`](..
 - Replace **Tag Taxonomy** categories with the user's starter tags from Q4.
 - If the user has a single model only (Q6), replace the **Model Routing** section with: *"Single-model mode: all steps run on the user's available model. No sub-agent delegation."*
 - **Confidentiality Scan (Step 0)** — keep as-is for public repos (Q7 = public). For private repos, the scan is optional; either drop the Step 0 section and its references in the workflows, or keep it as a lighter-weight sanity check (e.g., credentials only). Document the choice in the new repo's `CLAUDE.md` Guardrails so future sessions understand the threat model.
-- Keep **Frontmatter Schemas**, **Tier 1/Tier 2 Workflows** (minus or including Step 0 per above), **CONNECT Step Detail**, **Query Workflow**, **Lint Workflow**, and **Guardrails** unchanged — these are the mechanics.
+- Keep **Frontmatter Schemas**, **Tier 1/Tier 2 Workflows** (minus or including Step 0 per above), **CONNECT Step Detail**, **Contradiction Handling at Ingest**, **Query Workflow**, **Lint Workflow**, and **Guardrails** unchanged — these are the mechanics.
+- **Contradiction Handling at Ingest** is the wiki's defence against silent merges that read as confident knowledge but quietly drop prior claims. Keep it default-on for both public and private repos. The companion file `meta/contradictions.md` is the append-only ledger drained by the Lint Workflow.
 
 ### 4.2 `index.md`
 
@@ -209,6 +214,12 @@ These are author-authored *artifacts*, not ingested knowledge. They are not summ
 
 **0 gists** | [back to wiki index](../index.md)
 ```
+
+### 4.8 `meta/contradictions.md`
+
+Append-only ledger of tensions deferred at ingest via option `(q)`. The Lint Workflow drains this file. See `CLAUDE.md` → "Contradiction Handling at Ingest" for the surrounding contract.
+
+Copy this reference repo's [`meta/contradictions.md`](../meta/contradictions.md) verbatim into the new repo. Its header explains the schema (anchor format, required fields, append-only rule) and ends with `_No open contradictions._` as the empty state. No tokens need substitution — the file is topic-agnostic.
 
 ---
 
