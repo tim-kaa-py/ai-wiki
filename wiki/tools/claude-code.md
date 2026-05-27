@@ -36,7 +36,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_context-window.md"
   - "summaries/2026-05-06_claude-code-docs_best-practices.md"
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
-last_updated: "2026-05-17"
+  - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
+last_updated: "2026-05-27"
 ---
 
 # Claude Code
@@ -254,6 +255,8 @@ Claude Code can use MCP servers to interact with external services (Slack, BigQu
 
 ### Parallel Sessions
 Boris Cherny runs 5-10 Claudes in parallel — `claude.ai/code` tabs alongside local terminal sessions. Hand off reviews or kick off background work while continuing in the terminal. Use `/compact` to manage context across sessions. *(Source: Boris Cherny, Creator of Claude Code)*
+
+The binding constraint is **attention, not compute**: you can *open* many sessions, but a single person can only *actively steer* about 4-5 before quality drops — the surplus run as parked/background streams you check in on. The two figures are the same picture from different angles (5-10 open, ~4-5 actively attended), which is exactly why attention-triage surfaces exist (Claude Agents sorted by attention needed, Remote Control). *(Source: Stop babysitting your agents, Claude, 2026-05-20)*
 
 ### Voice
 `/voice` or `export CLAUDE_CODE_VOICE_DICTATION=true`. Hold Space to record, release to transcribe. Encourages conversational prompting over terse typed instructions.

@@ -6,7 +6,8 @@ tags: [claude-code, agents, automation, workflow, routines, connectors, managed-
 sources:
   - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
   - "summaries/2026-05-06_claude-code-docs_routines.md"
-last_updated: "2026-05-06"
+  - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
+last_updated: "2026-05-27"
 ---
 
 # Claude Routines
@@ -162,9 +163,26 @@ Monitor usage at `claude.ai/code/routines` before adding high-frequency triggers
 /schedule update       # Edit routine including custom cron expressions (min interval: 1h)
 ```
 
+## `/loop` (Local) vs Routines (Remote)
+
+Anthropic's "Stop babysitting your agents" talk (Sid Benesaria, May 2026) frames Routines as the *remote* end of a two-rung autonomy ladder whose *local* rung is `/loop`:
+
+| | `/loop` | Routines |
+|--|---------|----------|
+| Where it runs | Inside the **current local** Claude Code session | Remotely, in the **same cloud containers** as Claude Code on Web |
+| Trigger | Fixed time interval only | Time-based **or** event-based (schedule / webhook / API / GitHub event) |
+| Lifecycle | Wakes the same session, re-runs the prompt | Each fire spawns a **new** session with a specified prompt |
+| Setup | `/loop <interval> <prompt>` in a running session | Routines tab in web or desktop app |
+| Bottleneck removed | Routine *monitoring* you'd otherwise do at the keyboard | Your machine being on at all |
+
+Example: `/loop 10m babysit my open PRs` wakes the session every 10 minutes, re-runs the prompt, and — given a strong CLAUDE.md and connected tools — figures out what to do on its own. Routines are the same idea promoted to the cloud with richer triggers: the talk cites a team routine that updates docs daily, and another that scans issues/feedback and posts to Slack every six hours.
+
+The talk's framing thesis: both rungs exist to **push bookkeeping off your keyboard** (PR babysitting, doc updates, triage, keeping CI green) — work that needs to *run*, not to have you present. See [Focus Maxing](../concepts/focus-maxing.md) for the attention-budget argument this serves. *(Source: Claude — Stop babysitting your agents.)*
+
 ## Related Pages
 
 - [Claude Code](claude-code.md) -- the platform routines run on
 - [Claude Routines vs n8n](../comparisons/claude-routines-vs-n8n.md) -- detailed comparison
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) -- broader workflow patterns
 - [Prompt Engineering for Claude](../concepts/prompt-engineering-claude.md) -- prompt design principles applicable to routine prompts
+- [Focus Maxing](../concepts/focus-maxing.md) -- the attention-budget argument `/loop` and Routines serve

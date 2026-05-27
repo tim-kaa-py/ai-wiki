@@ -5,7 +5,8 @@ pillar: "building"
 tags: [anti-patterns, agentic-coding-workflow, parallel-agents, claude-code, workflow, attention]
 sources:
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
-last_updated: "2026-05-09"
+  - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
+last_updated: "2026-05-27"
 ---
 
 # Focus Maxing (Anti-Pattern)
@@ -50,6 +51,21 @@ This is the inverse of the conventional productivity story. The literature on fl
 
 The risk: an entire ecosystem of agent IDE features can be optimized for surfacing-everything-to-the-human (which feels like control) when the actual job is letting-the-agent-finish-and-yield (which feels like trust). "Focus maxing" is the trap pretending to be the goal.
 
+## Attention Is the Scarce Resource (Anthropic's Own Framing)
+
+Anthropic's "Stop babysitting your agents" talk (Sid Benesaria, May 2026) gives the same anti-pattern a Claude-official restatement and sharpens its root cause: as models get smarter, the bottleneck stops being the model and becomes **your attention**. The constraint on running many Claude instances in parallel "isn't compute — it's your attention." This is the positive version of focus maxing's negative claim: focus maxing names the failure (attention fragmented into 30-second bursts); Benesaria names the resource being squandered (contiguous attention) and frames every surface below as existing primarily to **protect** it, not to add raw capacity.
+
+The talk's three-rung stack is built around this: (1) make agents **self-verifying** (a [loop](generator-evaluator-harness.md) that hill-climbs to a success state) so each stream doesn't need babysitting, (2) **parallelize** only once each stream is reliable, and (3) push routine bookkeeping into [background loops and Routines](../tools/claude-routines.md) so it leaves the keyboard entirely. Verification comes first because parallelism without reliable streams just multiplies the attention drain.
+
+### Surfaces That Triage by Attention
+
+Two of the talk's surfaces are explicitly attention-protection tools, not capacity tools:
+
+- **Claude Agents** (`claude agents`) — a terminal sidebar that lists local sessions and **sorts them by how much attention they need**: blocked-on-input sessions float to the top, running/completed ones sink. Supports pinning, renaming, reordering.
+- **Remote Control** (`/remote-control` in a running session) — control any session from your phone; push notifications fire when a session needs input, so you answer from anywhere instead of watching a screen.
+
+Both implement the fix this page prescribes — let agents run long and yield cleanly, then route your attention only to the streams that actually need it. *(Source: Claude — Stop babysitting your agents.)*
+
 ## Relationship to the 5-Minute Threshold
 
 [Plan and Review](plan-and-review.md) names ~5 minutes as the operational threshold above which a single-agent stream demands parallelism. Focus maxing is what happens when you stay below that threshold *by design* — splitting a 20-minute task into 40 thirty-second prompts to keep yourself "in control." The fix is to extend the run-length, not shorten it.
@@ -64,4 +80,6 @@ The risk: an entire ecosystem of agent IDE features can be optimized for surfaci
 - [Parallel Agent Patterns](parallel-agent-patterns.md) — the alternative once runs cross the 5-minute threshold
 - [Claude Code Auto Mode](../how-tos/claude-code-auto-mode.md) — `accept-edits` permission mode that reduces the interrupt rate
 - [Smart Zone vs Dumb Zone](smart-zone.md) — context-axis counterpart to this attention-axis discipline
+- [Claude Routines](../tools/claude-routines.md) — `/loop` and Routines, the third rung that removes the keyboard from routine work
+- [Generator-Evaluator Harness](generator-evaluator-harness.md) — the verification loop that must come first before parallelism pays off
 - [Louis Knight-Webb](../people/louis-knight-webb.md) — coined the term
