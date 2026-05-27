@@ -41,7 +41,10 @@ Plus:
 
 - **Claude Code** installed and signed in. This doc assumes you launch it inside the wiki repo's root.
 - **Python 3** and **yt-dlp** (`pip install yt-dlp`) for YouTube/podcast transcript extraction. Needed only if you ingest video/audio sources.
+- **`faster-whisper`** (`pip install faster-whisper`) — optional, only for the no-captions fallback (see below). For GPU acceleration also install `nvidia-cublas-cu12` + `nvidia-cudnn-cu12`; without a GPU it runs on CPU (slower).
 - **`gh` CLI** only if you want to push changes or work across remotes — not required for daily use.
+
+**No-captions fallback:** if a YouTube/podcast source has no captions at all, the agent automatically transcribes the audio locally with faster-whisper (downloaded to a temp file, then deleted — nothing is stored). On a CUDA GPU it uses `large-v3` (best accuracy, ~10 min for a 37-min video); on CPU it drops to `small`. It only asks you to paste a transcript if this also fails. If `faster-whisper` isn't installed, it skips straight to asking you to paste.
 
 Open the repo in your terminal, run `claude`, and you're working.
 
@@ -334,7 +337,8 @@ $ claude
 - [`concept.md`](concept.md) — architecture + recreation guide for a different topic.
 - [`index.md`](../index.md) — browse everything.
 - [`log.md`](../log.md) — chronological ingest history.
-- [`scripts/extract-transcript.py`](../scripts/extract-transcript.py) — YouTube/podcast transcript extractor.
+- [`scripts/extract-transcript.py`](../scripts/extract-transcript.py) — YouTube/podcast caption extractor.
+- [`scripts/transcribe-audio.py`](../scripts/transcribe-audio.py) — local audio→text fallback (faster-whisper) for sources with no captions.
 - [`docs/private-modules.md`](private-modules.md) — pattern for author-private extensions mounted inside this repo (some skills may not be available in a public clone).
 
 ---

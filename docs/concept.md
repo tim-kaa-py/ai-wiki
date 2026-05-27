@@ -78,7 +78,8 @@ Create the following directory structure in the working directory:
 ├── notes/
 │   └── .gitkeep
 ├── scripts/
-│   └── extract-transcript.py
+│   ├── extract-transcript.py
+│   └── transcribe-audio.py
 ├── sources/
 │   ├── articles/
 │   ├── docs/
@@ -234,9 +235,21 @@ Runtime requirements (document these in `README.md` or `user-documentation.md`):
 - Python 3.8+
 - `yt-dlp` (`pip install yt-dlp` or platform equivalent)
 
-The script outputs JSON: `{"status", "extraction_method", "subtitle_lang", "transcript"}`. `CLAUDE.md` already handles the `no_captions` fallback (prompt user to paste).
+The script outputs JSON: `{"status", "extraction_method", "subtitle_lang", "transcript"}`.
 
-### 5.2 Optional future scripts
+### 5.2 Local transcription fallback
+
+Copy [`scripts/transcribe-audio.py`](../scripts/transcribe-audio.py) for sources that have **no captions at all**. It downloads the audio via `yt-dlp`, transcribes it locally with [faster-whisper](https://github.com/SYSTRAN/faster-whisper), emits the **same JSON contract** as `extract-transcript.py` (with `extraction_method: "whisper-local"`), and deletes the temp audio. No `ffmpeg` needed (faster-whisper decodes via bundled PyAV).
+
+Design points worth preserving on recreation:
+
+- **Device-aware default model:** `large-v3` on a CUDA GPU, `small` on CPU (large-v3 is too slow on CPU). A runtime CUDA→CPU fallback also downgrades an auto-selected model. GPU uses `int8_float16` so even `large-v3` fits a 4 GB card.
+- **`initial_prompt` priming** (`--prompt`) biases proper-noun spelling — without it, Whisper transcribes "Claude" as "Cloud". Default primes AI-domain terms.
+- Runtime requirements: `faster-whisper`; for GPU also `nvidia-cublas-cu12` + `nvidia-cudnn-cu12` (the script injects their DLL dirs on Windows).
+
+`CLAUDE.md` Step 3 chains these: captions → local transcription → ask user to paste. The `no_captions` path tries `transcribe-audio.py` before falling back to a manual paste.
+
+### 5.3 Optional future scripts
 
 Leave `scripts/` open for additions (e.g., paper fetchers, lint helpers). Do not pre-create them.
 
@@ -284,7 +297,7 @@ If pillars feel wrong after the first 2–3 ingests, that's normal — rename th
 
 - **Never modify sources after saving.** Re-extraction with better tooling is allowed; editorial changes are not.
 - **Never skip the CONNECT step** — the wiki only compounds if new sources are cross-linked into existing pages.
-- **Never download video/audio** — transcript extraction uses `--skip-download` internally.
+- **Never download video/audio for storage** — caption/metadata extraction uses `--skip-download`. The sole exception is the transcription fallback (`transcribe-audio.py`), which downloads audio to a temp file, transcribes locally, and deletes it immediately.
 - **Never pre-populate wiki pages** during scaffolding. Wiki pages are only born from real sources.
 
 ---

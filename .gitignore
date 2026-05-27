@@ -3,6 +3,10 @@
 *.ttml
 *.vtt
 
+# Python bytecode cache
+__pycache__/
+*.pyc
+
 # Obsidian local config
 .obsidian/
 

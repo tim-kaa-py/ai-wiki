@@ -83,7 +83,7 @@ url: "<url>"
 pillar: "building|understanding|ecosystem|lab"
 tags: [tag1, tag2]
 ingested: "<YYYY-MM-DD>"
-extraction_method: "auto-captions|manual-captions|web-fetch|pdf-extract|user-pasted"
+extraction_method: "auto-captions|manual-captions|whisper-local|web-fetch|pdf-extract|user-pasted"
 # Optional (source-type specific):
 video_id: "<id>"
 duration: "<duration>"
@@ -281,7 +281,11 @@ python scripts/extract-transcript.py "<URL>"
 ```
 The script outputs JSON: `{"status", "extraction_method", "subtitle_lang", "transcript"}`.
 
-If `status` is `"no_captions"`, ask the user to paste the transcript manually.
+If `status` is `"no_captions"`, fall back to **local transcription** before asking the user:
+```bash
+python scripts/transcribe-audio.py "<URL>"
+```
+This downloads the audio to a temp file and transcribes it locally with faster-whisper (GPU via CUDA if available, else CPU; model default is device-aware — `large-v3` on GPU, `small` on CPU). It returns the same JSON contract with `extraction_method: "whisper-local"`. An `--prompt` flag primes proper-noun spelling (defaults to AI-domain terms so "Claude" isn't heard as "Cloud"); `--model` and `--device` override the defaults. Requires `faster-whisper` (`pip install faster-whisper`); GPU additionally needs `nvidia-cublas-cu12` + `nvidia-cudnn-cu12`. Only if transcription also returns `status: "error"`, ask the user to paste the transcript manually.
 
 Use `extraction_method` from the output to set the source frontmatter field.
 
@@ -625,7 +629,7 @@ Use existing tags when possible. Create new tags sparingly. Keep tags lowercase,
 
 ## Guardrails
 
-- **Never download video/audio files** — always use `--skip-download`
+- **Never download video/audio files for storage** — metadata and caption extraction always use `--skip-download`. The one exception is the transcription fallback (`scripts/transcribe-audio.py`), which downloads audio to a temp file, transcribes it locally, and deletes it immediately — nothing is persisted.
 - **Check for yt-dlp** — run `which yt-dlp` before using it. If missing, suggest installation. (ffmpeg is NOT required.)
 - **Check for Python** — run `python --version` before using `extract-transcript.py`. If missing, suggest installation.
 - **Check for duplicates** — search `index.md` for the URL or video ID before processing
