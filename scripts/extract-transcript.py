@@ -9,16 +9,31 @@ Requires: yt-dlp (no ffmpeg needed)
 """
 
 import json
+import shutil
 import subprocess
 import sys
 import urllib.request
+
+
+def js_runtime_args():
+    """Return yt-dlp --js-runtimes args for the first available JS runtime.
+
+    Modern YouTube extraction needs a JS runtime to solve player challenges;
+    without one, yt-dlp falls back to a deprecated path that can miss
+    automatic captions. yt-dlp only enables deno by default, so we detect
+    deno/node/bun and pass whatever exists. Returns [] if none are found.
+    """
+    for runtime in ("deno", "node", "bun"):
+        if shutil.which(runtime):
+            return ["--js-runtimes", runtime]
+    return []
 
 
 def get_video_info(url):
     """Run yt-dlp -j and return parsed JSON."""
     try:
         result = subprocess.run(
-            ["yt-dlp", "-j", url],
+            ["yt-dlp", *js_runtime_args(), "-j", url],
             capture_output=True, text=True, check=True
         )
         return json.loads(result.stdout)
@@ -163,6 +178,9 @@ def format_timestamp(ms, use_hours):
 
 def output_result(status, method=None, lang=None, transcript=None):
     """Print JSON result to stdout."""
+    # Windows stdout defaults to cp1252, which can't encode transcript
+    # characters like music notes, em-dashes, or smart quotes.
+    sys.stdout.reconfigure(encoding="utf-8")
     print(json.dumps({
         "status": status,
         "extraction_method": method,
