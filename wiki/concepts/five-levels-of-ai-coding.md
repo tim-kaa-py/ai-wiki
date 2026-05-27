@@ -5,7 +5,8 @@ pillar: "building"
 tags: [ai-coding, agentic-engineering, dark-factory, workflow, software-engineering, j-curve, spec-quality, organizational-design]
 sources:
   - "summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md"
-last_updated: "2026-04-13"
+  - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
+last_updated: "2026-05-26"
 ---
 
 # Five Levels of AI Coding
@@ -90,6 +91,21 @@ Legacy systems cannot be dark-factored because the specification doesn't exist �
 
 This is a multi-step, potentially multi-year process with no shortcuts.
 
+## Productivity as Output Volume, Not Speed (Anthropic 2026)
+
+Anthropic's 2026 Agentic Coding Trends Report quantifies what the J-curve framing predicts: organizations that have actually redesigned around AI report a **net decrease in time per task category** but a **much larger net increase in output volume**. The headline measurement: **~27% of AI-assisted work is *net-new* work that wouldn't have been done manually** — papercut fixes, exploratory tooling, internal dashboards, work that previously didn't clear the cost-effectiveness bar.
+
+The reframing for the maturity model: at Levels 0–2, productivity is intensive (same work, faster, sometimes slower per the METR study). At Levels 3–5, productivity becomes **extensive** — more total work, including work that wouldn't have existed at all. ROI dashboards that measure minutes saved per task systematically under-count the gain at higher levels.
+
+Customer evidence cited in the report:
+
+- **Zapier** — 89% AI adoption org-wide, **800+ internal agents** deployed across functions (legal, sales, ops, marketing), not just engineering.
+- **TELUS** — 30% faster code shipping, **500,000+ hours saved**, **13,000+ custom AI solutions** built.
+- **CRED** — doubled execution speed by shifting devs to higher-value work, not by removing humans.
+- **Augment Code customer** — a 4–8-month project finished in two weeks via collapsed onboarding into an unfamiliar codebase.
+
+Operational implication: **replace "minutes saved per task" with output-volume metrics** (features shipped, experiments run, previously-deprioritized work completed). Read these numbers as Anthropic's case for the higher levels, not as a neutral industry survey — but the *direction* (extensive over intensive) is consistent with the J-curve and Dark-Factory framings already on this page. *(Source: Anthropic 2026 Agentic Coding Trends Report.)*
+
 ## The Jevons Paradox for Software
 
 Historical pattern: every time the cost of computing dropped (mainframes to PCs, PCs to cloud, cloud to serverless), total software production exploded rather than staying flat. AI is dropping the cost of software production by an order of magnitude or more. Massive unmet demand exists (regional hospitals, mid-market manufacturers, family logistics companies). The constraint moves from "can we build it" to "should we build it" — and "should we build it" has always been the harder question.
@@ -101,8 +117,33 @@ Historical pattern: every time the cost of computing dropped (mainframes to PCs,
 3. **Measure, don't trust feelings.** Self-assessment of AI productivity is unreliable. Use actual task completion time comparisons, not surveys.
 4. **Budget compute as headcount.** $1,000/engineer/day in compute is the benchmark for serious AI software factories. If your AI spend per engineer is trivial, you're not operating at the scale where dark factory patterns become viable.
 
+## Unresolved Tensions
+
+### Is Level 5 (Dark Factory) the actual endpoint?
+
+*Surfaced 2026-05-26 during ingest of Anthropic's 2026 Agentic Coding Trends Report.*
+
+This page names **Level 5 / Dark Factory** — zero human involvement in implementation or code review — as the explicit aspirational endpoint of the maturity model, with StrongDM's three-person team as the documented worked example:
+
+> "5 | Dark Factory | Operates only at spec and evaluation boundaries | Specs in, working software out — zero human code involvement"
+> — [Nate B Jones, *5 Levels of AI Coding*](../../summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md)
+
+Anthropic's 2026 trends report argues against this endpoint via the [Collaboration Paradox](collaboration-paradox.md): developers use AI in ~60% of their work yet "fully delegate" only 0–20% of tasks, and Anthropic frames this gap as the *structural shape* of the new role, not a backlog of capabilities still to come:
+
+> "Anthropic resolves the apparent contradiction by arguing that effective AI collaboration requires active human participation — so '% fully delegated' is the wrong success metric."
+> — [Anthropic, *2026 Agentic Coding Trends Report*](../../summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md)
+
+**Possible reconciliations** (none adopted):
+
+- **Different work regimes.** Dark Factory describes the frontier-team endpoint for well-specifiable work (StrongDM's holdout-scenario architecture). Collaboration Paradox describes the median team's steady state across all work types. Both can be simultaneously true at different points of the distribution.
+- **Different measurement windows.** Anthropic's numbers may reflect a transition state; Level 5 may remain the asymptote, with the 0–20% delegation figure climbing as models and tooling mature.
+- **Genuine disagreement.** Anthropic and Shapiro/Jones may simply disagree about whether the asymptote is full delegation or steady-state collaboration, and one side is wrong about the destination.
+
+The wiki holds both framings without choosing. Use Level 5 / Dark Factory as the model for work that specifies cleanly with verifiable holdout sets (StrongDM-shape work). Use the Collaboration Paradox as the model for work where human judgment, taste, or accountability is itself the value.
+
 ## Related Pages
 
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — practical workflow incorporating these maturity levels
 - [Empathize with the Agent](empathize-with-the-agent.md) — the mental shift required to progress past Level 2
 - [Claude Code](../tools/claude-code.md) — tool enabling Level 3-4 patterns
+- [The Collaboration Paradox](collaboration-paradox.md) — Anthropic's competing framing that "% fully delegated is the wrong yardstick" — see [Unresolved Tensions](#unresolved-tensions) above

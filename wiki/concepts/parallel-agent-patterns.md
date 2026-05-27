@@ -10,7 +10,8 @@ sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
-last_updated: "2026-05-17"
+  - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
+last_updated: "2026-05-26"
 ---
 
 # Parallel Agent Patterns
@@ -56,6 +57,14 @@ Autonomous agents will solve whatever has clear feedback. If tests are weak, age
 ### Implication
 
 Large autonomous SWE is **feasible with strong verification**. Security-critical code still needs human review — the 99% pass rate hides the 1% that a malicious or lucky test gap would miss.
+
+### Single-Agent Calibration Point: Rakuten / vLLM (7-Hour Run)
+
+A complementary data point from Anthropic's 2026 Agentic Coding Trends Report, for what a *single* well-equipped agent can do on a real codebase rather than a 16-agent fleet:
+
+> Claude Code completed an activation-vector-extraction implementation in vLLM — a **12.5M-LOC multi-language repo** — in **7 hours of autonomous work, in a single run, with 99.9% numerical accuracy** vs. the reference method.
+
+Read alongside Carlini's 16-agent compiler, this is the **single-stream** calibration point: long autonomous runs against production-sized codebases are viable for well-defined, numerically-verifiable tasks. The pattern decision (single long run vs. fleet of short ones) follows the same verification logic as the lock-file team — strong, automatic verification is what makes the autonomy safe. *(Source: Anthropic 2026 Agentic Coding Trends Report.)*
 
 ## Pattern 2: Orchestrator-Worker Multi-Agent Research System
 

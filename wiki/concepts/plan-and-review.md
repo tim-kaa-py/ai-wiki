@@ -5,7 +5,8 @@ pillar: "building"
 tags: [agentic-coding-workflow, plan-and-review, workflow, planning, review, parallel-agents, anti-patterns, claude-code, codex]
 sources:
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
-last_updated: "2026-05-09"
+  - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
+last_updated: "2026-05-26"
 ---
 
 # Plan and Review
@@ -62,6 +63,24 @@ Knight-Webb treats the time horizon as a first-class design variable: longer hor
 Humans can passively wait ~5 minutes (browse Twitter); beyond that, sitting and watching logs is wasteful. So once average run-length crosses 5 minutes, single-stream workflows break.
 
 This dovetails with [Smart Zone vs Dumb Zone](smart-zone.md) (≈100K tokens) on the *context* axis: the smart-zone ceiling tells you when to clear; the 5-minute threshold tells you when to parallelize.
+
+## Episode vs. Arc: Reconciling with the Collaboration Paradox
+
+Anthropic's 2026 Agentic Coding Trends Report frames the goal of agentic coding differently:
+
+> "the right one is the quality of the review/direction/validation loop. The engineers' own intuition supports this — they delegate tasks they can 'sniff-check' easily, and keep design-dependent or high-stakes work in their own hands or in tight collaboration."
+
+Read flat, that reads as a direct push-back on this page's "spec exhaustively, stay out of the loop" default. The reconciliation is that Knight-Webb and Anthropic are naming **different units of the same arc**.
+
+A plan-heavy task is one *episode* — the unattended implementation run — inside a longer collaboration arc:
+
+1. **Planning = direction.** The human writes the spec. Active participation.
+2. **Implementation = unattended episode.** Knight-Webb's "stay out of the loop."
+3. **Review = validation.** The human reads the diff and decides.
+
+Measured per-episode, the implementation phase is high-delegation. Measured per-arc, the task is firmly inside Anthropic's "review, direction, validation" loop — the human is participating before and after the unattended segment. The two metrics — *minutes the agent runs unattended* vs. *total human involvement across the task* — are orthogonal and can both be high.
+
+This does not soften Knight-Webb's load-bearing claim that the displaced time goes into **planning and reviewing**, not into in-flight collaboration. That distinction stays sharp: the unattended episode in the middle is genuinely unattended; this page's matrix and 5-min/30-min heuristic apply unchanged. The Anthropic framing is a layer *around* the per-task decision, not a replacement for it — you can keep using the matrix per task and the two wiki pages now agree at the structural level.
 
 ## Latency-vs-Accuracy Trade in the Harness
 
@@ -156,3 +175,4 @@ Knight-Webb's position: AI-assisted review is fine; fully unread vibe-coded merg
 - [Reviewer Agents](reviewer-agents.md) — why human code review remains the production gate
 - [Harness Engineering](harness-engineering.md) — where the latency-vs-accuracy trade is wired
 - [Louis Knight-Webb](../people/louis-knight-webb.md) — author of the framing
+- [The Collaboration Paradox](collaboration-paradox.md) — Anthropic's adjacent framing of where the displaced time goes; partial overlap with the time-displacement argument here

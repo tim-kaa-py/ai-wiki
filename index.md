@@ -153,6 +153,7 @@
 | Date | Title | Type | Tags |
 |------|-------|------|------|
 | 2026-04-18 | [Anthropic Built It. OpenAI and LangChain Just Responded (The AI Automators)](summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md) | youtube | managed-agents, claude, openai, langchain, agents, harness, sandbox, agent-frameworks, infrastructure, comparison |
+| 2026-01-21 | [2026 Agentic Coding Trends Report (Anthropic)](summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md) | paper | agents, agentic-coding, claude-code, multi-agent, trends, opinion, security, productivity |
 | 2026-04-15 | [Notion's Token Town: 5 Rebuilds, 100+ Tools, MCP vs CLIs, Software Factory (Latent Space)](summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md) | podcasts | agents, mcp, notion, tool-use, architecture, software-factory, evals, harness-design |
 | 2026-04-15 | [Scaling Managed Agents: Decoupling brain from hands (Anthropic)](summaries/2026-04-15_anthropic_scaling-managed-agents.md) | articles | managed-agents, claude, agents, harness, architecture, sandbox |
 | 2026-01-21 | [Designing AI-resistant technical evaluations (Anthropic)](summaries/2026-01-21_anthropic_designing-ai-resistant-evaluations.md) | articles | hiring, evaluation, claude, performance-engineering, ai-resistance |
@@ -174,6 +175,7 @@
 - [MCP vs CLI](wiki/comparisons/mcp-vs-cli.md) — comparison: permissions, self-repair, progressive disclosure, token economics; per-capability decision framework
 - [Software Factory](wiki/concepts/software-factory.md) — concept: coding agents as AGI kernel, automated develop/debug/review/merge/maintain loop
 - [Model Behavior Engineer (MBE)](wiki/concepts/model-behavior-engineer.md) — concept: Notion's non-engineering career track for eval authoring and LLM-judge calibration
+- [The Collaboration Paradox](wiki/concepts/collaboration-paradox.md) — concept: ~60% AI involvement vs. 0–20% full delegation as steady state; counter to autonomy-maximalist framings
 
 ## My Lab
 
