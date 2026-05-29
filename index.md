@@ -58,6 +58,7 @@
 | 2026-04-30 | [FULL Guide to Becoming a Principled Agentic Engineer (Cole Medin)](summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md) | youtube | agentic-engineering, claude-code, workflow, planning, prompt-engineering |
 | 2026-05-02 | [Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban](summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md) | youtube | agents, agentic-coding-workflow, claude-code, codex, parallel-agents, plan-and-review, workflow, anti-patterns |
 | 2026-05-20 | [Stop babysitting your agents (Claude)](summaries/2026-05-20_claude_stop-babysitting-your-agents.md) | youtube | claude-code, agents, workflow, verification, automation, best-practices, skills, parallelization, mcp |
+| 2026-05-28 | [Karpathy-Inspired Claude Code Guidelines (multica-ai)](summaries/2026-05-28_multica-ai_karpathy-coding-guidelines.md) | repo | claude-code, prompt-engineering, agentic-coding-workflow, best-practices, anti-patterns, andrej-karpathy, agent-skills |
 
 ### Wiki Pages
 
@@ -189,4 +190,4 @@
 
 ---
 
-**71 sources** | **74 wiki pages** | [Ingest Log](log.md)
+**72 sources** | **74 wiki pages** | [Ingest Log](log.md)

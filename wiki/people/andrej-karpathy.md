@@ -9,7 +9,8 @@ sources:
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
   - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
   - "summaries/2026-04-22_nate-b-jones_karpathy-wiki-vs-open-brain.md"
-last_updated: "2026-04-23"
+  - "summaries/2026-05-28_multica-ai_karpathy-coding-guidelines.md"
+last_updated: "2026-05-28"
 ---
 
 # Andrej Karpathy
@@ -56,6 +57,17 @@ Karpathy's Auto Research framework, originally built for ML optimization, has be
 The key adaptation insight: Auto Research's ML optimization loop maps directly onto any skill that can be decomposed into boolean success criteria — even creative/subjective tasks like copywriting. The bottleneck is not the framework's rigidity but the user's ability to articulate what makes their output theirs. *(Source: Ben AI)*
 
 See [Auto Research](../concepts/auto-research.md) for the full concept breakdown.
+
+## Karpathy Coding Guidelines (`multica-ai/andrej-karpathy-skills`)
+
+Karpathy's late-2025 X post diagnosing LLM coding pitfalls — *"models make wrong assumptions on your behalf and just run along with them," "they really like to overcomplicate code and APIs, bloat abstractions," "they sometimes change/remove comments and code they don't sufficiently understand as side effects"* — was crystallized into a single `CLAUDE.md` artifact by multica-ai and reached **160k stars by May 2026**. The artifact maps each named pitfall to an operational principle:
+
+1. **Think Before Coding** — state assumptions, present alternatives, push back, stop when unclear.
+2. **Simplicity First** — minimum code; no speculative abstractions, no defensive handling for impossible cases.
+3. **Surgical Changes** — every changed line must trace directly to the user's request.
+4. **Goal-Driven Execution** — convert tasks into "step → verify: check" so the agent can loop independently.
+
+The unique contribution isn't the ideas — it's the *naming and packaging*: a tweet turned into copy-pasteable behavioral guardrails. The same content also ships as an invokable agent skill (`skills/karpathy-guidelines/SKILL.md`), making the guidelines toggleable rather than always-on system-prompt weight. *(Source: multica-ai, `andrej-karpathy-skills`)*
 
 ## Critique: Nate B Jones on the Wiki's Named Limits
 
