@@ -112,6 +112,7 @@ Practical implication: the same evaluator infrastructure (Playwright, Puppeteer 
 
 ## Related Pages
 
+- [Agent Loops (Loop Engineering)](agent-loops.md) — the entry-level reason-act-observe primitive; this harness is its production-scale "maker-checker" topology
 - [Harness Engineering](harness-engineering.md) — the parent discipline
 - [Agent Orchestration Patterns](agent-orchestration-patterns.md) — the canonical evaluator-optimizer pattern this elaborates
 - [Natural Language Harness](natural-language-harness.md) — execution contracts alongside sprint contracts

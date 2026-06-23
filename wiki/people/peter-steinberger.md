@@ -5,7 +5,8 @@ pillar: "ecosystem"
 tags: [agentic-engineering, openclaw, ios, engineering-leadership]
 sources:
   - "summaries/2026-02-12_lex-clips_how-to-code-with-ai-agents-advice-from-openclaw-creator.md"
-last_updated: "2026-04-13"
+  - "summaries/2026-06-19_nate-herk_agent-loops-clearly-explained.md"
+last_updated: "2026-06-23"
 ---
 
 # Peter Steinberger
@@ -47,8 +48,13 @@ Uses Claude Code exclusively (no IDE), multiple terminal windows in parallel, vo
 
 Interviewed by Lex Fridman (2026-02-12, 31 min). The interview captures his converged principles after months of intensive agentic coding with Claude Code on the OpenClaw project. His approach evolved from experimenting with multiple tools to settling on Claude Code for its terminal-first design and ability to run many parallel sessions.
 
+## As a Loop-Engineering Archetype
+
+Cited (by Nate Herk, 2026-06-19) as the high end of the "run everything as agent loops" spectrum — alongside Boris Cherny, an example of practitioners who no longer prompt their coding agents turn-by-turn. The framing comes with a caveat: this makes sense for an engineer doing large-codebase work, but the heuristic doesn't transfer 1:1 to knowledge-work roles. Steinberger is the codebase-work calibration point against which lighter-weight loop adoption is contrasted. See [Agent Loops § Loop Advice Doesn't Transfer 1:1 Across Roles](../concepts/agent-loops.md#loop-advice-doesnt-transfer-11-across-roles).
+
 ## Related Pages
 
+- [Agent Loops (Loop Engineering)](../concepts/agent-loops.md) — Steinberger as the "everything is a loop" archetype
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md)
 - [Empathize with the Agent](../concepts/empathize-with-the-agent.md)
 - [Claude Code](../tools/claude-code.md)

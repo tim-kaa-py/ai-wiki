@@ -120,6 +120,7 @@ Read: **more structure is not always better.** Default to the smallest harness t
 
 ## Related Pages
 
+- [Agent Loops (Loop Engineering)](agent-loops.md) — the entry-level reason-act-observe primitive; its three topologies (solo / maker-checker / manager-with-helpers) are the beginner-facing view of these patterns
 - [Harness Engineering](harness-engineering.md) — the discipline these patterns sit inside
 - [Natural Language Harness](natural-language-harness.md) — how to express these patterns cleanly
 - [Meta Harness](meta-harness.md) — optimizing the pattern mix itself

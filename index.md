@@ -6,6 +6,7 @@
 
 | Date | Title | Type | Tags |
 |------|-------|------|------|
+| 2026-06-19 | [Finally. Agent Loops Clearly Explained. (Nate Herk)](summaries/2026-06-19_nate-herk_agent-loops-clearly-explained.md) | youtube | agents, workflow, claude-code, loop-engineering, verification |
 | 2026-04-17 | [Harness Engineering: How to Build Software When Humans Steer, Agents Execute — Ryan Lopopolo, OpenAI](summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md) | youtube | harness-engineering, agents, agentic-coding-workflow, workflow, best-practices, code-review, monorepo, strategy |
 | 2026-02-11 | [Harness Engineering: Leveraging Codex in an Agent-First World (OpenAI)](summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md) | article | harness-engineering, agents, agentic-coding-workflow, workflow, best-practices, code-review, monorepo, strategy |
 | 2026-02-12 | [How to Code with AI Agents (Peter Steinberger)](summaries/2026-02-12_lex-clips_how-to-code-with-ai-agents-advice-from-openclaw-creator.md) | youtube | agentic-engineering, workflow, prompt-craft, soul-md, voice-input |
@@ -137,6 +138,7 @@
 
 - [Harness Engineering](wiki/concepts/harness-engineering.md) — concept: Agent = Model + Harness, OS analogy, craft of subtraction, three-era framing
 - [Agent Orchestration Patterns](wiki/concepts/agent-orchestration-patterns.md) — Anthropic's five canonical patterns (chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer) and ablation findings
+- [Agent Loops (Loop Engineering)](wiki/concepts/agent-loops.md) — concept: reason-act-observe primitive, goal vs verification pillars, quality-vs-attempts model, three topologies, when a loop is worth it
 - [Natural Language Harness (NLH)](wiki/concepts/natural-language-harness.md) — Tingua's three-layer separation, execution contracts, file-backed state
 - [Meta Harness](wiki/concepts/meta-harness.md) — Omar Khattab / Stanford: optimizing the pipeline itself, raw traces irreplaceable, harness transfers across models
 - [Omar Khattab](wiki/people/omar-khattab.md) — DSPy + Meta Harness author
