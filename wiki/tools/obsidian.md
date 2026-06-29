@@ -7,7 +7,8 @@ sources:
   - "summaries/2026-04-02_karpathy_llm-wiki.md"
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
-last_updated: "2026-04-13"
+  - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
+last_updated: "2026-06-29"
 ---
 
 # Obsidian
@@ -67,9 +68,17 @@ The vault contains:
 
 Clone the repo, open it as a vault, and the entire self-documenting codebase is immediately browsable with Obsidian's full feature set. *(Source: Cole Medin)*
 
+## The Vault as a "Map" (Chase AI)
+
+Chase AI frames an Obsidian vault not primarily as a *visualization* surface but as a **map** the LLM walks — the state layer of an [Agentic OS](../concepts/agentic-os.md). The load-bearing element is an `index.md` at **every level** of the hierarchy, acting as a table of contents that tells Claude what it's looking at as it descends ("every new room it enters, there's a clear spot it can go to"). Two practical points:
+
+- **The map is a cost lever.** A flat vault of un-linked notes forces Claude to hunt — more tokens, more money, slower. A hierarchy with index files gives it a direct path: faster and cheaper.
+- **Don't cargo-cult folder names.** The Karpathy `/raw` `/wiki` `/outputs` layout is just inspiration; the only requirement is a coherent map with index files unique to your data, plus a `CLAUDE.md` documenting vault conventions and a navigation pattern ("when looking for X, follow this path"). *(Source: Chase AI)*
+
 ## Related Pages
 
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md) — the pattern Obsidian visualizes
 - [Claude Code](claude-code.md) — the engine that maintains the wiki
 - [Andrej Karpathy](../people/andrej-karpathy.md) — originator of the pattern
 - [Claude Code Hooks for Memory](../how-tos/claude-code-hooks-memory.md) — the hook system that feeds the vault
+- [Agentic OS](../concepts/agentic-os.md) — the vault-as-map is the Level-2 state layer of the larger system

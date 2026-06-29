@@ -13,7 +13,8 @@ sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
-last_updated: "2026-05-17"
+  - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
+last_updated: "2026-06-29"
 ---
 
 # Agent Skills
@@ -93,6 +94,16 @@ Once skills are bundled context + scripts + docs + (optionally) MCP server defin
 2. **Write the description last.** Draft the skill body, then write a frontmatter description that specifically names the task and the trigger conditions.
 3. **Move deterministic work into scripts.** Any step that doesn't require model judgment should be a script call.
 4. **Test the discovery signal.** Give the agent representative tasks without priming for the skill. If it doesn't pick up the skill, the description is too vague.
+
+### Finding Which Skills to Build: The Workflow Audit (Chase AI)
+
+Before authoring a skill, surface *which* repeated work is worth codifying. Chase AI's **workflow audit** offers three discovery techniques — the second is the non-obvious one:
+
+1. **Manual recall** — list your repeated tasks yourself.
+2. **History mining** — have Claude Code read your last 10–20 sessions and extract repeated, not-yet-codified tasks into a chart of *task / desired output / proposed skill*. The agent's own session history is the audit corpus.
+3. **Brain-dump interview** — hand Claude a stream-of-consciousness dump and have it interview you to surface the repeated work.
+
+Pair this with **validate-before-codify**: do the task by hand once, confirm it works, then tell Claude "turn what we just did into a skill" — it can see the tool calls and back-and-forth from the session, so the skill is grounded in a working run rather than speculation. This operationalizes "start from real failures" above and complements Cole Medin's [3+ times rule](ai-layer.md). See [Agentic OS](agentic-os.md) for where the audit sits in the larger Level-1 build order. *(Source: Chase AI)*
 
 ## Forward-Looking: Skills over MCP
 
@@ -212,3 +223,4 @@ Plugins also bundle agents, hooks, MCP server definitions, LSP definitions, and 
 - [AI Layer](ai-layer.md) — global rules + commands + skills as a unified concept
 - [Agent Memory Systems](agent-memory-systems.md) — the next primitive after Skills; same progressive-disclosure design lineage
 - [Dreaming](dreaming.md) — companion to memory; out-of-band consolidation pattern
+- [Agentic OS](agentic-os.md) — skills as the Level-1 backbone; the workflow audit that decides which skills to build

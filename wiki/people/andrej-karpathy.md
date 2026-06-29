@@ -10,7 +10,8 @@ sources:
   - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
   - "summaries/2026-04-22_nate-b-jones_karpathy-wiki-vs-open-brain.md"
   - "summaries/2026-05-28_multica-ai_karpathy-coding-guidelines.md"
-last_updated: "2026-05-28"
+  - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
+last_updated: "2026-06-29"
 ---
 
 # Andrej Karpathy
@@ -69,6 +70,10 @@ Karpathy's late-2025 X post diagnosing LLM coding pitfalls — *"models make wro
 
 The unique contribution isn't the ideas — it's the *naming and packaging*: a tweet turned into copy-pasteable behavioral guardrails. The same content also ships as an invokable agent skill (`skills/karpathy-guidelines/SKILL.md`), making the guidelines toggleable rather than always-on system-prompt weight. *(Source: multica-ai, `andrej-karpathy-skills`)*
 
+## Reception: Chase AI on the "Obsidian RAG"
+
+Chase AI cites Karpathy's vault structure (`/raw` → `/wiki` → outputs) as the reference architecture for the memory/state layer of an [Agentic OS](../concepts/agentic-os.md). His reading sharpens what's load-bearing: the three folders are arbitrary and shouldn't be cargo-culted — the real value is an `index.md` at **every level** acting as a table of contents, which is both a navigation aid and a token/cost lever (a flat, un-indexed vault forces the LLM to hunt). *(Source: Chase AI)*
+
 ## Critique: Nate B Jones on the Wiki's Named Limits
 
 Nate B Jones has articulated the sharpest critique of Karpathy's wiki pattern: the architecture is correct, but it introduces named failure modes beyond the scalability cliff Karpathy himself acknowledged. Notably: wiki staleness as *active misinformation* (vs database staleness as ignorance), editorial/synthesis drift, raw-vs-synthesis source-of-truth drift, multi-agent write conflicts, team fracture, and a speed-of-business mismatch between paper-pace ingests and ticket/Slack-pace operational data. Jones also credits Karpathy with the deeper reframing the gist only hints at — AI from oracle to maintainer. *(Source: Nate B Jones)*
@@ -81,3 +86,4 @@ See [LLM Wiki Pattern § Limitations](../concepts/llm-wiki-pattern.md#limitation
 - [Obsidian](../tools/obsidian.md) — the tool he pairs with the wiki
 - [PRD-as-Prompt Pattern](../concepts/prd-as-prompt.md) — the bootstrap pattern from his follow-up tweet
 - [Auto Research](../concepts/auto-research.md) — his ML optimization framework adapted for general skill optimization
+- [Agentic OS](../concepts/agentic-os.md) — Chase AI builds the Level-2 state layer on Karpathy's vault structure

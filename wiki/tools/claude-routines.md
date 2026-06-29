@@ -7,7 +7,8 @@ sources:
   - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
   - "summaries/2026-05-06_claude-code-docs_routines.md"
   - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
-last_updated: "2026-05-27"
+  - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
+last_updated: "2026-06-29"
 ---
 
 # Claude Routines
@@ -163,6 +164,22 @@ Monitor usage at `claude.ai/code/routines` before adding high-frequency triggers
 /schedule update       # Edit routine including custom cron expressions (min interval: 1h)
 ```
 
+## The Skill → Automation → Loop Promotion Path (Chase AI)
+
+Chase AI positions routines as the **automation rung** in a three-step promotion ladder that turns one-off prompting into a self-improving system:
+
+1. **Skill** — codify a validated, repeated workflow (see [Agent Skills § Workflow Audit](../concepts/agent-skills.md#finding-which-skills-to-build-the-workflow-audit-chase-ai)).
+2. **Automation** — wrap the skill as a scheduled routine. Chase's Claw Desktop recipe: `Routines → New → name → instruction "run this skill: <skill-name>" → set a schedule`.
+3. **Loop** — ask whether a self-improvement loop fits; if so, the routine logs each run into the vault's state structure so future runs read prior iterations and improve. The logging must live in the same coherent "map" as the rest of memory/state (see [Agentic OS § Level 2](../concepts/agentic-os.md)).
+
+This is the Level-1 backbone of an [Agentic OS](../concepts/agentic-os.md): routines are where a skill stops being something you invoke and becomes something that runs on its own. *(Source: Chase AI)*
+
+### Headless `claude -p` Behind Dashboard Buttons
+
+When an AIOS dashboard exposes a button instead of a terminal, the button calls a **headless** Claude Code instance via `claude -p`, invisibly running a skill or slash command — same power as the terminal, no window. This is the same mechanism a routine uses to run unattended, just triggered by a UI click rather than a schedule/webhook.
+
+**Billing caveat (June 2026):** Anthropic briefly claimed `claude -p` would bill against a $200 API credit rather than the Max subscription, then walked it back; for now it still draws from the Max plan — same as running it in the terminal. *(Source: Chase AI)*
+
 ## `/loop` (Local) vs Routines (Remote)
 
 Anthropic's "Stop babysitting your agents" talk (Sid Benesaria, May 2026) frames Routines as the *remote* end of a two-rung autonomy ladder whose *local* rung is `/loop`:
@@ -186,3 +203,4 @@ The talk's framing thesis: both rungs exist to **push bookkeeping off your keybo
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) -- broader workflow patterns
 - [Prompt Engineering for Claude](../concepts/prompt-engineering-claude.md) -- prompt design principles applicable to routine prompts
 - [Focus Maxing](../concepts/focus-maxing.md) -- the attention-budget argument `/loop` and Routines serve
+- [Agentic OS](../concepts/agentic-os.md) -- the skill -> automation -> loop promotion path; routines as the Level-1 automation runtime

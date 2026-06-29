@@ -5,7 +5,8 @@ pillar: "building"
 tags: [agents, workflow, loop-engineering, verification, claude-code, agent-architecture]
 sources:
   - "summaries/2026-06-19_nate-herk_agent-loops-clearly-explained.md"
-last_updated: "2026-06-23"
+  - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
+last_updated: "2026-06-29"
 ---
 
 # Agent Loops (Loop Engineering)
@@ -69,6 +70,10 @@ Practitioner heuristics about loops are **role-dependent**. Peter Steinberger ru
 
 This is also why the cost framing here (knowledge-work loops kept short) sits comfortably alongside the much larger spend justified for high-value coding loops in [Generator-Evaluator Harness § The Cost Reality](generator-evaluator-harness.md#the-cost-reality): both gate on value-per-run, but the value ceiling differs by domain.
 
+## Self-Improving Loops Need a State Structure (Chase AI)
+
+Nate Herk's framing covers loop *logic* (reason-act-observe, goal vs verification). Chase AI adds the **infrastructure** a self-improving loop needs: somewhere to **log past runs** so each iteration can read prior ones and improve. That log must live in the same coherent memory/state "map" the agent already navigates — it is not a side file. This is why, in the [Agentic OS](agentic-os.md) framing, the loop engine (Level 1) and the state structure (Level 2) are inseparable: the loop is the engine, the logged state is its memory. A "second brain" *is* this logged, navigable store the loop both reads and writes. *(Source: Chase AI)*
+
 ## Related Pages
 
 - [Generator-Evaluator Harness](generator-evaluator-harness.md) — the production-scale maker-checker: separate evaluator agent, explicit rubric, browser-based done-checks
@@ -78,3 +83,4 @@ This is also why the cost framing here (knowledge-work loops kept short) sits co
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — verification feedback loops in practice (Boris Cherny's "single most impactful practice")
 - [Agent Evaluation](agent-evaluation.md) — how to make the verification pillar measurable (graders, rubrics, success criteria)
 - [Peter Steinberger](../people/peter-steinberger.md) — the "run everything as loops" end of the role spectrum
+- [Agentic OS](agentic-os.md) — loops as the Level-1 backbone, fed by the Level-2 state map; the skill → automation → loop promotion path

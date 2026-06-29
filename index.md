@@ -6,6 +6,7 @@
 
 | Date | Title | Type | Tags |
 |------|-------|------|------|
+| 2026-06-25 | [The Agentic OS Setup That Will 10x Claude Code (Chase AI)](summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md) | youtube | claude-code, agents, skills, workflow, architecture |
 | 2026-06-19 | [Finally. Agent Loops Clearly Explained. (Nate Herk)](summaries/2026-06-19_nate-herk_agent-loops-clearly-explained.md) | youtube | agents, workflow, claude-code, loop-engineering, verification |
 | 2026-04-17 | [Harness Engineering: How to Build Software When Humans Steer, Agents Execute — Ryan Lopopolo, OpenAI](summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md) | youtube | harness-engineering, agents, agentic-coding-workflow, workflow, best-practices, code-review, monorepo, strategy |
 | 2026-02-11 | [Harness Engineering: Leveraging Codex in an Agent-First World (OpenAI)](summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md) | article | harness-engineering, agents, agentic-coding-workflow, workflow, best-practices, code-review, monorepo, strategy |
@@ -68,6 +69,7 @@
 - [Agentic Coding Workflow](wiki/how-tos/agentic-coding-workflow.md) — step-by-step guide: setup, prompting, git, PR review
 - [Empathize with the Agent](wiki/concepts/empathize-with-the-agent.md) — core concept: thinking from the agent's perspective
 - [LLM Wiki Pattern](wiki/concepts/llm-wiki-pattern.md) — Karpathy's approach: LLM-maintained wiki replacing RAG for personal knowledge
+- [Agentic OS (AIOS)](wiki/concepts/agentic-os.md) — concept: Chase AI's four-level system (skills+loops / memory-map / UI / distribution); value is under the hood (L1–2 ≈ 90%); index-files-as-cost-lever
 - [PRD-as-Prompt](wiki/concepts/prd-as-prompt.md) — bootstrap pattern: encoding a full architecture as a single executable prompt
 - [Claude Code Hooks for Memory](wiki/how-tos/claude-code-hooks-memory.md) — implementation guide: automatic memory capture via hooks + Claude Agent SDK
 - [Claude Code Permissions](wiki/how-tos/claude-code-permissions.md) — how to use /permissions instead of --dangerously-skip-permissions

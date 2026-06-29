@@ -8,7 +8,8 @@ sources:
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
   - "summaries/2026-04-22_nate-b-jones_karpathy-wiki-vs-open-brain.md"
-last_updated: "2026-04-23"
+  - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
+last_updated: "2026-06-29"
 ---
 
 # LLM Wiki Pattern
@@ -49,6 +50,16 @@ The pattern makes a specific claim about when RAG is unnecessary:
 - **Therefore:** RAG is unnecessary at personal scale — the wiki pattern is sufficient
 
 **Acknowledged limit:** At gigabyte scale with hundreds or thousands of documents, RAG is still the better option. The pattern is explicitly not a universal RAG replacement — it's scoped to personal knowledge bases where the LLM's context can cover the index and summaries.
+
+## The Map: Index Files Are the Real Value (Chase AI)
+
+Chase AI re-presents the Karpathy structure as a vault with three subfolders — `/raw` (unstructured data), `/wiki` (Wikipedia-style articles synthesized from raw), and an **outputs** folder (deliverables like slide decks). His sharpening of the pattern is a useful corrective to folder-fixation:
+
+- **The folders are arbitrary; the `index.md` files are the point.** The real beauty isn't the three folders — it's that **every level has an `index.md`** acting as a table of contents that tells the LLM what it's looking at as it descends. "Every new room it enters, there's a clear spot it can go to."
+- **Don't cargo-cult the folder names.** Skip `/raw` and `/outputs` if they don't fit your data; the only load-bearing requirement is a coherent map with index files unique to you.
+- **The map is a cost lever, not just tidiness.** A flat folder of millions of un-linked files forces the LLM to hunt — slow, and it **reads more tokens and costs more money**. A clear hierarchy with index files lets it take "a very clear path" to the right file: faster *and* cheaper. Good information architecture is an efficiency lever.
+
+This is the Level-2 ("memory & state") reference architecture in the broader [Agentic OS](agentic-os.md) framing. *(Source: Chase AI)*
 
 ## The Compiler Analogy (Karpathy → Cole Medin)
 
@@ -133,3 +144,4 @@ The internal variant captures **tacit knowledge** — decisions, lessons learned
 - [Claude Code Hooks for Memory](../how-tos/claude-code-hooks-memory.md) — implementation guide for the internal data variant
 - [PRD-as-Prompt Pattern](../concepts/prd-as-prompt.md) — bootstrap pattern for one-shotting the system setup
 - [Contextual Retrieval](./contextual-retrieval.md) — the RAG-improving counterpart: where the wiki pattern abandons RAG at personal scale, Contextual Retrieval improves RAG at production scale.
+- [Agentic OS](agentic-os.md) — the four-level system where this wiki structure is the Level-2 "map"; index-files-as-cost-lever framing
