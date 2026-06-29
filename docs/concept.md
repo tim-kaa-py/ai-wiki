@@ -239,13 +239,13 @@ The script outputs JSON: `{"status", "extraction_method", "subtitle_lang", "tran
 
 ### 5.2 Local transcription fallback
 
-Copy [`scripts/transcribe-audio.py`](../scripts/transcribe-audio.py) for sources that have **no captions at all**. It downloads the audio via `yt-dlp`, transcribes it locally with [faster-whisper](https://github.com/SYSTRAN/faster-whisper), emits the **same JSON contract** as `extract-transcript.py` (with `extraction_method: "whisper-local"`), and deletes the temp audio. No `ffmpeg` needed (faster-whisper decodes via bundled PyAV).
+Copy [`scripts/transcribe-audio.py`](../scripts/transcribe-audio.py) for sources that have **no captions at all**. It downloads the audio via `yt-dlp` (with `--remote-components ejs:github` so current YouTube signature challenges resolve), normalizes it to 16 kHz mono with `ffmpeg`, transcribes it locally with the [whisper.cpp](https://github.com/ggerganov/whisper.cpp) CLI (`whisper-cli`), emits the **same JSON contract** as `extract-transcript.py` (with `extraction_method: "whisper-local"`), and deletes the temp files.
 
 Design points worth preserving on recreation:
 
-- **Device-aware default model:** `large-v3` on a CUDA GPU, `small` on CPU (large-v3 is too slow on CPU). A runtime CUDA→CPU fallback also downgrades an auto-selected model. GPU uses `int8_float16` so even `large-v3` fits a 4 GB card.
-- **`initial_prompt` priming** (`--prompt`) biases proper-noun spelling — without it, Whisper transcribes "Claude" as "Cloud". Default primes AI-domain terms.
-- Runtime requirements: `faster-whisper`; for GPU also `nvidia-cublas-cu12` + `nvidia-cudnn-cu12` (the script injects their DLL dirs on Windows).
+- **Reuse, don't reinstall.** The script drives the `whisper-cli` binary + ggml model already on the machine — the same stack the `claude-video-vision` plugin uses. It resolves the model by reading `~/.claude-video-vision/config.json` (`whisper_model`, default `large-v3-turbo`) under `~/whisper-models/`. whisper.cpp picks its backend automatically (Metal on Apple Silicon); no device flag is needed.
+- **Never auto-install.** If `whisper-cli`, `ffmpeg`, or the model is missing, it returns `status: "error"` with a manual-install hint and stops — it does not pip-install faster-whisper/openai-whisper. This is deliberate: an earlier version reached for `pip install faster-whisper` and stood up a duplicate stack that was never needed.
+- **`--prompt` priming** biases proper-noun spelling — without it, Whisper transcribes "Claude" as "Cloud". Default primes AI-domain terms. `--model` overrides the model (ggml name or absolute path).
 
 `CLAUDE.md` Step 3 chains these: captions → local transcription → ask user to paste. The `no_captions` path tries `transcribe-audio.py` before falling back to a manual paste.
 

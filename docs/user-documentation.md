@@ -41,10 +41,10 @@ Plus:
 
 - **Claude Code** installed and signed in. This doc assumes you launch it inside the wiki repo's root.
 - **Python 3** and **yt-dlp** (`pip install yt-dlp`) for YouTube/podcast transcript extraction. Needed only if you ingest video/audio sources.
-- **`faster-whisper`** (`pip install faster-whisper`) — optional, only for the no-captions fallback (see below). For GPU acceleration also install `nvidia-cublas-cu12` + `nvidia-cudnn-cu12`; without a GPU it runs on CPU (slower).
+- **`whisper.cpp`** (`brew install whisper-cpp`) plus **`ffmpeg`** (`brew install ffmpeg`) — optional, only for the no-captions fallback (see below). Also needs a ggml model under `~/whisper-models/` (default `ggml-large-v3-turbo.bin`). This is the same toolchain the `claude-video-vision` plugin uses, so if you have that set up you already have it.
 - **`gh` CLI** only if you want to push changes or work across remotes — not required for daily use.
 
-**No-captions fallback:** if a YouTube/podcast source has no captions at all, the agent automatically transcribes the audio locally with faster-whisper (downloaded to a temp file, then deleted — nothing is stored). On a CUDA GPU it uses `large-v3` (best accuracy, ~10 min for a 37-min video); on CPU it drops to `small`. It only asks you to paste a transcript if this also fails. If `faster-whisper` isn't installed, it skips straight to asking you to paste.
+**No-captions fallback:** if a YouTube/podcast source has no captions at all, the agent automatically transcribes the audio locally with whisper.cpp (audio downloaded to a temp file, normalized with ffmpeg, then deleted — nothing is stored). It uses the model configured for the `claude-video-vision` plugin (default `large-v3-turbo`), Metal-accelerated on Apple Silicon. It only asks you to paste a transcript if this also fails. The script never installs anything: if `whisper-cli`, `ffmpeg`, or the model is missing, it prints the manual install command and the agent falls back to asking you to paste — it will **not** pip-install a second transcription stack.
 
 Open the repo in your terminal, run `claude`, and you're working.
 
@@ -338,7 +338,7 @@ $ claude
 - [`index.md`](../index.md) — browse everything.
 - [`log.md`](../log.md) — chronological ingest history.
 - [`scripts/extract-transcript.py`](../scripts/extract-transcript.py) — YouTube/podcast caption extractor.
-- [`scripts/transcribe-audio.py`](../scripts/transcribe-audio.py) — local audio→text fallback (faster-whisper) for sources with no captions.
+- [`scripts/transcribe-audio.py`](../scripts/transcribe-audio.py) — local audio→text fallback (whisper.cpp) for sources with no captions.
 - [`docs/private-modules.md`](private-modules.md) — pattern for author-private extensions mounted inside this repo (some skills may not be available in a public clone).
 
 ---

@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
-"""Generate a transcript for a media URL via local ASR (faster-whisper).
+"""Generate a transcript for a media URL via local ASR (whisper.cpp).
 
 Fallback for sources with NO captions: downloads the audio stream with
-yt-dlp, transcribes it locally with faster-whisper (no API, no system
-ffmpeg needed — PyAV decodes the audio), and emits the same JSON contract
-as extract-transcript.py so callers can treat both interchangeably.
+yt-dlp, normalizes it to 16 kHz mono with ffmpeg, and transcribes it
+locally with the whisper.cpp CLI (`whisper-cli`). Emits the same JSON
+contract as extract-transcript.py so callers can treat both interchangeably.
+
+This deliberately reuses the whisper.cpp binary + model already installed on
+the machine (the same stack the claude-video-vision plugin uses). It NEVER
+installs anything: if whisper-cli, the model, or ffmpeg is missing it returns
+status "error" with a manual-install hint on stderr. Do not "fix" a missing
+dependency by pip-installing faster-whisper / openai-whisper — that is the
+exact duplication this rewrite removes.
 
 Outputs JSON to stdout:
   {"status": "ok", "extraction_method": "whisper-local", "subtitle_lang": "en", "transcript": "..."}
   {"status": "error", "extraction_method": null, "subtitle_lang": null, "transcript": null}
 
-Requires: yt-dlp, faster-whisper (pip install faster-whisper)
+Requires (none auto-installed): yt-dlp, ffmpeg, whisper-cli (brew install whisper-cpp),
+and a ggml model under ~/whisper-models/.
 """
 
 import argparse
@@ -21,6 +29,10 @@ import shutil
 import subprocess
 import sys
 import tempfile
+
+MODEL_DIR = os.path.expanduser("~/whisper-models")
+VIDEO_VISION_CONFIG = os.path.expanduser("~/.claude-video-vision/config.json")
+DEFAULT_MODEL_NAME = "large-v3-turbo"
 
 
 def js_runtime_args():
@@ -38,13 +50,16 @@ def js_runtime_args():
 def download_audio(url, dest_dir):
     """Download the best audio stream to dest_dir. Return the file path.
 
-    Uses -f bestaudio with no conversion, so no system ffmpeg is required.
+    --remote-components ejs:github pulls yt-dlp's JS challenge solver. Without
+    it, current YouTube downloads fail with HTTP 403 (signature solving error),
+    which is exactly what bit the old faster-whisper path.
     """
     out_template = os.path.join(dest_dir, "audio.%(ext)s")
     try:
         subprocess.run(
-            ["yt-dlp", *js_runtime_args(), "-f", "bestaudio",
-             "-o", out_template, url],
+            ["yt-dlp", *js_runtime_args(),
+             "--remote-components", "ejs:github",
+             "-f", "bestaudio", "-o", out_template, url],
             capture_output=True, text=True, check=True,
         )
     except FileNotFoundError:
@@ -58,49 +73,59 @@ def download_audio(url, dest_dir):
     return files[0] if files else None
 
 
-def add_cuda_dll_dirs():
-    """Make CTranslate2 find cuBLAS/cuDNN from the nvidia-*-cu12 pip packages.
+def normalize_to_wav(src_path, dest_dir):
+    """Convert any audio/video to 16 kHz mono WAV (whisper.cpp's expected input).
 
-    On Windows the DLLs ship inside site-packages/nvidia/<lib>/bin but are not
-    on PATH, so CTranslate2's CUDA backend fails to load them. add_dll_directory
-    registers them for the current process. No-op if the packages aren't present.
+    Routing everything through ffmpeg means any container yt-dlp hands back
+    works through one code path. Returns the wav path, or None on failure.
     """
-    if not hasattr(os, "add_dll_directory"):
-        return
-    for pkg in ("cublas", "cudnn"):
+    if not shutil.which("ffmpeg"):
+        print("Error: ffmpeg not found. Install it: brew install ffmpeg", file=sys.stderr)
+        return None
+    wav_path = os.path.join(dest_dir, "audio16k.wav")
+    try:
+        subprocess.run(
+            ["ffmpeg", "-nostdin", "-y", "-i", src_path,
+             "-ar", "16000", "-ac", "1", "-c:a", "pcm_s16le", wav_path],
+            capture_output=True, text=True, check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Error normalizing audio: {e.stderr}", file=sys.stderr)
+        return None
+    return wav_path
+
+
+def resolve_model(requested):
+    """Return the ggml model path, or None if it can't be found.
+
+    Prefer an explicit --model. Otherwise read the model name the
+    claude-video-vision plugin is configured to use (so the two stay in sync)
+    and fall back to large-v3-turbo. Model files live in ~/whisper-models/.
+    """
+    if requested and os.path.isabs(requested) and os.path.isfile(requested):
+        return requested
+
+    model_name = requested
+    if not model_name:
+        model_name = DEFAULT_MODEL_NAME
         try:
-            mod = __import__(f"nvidia.{pkg}", fromlist=[pkg])
-            # nvidia.* are namespace packages: __file__ is None, use __path__.
-            for base in (mod.__path__ or []):
-                bin_dir = os.path.join(base, "bin")
-                if os.path.isdir(bin_dir):
-                    os.add_dll_directory(bin_dir)
-        except ImportError:
+            with open(VIDEO_VISION_CONFIG) as f:
+                model_name = json.load(f).get("whisper_model", DEFAULT_MODEL_NAME)
+        except (OSError, json.JSONDecodeError):
             pass
 
-
-def resolve_device(requested):
-    """Map a requested device to (device, compute_type), detecting CUDA for 'auto'.
-
-    GPU uses int8_float16: fast and low-VRAM, so even large-v3 fits a 4 GB card.
-    CPU uses int8.
-    """
-    if requested in ("auto", "cuda"):
-        add_cuda_dll_dirs()
-        try:
-            import ctranslate2
-            if ctranslate2.get_cuda_device_count() > 0:
-                return "cuda", "int8_float16"
-        except Exception:
-            pass
-        if requested == "cuda":
-            print("Warning: CUDA requested but no GPU detected; using CPU.", file=sys.stderr)
-    return "cpu", "int8"
-
-
-def default_model_for(device):
-    """Device-aware default model: large-v3 is GPU-fast but punishingly slow on CPU."""
-    return "large-v3" if device == "cuda" else "small"
+    path = os.path.join(MODEL_DIR, f"ggml-{model_name}.bin")
+    if os.path.isfile(path):
+        return path
+    print(
+        f"Error: whisper model not found at {path}\n"
+        f"This script does not download models automatically. Fetch it manually, e.g.:\n"
+        f"  curl -L -o '{path}' \\\n"
+        f"    https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-{model_name}.bin\n"
+        f"or pass an absolute --model path to an existing ggml-*.bin.",
+        file=sys.stderr,
+    )
+    return None
 
 
 def format_timestamp(seconds, use_hours):
@@ -114,25 +139,8 @@ def format_timestamp(seconds, use_hours):
     return f"{minutes:02d}:{secs:02d}"
 
 
-def load_model(model_size, device, compute_type, auto_model):
-    """Load WhisperModel, falling back to CPU if CUDA init fails.
-
-    On a CUDA->CPU fallback, downgrade an auto-selected model to the CPU
-    default so we don't run large-v3 on CPU. An explicit --model is kept.
-    """
-    from faster_whisper import WhisperModel
-    try:
-        return WhisperModel(model_size, device=device, compute_type=compute_type), device, model_size
-    except Exception as e:
-        if device == "cuda":
-            fb_model = default_model_for("cpu") if auto_model else model_size
-            print(f"Warning: CUDA load failed ({type(e).__name__}); falling back to CPU with model '{fb_model}'.", file=sys.stderr)
-            return WhisperModel(fb_model, device="cpu", compute_type="int8"), "cpu", fb_model
-        raise
-
-
-# Priming text biases faster-whisper toward correct spelling of domain proper
-# nouns (e.g. "Claude", not "Cloud"). Override with --prompt for a given source.
+# Priming text biases whisper toward correct spelling of domain proper nouns
+# (e.g. "Claude", not "Cloud"). Override with --prompt for a given source.
 DEFAULT_PROMPT = (
     "A technical talk about AI and software engineering. Likely terms: "
     "Claude, Claude Code, Anthropic, OpenAI, GPT, LLM, MCP, RAG, agents, "
@@ -140,25 +148,57 @@ DEFAULT_PROMPT = (
 )
 
 
-def transcribe(audio_path, model_size, device, compute_type, auto_model, initial_prompt):
-    """Run faster-whisper on the audio file. Return (transcript, lang) or (None, None)."""
-    try:
-        model, used_device, used_model = load_model(model_size, device, compute_type, auto_model)
-    except ImportError:
-        print("Error: faster-whisper not installed. Run: pip install faster-whisper", file=sys.stderr)
+def transcribe(wav_path, model_path, initial_prompt, dest_dir):
+    """Run whisper-cli on the wav, parse its JSON, build timestamped lines.
+
+    Returns (transcript, lang) or (None, None). whisper-cli emits Metal-backed
+    inference on Apple Silicon automatically; no device flag is needed.
+    """
+    whisper_bin = shutil.which("whisper-cli")
+    if not whisper_bin:
+        print(
+            "Error: whisper-cli (whisper.cpp) not found. Install it: brew install whisper-cpp\n"
+            "Do not pip install faster-whisper/openai-whisper — this script uses whisper.cpp on purpose.",
+            file=sys.stderr,
+        )
         return None, None
 
-    print(f"Loaded model '{used_model}' on {used_device}. Transcribing...", file=sys.stderr)
-    segments, info = model.transcribe(audio_path, beam_size=5, initial_prompt=initial_prompt)
+    out_base = os.path.join(dest_dir, "transcript")
+    print(f"Transcribing with {os.path.basename(model_path)} on {whisper_bin} ...", file=sys.stderr)
+    try:
+        subprocess.run(
+            [whisper_bin, "-m", model_path, "-f", wav_path,
+             "-l", "auto", "--prompt", initial_prompt, "-np", "-oj", "-of", out_base],
+            capture_output=True, text=True, check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Error during transcription: {e.stderr}", file=sys.stderr)
+        return None, None
 
-    # segments is a generator; collect first so we can decide hour formatting.
-    collected = [(seg.start, seg.text.strip()) for seg in segments if seg.text.strip()]
+    json_path = out_base + ".json"
+    try:
+        with open(json_path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError) as e:
+        print(f"Error reading whisper output: {e}", file=sys.stderr)
+        return None, None
+
+    segments = data.get("transcription", [])
+    collected = []
+    for seg in segments:
+        text = (seg.get("text") or "").strip()
+        if not text:
+            continue
+        start_ms = seg.get("offsets", {}).get("from", 0)
+        collected.append((start_ms / 1000.0, text))
+
     if not collected:
         return None, None
 
+    lang = data.get("result", {}).get("language") or "en"
     use_hours = collected[-1][0] >= 3600
     lines = [f"[{format_timestamp(start, use_hours)}] {text}" for start, text in collected]
-    return "\n".join(lines), info.language
+    return "\n".join(lines), lang
 
 
 def output_result(status, method=None, lang=None, transcript=None):
@@ -173,20 +213,23 @@ def output_result(status, method=None, lang=None, transcript=None):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Transcribe a media URL via local faster-whisper.")
+    parser = argparse.ArgumentParser(description="Transcribe a media URL via local whisper.cpp.")
     parser.add_argument("url", help="YouTube/podcast/media URL")
     parser.add_argument("--model", default=None,
-                        help="faster-whisper model: tiny|base|small|medium|large-v3 "
-                             "(default: device-aware — large-v3 on GPU, small on CPU)")
-    parser.add_argument("--device", default="auto", choices=["auto", "cuda", "cpu"],
-                        help="auto picks CUDA if available, else CPU (default: auto)")
+                        help="ggml model name (e.g. large-v3-turbo, base, small) or an absolute "
+                             "path to a ggml-*.bin. Default: read from the claude-video-vision "
+                             "config, else large-v3-turbo. Models live in ~/whisper-models/.")
+    parser.add_argument("--device", default="auto", choices=["auto", "metal", "cpu"],
+                        help="accepted for backward compatibility; whisper.cpp selects the "
+                             "backend automatically (Metal on Apple Silicon). Ignored.")
     parser.add_argument("--prompt", default=DEFAULT_PROMPT,
-                        help="initial_prompt to bias proper-noun spelling (default: AI-domain terms)")
+                        help="initial prompt to bias proper-noun spelling (default: AI-domain terms)")
     args = parser.parse_args()
 
-    device, compute_type = resolve_device(args.device)
-    auto_model = args.model is None
-    model_size = args.model or default_model_for(device)
+    model_path = resolve_model(args.model)
+    if not model_path:
+        output_result("error")
+        return
 
     with tempfile.TemporaryDirectory() as tmp:
         audio_path = download_audio(args.url, tmp)
@@ -194,7 +237,12 @@ def main():
             output_result("error")
             return
 
-        transcript, lang = transcribe(audio_path, model_size, device, compute_type, auto_model, args.prompt)
+        wav_path = normalize_to_wav(audio_path, tmp)
+        if not wav_path:
+            output_result("error")
+            return
+
+        transcript, lang = transcribe(wav_path, model_path, args.prompt, tmp)
 
     if not transcript:
         output_result("error")
