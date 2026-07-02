@@ -61,6 +61,7 @@
 | 2026-05-02 | [Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban](summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md) | youtube | agents, agentic-coding-workflow, claude-code, codex, parallel-agents, plan-and-review, workflow, anti-patterns |
 | 2026-05-20 | [Stop babysitting your agents (Claude)](summaries/2026-05-20_claude_stop-babysitting-your-agents.md) | youtube | claude-code, agents, workflow, verification, automation, best-practices, skills, parallelization, mcp |
 | 2026-05-28 | [Karpathy-Inspired Claude Code Guidelines (multica-ai)](summaries/2026-05-28_multica-ai_karpathy-coding-guidelines.md) | repo | claude-code, prompt-engineering, agentic-coding-workflow, best-practices, anti-patterns, andrej-karpathy, agent-skills |
+| 2026-06-10 | [Why The Best Engineers Are Solving Code Review Bottlenecks (Beyond Coding)](summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md) | youtube | agents, code-review, guardrails, spec-driven-development, tdd, workflow, best-practices, claude-code |
 
 ### Wiki Pages
 
@@ -115,6 +116,8 @@
 - [Focus Maxing](wiki/concepts/focus-maxing.md) — concept: Knight-Webb's named anti-pattern — tools that pull humans in/out of context every 30s; the failure mode the parallelism + tier-2 tooling agenda is the cure for
 - [Louis Knight-Webb](wiki/people/louis-knight-webb.md) — Vibe Kanban founder; coined "focus maxing"; author of the displacement argument and the 5-min/30-min heuristic
 - [Dreaming](wiki/concepts/dreaming.md) — concept: out-of-band batch memory consolidation; three convergent arguments for why curation belongs outside the task loop; memory-quality follows compute-scaling logic
+- [Cognitive Debt](wiki/concepts/cognitive-debt.md) — concept: the two human-side failure modes of heavy AI delegation — losing grip on architecture (cognitive debt) and offloading accountability (cognitive surrender); the hand-grenade framing; discipline countermeasures
+- [Florian Buetow](wiki/people/florian-buetow.md) — AI engineer at Xebia; "don't review at all" via stop-hook guardrail loops; harness-over-model; spec+TDD behavioral tests as the first setup he saw work; architectural unit tests from the AI's own diagram
 
 ## Understanding AI
 

@@ -19,7 +19,8 @@ sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
-last_updated: "2026-05-09"
+  - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
+last_updated: "2026-07-02"
 ---
 
 # Agentic Coding Workflow
@@ -238,7 +239,7 @@ Every manual "continue" or "yes" click is a harness failure — the agent lacked
 6. **Practice compounds** — dedicate time to experimenting; agentic engineering is a learnable skill
 7. **Conversation, not command** — guide with intent, interrupt when stuck
 8. **Verify output** — give the agent a way to see what it built
-9. **Spec quality is the new bottleneck** — when AI builds what you describe, ambiguity produces software that fills gaps with machine guesses, not customer-centric guesses. Practice writing specs detailed enough for an AI agent to implement without human intervention. *(Source: Nate B Jones / Dan Shapiro)*
+9. **Spec quality is the new bottleneck — but the spec is the lever, not the enforcement.** When AI builds what you describe, ambiguity produces software that fills gaps with machine guesses, not customer-centric guesses. Practice writing specs detailed enough for an AI agent to implement without human intervention. *(Source: Nate B Jones / Dan Shapiro)* This makes spec quality the **highest-leverage human input** — but not a sufficient one on its own. Florian Buetow's counterpoint from trying it: pure spec-driven development drifts after ~5 minutes, because no spec is fully unambiguous and a static prompt gives the model no correction signal once it starts filling gaps its own way. The residual ambiguity gap is closed by **behavioral tests as an automated feedback signal** — spec + TDD-style behavioral tests fed back through the loop was the first setup Buetow saw actually work. The two are complementary, not opposed: the spec is where the human encodes intent (the lever), and behavioral tests are the runtime enforcement that catches the drift the spec can't fully specify away. *(Source: Florian Buetow, Beyond Coding 2026)* The spec remains the durable artifact of *shared understanding*; the tests are what hold the machine to it.
 10. **Know your level honestly** — Dan Shapiro's 5-level framework (spicy autocomplete → dark factory) exposes that 90% of developers are stuck at Level 2 and think they're further along. The METR study confirms self-assessment is unreliable. Measure actual task completion time, not subjective perception. *(Source: Nate B Jones / Dan Shapiro)*
 
 ## Leveling Up: The Maturity Ladder

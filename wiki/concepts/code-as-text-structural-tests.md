@@ -7,7 +7,8 @@ sources:
   - "summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md"
   - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+  - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
+last_updated: "2026-07-02"
 ---
 
 # Code-as-Text Structural Tests
@@ -60,6 +61,27 @@ A structural test that fails with "files under 350 lines: src/foo/bar.ts has 412
 
 Every diagnostic is a prompt-injection surface. Treat error text as a prompt template, not a log line. See the error-messages-as-prompts discussion in [Harness Engineering](harness-engineering.md).
 
+## Semantic Grep: Forbidding Code Shapes (Buetow)
+
+Florian Buetow (Beyond Coding, June 2026) adds a lint-tier guardrail he calls **semantic grep** ("SEM grep"): regex/AST-level pattern matching over *code constructs* rather than text, used to forbid specific code shapes a human reviewer would otherwise flag every time. It sits below structural tests on the deterministic ladder — per-construct rather than whole-repo — but shares the same job: encode recurring PR feedback as an enforceable, project-custom rule.
+
+His canonical examples:
+
+- **No default parameter values in Python method signatures** — Buetow calls this one of the greatest sources of later debugging pain.
+- **Never swallow errors** — every error must be propagated, not silently caught.
+
+Each match fires an error phrased as a prompt: *"You must not write it in that way. It's against policy."* This is the same error-messages-as-prompts principle as above — the guardrail's output *is* the correction a human would otherwise type. Buetow's practical starting move: ask the AI "what anti-patterns exist in this codebase?", then write a SEM grep rule for each. *(Source: Florian Buetow, Beyond Coding 2026)*
+
+## Deriving Architectural Tests From the AI's Own Diagram (Buetow)
+
+The **dependency-direction** invariant above (UI must not import DB directly; route through the business-logic layer) has a discovery method Buetow makes explicit. AI-generated code tends to create "weird interconnections between modules that a human would never do," and you can't encode a rule against an edge you haven't noticed yet. His loop:
+
+1. Have the AI **draw the system diagram** of the current codebase.
+2. Spot the illegal edges — the cross-module dependencies a human never would have drawn.
+3. Encode each as a **fast, dependency-only unit test** (analyzes the import graph, not behavior), e.g. `assert no_dependency(from="ui", to="db")`.
+
+Buetow frames these architectural unit tests as a guardrail class *distinct from* behavioral tests: behavioral tests constrain *what* the code does (and let you rebuild it if deleted); architectural tests constrain *how modules may depend on each other*. Both are needed — behavioral tests alone leave the wiring free, and free wiring is exactly where the AI erodes the human's grip on the system (see [Cognitive Debt](cognitive-debt.md)). *(Source: Florian Buetow, Beyond Coding 2026)*
+
 ## Why Structural Tests Pay: Feedback-Loop Quality Is the AI Ceiling
 
 Matt Pocock's compressed framing (AI Engineer 2026): **feedback-loop quality is the AI ceiling.** Without good feedback loops the agent codes blind; with them, capability rises. Structural tests are exactly the kind of check that pays into this:
@@ -96,3 +118,5 @@ Order of preference: if a concern can be a lint, make it a lint. Else a structur
 - [Harness Engineering](harness-engineering.md) — the parent discipline
 - [Reviewer Agents](reviewer-agents.md) — the judgment-based counterpart
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — where structural tests fit in daily practice
+- [Cognitive Debt](cognitive-debt.md) — why free module wiring erodes the human's grip; the failure architectural tests defend against
+- [Florian Buetow](../people/florian-buetow.md) — semantic grep + diagram-derived architectural tests

@@ -19,7 +19,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_features-overview.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
-last_updated: "2026-05-17"
+  - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
+last_updated: "2026-07-02"
 ---
 
 # Harness Engineering
@@ -341,6 +342,33 @@ Matt's compressed framing of why every loop in this section earns its place: **f
 
 These all converge on the same operational rule: invest in feedback before you invest in capability. *(Source: Matt Pocock, AI Engineer 2026)*
 
+## Harness-Over-Model: Buetow's Controlled TDD Experiment
+
+Florian Buetow (Beyond Coding, June 2026) supplies a first-person case for the "harness matters more than the model" thesis (Stanford's 6x measurement and the Haiku-beats-Opus finding above are the quantitative version). Buetow ran the *same top frontier model* with a spec-prompt + TDD-behavioral-test setup under two different harnesses: it **worked in one and failed in the other**. Because the variable that flipped the outcome was the harness — tools, prompting, memory layer, tool execution — not the model, harness choice dominates. His corollary sharpens the [Craft of Subtraction](#craft-of-subtraction) and [Re-Audit on Model Upgrade](#re-audit-on-model-upgrade-opus-47-example) points into an anti-pattern: because the best harness is a moving target (his example: Claude Code then, Codex "now" for implementation), **standardizing an org on a single tool is itself an anti-pattern** — if forced onto one, find the tasks it is genuinely good at (PR docs, debugging) and use it there. *(Source: Florian Buetow, Beyond Coding 2026)*
+
+## Horizontal vs Vertical Scaling of AI Engineering (Buetow)
+
+Buetow's framing for *where* harness leverage lives:
+
+| | **Horizontal** | **Vertical** |
+|--|----------------|--------------|
+| Move | Automate the human pipeline you already have — e.g. auto-review every PR with Copilot | A small specialized team builds custom tooling/environments so the product ships as intended |
+| Mechanism | Wrap automation around the existing process | Guardrails, architecture tests, stop-hook feedback |
+| Effect on quality | "They don't really talk about how that improves the quality" — it just moves the old process faster | Raises the quality ceiling by engineering the environment the agent runs in |
+
+Buetow favors vertical: horizontal scaling automates the old process without raising quality, whereas vertical scaling is where the harness/environment leverage actually is. This is the same "engineer the environment, not the human-in-the-loop" thesis that [Reviewer Agents](reviewer-agents.md) and [Code-as-Text Structural Tests](code-as-text-structural-tests.md) carry from Ryan Lopopolo — the same idea from a different speaker. *(Source: Florian Buetow, Beyond Coding 2026)*
+
+## Stop-Hook Guardrail Loop: The Concrete Plumbing (Buetow)
+
+Buetow names the end-to-end mechanism that turns "guardrails" into an automated feedback loop with no human in the middle — the same components the [Ralph loop](#ralph-loops-and-the-single-prompt-implementer-pocock) and [error-messages-as-prompts](#harness-as-repo-artifacts-ryan-lopopolo-openai) sections describe, wired together as one recipe:
+
+1. The CLI harness fires a **stop hook** when the agent finishes its work (see [Claude Code Hooks for Memory § Verification Hooks](../how-tos/claude-code-hooks-memory.md#verification-hooks-for-long-running-tasks) for the Anthropic "put guardrails in hooks" framing).
+2. The hook runs a shell script executing the **guardrails** — linter, semantic grep, behavioral tests, architectural tests.
+3. Each guardrail must "output like natural language text — this is forbidden, do it in this way," so its output *is* the correction a human would otherwise write.
+4. That feedback re-triggers the agent; paired with a **Ralph loop / `goal` command** (Buetow treats the `goal` command as functionally equivalent to a Ralph loop), the agent "keeps running longer and longer until they fix the issue."
+
+Buetow's umbrella term **guardrail** covers both the deterministic checks above *and* a prompt-based specialized review agent — he notes the term originally meant a prompt. The design property that unifies them: the feedback encodes the prompt a human would otherwise supply. His getting-started order is **static guardrails first** (cheap deterministic wins), then architecture, then spec validation — and he suggests **data-mining `~/.claude` session logs** for repeated corrections, converting each into a static check (a ~15-minute skill). *(Source: Florian Buetow, Beyond Coding 2026)*
+
 ## One Objective Per Agent: The Memory-Curation Split
 
 A harness-design principle Anthropic's May 2026 memory work makes explicit: **agents perform best with one clear objective at a time.** Adding a second objective dilutes the first.
@@ -379,3 +407,5 @@ Generalization: every prompt in the harness encodes an assumption about the prio
 - [Matt Pocock](../people/matt-pocock.md) — author of the structured Ralph variant
 - [Agent Memory Systems](agent-memory-systems.md) — memory primitive at platform scale; permission scopes, OCC, audit
 - [Dreaming](dreaming.md) — operationalization of "one objective per agent" applied to memory curation
+- [Cognitive Debt](cognitive-debt.md) — the human-side risk the guardrail loop is meant to contain
+- [Florian Buetow](../people/florian-buetow.md) — harness-over-model experiment, horizontal/vertical scaling, stop-hook guardrail loop
