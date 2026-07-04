@@ -4,6 +4,8 @@
 
 ## 2026-07-04
 
+**Update** LINT: post-OKF-migration health check — all 8 categories clean. Orphans: none (77/77 source-summary pairs, every summary referenced by >=1 wiki page, 1 gist correctly indexed). Stale: none (no wiki timestamp older than 90 days). Index sync: no broken links, no missing entries. Log sync: clean (12 apparent misses are the 2026-05-06 BATCH-INGEST pages, named in that entry rather than by slug — false positive). Contradictions: ledger empty, no open tensions, no stray TENSION markers. Gaps: all high-frequency tags have wiki pages. OKF conformance: scripts/okf-check.py PASS. Inbox: empty. No fixes required.
+
 **Update** STRUCTURE: OKF v0.1 migration — frontmatter (type/resource/timestamp/description) across 234 bundle files, log.md and index.md converted to OKF shapes, okf_version declared, CLAUDE.md + docs + podcast-ingest skill synced, conformance checker added (scripts/okf-check.py, wired into Lint). Also fixed pre-existing index gaps: added wiki/concepts/agent-memory-systems.md bullet, corrected footer counts to 77 sources / 80 wiki pages.
 
 ## 2026-07-02
