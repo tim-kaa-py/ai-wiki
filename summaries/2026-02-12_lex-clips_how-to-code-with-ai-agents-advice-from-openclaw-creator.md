@@ -1,5 +1,6 @@
 ---
 title: "How to Code with AI Agents (Peter Steinberger)"
+description: "Peter Steinberger shares principles for agentic engineering including agent empathy, codebase design, and parallel sessions"
 type: "summary"
 channel: "Lex Clips"
 date: "2026-02-12"

@@ -1,5 +1,6 @@
 ---
 title: "Contextual Retrieval"
+description: "Anthropic's RAG chunking technique that prepends an LLM-generated situating summary to each chunk before embedding or indexing"
 type: "concept"
 pillar: "understanding"
 tags: [rag, retrieval, embeddings, bm25, contextual-retrieval, reranking, prompt-caching, claude]

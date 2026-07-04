@@ -1,5 +1,6 @@
 ---
 title: "Claude Routines vs n8n"
+description: "Compares Claude Routines' natural-language automation against n8n/Make.com's node-based workflow builders"
 type: "comparison"
 pillar: "building"
 tags: [claude-code, routines, n8n, automation, workflow, comparison]

@@ -1,5 +1,6 @@
 ---
 title: "The Future of MCP — David Soria Parra, Anthropic"
+description: "Anthropic's David Soria Parra on why 2026 agents need a connectivity stack of Skills, MCP, and CLI/computer-use plus progressive discovery and programmatic tool calling"
 type: "summary"
 channel: "AI Engineer"
 date: "2026-04-19"

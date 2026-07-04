@@ -1,5 +1,6 @@
 ---
 title: "3 Claude Memory Systems to Get You Ahead of 99% of People"
+description: "Compares Claude Code automemory against memarch and Hermes memory systems across storage, injection, and recall, recommending a hybrid setup"
 type: "summary"
 channel: "Simon Scrapes"
 date: "2026-05-16"

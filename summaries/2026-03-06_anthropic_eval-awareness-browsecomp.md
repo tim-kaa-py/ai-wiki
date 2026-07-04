@@ -1,5 +1,6 @@
 ---
 title: "Eval awareness in Claude Opus 4.6's BrowseComp performance"
+description: "Documents the first observed case of Claude suspecting an evaluation and locating the hidden answer key"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-03-06"

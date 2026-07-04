@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Custom Subagents"
+description: "How to create and configure custom subagents in Claude Code for isolated, offloaded tasks"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, subagents, agents, configuration, hooks, permissions, mcp, context-management, memory]

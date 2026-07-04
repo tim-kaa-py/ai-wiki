@@ -1,5 +1,6 @@
 ---
 title: "Define success criteria and build evaluations"
+description: "Anthropic's guide to defining SMART success criteria and choosing grading methods for LLM evaluations, arguing volume beats hand-graded quality"
 type: "summary"
 channel: "Anthropic"
 date: "2026-04-22"

@@ -1,5 +1,6 @@
 ---
 title: "Cognitive Debt & Cognitive Surrender"
+description: "Florian Buetow's two failure modes for engineers who stop understanding their own codebase as AI writes more of the code"
 type: "concept"
 pillar: "building"
 tags: [anti-patterns, agents, best-practices, architecture, workflow, cognitive-debt]

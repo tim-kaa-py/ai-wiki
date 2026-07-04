@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Agent Teams"
+description: "How Claude Code's experimental agent teams coordinate multiple sessions with peer-to-peer messaging"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, agent-teams, multi-agent, parallel-agents, orchestration, subagents, coordination, experimental]

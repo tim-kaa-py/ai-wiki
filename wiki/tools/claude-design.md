@@ -1,5 +1,6 @@
 ---
 title: "Claude Design"
+description: "Anthropic's browser-based front-end generator at claude.ai/design, with design systems, tweaks, and variants"
 type: "tool"
 pillar: "building"
 tags: [claude-design, claude-code, front-end, design-system, workflow, ui]

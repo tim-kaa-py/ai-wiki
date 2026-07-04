@@ -1,5 +1,6 @@
 ---
 title: "Scaling Managed Agents: Decoupling the brain from the hands"
+description: "Describes Anthropic's split of Managed Agents into a stateless harness, interchangeable sandboxes, and durable session log"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-04-15"

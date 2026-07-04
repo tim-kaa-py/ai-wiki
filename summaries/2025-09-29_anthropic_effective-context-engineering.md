@@ -1,5 +1,6 @@
 ---
 title: "Effective context engineering for AI agents"
+description: "Argues context engineering supersedes prompt engineering and outlines strategies to manage context rot in agents"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-09-29"

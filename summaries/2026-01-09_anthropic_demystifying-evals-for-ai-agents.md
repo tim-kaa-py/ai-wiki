@@ -1,5 +1,6 @@
 ---
 title: "Demystifying evals for AI agents"
+description: "A comprehensive guide to evaluating AI agents covering grader types, non-determinism metrics, and eval saturation"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-01-09"

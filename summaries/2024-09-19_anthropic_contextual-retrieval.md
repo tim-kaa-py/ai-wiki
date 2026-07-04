@@ -1,5 +1,6 @@
 ---
 title: "Introducing Contextual Retrieval"
+description: "Explains Anthropic's contextual retrieval technique that prepends context to chunks before embedding/BM25 to cut retrieval failures"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2024-09-19"

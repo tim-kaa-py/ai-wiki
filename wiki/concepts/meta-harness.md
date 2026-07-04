@@ -1,5 +1,6 @@
 ---
 title: "Meta Harness"
+description: "Omar Khattab's Stanford framework that treats the agent harness itself, not just prompts, as the target of automated optimization"
 type: "concept"
 pillar: "understanding"
 tags: [meta-harness, harness-engineering, dspy, optimization, self-improving-ai, agents, claude-code]

@@ -1,5 +1,6 @@
 ---
 title: "Generator-Evaluator Harness"
+description: "A GAN-inspired agent pattern where a generator produces output and a separate evaluator critiques it against a rubric until it passes"
 type: "concept"
 pillar: "understanding"
 tags: [generator-evaluator, harness-engineering, agents, multi-agent, sprint-contracts, evaluation, gan, judge-as-agent]

@@ -1,5 +1,6 @@
 ---
 title: "Code Review (Claude Code)"
+description: "Anthropic's docs on Code Review, a managed service that runs reviewer agents on GitHub PRs and posts verified inline comments"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

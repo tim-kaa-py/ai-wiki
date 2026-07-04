@@ -1,5 +1,6 @@
 ---
 title: "2026 Agentic Coding Trends Report"
+description: "Anthropic's 2026 report framing agentic coding around the collaboration paradox and net-new work volume rather than speed"
 type: "summary"
 channel: "Anthropic"
 date: "2026-01-21"

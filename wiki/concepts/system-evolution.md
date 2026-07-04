@@ -1,5 +1,6 @@
 ---
 title: "System Evolution (Outer-Loop AI-Layer RCA)"
+description: "Cole Medin's outer-loop root-cause analysis of the AI layer itself after a coding agent ships a defect, to compound improvements over time"
 type: "concept"
 pillar: "building"
 tags: [agentic-engineering, claude-code, system-evolution, outer-loop, ai-layer, compounding, root-cause-analysis]

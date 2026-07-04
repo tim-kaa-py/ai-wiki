@@ -1,5 +1,6 @@
 ---
 title: "Code Review (Claude Code Managed Service)"
+description: "How Anthropic's managed Code Review service runs agent fleets to analyze and comment on GitHub PRs"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, code-review, github, multi-agent, pr-automation, review-md, claude-md, workflow, managed-service]

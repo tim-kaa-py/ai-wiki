@@ -1,5 +1,6 @@
 ---
 title: "Orchestrate teams of Claude Code sessions"
+description: "Anthropic's docs on experimental agent teams that coordinate multiple Claude Code sessions via peer messaging and a shared task list"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

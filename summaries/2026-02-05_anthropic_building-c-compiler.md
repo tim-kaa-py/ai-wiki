@@ -1,5 +1,6 @@
 ---
 title: "Building a C compiler with a team of parallel Claudes"
+description: "Recounts how 16 parallel Claude Code agents built a 100k-line Rust C compiler coordinated only by lock files"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-02-05"

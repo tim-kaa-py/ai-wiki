@@ -1,5 +1,6 @@
 ---
 title: "Raising the bar on SWE-bench Verified with Claude 3.5 Sonnet"
+description: "Describes how Claude 3.5 Sonnet reached 49% on SWE-bench Verified using minimal tooling of just Bash and Edit"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-01-06"

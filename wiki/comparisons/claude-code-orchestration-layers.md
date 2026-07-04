@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Orchestration Layers"
+description: "Head-to-head comparison of vanilla Claude Code, Superpowers, and GSD building the same benchmark project"
 type: "comparison"
 pillar: "ecosystem"
 tags: [claude-code, comparison, orchestration, gsd, superpowers, agents, sub-agents, workflow]

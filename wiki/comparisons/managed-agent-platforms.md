@@ -1,5 +1,6 @@
 ---
 title: "Managed Agent Platforms: Claude vs LangChain vs OpenAI"
+description: "Compares Claude Managed Agents, LangChain Deep Agents Deploy, and OpenAI Agents SDK and their lock-in tradeoffs"
 type: "comparison"
 pillar: "ecosystem"
 tags: [managed-agents, claude, openai, langchain, agents, agent-frameworks, comparison, infrastructure, sandbox]

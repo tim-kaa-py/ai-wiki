@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Skills"
+description: "How to author, invoke, and constrain Skills, the SKILL.md-based successor to custom commands"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, skills, how-to, configuration, subagents, workflow, supply-chain]

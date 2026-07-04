@@ -1,5 +1,6 @@
 ---
 title: "The Collaboration Paradox"
+description: "Anthropic's finding that developers use AI in most work yet fully delegate very few tasks, reframing the right success metric"
 type: "concept"
 pillar: "ecosystem"
 tags: [agentic-coding, productivity, collaboration, autonomy, opinion, metrics, anthropic]

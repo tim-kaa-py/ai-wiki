@@ -1,5 +1,6 @@
 ---
 title: "VSCode Hotkey: Launch Claude Code in a New Editor Tab"
+description: "Explains a VSCode keybinding that opens Claude Code as a full editor tab instead of the terminal panel, enabling parallel sessions"
 type: "summary"
 channel: "self"
 date: "2026-04-19"

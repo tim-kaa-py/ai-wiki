@@ -1,5 +1,6 @@
 ---
 title: "Model Behavior Engineer (MBE)"
+description: "Notion's non-engineering career track for people who own and shape how an organization's AI behaves"
 type: "concept"
 pillar: "ecosystem"
 tags: [model-behavior-engineer, evals, agents, roles, organization, prompt-engineering]

@@ -1,5 +1,6 @@
 ---
 title: "Quantifying infrastructure noise in agentic coding evals"
+description: "Shows infrastructure setup differences cause a 6-point spread on Terminal-Bench 2.0, so small leaderboard gaps may be noise not capability"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-04-18"

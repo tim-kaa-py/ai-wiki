@@ -1,5 +1,6 @@
 ---
 title: "Plan and Review"
+description: "Louis Knight-Webb's framing that time saved from AI coding is displaced into planning and reviewing, not freed as slack"
 type: "concept"
 pillar: "building"
 tags: [agentic-coding-workflow, plan-and-review, workflow, planning, review, parallel-agents, anti-patterns, claude-code, codex]

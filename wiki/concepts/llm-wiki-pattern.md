@@ -1,5 +1,6 @@
 ---
 title: "LLM Wiki Pattern"
+description: "Karpathy's knowledge management approach where an LLM incrementally builds a structured markdown wiki instead of using traditional RAG"
 type: "concept"
 pillar: "building"
 tags: [karpathy, wiki, knowledge-management, rag, markdown, compiler-analogy, hooks]

@@ -1,5 +1,6 @@
 ---
 title: "Stop babysitting your agents"
+description: "Argues attention becomes the bottleneck as models improve, and proposes self-verification, multi-Claude parallelism, and background routines"
 type: "summary"
 channel: "Claude"
 date: "2026-05-20"

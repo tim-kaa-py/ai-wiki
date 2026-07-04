@@ -1,5 +1,6 @@
 ---
 title: "PIV Loop (Plan-Implement-Validate)"
+description: "Cole Medin's per-ticket Plan-Implement-Validate inner loop that an engineer runs while a coding agent ships cleanly"
 type: "concept"
 pillar: "building"
 tags: [agentic-engineering, claude-code, workflow, planning, piv, inner-loop, two-layer-planning]

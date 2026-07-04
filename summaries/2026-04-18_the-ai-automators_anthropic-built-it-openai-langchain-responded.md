@@ -1,5 +1,6 @@
 ---
 title: "Anthropic Built It. OpenAI and LangChain Just Responded. You Now Have A Decision To Make."
+description: "Compares Anthropic Managed Agents, LangChain Deep Agents Deploy, and OpenAI Agents SDK and frames the real choice as where you sit on a build-to-buy spectrum"
 type: "summary"
 channel: "The AI Automators"
 date: "2026-04-18"

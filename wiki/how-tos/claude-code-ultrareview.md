@@ -1,5 +1,6 @@
 ---
 title: "Ultrareview (Claude Code)"
+description: "How /ultrareview runs a remote reviewer-agent fleet that independently verifies findings before merging"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, ultrareview, code-review, multi-agent, cloud, pr-automation, research-preview, ci-integration]

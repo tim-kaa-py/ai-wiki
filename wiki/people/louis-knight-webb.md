@@ -1,5 +1,6 @@
 ---
 title: "Louis Knight-Webb"
+description: "Vibe Kanban founder arguing software engineering is becoming plan and review rather than writing code"
 type: "person"
 pillar: "ecosystem"
 tags: [agentic-coding-workflow, plan-and-review, parallel-agents, vibe-kanban, anti-patterns, claude-code, codex]

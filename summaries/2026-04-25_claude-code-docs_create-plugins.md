@@ -1,5 +1,6 @@
 ---
 title: "Create plugins"
+description: "Anthropic's guide to packaging skills, agents, hooks, MCP servers, and monitors into distributable Claude Code plugins"
 type: "summary"
 channel: "Claude Code Docs"
 date: "2026-04-25"

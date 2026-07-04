@@ -1,5 +1,6 @@
 ---
 title: "PRD-as-Prompt Pattern"
+description: "A bootstrap pattern encoding a full system architecture as a product requirements document a coding agent executes in one prompt"
 type: "concept"
 pillar: "building"
 tags: [prompt-engineering, architecture, bootstrap, agents, best-practices, karpathy]

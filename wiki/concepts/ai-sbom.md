@@ -1,5 +1,6 @@
 ---
 title: "AI SBOM (Software Bill of Materials for Context)"
+description: "Patrick Debois's proposal for a bill of materials tracking provenance of skills, agent.md bundles, and MCP-server context packages"
 type: "concept"
 pillar: "building"
 tags: [security, supply-chain, sbom, agents, skills, context-engineering, provenance]

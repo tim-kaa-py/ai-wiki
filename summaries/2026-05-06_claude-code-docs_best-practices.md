@@ -1,5 +1,6 @@
 ---
 title: "Best practices for Claude Code"
+description: "Anthropic's canonical Claude Code best practices centered on context hygiene and giving Claude verification criteria"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

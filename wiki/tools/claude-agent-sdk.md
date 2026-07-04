@@ -1,5 +1,6 @@
 ---
 title: "Claude Agent SDK"
+description: "How the Claude Agent SDK exposes Claude Code's tools, hooks, and context management as a programmable library"
 type: "tool"
 pillar: "building"
 tags: [agent-sdk, claude-code, python, typescript, agents, tools, mcp, subagents, sessions, production, hooks]

@@ -1,5 +1,6 @@
 ---
 title: "Matt Pocock"
+description: "AI-coding teacher known for end-to-end pipeline design, the grill-me skill, and the Sandcastle library"
 type: "person"
 pillar: "ecosystem"
 tags: [agentic-engineering, claude-code, ai-hero, sandcastle, education, workflow]

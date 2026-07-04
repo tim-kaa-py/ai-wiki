@@ -1,5 +1,6 @@
 ---
 title: "Software Factory"
+description: "Simon Last's framing of coding agents as the kernel of AGI, forming an automated loop for building and maintaining software"
 type: "concept"
 pillar: "ecosystem"
 tags: [software-factory, agents, coding-agents, agi, harness-engineering, automation]

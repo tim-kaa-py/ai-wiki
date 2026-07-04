@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Status Line Setup"
+description: "How to configure a three-line status bar showing context, cost, rate limits, and git branch"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, terminal, configuration, workflow, status-line, how-to, reference]

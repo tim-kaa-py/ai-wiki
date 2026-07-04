@@ -1,5 +1,6 @@
 ---
 title: "Agentic OS (AIOS)"
+description: "Chase AI's four-level framing for a personal agentic OS combining loop engineering, skills, memory, and a navigable second brain"
 type: "concept"
 pillar: "building"
 tags: [claude-code, agents, skills, workflow, architecture, loop-engineering, second-brain, obsidian, distribution]

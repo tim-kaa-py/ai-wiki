@@ -1,5 +1,6 @@
 ---
 title: "Peter Steinberger"
+description: "OpenClaw creator and vocal agentic-coding practitioner known for the Agentic Trap curve and soul.md concept"
 type: "person"
 pillar: "ecosystem"
 tags: [agentic-engineering, openclaw, ios, engineering-leadership]

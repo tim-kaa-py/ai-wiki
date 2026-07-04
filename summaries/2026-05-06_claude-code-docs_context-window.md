@@ -1,5 +1,6 @@
 ---
 title: "Explore the context window (Claude Code)"
+description: "Anthropic's token-level breakdown of what fills Claude Code's context window and when, including baseline system prompt cost"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

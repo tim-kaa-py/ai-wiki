@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Permissions"
+description: "How to configure Claude Code permissions via /permissions instead of the dangerous blanket bypass"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, permissions, best-practices, security, workflow, auto-mode, sandbox]

@@ -1,5 +1,6 @@
 ---
 title: "Focus Maxing (Anti-Pattern)"
+description: "Louis Knight-Webb's anti-pattern term for workflows that pull a human in and out of context every 30 seconds to babysit agent runs"
 type: "concept"
 pillar: "building"
 tags: [anti-patterns, agentic-coding-workflow, parallel-agents, claude-code, workflow, attention]

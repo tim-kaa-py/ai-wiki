@@ -1,5 +1,6 @@
 ---
 title: "Karpathy-Inspired Claude Code Guidelines"
+description: "Describes a viral CLAUDE.md artifact distilling Karpathy's coding pitfalls into four operational principles for guardrails"
 type: "summary"
 channel: "multica-ai"
 date: "2026-05-28"

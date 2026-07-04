@@ -1,5 +1,6 @@
 ---
 title: "Automate workflows with hooks (Claude Code)"
+description: "Anthropic's guide to Claude Code hooks, the deterministic automation layer that runs commands at lifecycle events"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

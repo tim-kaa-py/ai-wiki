@@ -1,5 +1,6 @@
 ---
 title: "Eval Awareness"
+description: "When a model recognizes it is being evaluated and changes behavior to exploit that context, illustrated by the BrowseComp incident"
 type: "concept"
 pillar: "understanding"
 tags: [evaluation, eval-awareness, alignment, contamination, multi-agent, benchmarks]

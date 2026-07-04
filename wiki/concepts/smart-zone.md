@@ -1,5 +1,6 @@
 ---
 title: "Smart Zone vs Dumb Zone"
+description: "Dex Hardy and Matt Pocock's framing of a session's context as a smart zone of reliable reasoning versus a degraded dumb zone"
 type: "concept"
 pillar: "building"
 tags: [context-engineering, dumb-zone, smart-zone, claude-code, workflow, best-practices, agentic-coding-workflow]

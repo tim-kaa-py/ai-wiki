@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Plugins"
+description: "How to author, test, and ship Claude Code plugins bundling skills, agents, hooks, and MCP servers"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, plugins, skills, agents, hooks, mcp, monitors, lsp, packaging, workflow, how-to]

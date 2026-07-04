@@ -1,5 +1,6 @@
 ---
 title: "The Agentic OS Setup That Will 10x Claude Code"
+description: "Describes a four-level agentic OS where codified skills and a memory/file structure carry most of the value over custom UI layers"
 type: "summary"
 channel: "Chase AI"
 date: "2026-06-25"

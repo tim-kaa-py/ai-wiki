@@ -1,5 +1,6 @@
 ---
 title: "Context Development Life Cycle (CDLC)"
+description: "Patrick Debois's five-phase Generate-Test-Distribute-Observe-Adapt lifecycle for treating context like versioned code"
 type: "concept"
 pillar: "building"
 tags: [cdlc, context-engineering, agents, evaluation, skills, workflow, devops]

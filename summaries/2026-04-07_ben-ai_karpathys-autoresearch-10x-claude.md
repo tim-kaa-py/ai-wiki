@@ -1,5 +1,6 @@
 ---
 title: "How to use Karpathy's Autoresearch to 10x Claude"
+description: "Adapts Karpathy's Auto Research framework into a self-improving loop for testing and refining Claude skills"
 type: "summary"
 channel: "Ben AI"
 date: "2026-04-07"

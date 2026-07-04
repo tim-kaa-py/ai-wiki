@@ -1,5 +1,6 @@
 ---
 title: "Superpowers"
+description: "A Claude Code plugin adding skill-based orchestration, visual design iteration, and TDD-driven development"
 type: "tool"
 pillar: "building"
 tags: [claude-code, orchestration, agents, sub-agents, tdd, superpowers, workflow, visual-companion]

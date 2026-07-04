@@ -1,5 +1,6 @@
 ---
 title: "Writing effective tools for agents — with agents"
+description: "Five principles for writing effective agent tools, developed by using Claude Code itself as the build partner"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-09-11"

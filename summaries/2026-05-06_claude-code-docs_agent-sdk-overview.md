@@ -1,5 +1,6 @@
 ---
 title: "Agent SDK overview"
+description: "Anthropic's overview of the Agent SDK, the programmable library exposing Claude Code's tools and agent loop for production automation"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

@@ -1,5 +1,6 @@
 ---
 title: "Beyond permission prompts: making Claude Code more secure and autonomous"
+description: "Describes OS-level sandboxing for Claude Code that cut permission prompts by 84 percent using filesystem and network isolation"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-10-20"

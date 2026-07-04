@@ -1,5 +1,6 @@
 ---
 title: "Claude Code: Best practices for agentic coding"
+description: "Anthropic's canonical best practices for agentic coding with Claude Code, centered on managing context window limits"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-04-18"

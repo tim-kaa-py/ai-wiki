@@ -1,5 +1,6 @@
 ---
 title: "Omar Khattab"
+description: "Stanford researcher behind DSPy and the Meta Harness paper on optimizing agent pipelines, not just prompts"
 type: "person"
 pillar: "ecosystem"
 tags: [dspy, meta-harness, harness-engineering, optimization, stanford, researcher]

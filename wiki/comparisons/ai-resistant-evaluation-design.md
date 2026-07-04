@@ -1,5 +1,6 @@
 ---
 title: "AI-Resistant Evaluation Design (V1 → V2 → V3)"
+description: "How a real take-home eval evolved through three versions as models caught up, from Anthropic's performance team"
 type: "comparison"
 pillar: "understanding"
 tags: [evaluation, hiring, ai-resistance, performance-engineering, interview-design]

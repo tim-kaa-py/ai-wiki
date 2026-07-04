@@ -1,5 +1,6 @@
 ---
 title: "Why Andrej Karpathy Abandoned RAG (Claude Code x Obsidian)"
+description: "Tutorial replicating Karpathy's LLM wiki pattern using Claude Code with Obsidian as the visualization frontend"
 type: "summary"
 channel: "sayed.developer"
 date: "2026-04-07"

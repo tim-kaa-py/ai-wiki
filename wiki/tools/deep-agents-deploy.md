@@ -1,5 +1,6 @@
 ---
 title: "Deep Agents & Deep Agents Deploy"
+description: "LangChain's open-source Deep Agents harness library and its managed LangSmith deployment wrapper"
 type: "tool"
 pillar: "ecosystem"
 tags: [langchain, langgraph, deep-agents, managed-agents, agent-frameworks, sandbox, agents, infrastructure]

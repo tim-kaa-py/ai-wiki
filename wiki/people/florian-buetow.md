@@ -1,5 +1,6 @@
 ---
 title: "Florian Buetow"
+description: "Engineer arguing that engineered guardrail environments, not human review, must catch agent code errors"
 type: "person"
 pillar: "ecosystem"
 tags: [agentic-engineering, code-review, guardrails, harness-engineering, tdd, workflow]

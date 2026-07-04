@@ -1,5 +1,6 @@
 ---
 title: "Claude Prompting Best Practices"
+description: "Anthropic's canonical prompt engineering reference for Claude 4.6 and Opus 4.7, covering techniques and agentic design"
 type: "summary"
 channel: "Anthropic"
 date: "2026-04-13"

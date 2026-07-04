@@ -1,5 +1,6 @@
 ---
 title: "Context Engineering"
+description: "The discipline of curating what tokens occupy a model's context window across a session, as the successor to prompt engineering"
 type: "concept"
 pillar: "understanding"
 tags: [context-engineering, context-rot, just-in-time-retrieval, sub-agents, compaction, prompt-engineering, agents, cdlc]

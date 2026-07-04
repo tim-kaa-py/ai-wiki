@@ -1,5 +1,6 @@
 ---
 title: "Planning In Claude Code Just Got a Huge Upgrade"
+description: "Covers Ultra Plan, a cloud-hosted multi-agent planning feature for Claude Code that speeds up planning and execution"
 type: "summary"
 channel: "Nate Herk | AI Automation"
 date: "2026-04-06"

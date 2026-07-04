@@ -1,5 +1,6 @@
 ---
 title: "Equipping agents for the real world with Agent Skills"
+description: "Anthropic's introduction of Agent Skills - folders of instructions, scripts, and resources that extend Claude via progressive disclosure"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-10-16"

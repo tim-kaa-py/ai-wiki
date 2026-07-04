@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Auto Mode"
+description: "How auto mode's two-stage classifier replaces --dangerously-skip-permissions with safer unattended runs"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, permissions, auto-mode, safety, prompt-injection, classifier]

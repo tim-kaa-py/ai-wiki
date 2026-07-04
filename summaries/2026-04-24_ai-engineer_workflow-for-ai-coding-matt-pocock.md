@@ -1,5 +1,6 @@
 ---
 title: "Full Walkthrough: Workflow for AI Coding — Matt Pocock"
+description: "Describes Matt Pocock's grill-me to PRD to Kanban DAG to Ralph loop workflow and context discipline practices"
 type: "summary"
 channel: "AI Engineer"
 date: "2026-04-24"

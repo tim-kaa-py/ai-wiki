@@ -1,5 +1,6 @@
 ---
 title: "Prompt Engineering for Claude"
+description: "Anthropic's official prompt engineering patterns and mental model for getting the most out of Claude 4.6 and Opus 4.7"
 type: "concept"
 pillar: "building"
 tags: [prompt-engineering, claude, best-practices, xml-tags, few-shot-prompting, thinking, adaptive-thinking]

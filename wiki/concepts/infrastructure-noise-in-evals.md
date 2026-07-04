@@ -1,5 +1,6 @@
 ---
 title: "Infrastructure Noise in Agentic Evals"
+description: "Anthropic's finding that agentic benchmark scores depend on runtime resources, so small leaderboard gaps can be infrastructure artifacts"
 type: "concept"
 pillar: "understanding"
 tags: [evaluation, agents, benchmarks, infrastructure, swe-bench, terminal-bench]

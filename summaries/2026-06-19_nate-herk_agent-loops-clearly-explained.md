@@ -1,5 +1,6 @@
 ---
 title: "Finally. Agent Loops Clearly Explained."
+description: "Defines an agent loop as reason-act-observe-repeat and argues verification quality matters more than looping itself"
 type: "summary"
 channel: "Nate Herk | AI Automation"
 date: "2026-06-19"

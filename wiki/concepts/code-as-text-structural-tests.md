@@ -1,5 +1,6 @@
 ---
 title: "Code-as-Text Structural Tests"
+description: "Ryan Lopopolo's third testing tier that runs assertions against source code as text to keep agent-authored codebases legible"
 type: "concept"
 pillar: "building"
 tags: [harness-engineering, testing, structural-tests, monorepo, agentic-coding-workflow, best-practices]

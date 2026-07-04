@@ -1,5 +1,6 @@
 ---
 title: "The Think Tool"
+description: "A no-op tool that lets an agent record reasoning mid-chain before its next tool call, distinct from extended thinking"
 type: "concept"
 pillar: "understanding"
 tags: [think-tool, tool-use, reasoning, extended-thinking, tau-bench, agents, claude]

@@ -1,5 +1,6 @@
 ---
 title: "The 5 Levels of AI Coding (Why Most of You Won't Make It Past Level 2)"
+description: "Dan Shapiro's five-level framework for AI coding maturity and why most developers remain stuck below full autonomy"
 type: "summary"
 channel: "AI News & Strategy Daily | Nate B Jones"
 date: "2026-02-18"

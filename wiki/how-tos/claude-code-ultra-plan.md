@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Ultra Plan"
+description: "How Ultra Plan offloads Claude Code's planning phase to a cloud multi-agent Opus 4.6 architecture"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, planning, agents, workflow, multi-agent, opus-4-6, cloud-compute, how-to]

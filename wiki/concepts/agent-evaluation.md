@@ -1,5 +1,6 @@
 ---
 title: "Agent Evaluation"
+description: "Anthropic's vocabulary and grader taxonomy for evaluating LLM agents, plus non-determinism metrics and a practical roadmap"
 type: "concept"
 pillar: "understanding"
 tags: [evaluation, agents, graders, pass-at-k, benchmarks, best-practices, error-budgets, llm-as-judge]

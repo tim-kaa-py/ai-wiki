@@ -1,5 +1,6 @@
 ---
 title: "FULL Guide to Becoming a Principled Agentic Engineer (Build Anything with AI)"
+description: "Describes Cole Medin's Ideate-PIV-Evolve system of Claude Code commands backed by Jira, with an inner PIV loop and an outer loop that patches AI rules"
 type: "summary"
 channel: "Cole Medin"
 date: "2026-04-30"

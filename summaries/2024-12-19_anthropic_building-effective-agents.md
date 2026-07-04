@@ -1,5 +1,6 @@
 ---
 title: "Building effective agents"
+description: "Anthropic's taxonomy distinguishing workflows from agents and five workflow patterns for building effective LLM systems"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2024-12-19"

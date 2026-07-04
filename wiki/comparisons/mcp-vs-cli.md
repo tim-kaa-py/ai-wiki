@@ -1,5 +1,6 @@
 ---
 title: "MCP vs CLI"
+description: "How to choose between MCP tools and a shell/CLI for agent tool access, across four decision axes"
 type: "comparison"
 pillar: "building"
 tags: [mcp, cli, tool-use, agents, harness-design, permissions, token-economics]

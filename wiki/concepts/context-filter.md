@@ -1,5 +1,6 @@
 ---
 title: "Context Filter (WAF for Prompt Injection)"
+description: "Patrick Debois's proposal for a pre-agent filter scanning incoming context for prompt-injection patterns before it reaches the LLM"
 type: "concept"
 pillar: "building"
 tags: [security, prompt-injection, agents, skills, context-engineering, waf, supply-chain]

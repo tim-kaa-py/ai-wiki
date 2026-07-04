@@ -1,5 +1,6 @@
 ---
 title: "Harness Engineering: Leveraging Codex in an Agent-First World"
+description: "OpenAI team's account of shipping code hands-off with Codex, detailing their docs-as-system-of-record harness architecture"
 type: "summary"
 channel: "OpenAI"
 date: "2026-02-11"

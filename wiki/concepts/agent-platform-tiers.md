@@ -1,5 +1,6 @@
 ---
 title: "Agent Platform Tiers (Build-to-Buy Spectrum)"
+description: "A five-tier build-to-buy spectrum for positioning an agentic system, from full control to full vendor convenience"
 type: "concept"
 pillar: "ecosystem"
 tags: [managed-agents, agent-frameworks, infrastructure, comparison, agents, sandbox, harness, harness-engineering, strategy, memory]

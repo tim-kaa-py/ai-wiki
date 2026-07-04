@@ -1,5 +1,6 @@
 ---
 title: "Find bugs with ultrareview"
+description: "Anthropic's docs on ultrareview, a remote fleet of reviewer agents that independently verify bugs before merging"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

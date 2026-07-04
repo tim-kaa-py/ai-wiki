@@ -1,5 +1,6 @@
 ---
 title: "Work with sessions (Agent SDK)"
+description: "Anthropic's docs on Agent SDK sessions, covering continue, resume, and fork patterns for persisted JSONL conversation history"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

@@ -1,5 +1,6 @@
 ---
 title: "The Complete Anatomy of a Claude Code Project - 2026"
+description: "A diagram-style overview of a Claude Code project's file structure, framing CLAUDE.md as project brain and hooks as deterministic"
 type: "summary"
 channel: "GenAI Works"
 date: "2026-05-05"

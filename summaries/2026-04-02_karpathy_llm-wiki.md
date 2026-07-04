@@ -1,5 +1,6 @@
 ---
 title: "LLM Wiki"
+description: "Karpathy's blueprint for an LLM-maintained wiki that replaces RAG with a compounding, interlinked markdown knowledge base"
 type: "summary"
 channel: "Andrej Karpathy"
 date: "2026-04-02"

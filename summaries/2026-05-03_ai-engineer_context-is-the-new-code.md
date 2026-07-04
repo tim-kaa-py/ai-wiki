@@ -1,5 +1,6 @@
 ---
 title: "Context Is the New Code – Patrick Debois, Tessl"
+description: "Patrick Debois proposes a Context Development Life Cycle that applies DevOps practices to engineering prompts, skills, and workflows"
 type: "summary"
 channel: "AI Engineer"
 date: "2026-05-03"

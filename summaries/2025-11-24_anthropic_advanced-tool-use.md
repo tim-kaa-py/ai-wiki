@@ -1,5 +1,6 @@
 ---
 title: "Introducing advanced tool use on the Claude Developer Platform"
+description: "Introduces three beta tool-use features: Tool Search, Programmatic Tool Calling, and Tool Use Examples"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-11-24"

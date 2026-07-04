@@ -1,5 +1,6 @@
 ---
 title: "Parallel Agent Patterns"
+description: "Two coordination models for running many Claude agents in parallel: lock-file agent teams and hierarchical orchestrator-worker"
 type: "concept"
 pillar: "building"
 tags: [agent-teams, parallel-agents, multi-agent, orchestrator-worker, claude-code, verification, memory, dreaming]

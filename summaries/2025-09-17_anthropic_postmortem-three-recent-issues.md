@@ -1,5 +1,6 @@
 ---
 title: "A postmortem of three recent issues"
+description: "Anthropic's postmortem on three infrastructure bugs in Aug-Sep 2025 that degraded Claude output quality"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-09-17"

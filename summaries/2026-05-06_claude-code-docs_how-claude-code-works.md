@@ -1,5 +1,6 @@
 ---
 title: "How Claude Code works"
+description: "Anthropic's explanation of Claude Code as an agentic harness running a gather-context, take-action, verify loop"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

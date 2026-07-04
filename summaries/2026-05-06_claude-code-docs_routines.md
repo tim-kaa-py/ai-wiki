@@ -1,5 +1,6 @@
 ---
 title: "Automate work with routines"
+description: "Anthropic's docs on routines, scheduled or event-triggered Claude Code sessions that run autonomously on managed cloud infrastructure"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

@@ -1,5 +1,6 @@
 ---
 title: "Karpathy's Wiki vs. Open Brain. One Fails When You Need It Most."
+description: "Analyzes the strengths and failure modes of Karpathy's wiki pattern for solo research versus general corporate memory"
 type: "summary"
 channel: "AI News & Strategy Daily | Nate B Jones"
 date: "2026-04-22"

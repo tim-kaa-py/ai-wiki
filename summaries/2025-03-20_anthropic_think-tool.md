@@ -1,5 +1,6 @@
 ---
 title: "The 'think' tool: Enabling Claude to stop and think in complex tool use situations"
+description: "Introduces the think tool giving Claude scratch space during tool-use chains, improving tau-Bench airline results by 54%"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-03-20"

@@ -1,5 +1,6 @@
 ---
 title: "Claude Code auto mode: a safer way to skip permissions"
+description: "Introduces Claude Code auto mode, a two-stage classifier replacing permission prompts with injection and output detection"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-03-25"

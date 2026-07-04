@@ -1,5 +1,6 @@
 ---
 title: "Tool Design for Agents"
+description: "How to design tools LLM agents can use reliably, framed as the agent-computer interface deserving the same care as human interfaces"
 type: "concept"
 pillar: "building"
 tags: [tool-design, agents, mcp, aci, evaluation, claude-code, best-practices]

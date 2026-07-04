@@ -1,5 +1,6 @@
 ---
 title: "Rethinking AI Agents: The Rise of Harness Engineering"
+description: "Argues agents equal model plus harness, citing papers showing orchestration code drives large performance swings"
 type: "summary"
 channel: "PY"
 date: "2026-04-14"

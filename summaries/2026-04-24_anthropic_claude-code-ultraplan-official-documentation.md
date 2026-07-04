@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Ultraplan — Official Documentation"
+description: "Anthropic's docs on Ultraplan, a cloud-hosted planning session you can execute in the cloud or bring back to your terminal"
 type: "summary"
 channel: "Anthropic"
 date: "2026-04-24"

@@ -1,5 +1,6 @@
 ---
 title: "Obsidian"
+description: "A markdown-based knowledge management tool used as the visualization frontend for the LLM wiki pattern"
 type: "tool"
 pillar: "building"
 tags: [obsidian, knowledge-management, wiki, visualization, web-clipper, self-documenting]

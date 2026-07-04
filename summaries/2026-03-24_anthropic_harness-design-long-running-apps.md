@@ -1,5 +1,6 @@
 ---
 title: "Harness design for long-running application development"
+description: "Examines a Planner-Generator-Evaluator harness for long-running app development and its cost versus solo-agent tradeoffs"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-03-24"

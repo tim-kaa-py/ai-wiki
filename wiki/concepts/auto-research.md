@@ -1,5 +1,6 @@
 ---
 title: "Auto Research"
+description: "Karpathy's self-improving optimization loop of criteria, baseline, hypothesis, test, and evaluate, adapted for AI skill tuning"
 type: "concept"
 pillar: "building"
 tags: [auto-research, self-improving-ai, optimization, evals, criteria-design, agents, claude-code]

@@ -1,5 +1,6 @@
 ---
 title: "GSD vs Superpowers vs Claude Code: A New AI King?"
+description: "Benchmarks vanilla Claude Code against the Superpowers plugin and GSD framework, with vanilla winning on speed and cost"
 type: "summary"
 channel: "Chase AI"
 date: "2026-04-13"

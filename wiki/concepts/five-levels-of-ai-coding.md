@@ -1,5 +1,6 @@
 ---
 title: "Five Levels of AI Coding"
+description: "Dan Shapiro's maturity model for AI-assisted coding, from autocomplete to fully autonomous dark-factory software production"
 type: "concept"
 pillar: "building"
 tags: [ai-coding, agentic-engineering, dark-factory, workflow, software-engineering, j-curve, spec-quality, organizational-design]

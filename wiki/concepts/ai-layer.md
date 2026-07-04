@@ -1,5 +1,6 @@
 ---
 title: "AI Layer (Rules + Commands + Skills)"
+description: "Cole Medin's umbrella term for global rules, commands, and skills as the versioned instruction layer surrounding a coding agent"
 type: "concept"
 pillar: "building"
 tags: [agentic-engineering, claude-code, ai-layer, global-rules, commands, skills, source-control, agent-architecture]

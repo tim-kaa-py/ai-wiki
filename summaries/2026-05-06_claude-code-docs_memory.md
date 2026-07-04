@@ -1,5 +1,6 @@
 ---
 title: "How Claude remembers your project"
+description: "Anthropic's docs on how Claude Code persists knowledge via CLAUDE.md files and self-written auto memory"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

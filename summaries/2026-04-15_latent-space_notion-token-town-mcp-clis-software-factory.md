@@ -1,5 +1,6 @@
 ---
 title: "Notion's Token Town: 5 Rebuilds, 100+ Tools, MCP vs CLIs and the Software Factory Future"
+description: "Notion engineers recount 3.5 years of rebuilding coding agent harnesses and their views on MCP versus CLI tradeoffs"
 type: "summary"
 channel: "Latent Space: The AI Engineer Podcast"
 date: "2026-04-15"

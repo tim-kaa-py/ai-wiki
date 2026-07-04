@@ -1,5 +1,6 @@
 ---
 title: "Natural Language Harness (NLH)"
+description: "The Tingua team's discipline of writing an agent's control logic in structured natural language, separated from runtime and tools"
 type: "concept"
 pillar: "understanding"
 tags: [nlh, harness-engineering, agents, agent-architecture, orchestration, execution-contracts]

@@ -1,5 +1,6 @@
 ---
 title: "Packaging MCP Servers as Desktop Extensions (.mcpb)"
+description: "How .mcpb packages MCP servers for one-click install into Claude Desktop without manual setup"
 type: "how-to"
 pillar: "building"
 tags: [mcp, mcpb, desktop-extensions, claude-desktop, packaging, enterprise]

@@ -1,5 +1,6 @@
 ---
 title: "Cole Medin"
+description: "AI-coding educator behind an internal-data LLM wiki adaptation and an operationalized agentic SDLC"
 type: "person"
 pillar: "ecosystem"
 tags: [agentic-engineering, claude-code, workflow, education, system-evolution, ai-layer]

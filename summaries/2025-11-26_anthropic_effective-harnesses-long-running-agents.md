@@ -1,5 +1,6 @@
 ---
 title: "Effective harnesses for long-running agents"
+description: "Describes an initializer-plus-coding-agent harness pattern for multi-context-window long-running agent tasks"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-11-26"

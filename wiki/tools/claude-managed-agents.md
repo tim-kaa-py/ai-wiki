@@ -1,5 +1,6 @@
 ---
 title: "Claude Managed Agents"
+description: "Anthropic's fully cloud-hosted agent platform bundling model harness and sandboxed execution"
 type: "tool"
 pillar: "ecosystem"
 tags: [managed-agents, claude, anthropic, infrastructure, sandbox, harness, harness-engineering, agents, memory, dreaming, multi-agent]

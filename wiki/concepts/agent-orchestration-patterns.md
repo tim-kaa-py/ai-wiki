@@ -1,5 +1,6 @@
 ---
 title: "Agent Orchestration Patterns (Anthropic's Five Canonical)"
+description: "Anthropic's five canonical agent orchestration building blocks that production harnesses compose to close the performance gap"
 type: "concept"
 pillar: "understanding"
 tags: [agents, agent-architecture, orchestration, harness-engineering, patterns]

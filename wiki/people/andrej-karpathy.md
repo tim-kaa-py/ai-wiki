@@ -1,5 +1,6 @@
 ---
 title: "Andrej Karpathy"
+description: "AI researcher and originator of the LLM wiki pattern for maintaining personal knowledge bases with LLMs"
 type: "person"
 pillar: "ecosystem"
 tags: [karpathy, wiki, knowledge-management, ai-research, tesla, openai, compiler-analogy, prd-as-prompt, auto-research, self-improving-ai]

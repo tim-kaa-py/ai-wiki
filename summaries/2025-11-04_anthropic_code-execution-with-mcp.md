@@ -1,5 +1,6 @@
 ---
 title: "Code execution with MCP: Building more efficient agents"
+description: "Proposes exposing MCP tools as a code API in a sandboxed runtime to cut token usage by up to 98.7 percent"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-11-04"

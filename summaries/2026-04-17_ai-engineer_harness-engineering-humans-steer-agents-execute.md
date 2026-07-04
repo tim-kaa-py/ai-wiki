@@ -1,5 +1,6 @@
 ---
 title: "Harness Engineering: How to Build Software When Humans Steer, Agents Execute — Ryan Lopopolo, OpenAI"
+description: "Argues that once code is free, engineers should build the harness (docs, lints, tests, reviewer agents) that steers coding agents instead of reviewing every PR"
 type: "summary"
 channel: "AI Engineer"
 date: "2026-04-17"

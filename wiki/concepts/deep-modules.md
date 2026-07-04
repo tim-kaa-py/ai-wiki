@@ -1,5 +1,6 @@
 ---
 title: "Deep Modules (Ousterhout, Applied to AI)"
+description: "Ousterhout's deep-module design heuristic applied to AI coding, with Matt Pocock's argument for why it matters more now"
 type: "concept"
 pillar: "building"
 tags: [architecture, ousterhout, deep-modules, agentic-coding-workflow, agent-skills, claude-code, best-practices, refactoring]

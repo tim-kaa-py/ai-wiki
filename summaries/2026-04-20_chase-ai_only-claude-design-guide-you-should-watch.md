@@ -1,5 +1,6 @@
 ---
 title: "The ONLY Claude Design Guide You Should Watch"
+description: "Explains Claude Design's iterate-via-tweaks-and-variants workflow and how to avoid burning usage quota"
 type: "summary"
 channel: "Chase AI"
 date: "2026-04-20"

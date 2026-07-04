@@ -1,5 +1,6 @@
 ---
 title: "Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban"
+description: "Argues AI-displaced coding time shifts into planning and review, recommending plan-heavy workflows except for stateful front-end work"
 type: "summary"
 channel: "AI Engineer"
 date: "2026-05-02"

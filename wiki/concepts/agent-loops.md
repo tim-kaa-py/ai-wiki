@@ -1,5 +1,6 @@
 ---
 title: "Agent Loops (Loop Engineering)"
+description: "Defines the reason-act-observe agent loop and Nate Herk's loop engineering mindset shift for designing systems that prompt agents"
 type: "concept"
 pillar: "building"
 tags: [agents, workflow, loop-engineering, verification, claude-code, agent-architecture]

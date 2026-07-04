@@ -1,5 +1,6 @@
 ---
 title: "Agent Memory Systems: Storage / Injection / Recall"
+description: "A three-question framework for evaluating any agent memory system, from Claude Code automemory to custom RAG"
 type: "concept"
 pillar: "building"
 tags: [memory, agents, claude-code, context-engineering, hooks, best-practices, managed-agents, multi-agent, dreaming]

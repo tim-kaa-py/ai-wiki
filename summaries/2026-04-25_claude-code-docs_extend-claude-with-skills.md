@@ -1,5 +1,6 @@
 ---
 title: "Extend Claude with skills"
+description: "Anthropic's reference on Claude Code Skills as SKILL.md files that load only on invocation, with invocation and execution controls"
 type: "summary"
 channel: "Claude Code Docs"
 date: "2026-04-25"

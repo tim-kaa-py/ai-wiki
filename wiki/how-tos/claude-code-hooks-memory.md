@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Hooks for Memory"
+description: "How to set up Claude Code hooks that automatically capture session knowledge into a self-maintaining wiki"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, hooks, memory, llm-knowledge-bases, agents, workflow, automation, hook-types, json-output]

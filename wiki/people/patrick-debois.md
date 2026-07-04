@@ -1,5 +1,6 @@
 ---
 title: "Patrick Debois"
+description: "DevOps originator now applying SDLC discipline to context engineering via the Context Development Life Cycle"
 type: "person"
 pillar: "ecosystem"
 tags: [devops, context-engineering, cdlc, tessl, agents]

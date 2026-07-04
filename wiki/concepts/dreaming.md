@@ -1,5 +1,6 @@
 ---
 title: "Dreaming (Out-of-Band Memory Consolidation)"
+description: "Anthropic's out-of-band batch process that mines agent transcripts across sessions to consolidate and diff a shared memory store"
 type: "concept"
 pillar: "building"
 tags: [memory, agents, multi-agent, dreaming, self-learning, managed-agents, anthropic, claude, harness-engineering, knowledge-base]

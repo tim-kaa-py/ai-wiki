@@ -1,5 +1,6 @@
 ---
 title: "Claude Code"
+description: "Anthropic's CLI-based agentic coding environment spanning mobile, web, desktop, and terminal"
 type: "tool"
 pillar: "building"
 tags: [claude-code, cli, agentic-engineering, automation, voice-input, knowledge-management, hooks, memory, routines, permissions, mcp]

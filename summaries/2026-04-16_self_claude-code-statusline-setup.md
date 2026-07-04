@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Status Line — Context Awareness + Rate Limit Dashboard"
+description: "Sets up a three-line Claude Code status bar showing context usage, session cost, rate limits, git branch, and code velocity"
 type: "summary"
 channel: "self"
 date: "2026-04-16"

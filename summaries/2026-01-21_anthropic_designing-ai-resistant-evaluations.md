@@ -1,5 +1,6 @@
 ---
 title: "Designing AI-resistant technical evaluations"
+description: "Discusses how Claude models beat a take-home engineering test and how to redesign evaluations to resist AI pattern-matching"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-01-21"

@@ -1,5 +1,6 @@
 ---
 title: "Why The Best Engineers Are Solving Code Review Bottlenecks"
+description: "Argues that once code generation is cheap, review becomes the bottleneck, and proposes stop-hook guardrails plus behavioral tests instead of human review"
 type: "summary"
 channel: "Beyond Coding"
 date: "2026-06-10"

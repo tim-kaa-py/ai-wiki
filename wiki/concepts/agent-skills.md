@@ -1,5 +1,6 @@
 ---
 title: "Agent Skills"
+description: "Anthropic's framework for packaging reusable Claude capabilities as SKILL.md directories with scripts and reference files"
 type: "concept"
 pillar: "building"
 tags: [agent-skills, claude, skills, progressive-disclosure, agents, mcp, claude-code, skills-as-packages, supply-chain, memory]

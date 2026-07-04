@@ -1,5 +1,6 @@
 ---
 title: "Claude Routines Just Dropped, And It's Perfect"
+description: "Introduces Claude Routines, scheduled and triggered cloud Claude Code sessions that compete with n8n-style automation"
 type: "summary"
 channel: "Nick Saraev"
 date: "2026-04-14"

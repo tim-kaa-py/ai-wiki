@@ -1,5 +1,6 @@
 ---
 title: "GSD (Get Stuff Done)"
+description: "A Claude Code orchestration framework adding rigid phase-based planning and sub-agent-driven development"
 type: "tool"
 pillar: "building"
 tags: [claude-code, orchestration, agents, sub-agents, planning, gsd, workflow]

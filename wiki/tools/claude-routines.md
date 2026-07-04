@@ -1,5 +1,6 @@
 ---
 title: "Claude Routines"
+description: "How scheduled, triggered, or API-invoked Claude Code sessions turn Claude into a no-code automation platform"
 type: "tool"
 pillar: "building"
 tags: [claude-code, agents, automation, workflow, routines, connectors, managed-sessions, webhooks, github-events, api-triggers]

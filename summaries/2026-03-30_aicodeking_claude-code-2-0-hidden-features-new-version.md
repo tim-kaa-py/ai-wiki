@@ -1,5 +1,6 @@
 ---
 title: "Claude Code 2.0 & Hidden Features"
+description: "Walkthrough of underutilized Claude Code 2.0 features covering session mobility, hooks, worktrees, and custom agents"
 type: "summary"
 channel: "AICodeKing"
 date: "2026-03-30"

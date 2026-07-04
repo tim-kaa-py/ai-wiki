@@ -1,5 +1,6 @@
 ---
 title: "Desktop Extensions: One-click MCP server installation for Claude Desktop"
+description: "Covers Desktop Extensions, the .mcpb packaging format for one-click MCP server installation in Claude Desktop"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-06-26"

@@ -1,5 +1,6 @@
 ---
 title: "MCP (Model Context Protocol)"
+description: "Anthropic's open protocol for exposing tools, data, and prompts to LLM agents via local or remote MCP servers"
 type: "concept"
 pillar: "building"
 tags: [mcp, tool-use, code-execution, tool-search, programmatic-tool-calling, context-management, agents]

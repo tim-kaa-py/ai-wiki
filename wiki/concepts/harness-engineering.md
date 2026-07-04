@@ -1,5 +1,6 @@
 ---
 title: "Harness Engineering"
+description: "The discipline of designing and pruning everything around an agent that isn't model weights, the third era after prompt and context engineering"
 type: "concept"
 pillar: "understanding"
 tags: [harness-engineering, agents, agent-architecture, orchestration, evaluation, prompt-engineering, context-engineering, meta-harness, nlh, dspy, memory, dreaming]

@@ -1,5 +1,6 @@
 ---
 title: "Create custom subagents (Claude Code Docs)"
+description: "Anthropic's reference for configuring Claude Code subagents, covering isolated context, frontmatter schema, and built-in examples"
 type: "summary"
 channel: "Anthropic / Claude Code Docs"
 date: "2026-04-25"

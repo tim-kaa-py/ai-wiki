@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Tips from the Creator (Boris Cherny Thread)"
+description: "Boris Cherny's 13-tip thread on his personal Claude Code workflow, covering models, tools, permissions, and feedback loops"
 type: "summary"
 channel: "Boris Cherny (@bcherny)"
 date: "2026-01-02"

@@ -1,5 +1,6 @@
 ---
 title: "Extend Claude Code"
+description: "Anthropic's decision map for choosing among CLAUDE.md, Skills, Subagents, Agent Teams, MCP, Hooks, and Plugins"
 type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"

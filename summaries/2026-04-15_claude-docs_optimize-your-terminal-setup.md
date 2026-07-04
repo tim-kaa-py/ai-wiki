@@ -1,5 +1,6 @@
 ---
 title: "Optimize your terminal setup"
+description: "Anthropic's reference for configuring Claude Code's terminal, covering keybindings, notifications, and Vim mode"
 type: "summary"
 channel: "Anthropic"
 date: "2026-04-15"

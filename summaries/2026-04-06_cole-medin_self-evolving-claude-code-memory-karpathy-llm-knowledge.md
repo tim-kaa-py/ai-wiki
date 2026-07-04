@@ -1,5 +1,6 @@
 ---
 title: "I Built Self-Evolving Claude Code Memory w/ Karpathy's LLM Knowledge Bases"
+description: "Adapts Karpathy's LLM knowledge base pipeline into a self-maintaining codebase memory system using Claude Code hooks"
 type: "summary"
 channel: "Cole Medin"
 date: "2026-04-06"

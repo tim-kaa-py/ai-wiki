@@ -1,5 +1,6 @@
 ---
 title: "Reviewer Agents"
+description: "Ryan Lopopolo's persona-based CI agents that review every push against a documented standard to remove humans from the merge path"
 type: "concept"
 pillar: "building"
 tags: [harness-engineering, code-review, agents, ci, agentic-coding-workflow, workflow, best-practices]

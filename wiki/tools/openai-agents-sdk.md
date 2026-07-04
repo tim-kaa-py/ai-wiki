@@ -1,5 +1,6 @@
 ---
 title: "OpenAI Agents SDK"
+description: "OpenAI's self-hosted agent framework with harness features baked in for long-horizon agent loops"
 type: "tool"
 pillar: "ecosystem"
 tags: [openai, agents, agent-frameworks, harness, sandbox, sdk, infrastructure]

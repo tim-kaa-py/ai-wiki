@@ -1,5 +1,6 @@
 ---
 title: "Claude Code Sandboxing"
+description: "How OS-level sandboxing restricts filesystem and network access for Claude Code sessions"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, sandbox, security, permissions, bubblewrap, seatbelt, claude-code-web]

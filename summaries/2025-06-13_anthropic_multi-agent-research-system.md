@@ -1,5 +1,6 @@
 ---
 title: "How we built our multi-agent research system"
+description: "Details Anthropic's orchestrator-worker multi-agent research system and its token cost and performance tradeoffs"
 type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-06-13"

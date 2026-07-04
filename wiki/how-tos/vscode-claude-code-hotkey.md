@@ -1,5 +1,6 @@
 ---
 title: "VSCode Hotkey: Launch Claude Code in Editor Tab"
+description: "How to bind a VSCode keyboard shortcut that opens Claude Code as a full editor tab instead of the terminal panel"
 type: "how-to"
 pillar: "building"
 tags: [claude-code, vscode, configuration, workflow, how-to, reference]

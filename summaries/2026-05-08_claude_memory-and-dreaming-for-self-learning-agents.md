@@ -1,5 +1,6 @@
 ---
 title: "Memory and dreaming for self-learning agents"
+description: "Anthropic frames memory as the next agentic primitive after MCP and Skills, and introduces Dreaming, a batch process that mines transcripts to update memory"
 type: "summary"
 channel: "Claude"
 date: "2026-05-08"

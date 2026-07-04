@@ -1,5 +1,6 @@
 ---
 title: "Empathize with the Agent"
+description: "The mental shift of thinking from the agent's zero-context perspective before prompting it, as the key to effective agentic coding"
 type: "concept"
 pillar: "building"
 tags: [agentic-engineering, prompt-craft, mental-model, ai-coding]

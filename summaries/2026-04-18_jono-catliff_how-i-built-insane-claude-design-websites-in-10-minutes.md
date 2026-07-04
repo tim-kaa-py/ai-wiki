@@ -1,5 +1,6 @@
 ---
 title: "How I Built INSANE Claude Design Websites In 10 Minutes"
+description: "Describes the handoff workflow from a Claude Design prototype to a deployed Next.js site via Claude Code and Vercel"
 type: "summary"
 channel: "Jono Catliff"
 date: "2026-04-18"

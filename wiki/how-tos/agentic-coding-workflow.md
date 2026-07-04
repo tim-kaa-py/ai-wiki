@@ -1,5 +1,6 @@
 ---
 title: "Agentic Coding Workflow"
+description: "Step-by-step guide to productive agentic coding, synthesized from Peter Steinberger and Claude Code power-user practices"
 type: "how-to"
 pillar: "building"
 tags: [agentic-engineering, workflow, best-practices, claude-code, spec-quality, ai-coding, auto-research, optimization]
