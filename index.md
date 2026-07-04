@@ -67,6 +67,7 @@ okf_version: "0.1"
 
 ### Wiki Pages
 
+* [Agent Memory Systems: Storage / Injection / Recall](wiki/concepts/agent-memory-systems.md) - A three-question framework for evaluating any agent memory system, from Claude Code automemory to custom RAG
 * [Claude Code](wiki/tools/claude-code.md) - Anthropic's CLI-based agentic coding environment spanning mobile, web, desktop, and terminal
 * [Obsidian](wiki/tools/obsidian.md) - A markdown-based knowledge management tool used as the visualization frontend for the LLM wiki pattern
 * [Agentic Coding Workflow](wiki/how-tos/agentic-coding-workflow.md) - Step-by-step guide to productive agentic coding, synthesized from Peter Steinberger and Claude Code power-user practices
@@ -195,4 +196,4 @@ okf_version: "0.1"
 
 ---
 
-**72 sources** | **74 wiki pages** | [Ingest Log](log.md)
+**77 sources** | **80 wiki pages** | [Ingest Log](log.md)

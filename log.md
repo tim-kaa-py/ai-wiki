@@ -2,6 +2,10 @@
 
 <!-- OKF log: date headings newest first, prose entries. Append-only. -->
 
+## 2026-07-04
+
+**Update** STRUCTURE: OKF v0.1 migration — frontmatter (type/resource/timestamp/description) across 234 bundle files, log.md and index.md converted to OKF shapes, okf_version declared, CLAUDE.md + docs + podcast-ingest skill synced, conformance checker added (scripts/okf-check.py, wired into Lint). Also fixed pre-existing index gaps: added wiki/concepts/agent-memory-systems.md bullet, corrected footer counts to 77 sources / 80 wiki pages.
+
 ## 2026-07-02
 
 **Creation** INGEST: [Why The Best Engineers Are Solving Code Review Bottlenecks (Beyond Coding)](summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md) (youtube, deep-dive (Mode A — user focus: automate code review via stop-hook feedback loops; architectural unit tests; quality without human-in-loop; TDD + architecture-pattern tests; discoveries A–F all kept)) — source: sources/youtube/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md (manual-captions, en); notes: notes/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md. Step 0 source-scan: skipped (public YouTube). Summary (Opus): TL;DR, Video Structure, Key Concepts, Key Takeaways, Argument Structures, Notable Commands. Step 0 summary-scan: CLEAR. CONNECT (Opus): new pages wiki/concepts/cognitive-debt.md, wiki/people/florian-buetow.md. Orthogonal merges: wiki/concepts/code-as-text-structural-tests.md (semantic grep + diagram-derived architectural tests), wiki/concepts/harness-engineering.md (harness-over-model experiment, horizontal/vertical scaling, stop-hook guardrail loop). 1 tension on wiki/how-tos/agentic-coding-workflow.md (spec-as-lever vs behavioral-tests-as-enforcement) resolved (d) Synthesize — Principle 9 rewritten, both attributions preserved. Index: 74 sources.
