@@ -87,13 +87,13 @@ Write to `sources/podcasts/<slug>.md`:
 ```yaml
 ---
 title: "<episode title>"
-source_type: "podcast"
+type: "podcast"
 channel: "<show name>"
 date: "<YYYY-MM-DD>"
-url: "<canonical url>"
+resource: "<canonical url>"
 pillar: "<pillar>"
 tags: [tag1, tag2]
-ingested: "<today>"
+timestamp: "<today>"
 extraction_method: "<method from step 3>"
 ---
 ```
@@ -204,10 +204,10 @@ Same as the standard CONNECT step in CLAUDE.md:
 
 ## Step 9 — Index & Log
 
-Add row to `index.md` under the correct pillar. Append entry to `log.md`:
+Add a `* [Title](path) - description` bullet to `index.md` under the correct pillar heading. Append a `**Creation**` entry to `log.md` under today's `## YYYY-MM-DD` heading:
 
 ```
-<date> | INGEST | <title> | podcast | tier-2 | <what was updated in wiki>
+**Creation** | INGEST | <title> | podcast | tier-2 | <what was updated in wiki>
 ```
 
 ## Guardrails

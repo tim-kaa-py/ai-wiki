@@ -79,7 +79,8 @@ Create the following directory structure in the working directory:
 │   └── .gitkeep
 ├── scripts/
 │   ├── extract-transcript.py
-│   └── transcribe-audio.py
+│   ├── transcribe-audio.py
+│   └── okf-check.py
 ├── sources/
 │   ├── articles/
 │   ├── docs/
@@ -130,7 +131,13 @@ Use the reference implementation in this repo as your template: [`CLAUDE.md`](..
 
 ### 4.2 `index.md`
 
+OKF v0.1 shape: frontmatter carries only `okf_version: "0.1"`; the body is one heading per pillar with `* [Title](path) - description` bullets underneath (description pulled from each entry's own frontmatter `description` field).
+
 ```markdown
+---
+okf_version: "0.1"
+---
+
 # <Topic> Knowledge Wiki
 
 ## <Pillar 1 Name>
@@ -148,17 +155,20 @@ Use the reference implementation in this repo as your template: [`CLAUDE.md`](..
 **0 sources** | **0 wiki pages** | [Ingest Log](log.md)
 ```
 
-As sources get ingested, you will add `### Sources` and `### Wiki Pages` subsections under each pillar, with markdown tables for sources and bulleted lists for wiki pages. See the reference [`index.md`](../index.md) for the exact format.
+As sources get ingested, replace `*No sources yet.*` with `* [Title](path/to/file.md) - description` bullets under each pillar heading (sources and wiki pages both use this flat bullet form — no tables). See the reference [`index.md`](../index.md) for the exact format.
 
 ### 4.3 `log.md`
+
+OKF v0.1 shape: `## YYYY-MM-DD` headings, newest date first; each entry is a line prefixed `**Creation**` (for INGEST/BATCH-INGEST/RE-INGEST actions) or `**Update**` (for everything else — lint fixes, gist saves, contradiction resolutions, etc.).
 
 ```markdown
 # Ingest Log
 
-<!-- Append-only. Most recent first. -->
+<!-- Append-only. Newest date heading first. -->
 
-| Date | Action | Source | Type | Tier | Updates |
-|------|--------|--------|------|------|---------|
+## YYYY-MM-DD
+
+- **Creation** | INGEST | <title> | <type> | <tier> | <what was updated>
 ```
 
 ### 4.4 `.gitignore`
@@ -249,7 +259,11 @@ Design points worth preserving on recreation:
 
 `CLAUDE.md` Step 3 chains these: captions → local transcription → ask user to paste. The `no_captions` path tries `transcribe-audio.py` before falling back to a manual paste.
 
-### 5.3 Optional future scripts
+### 5.3 OKF conformance checker
+
+Copy [`scripts/okf-check.py`](../scripts/okf-check.py) into the new repo at the same path. It validates that `sources/`, `summaries/`, `wiki/`, `index.md`, and `log.md` conform to [OKF v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) (correct frontmatter field names — `type`, `resource`, `timestamp`, `description` — plus the `index.md`/`log.md` shapes above). Run it with `python3 scripts/okf-check.py`; it exits 0 and prints `OKF CHECK: PASS` when the bundle conforms. Wire it into the Lint Workflow (`CLAUDE.md` → "Lint Workflow" → OKF CONFORMANCE step) so drift gets caught on every lint pass, not just at scaffold time.
+
+### 5.4 Optional future scripts
 
 Leave `scripts/` open for additions (e.g., paper fetchers, lint helpers). Do not pre-create them.
 

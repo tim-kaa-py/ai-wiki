@@ -4,6 +4,8 @@ An LLM-maintained knowledge wiki about AI. The agent handles all bookkeeping: su
 
 ## Architecture
 
+This repo is an [Open Knowledge Framework (OKF) v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) bundle — `sources/`, `summaries/`, `wiki/`, `index.md`, and `log.md` conform to the OKF v0.1 schema (gists are a wiki-specific extension outside the bundle). Conformance is checked by `scripts/okf-check.py`.
+
 Three layers (knowledge ingest pipeline):
 1. **Sources** (`sources/`) — Raw, verbatim material. Never modified after saving.
 2. **Summaries** (`summaries/`) — One-per-source, opinionated summaries focused on the user's interests.
@@ -12,7 +14,7 @@ Three layers (knowledge ingest pipeline):
 Plus a parallel artifact track:
 - **Gists** (`gists/`) — Standalone, user-authored Claude Code prompts shareable with others. Not derived from sources, not synthesized into the wiki. See [Gists Workflow](#gists-workflow).
 
-Plus: `index.md` (master index of sources/wiki), `gists/index.md` (gists index), `log.md` (chronological action log), `inbox/` (unprocessed items).
+Plus: `index.md` (master index of sources/wiki — frontmatter is `okf_version: "0.1"` only, body is `* [Title](path) - description` bullets under pillar headings, description pulled from each entry's frontmatter), `gists/index.md` (gists index — its own table format, not OKF), `log.md` (chronological action log — `## YYYY-MM-DD` headings, newest-first, entries prefixed `**Creation**` for INGEST/BATCH-INGEST/RE-INGEST or `**Update**` for other actions), `inbox/` (unprocessed items).
 
 ## Model Routing
 
@@ -76,13 +78,13 @@ Default model: **Sonnet**. The main session runs on Sonnet for orchestration and
 ```yaml
 ---
 title: "<title>"
-source_type: "youtube|podcast|article|paper|repo|docs|note"
+type: "youtube|podcast|article|paper|repo|docs|note"
 channel: "<author/channel/org>"
-date: "<YYYY-MM-DD>"
-url: "<url>"
+date: "<YYYY-MM-DD>"  # publication date
+resource: "<url>"
 pillar: "building|understanding|ecosystem|lab"
 tags: [tag1, tag2]
-ingested: "<YYYY-MM-DD>"
+timestamp: "<YYYY-MM-DD>"
 extraction_method: "auto-captions|manual-captions|whisper-local|web-fetch|pdf-extract|user-pasted"
 # Optional (source-type specific):
 video_id: "<id>"
@@ -95,13 +97,14 @@ duration: "<duration>"
 ```yaml
 ---
 title: "<title>"
-source_type: "<type>"
+type: "summary"
+description: "<one sentence>"
 channel: "<author>"
 date: "<YYYY-MM-DD>"
-url: "<url>"
+resource: "<url>"
 pillar: "<pillar>"
 tags: [tag1, tag2]
-ingested: "<YYYY-MM-DD>"
+timestamp: "<YYYY-MM-DD>"
 source_file: "sources/<folder>/<slug>.md"
 ---
 ```
@@ -112,12 +115,13 @@ source_file: "sources/<folder>/<slug>.md"
 ---
 title: "<topic>"
 type: "concept|tool|how-to|person|comparison"
+description: "<one sentence>"
 pillar: "<pillar>"
 tags: [tag1, tag2]
 sources:
   - "summaries/<slug1>.md"
   - "summaries/<slug2>.md"
-last_updated: "<YYYY-MM-DD>"
+timestamp: "<YYYY-MM-DD>"
 ---
 ```
 
@@ -235,8 +239,8 @@ User pastes a URL (not YouTube/podcast/arxiv/github).
    - Related Topics (tags)
 7. **SCAN SUMMARY** — Run Step 0 on the generated summary. Resolve any flags before proceeding.
 8. **CONNECT** — Update wiki pages (see CONNECT step below)
-9. **INDEX** — Add row to `index.md` under correct pillar
-10. **LOG** — Append entry to `log.md` (date, action, source, type, tier, what was updated)
+9. **INDEX** — Add a `* [Title](path) - description` bullet to `index.md` under the correct pillar heading, description from frontmatter
+10. **LOG** — Append a `**Creation**` entry to `log.md` under today's `## YYYY-MM-DD` heading (date, action, source, type, tier, what was updated)
 
 ### Entry Point B: Inbox Processing
 
@@ -427,7 +431,7 @@ See CONNECT step detail below.
 
 ### Step 9 — Index & Log
 
-Add row to `index.md` under correct pillar. Append entry to `log.md`.
+Add a `* [Title](path) - description` bullet to `index.md` under the correct pillar heading. Append a `**Creation**` entry to `log.md` under today's `## YYYY-MM-DD` heading (newest-first).
 
 ## CONNECT Step Detail
 
@@ -444,7 +448,7 @@ This is the step that makes the wiki compound. Run after every ingest (both tier
 4. **For non-conflicting additions, merge normally:**
    - Add new information (don't replace existing content)
    - Add the new summary to the `sources` list in frontmatter
-   - Update `last_updated`
+   - Update `timestamp`
 5. **Surface tensions to the user.** Present the batched menu per [Contradiction Handling at Ingest](#contradiction-handling-at-ingest). Apply the chosen resolution for each tension. Never silently merge a conflict.
 6. **New wiki page needed?** If the source introduces a substantial topic not yet covered:
    - Create a new page in the appropriate `wiki/` subdirectory
@@ -507,14 +511,14 @@ After the user picks, the orchestrator applies each resolution:
 
 | Letter | Effect |
 |--------|--------|
-| (a) Accept new | Replace existing claim on page. Add a footnote near the claim: *"Earlier versions of this page stated [old claim], per [source]; superseded by [new source] on [date]."* Update `sources:` and `last_updated`. |
+| (a) Accept new | Replace existing claim on page. Add a footnote near the claim: *"Earlier versions of this page stated [old claim], per [source]; superseded by [new source] on [date]."* Update `sources:` and `timestamp`. |
 | (b) Keep old | Do not modify page body. Add the new summary to `sources:` frontmatter only if the summary contributes other non-conflicting content; otherwise leave the page untouched. |
-| (c) Hold both | Add an `## Unresolved Tensions` subsection to the page (or append to it if present) with both quotes, both citations, and the date the tension was surfaced. Update `sources:` and `last_updated`. |
-| (d) Synthesize | Sub-agent drafts a resolving rewrite and presents it to the user for `approve / amend / revert`. After approval, write the rewrite, update `sources:` and `last_updated`. |
+| (c) Hold both | Add an `## Unresolved Tensions` subsection to the page (or append to it if present) with both quotes, both citations, and the date the tension was surfaced. Update `sources:` and `timestamp`. |
+| (d) Synthesize | Sub-agent drafts a resolving rewrite and presents it to the user for `approve / amend / revert`. After approval, write the rewrite, update `sources:` and `timestamp`. |
 | (e) Split page | Sub-agent proposes a page split (new title, claim distribution, cross-link plan). User must explicitly approve before any write. Add the new page to `index.md`. |
 | (q) Queue for lint | Append an entry to `meta/contradictions.md` (see schema below). Insert one HTML-comment marker on the wiki page near the relevant claim: `<!-- TENSION YYYY-MM-DD: see meta/contradictions.md#<anchor> -->`. Do not modify the page body otherwise. |
 
-For (a)–(d), update `last_updated` and the `sources:` list. For (q), leave page body and frontmatter untouched apart from the HTML-comment marker — the queue *is* the deferral mechanism, and silent merge into frontmatter would defeat it.
+For (a)–(d), update `timestamp` and the `sources:` list. For (q), leave page body and frontmatter untouched apart from the HTML-comment marker — the queue *is* the deferral mechanism, and silent merge into frontmatter would defeat it.
 
 ### `meta/contradictions.md` schema
 
@@ -555,7 +559,7 @@ Gists are reusable Claude Code prompts authored by the user, stored for sharing 
 3. **SCAN (Step 0)** — Gists are user-authored content; treat as non-public by default. Spawn the Step 0 Sonnet sub-agent on the gist content. Resolve any FLAGGED issues with the user before saving. Pay extra attention to internal tool names, project paths, and client identifiers — prompt bodies leak these easily.
 4. **SAVE** — Write to `gists/<slug>.md` using the template below.
 5. **INDEX** — Append a row to `gists/index.md`: `| <date> | [title](slug.md) | <intent> | <model> | <tags> |`. Increment the count at the bottom.
-6. **LOG** — Append entry to `log.md` with action `gist`.
+6. **LOG** — Append a `**Update**` entry to `log.md` under today's `## YYYY-MM-DD` heading with action `gist`.
 
 ### Gist file template
 
@@ -606,12 +610,13 @@ When the user asks a question (not providing a URL to ingest):
 When the user says "lint", "check wiki health", or similar:
 
 1. **ORPHANS** — Sources with no summary, summaries not referenced by any wiki page, gists in `gists/` not listed in `gists/index.md` (or vice versa)
-2. **STALE** — Wiki pages not updated in 90+ days that have active related topics
+2. **STALE** — Wiki pages whose `timestamp` is 90+ days old that have active related topics
 3. **INDEX SYNC** — Entries in `index.md` that don't match actual files, and vice versa
 4. **LOG SYNC** — Sources not recorded in `log.md`
 5. **CONTRADICTIONS** — Drain `meta/contradictions.md` first: for each `Status: open` entry, re-present the same menu used at ingest, including a fresh `AGENT'S READ` that considers any new sources accumulated since the tension was queued (per [Contradiction Handling at Ingest](#contradiction-handling-at-ingest)). After the user picks, apply the resolution and flip the entry to `Status: resolved` with the chosen letter, a one-line note, and the resolution date. Then scan for additional conflicts not yet in the ledger (e.g., from manual edits or older ingests that pre-date this workflow) and surface them with the same menu.
 6. **GAPS** — Tags with many sources but no wiki page; suggest pages to create
-7. **REPORT** — Present findings as actionable items. User approves fixes before execution.
+7. **OKF CONFORMANCE** — Run `python3 scripts/okf-check.py`; report any violations
+8. **REPORT** — Present findings as actionable items. User approves fixes before execution.
 
 ## Tag Taxonomy
 
