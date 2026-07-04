@@ -36,6 +36,17 @@ def convert(root, text):
             link = LINK_RE.search(s)
             title, path = link.group(1), link.group(2)
             desc = description_for(root, path)
+            # If no frontmatter description, preserve pre-existing inline description (em-dash or hyphen)
+            if not desc:
+                if " — " in s:
+                    inline_desc = s.split(" — ", 1)[1]
+                    out.append(f"- [{title}]({path}) — {inline_desc}")
+                    continue
+                elif " - " in s and not s.startswith("* ["):
+                    # Preserve existing hyphen-based descriptions from dashes
+                    inline_desc = s.split(" - ", 1)[1]
+                    out.append(f"- [{title}]({path}) - {inline_desc}")
+                    continue
             out.append(f"* [{title}]({path})" + (f" - {desc}" if desc else ""))
         else:
             out.append(line)

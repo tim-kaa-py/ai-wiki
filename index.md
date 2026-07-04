@@ -190,8 +190,8 @@ okf_version: "0.1"
 
 ## About This Wiki
 
-* [User Documentation](docs/user-documentation.md)
-* [Concept](docs/concept.md)
+- [User Documentation](docs/user-documentation.md) — how to use this system
+- [Concept](docs/concept.md) — architecture + recreation guide for any topic
 
 ---
 
