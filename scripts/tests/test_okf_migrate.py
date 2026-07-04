@@ -59,3 +59,7 @@ class TestMigrate(unittest.TestCase):
     def test_idempotent(self):
         once = m.migrate_source(SRC)
         self.assertEqual(once, m.migrate_source(once))
+
+
+if __name__ == "__main__":
+    unittest.main()
