@@ -5,7 +5,7 @@ pillar: "ecosystem"
 tags: [agentic-engineering, claude-code, ai-hero, sandcastle, education, workflow]
 sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+timestamp: "2026-05-08"
 ---
 
 # Matt Pocock

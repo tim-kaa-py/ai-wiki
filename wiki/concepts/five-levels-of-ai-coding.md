@@ -6,7 +6,7 @@ tags: [ai-coding, agentic-engineering, dark-factory, workflow, software-engineer
 sources:
   - "summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md"
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
-last_updated: "2026-05-26"
+timestamp: "2026-05-26"
 ---
 
 # Five Levels of AI Coding

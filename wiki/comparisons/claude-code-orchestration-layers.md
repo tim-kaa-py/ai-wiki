@@ -6,7 +6,7 @@ tags: [claude-code, comparison, orchestration, gsd, superpowers, agents, sub-age
 sources:
   - "summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
   - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
-last_updated: "2026-04-25"
+timestamp: "2026-04-25"
 ---
 
 # Claude Code Orchestration Layers

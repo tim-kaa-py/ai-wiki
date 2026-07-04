@@ -5,7 +5,7 @@ pillar: "building"
 tags: [claude-code, plugins, skills, agents, hooks, mcp, monitors, lsp, packaging, workflow, how-to]
 sources:
   - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
-last_updated: "2026-04-25"
+timestamp: "2026-04-25"
 ---
 
 # Claude Code Plugins

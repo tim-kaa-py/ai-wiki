@@ -6,7 +6,7 @@ tags: [claude-code, sandbox, security, permissions, bubblewrap, seatbelt, claude
 sources:
   - "summaries/2025-10-20_anthropic_claude-code-sandboxing.md"
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
-last_updated: "2026-04-20"
+timestamp: "2026-04-20"
 ---
 
 # Claude Code Sandboxing

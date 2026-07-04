@@ -6,7 +6,7 @@ tags: [agent-sdk, claude-code, python, typescript, agents, tools, mcp, subagents
 sources:
   - "summaries/2026-05-06_claude-code-docs_agent-sdk-overview.md"
   - "summaries/2026-05-06_claude-code-docs_agent-sdk-sessions.md"
-last_updated: "2026-05-06"
+timestamp: "2026-05-06"
 ---
 
 # Claude Agent SDK

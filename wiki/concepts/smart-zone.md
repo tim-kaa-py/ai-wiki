@@ -5,7 +5,7 @@ pillar: "building"
 tags: [context-engineering, dumb-zone, smart-zone, claude-code, workflow, best-practices, agentic-coding-workflow]
 sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+timestamp: "2026-05-08"
 ---
 
 # Smart Zone vs Dumb Zone

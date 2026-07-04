@@ -1,12 +1,12 @@
 ---
 title: "VSCode Hotkey: Launch Claude Code in a New Editor Tab"
-source_type: "article"
+type: "summary"
 channel: "self"
 date: "2026-04-19"
-url: ""
+resource: ""
 pillar: "building"
 tags: [claude-code, vscode, configuration, workflow, how-to, reference]
-ingested: "2026-04-19"
+timestamp: "2026-04-19"
 source_file: "sources/articles/2026-04-19_self_vscode-claude-code-hotkey.md"
 ---
 

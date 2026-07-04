@@ -1,12 +1,12 @@
 ---
 title: "Beyond permission prompts: making Claude Code more secure and autonomous"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-10-20"
-url: "https://www.anthropic.com/engineering/claude-code-sandboxing"
+resource: "https://www.anthropic.com/engineering/claude-code-sandboxing"
 pillar: "building"
 tags: [claude-code, sandbox, security, permissions, bubblewrap, seatbelt, claude-code-web]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2025-10-20_anthropic_claude-code-sandboxing.md"
 ---
 

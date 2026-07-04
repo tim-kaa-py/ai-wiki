@@ -1,12 +1,12 @@
 ---
 title: "Harness Engineering: How to Build Software When Humans Steer, Agents Execute — Ryan Lopopolo, OpenAI"
-source_type: "youtube"
+type: "youtube"
 channel: "AI Engineer"
 date: "2026-04-17"
-url: "https://www.youtube.com/watch?v=am_oeAoUhew"
+resource: "https://www.youtube.com/watch?v=am_oeAoUhew"
 pillar: "building"
 tags: [harness-engineering, agents, claude-code, agentic-coding-workflow, workflow, best-practices, strategy]
-ingested: "2026-04-22"
+timestamp: "2026-04-22"
 extraction_method: "auto-captions"
 video_id: "am_oeAoUhew"
 duration: "46:20"

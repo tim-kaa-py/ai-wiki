@@ -5,7 +5,7 @@ pillar: "ecosystem"
 tags: [agentic-coding, productivity, collaboration, autonomy, opinion, metrics, anthropic]
 sources:
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
-last_updated: "2026-05-26"
+timestamp: "2026-05-26"
 ---
 
 # The Collaboration Paradox

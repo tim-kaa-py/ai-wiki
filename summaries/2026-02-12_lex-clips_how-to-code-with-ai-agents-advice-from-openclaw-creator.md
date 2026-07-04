@@ -1,12 +1,12 @@
 ---
 title: "How to Code with AI Agents (Peter Steinberger)"
-source_type: "youtube"
+type: "summary"
 channel: "Lex Clips"
 date: "2026-02-12"
-url: "https://www.youtube.com/watch?v=wKy1_KLcxcs"
+resource: "https://www.youtube.com/watch?v=wKy1_KLcxcs"
 pillar: "building"
 tags: [agentic-engineering, workflow, prompt-craft, soul-md, voice-input, codebase-design, engineering-leadership]
-ingested: "2026-02-12"
+timestamp: "2026-02-12"
 source_file: "sources/youtube/2026-02-12_lex-clips_how-to-code-with-ai-agents-advice-from-openclaw-creator.md"
 ---
 

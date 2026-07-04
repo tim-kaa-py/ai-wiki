@@ -12,7 +12,7 @@ sources:
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2026-04-22_anthropic-docs_define-success-criteria-and-build-evaluations.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-last_updated: "2026-05-05"
+timestamp: "2026-05-05"
 ---
 
 # Agent Evaluation

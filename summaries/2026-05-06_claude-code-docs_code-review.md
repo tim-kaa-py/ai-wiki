@@ -1,12 +1,12 @@
 ---
 title: "Code Review (Claude Code)"
-source_type: "docs"
+type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"
-url: "https://code.claude.com/docs/en/code-review"
+resource: "https://code.claude.com/docs/en/code-review"
 pillar: "building"
 tags: [claude-code, code-review, github, multi-agent, pr-automation, review-md, claude-md, workflow]
-ingested: "2026-05-06"
+timestamp: "2026-05-06"
 source_file: "sources/articles/2026-05-06_claude-code-docs_code-review.md"
 ---
 

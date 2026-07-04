@@ -1,12 +1,12 @@
 ---
 title: "Harness design for long-running application development"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-03-24"
-url: "https://www.anthropic.com/engineering/harness-design-long-running-apps"
+resource: "https://www.anthropic.com/engineering/harness-design-long-running-apps"
 pillar: "understanding"
 tags: [harness-engineering, agents, generator-evaluator, context-management, multi-agent]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2026-03-24_anthropic_harness-design-long-running-apps.md"
 ---
 

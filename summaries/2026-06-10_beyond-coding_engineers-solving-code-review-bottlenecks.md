@@ -1,12 +1,12 @@
 ---
 title: "Why The Best Engineers Are Solving Code Review Bottlenecks"
-source_type: "youtube"
+type: "summary"
 channel: "Beyond Coding"
 date: "2026-06-10"
-url: "https://www.youtube.com/watch?v=W1uG25of2t0"
+resource: "https://www.youtube.com/watch?v=W1uG25of2t0"
 pillar: "building"
 tags: [agents, code-review, guardrails, spec-driven-development, tdd, workflow, best-practices, claude-code]
-ingested: "2026-07-02"
+timestamp: "2026-07-02"
 source_file: "sources/youtube/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
 ---
 

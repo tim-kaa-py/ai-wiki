@@ -5,7 +5,7 @@ pillar: "building"
 tags: [memory, agents, multi-agent, dreaming, self-learning, managed-agents, anthropic, claude, harness-engineering, knowledge-base]
 sources:
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
-last_updated: "2026-05-17"
+timestamp: "2026-05-17"
 ---
 
 # Dreaming (Out-of-Band Memory Consolidation)

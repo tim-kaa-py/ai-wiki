@@ -6,7 +6,7 @@ tags: [claude-code, terminal, configuration, workflow, status-line, how-to, refe
 sources:
   - "summaries/2026-04-16_self_claude-code-statusline-setup.md"
   - "summaries/2026-04-15_claude-docs_optimize-your-terminal-setup.md"
-last_updated: "2026-04-30"
+timestamp: "2026-04-30"
 ---
 
 # Claude Code Status Line Setup

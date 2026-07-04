@@ -1,12 +1,12 @@
 ---
 title: "Effective harnesses for long-running agents"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-11-26"
-url: "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents"
+resource: "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents"
 pillar: "understanding"
 tags: [harness-engineering, agents, long-running, claude, initializer-agent, testing]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2025-11-26_anthropic_effective-harnesses-long-running-agents.md"
 ---
 

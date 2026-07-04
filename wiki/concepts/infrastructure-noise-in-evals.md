@@ -5,7 +5,7 @@ pillar: "understanding"
 tags: [evaluation, agents, benchmarks, infrastructure, swe-bench, terminal-bench]
 sources:
   - "summaries/2026-04-18_anthropic_quantifying-infrastructure-noise.md"
-last_updated: "2026-04-20"
+timestamp: "2026-04-20"
 ---
 
 # Infrastructure Noise in Agentic Evals

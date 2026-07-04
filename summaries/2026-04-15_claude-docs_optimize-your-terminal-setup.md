@@ -1,12 +1,12 @@
 ---
 title: "Optimize your terminal setup"
-source_type: "docs"
+type: "summary"
 channel: "Anthropic"
 date: "2026-04-15"
-url: "https://code.claude.com/docs/en/terminal-config"
+resource: "https://code.claude.com/docs/en/terminal-config"
 pillar: "building"
 tags: [claude-code, terminal, configuration, how-to, reference]
-ingested: "2026-04-15"
+timestamp: "2026-04-15"
 source_file: "sources/docs/2026-04-15_claude-docs_optimize-your-terminal-setup.md"
 ---
 

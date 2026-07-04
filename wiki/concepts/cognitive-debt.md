@@ -5,7 +5,7 @@ pillar: "building"
 tags: [anti-patterns, agents, best-practices, architecture, workflow, cognitive-debt]
 sources:
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
-last_updated: "2026-07-02"
+timestamp: "2026-07-02"
 ---
 
 # Cognitive Debt & Cognitive Surrender

@@ -1,12 +1,12 @@
 ---
 title: "The 5 Levels of AI Coding (Why Most of You Won't Make It Past Level 2)"
-source_type: youtube
+type: "youtube"
 channel: "AI News & Strategy Daily | Nate B Jones"
 date: "2026-02-18"
-url: "https://www.youtube.com/watch?v=bDcgHzCBgmQ"
+resource: "https://www.youtube.com/watch?v=bDcgHzCBgmQ"
 pillar: building
 tags: [ai-coding, agentic-engineering, workflow, dark-factory, software-engineering, agents, agentic-loop]
-ingested: "2026-04-13"
+timestamp: "2026-04-13"
 extraction_method: auto-captions
 video_id: "bDcgHzCBgmQ"
 duration: "42:14"

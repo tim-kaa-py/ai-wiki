@@ -5,7 +5,7 @@ pillar: "building"
 tags: [claude-code, subagents, agents, configuration, hooks, permissions, mcp, context-management, memory]
 sources:
   - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
-last_updated: "2026-04-25"
+timestamp: "2026-04-25"
 ---
 
 # Claude Code Custom Subagents

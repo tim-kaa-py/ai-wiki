@@ -1,12 +1,12 @@
 ---
 title: "How Claude Code works"
-source_type: "docs"
+type: "docs"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"
-url: "https://code.claude.com/docs/en/how-claude-code-works"
+resource: "https://code.claude.com/docs/en/how-claude-code-works"
 pillar: "building"
 tags: [claude-code, agentic-loop, harness-engineering, tools, sessions, context-management, best-practices]
-ingested: "2026-05-06"
+timestamp: "2026-05-06"
 extraction_method: "web-fetch"
 ---
 

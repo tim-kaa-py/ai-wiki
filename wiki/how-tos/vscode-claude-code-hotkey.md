@@ -5,7 +5,7 @@ pillar: "building"
 tags: [claude-code, vscode, configuration, workflow, how-to, reference]
 sources:
   - "summaries/2026-04-19_self_vscode-claude-code-hotkey.md"
-last_updated: "2026-04-19"
+timestamp: "2026-04-19"
 ---
 
 # VSCode Hotkey: Launch Claude Code in an Editor Tab

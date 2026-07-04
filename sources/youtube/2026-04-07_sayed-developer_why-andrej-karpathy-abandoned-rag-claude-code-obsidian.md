@@ -1,14 +1,14 @@
 ---
 title: "Why Andrej Karpathy Abandoned RAG (Claude Code x Obsidian)"
-source_type: "youtube"
+type: "youtube"
 channel: "sayed.developer"
 date: "2026-04-07"
-url: "https://www.youtube.com/watch?v=WgqqoSkC0bw"
+resource: "https://www.youtube.com/watch?v=WgqqoSkC0bw"
 video_id: "WgqqoSkC0bw"
 duration: "12:57"
 pillar: "building"
 tags: [karpathy, wiki, obsidian, claude-code, rag, knowledge-management]
-ingested: "2026-04-09"
+timestamp: "2026-04-09"
 extraction_method: "auto-captions"
 ---
 

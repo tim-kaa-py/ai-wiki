@@ -5,7 +5,7 @@ pillar: "understanding"
 tags: [think-tool, tool-use, reasoning, extended-thinking, tau-bench, agents, claude]
 sources:
   - "summaries/2025-03-20_anthropic_think-tool.md"
-last_updated: "2026-04-20"
+timestamp: "2026-04-20"
 ---
 
 # The Think Tool

@@ -1,12 +1,12 @@
 ---
 title: "Karpathy's Wiki vs. Open Brain. One Fails When You Need It Most."
-source_type: "youtube"
+type: "summary"
 channel: "AI News & Strategy Daily | Nate B Jones"
 date: "2026-04-22"
-url: "https://m.youtube.com/watch?v=dxq7WtWxi44"
+resource: "https://m.youtube.com/watch?v=dxq7WtWxi44"
 pillar: "building"
 tags: [karpathy, wiki, knowledge-management, memory, context-engineering, limits, comparison]
-ingested: "2026-04-23"
+timestamp: "2026-04-23"
 source_file: "sources/youtube/2026-04-22_nate-b-jones_karpathy-wiki-vs-open-brain.md"
 ---
 

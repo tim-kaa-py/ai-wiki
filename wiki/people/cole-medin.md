@@ -6,7 +6,7 @@ tags: [agentic-engineering, claude-code, workflow, education, system-evolution, 
 sources:
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
-last_updated: "2026-05-09"
+timestamp: "2026-05-09"
 ---
 
 # Cole Medin

@@ -1,12 +1,12 @@
 ---
 title: "I Built Self-Evolving Claude Code Memory w/ Karpathy's LLM Knowledge Bases"
-source_type: "youtube"
+type: "summary"
 channel: "Cole Medin"
 date: "2026-04-06"
-url: "https://www.youtube.com/watch?v=7huCP6RkcY4"
+resource: "https://www.youtube.com/watch?v=7huCP6RkcY4"
 pillar: "building"
 tags: [claude-code, memory, llm-knowledge-bases, obsidian, karpathy, agents, second-brain, hooks]
-ingested: "2026-04-13"
+timestamp: "2026-04-13"
 source_file: "sources/youtube/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
 ---
 

@@ -1,12 +1,12 @@
 ---
 title: "Demystifying evals for AI agents"
-source_type: "article"
+type: "article"
 channel: "Anthropic Engineering"
 date: "2026-01-09"
-url: "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents"
+resource: "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents"
 pillar: "understanding"
 tags: [evaluation, agents, graders, pass-at-k, claude-code, swe-bench, best-practices]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 extraction_method: "web-fetch"
 ---
 

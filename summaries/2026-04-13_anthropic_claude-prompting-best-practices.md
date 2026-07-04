@@ -1,12 +1,12 @@
 ---
 title: "Claude Prompting Best Practices"
-source_type: "docs"
+type: "summary"
 channel: "Anthropic"
 date: "2026-04-13"
-url: "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+resource: "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
 pillar: "building"
 tags: [prompt-engineering, claude, agents, tool-use, thinking, agentic-engineering, best-practices, frontend-design]
-ingested: "2026-04-22"
+timestamp: "2026-04-22"
 source_file: "sources/docs/2026-04-13_anthropic_claude-prompting-best-practices.md"
 ---
 

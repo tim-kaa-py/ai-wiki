@@ -7,7 +7,7 @@ sources:
   - "summaries/2026-04-20_chase-ai_only-claude-design-guide-you-should-watch.md"
   - "summaries/2026-04-18_jono-catliff_how-i-built-insane-claude-design-websites-in-10-minutes.md"
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
-last_updated: "2026-04-22"
+timestamp: "2026-04-22"
 ---
 
 # Claude Design

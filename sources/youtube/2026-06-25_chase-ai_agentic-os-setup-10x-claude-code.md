@@ -1,12 +1,12 @@
 ---
 title: "The Agentic OS Setup That Will 10x Claude Code"
-source_type: "youtube"
+type: "youtube"
 channel: "Chase AI"
 date: "2026-06-25"
-url: "https://www.youtube.com/watch?v=HRw-vP0j8OM"
+resource: "https://www.youtube.com/watch?v=HRw-vP0j8OM"
 pillar: "building"
 tags: [claude-code, agents, skills, workflow, architecture]
-ingested: "2026-06-29"
+timestamp: "2026-06-29"
 extraction_method: "auto-captions"
 video_id: "HRw-vP0j8OM"
 duration: "31:20"

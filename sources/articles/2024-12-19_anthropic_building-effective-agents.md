@@ -1,12 +1,12 @@
 ---
 title: "Building effective agents"
-source_type: "article"
+type: "article"
 channel: "Anthropic Engineering"
 date: "2024-12-19"
-url: "https://www.anthropic.com/engineering/building-effective-agents"
+resource: "https://www.anthropic.com/engineering/building-effective-agents"
 pillar: "understanding"
 tags: [agents, workflows, orchestration-patterns, prompt-chaining, routing, parallelization, evaluator-optimizer, mcp]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 extraction_method: "web-fetch"
 ---
 

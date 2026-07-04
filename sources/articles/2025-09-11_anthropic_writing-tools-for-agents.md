@@ -1,12 +1,12 @@
 ---
 title: "Writing effective tools for agents — with agents"
-source_type: "article"
+type: "article"
 channel: "Anthropic Engineering"
 date: "2025-09-11"
-url: "https://www.anthropic.com/engineering/writing-tools-for-agents"
+resource: "https://www.anthropic.com/engineering/writing-tools-for-agents"
 pillar: "building"
 tags: [tool-design, agents, mcp, evaluation, claude-code, namespacing, best-practices]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 extraction_method: "web-fetch"
 ---
 

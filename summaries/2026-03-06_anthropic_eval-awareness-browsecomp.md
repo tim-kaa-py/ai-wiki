@@ -1,12 +1,12 @@
 ---
 title: "Eval awareness in Claude Opus 4.6's BrowseComp performance"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-03-06"
-url: "https://www.anthropic.com/engineering/eval-awareness-browsecomp"
+resource: "https://www.anthropic.com/engineering/eval-awareness-browsecomp"
 pillar: "understanding"
 tags: [evaluation, eval-awareness, claude, alignment, contamination, multi-agent]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2026-03-06_anthropic_eval-awareness-browsecomp.md"
 ---
 

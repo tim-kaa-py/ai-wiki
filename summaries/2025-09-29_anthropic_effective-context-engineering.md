@@ -1,12 +1,12 @@
 ---
 title: "Effective context engineering for AI agents"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-09-29"
-url: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+resource: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
 pillar: "understanding"
 tags: [context-engineering, agents, prompt-engineering, context-rot, compaction, sub-agents]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2025-09-29_anthropic_effective-context-engineering.md"
 ---
 

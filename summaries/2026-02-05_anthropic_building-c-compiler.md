@@ -1,12 +1,12 @@
 ---
 title: "Building a C compiler with a team of parallel Claudes"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-02-05"
-url: "https://www.anthropic.com/engineering/building-c-compiler"
+resource: "https://www.anthropic.com/engineering/building-c-compiler"
 pillar: "building"
 tags: [agent-teams, parallel-claude, claude-code, autonomous, multi-agent, agents]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2026-02-05_anthropic_building-c-compiler.md"
 ---
 

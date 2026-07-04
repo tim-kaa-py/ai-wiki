@@ -5,7 +5,7 @@ pillar: "building"
 tags: [agentic-engineering, claude-code, workflow, planning, piv, inner-loop, two-layer-planning]
 sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
-last_updated: "2026-05-09"
+timestamp: "2026-05-09"
 ---
 
 # PIV Loop (Plan-Implement-Validate)

@@ -20,7 +20,7 @@ sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
-last_updated: "2026-07-02"
+timestamp: "2026-07-02"
 ---
 
 # Agentic Coding Workflow

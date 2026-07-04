@@ -1,12 +1,12 @@
 ---
 title: "How Claude remembers your project"
-source_type: "docs"
+type: "docs"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"
-url: "https://code.claude.com/docs/en/memory"
+resource: "https://code.claude.com/docs/en/memory"
 pillar: "building"
 tags: [claude-code, claude-md, auto-memory, memory, context-management, best-practices, configuration]
-ingested: "2026-05-06"
+timestamp: "2026-05-06"
 extraction_method: "web-fetch"
 ---
 

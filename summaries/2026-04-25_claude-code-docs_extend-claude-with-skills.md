@@ -1,12 +1,12 @@
 ---
 title: "Extend Claude with skills"
-source_type: "article"
+type: "summary"
 channel: "Claude Code Docs"
 date: "2026-04-25"
-url: "https://code.claude.com/docs/en/skills"
+resource: "https://code.claude.com/docs/en/skills"
 pillar: "building"
 tags: [claude-code, skills, how-to, reference, workflow, configuration, subagents]
-ingested: "2026-04-25"
+timestamp: "2026-04-25"
 source_file: "sources/articles/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
 ---
 

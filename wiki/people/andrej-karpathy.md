@@ -11,7 +11,7 @@ sources:
   - "summaries/2026-04-22_nate-b-jones_karpathy-wiki-vs-open-brain.md"
   - "summaries/2026-05-28_multica-ai_karpathy-coding-guidelines.md"
   - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
-last_updated: "2026-06-29"
+timestamp: "2026-06-29"
 ---
 
 # Andrej Karpathy

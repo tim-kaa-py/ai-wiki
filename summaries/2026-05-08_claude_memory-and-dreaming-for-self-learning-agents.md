@@ -1,12 +1,12 @@
 ---
 title: "Memory and dreaming for self-learning agents"
-source_type: "youtube"
+type: "summary"
 channel: "Claude"
 date: "2026-05-08"
-url: "https://www.youtube.com/watch?v=RtywqDFBYnQ"
+resource: "https://www.youtube.com/watch?v=RtywqDFBYnQ"
 pillar: "building"
 tags: [agents, memory, claude, multi-agent, self-learning, managed-agents, anthropic]
-ingested: "2026-05-17"
+timestamp: "2026-05-17"
 source_file: "sources/youtube/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
 ---
 

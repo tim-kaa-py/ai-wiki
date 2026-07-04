@@ -12,7 +12,7 @@ sources:
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
-last_updated: "2026-05-17"
+timestamp: "2026-05-17"
 ---
 
 # MCP (Model Context Protocol)

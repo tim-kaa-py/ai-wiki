@@ -1,12 +1,12 @@
 ---
 title: "Claude Code auto mode: a safer way to skip permissions"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-03-25"
-url: "https://www.anthropic.com/engineering/claude-code-auto-mode"
+resource: "https://www.anthropic.com/engineering/claude-code-auto-mode"
 pillar: "building"
 tags: [claude-code, permissions, auto-mode, safety, prompt-injection, classifier]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2026-03-25_anthropic_claude-code-auto-mode.md"
 ---
 

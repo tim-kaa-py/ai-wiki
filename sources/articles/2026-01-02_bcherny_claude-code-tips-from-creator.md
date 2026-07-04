@@ -1,12 +1,12 @@
 ---
 title: "Claude Code Tips from the Creator (Boris Cherny Thread)"
-source_type: "article"
+type: "article"
 channel: "Boris Cherny (@bcherny)"
 date: "2026-01-02"
-url: "https://x.com/bcherny"
+resource: "https://x.com/bcherny"
 pillar: "building"
 tags: [claude-code, workflow, hooks, agents, permissions, mcp, best-practices, how-to]
-ingested: "2026-04-15"
+timestamp: "2026-04-15"
 extraction_method: "user-pasted"
 ---
 

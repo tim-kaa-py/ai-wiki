@@ -1,12 +1,12 @@
 ---
 title: "How I Built INSANE Claude Design Websites In 10 Minutes"
-source_type: "youtube"
+type: "summary"
 channel: "Jono Catliff"
 date: "2026-04-18"
-url: "https://m.youtube.com/watch?v=xYv4_cTOSNM"
+resource: "https://m.youtube.com/watch?v=xYv4_cTOSNM"
 pillar: "building"
 tags: [claude-design, claude-code, nextjs, gsap, vercel, deployment, handoff]
-ingested: "2026-04-21"
+timestamp: "2026-04-21"
 source_file: "sources/youtube/2026-04-18_jono-catliff_how-i-built-insane-claude-design-websites-in-10-minutes.md"
 ---
 

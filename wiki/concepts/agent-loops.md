@@ -6,7 +6,7 @@ tags: [agents, workflow, loop-engineering, verification, claude-code, agent-arch
 sources:
   - "summaries/2026-06-19_nate-herk_agent-loops-clearly-explained.md"
   - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
-last_updated: "2026-06-29"
+timestamp: "2026-06-29"
 ---
 
 # Agent Loops (Loop Engineering)

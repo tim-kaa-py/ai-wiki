@@ -5,7 +5,7 @@ pillar: "building"
 tags: [security, supply-chain, sbom, agents, skills, context-engineering, provenance]
 sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-last_updated: "2026-05-05"
+timestamp: "2026-05-05"
 ---
 
 # AI SBOM (Software Bill of Materials for Context)

@@ -6,7 +6,7 @@ tags: [claude-code, routines, n8n, automation, workflow, comparison]
 sources:
   - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
   - "summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md"
-last_updated: "2026-04-19"
+timestamp: "2026-04-19"
 ---
 
 # Claude Routines vs n8n

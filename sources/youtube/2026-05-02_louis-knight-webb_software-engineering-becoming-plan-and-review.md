@@ -1,12 +1,12 @@
 ---
 title: "Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban"
-source_type: "youtube"
+type: "youtube"
 channel: "AI Engineer"
 date: "2026-05-02"
-url: "https://m.youtube.com/watch?v=W76woOYHlvY"
+resource: "https://m.youtube.com/watch?v=W76woOYHlvY"
 pillar: "building"
 tags: [agents, agentic-coding-workflow, claude-code, codex, parallel-agents, plan-and-review, workflow, anti-patterns]
-ingested: "2026-05-09"
+timestamp: "2026-05-09"
 extraction_method: "auto-captions"
 video_id: "W76woOYHlvY"
 duration: "20:23"

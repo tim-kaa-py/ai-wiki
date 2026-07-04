@@ -1,12 +1,12 @@
 ---
 title: "The ONLY Claude Design Guide You Should Watch"
-source_type: "youtube"
+type: "summary"
 channel: "Chase AI"
 date: "2026-04-20"
-url: "https://m.youtube.com/watch?v=iJRq1kLLRmY"
+resource: "https://m.youtube.com/watch?v=iJRq1kLLRmY"
 pillar: "building"
 tags: [claude-design, claude-code, front-end, design-system, tutorial, workflow]
-ingested: "2026-04-21"
+timestamp: "2026-04-21"
 source_file: "sources/youtube/2026-04-20_chase-ai_only-claude-design-guide-you-should-watch.md"
 ---
 

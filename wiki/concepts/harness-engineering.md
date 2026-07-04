@@ -20,7 +20,7 @@ sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
-last_updated: "2026-07-02"
+timestamp: "2026-07-02"
 ---
 
 # Harness Engineering

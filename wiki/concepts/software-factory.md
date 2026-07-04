@@ -5,7 +5,7 @@ pillar: "ecosystem"
 tags: [software-factory, agents, coding-agents, agi, harness-engineering, automation]
 sources:
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
-last_updated: "2026-04-20"
+timestamp: "2026-04-20"
 ---
 
 # Software Factory

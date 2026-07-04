@@ -5,7 +5,7 @@ pillar: "ecosystem"
 tags: [managed-agents, claude, openai, langchain, agents, agent-frameworks, comparison, infrastructure, sandbox]
 sources:
   - "summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md"
-last_updated: "2026-04-19"
+timestamp: "2026-04-19"
 ---
 
 # Managed Agent Platforms: Claude vs LangChain vs OpenAI

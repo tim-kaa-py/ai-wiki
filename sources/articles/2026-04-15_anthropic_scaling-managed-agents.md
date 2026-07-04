@@ -1,12 +1,12 @@
 ---
 title: "Scaling Managed Agents: Decoupling the brain from the hands"
-source_type: "article"
+type: "article"
 channel: "Anthropic Engineering"
 date: "2026-04-15"
-url: "https://www.anthropic.com/engineering/managed-agents"
+resource: "https://www.anthropic.com/engineering/managed-agents"
 pillar: "ecosystem"
 tags: [managed-agents, claude, agents, harness, architecture, sandbox, infrastructure]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 extraction_method: "web-fetch"
 ---
 

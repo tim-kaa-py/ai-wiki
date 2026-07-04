@@ -1,12 +1,12 @@
 ---
 title: "A postmortem of three recent issues"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-09-17"
-url: "https://www.anthropic.com/engineering/a-postmortem-of-three-recent-issues"
+resource: "https://www.anthropic.com/engineering/a-postmortem-of-three-recent-issues"
 pillar: "ecosystem"
 tags: [postmortem, claude, infrastructure, model-quality, debugging, tpu]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2025-09-17_anthropic_postmortem-three-recent-issues.md"
 ---
 

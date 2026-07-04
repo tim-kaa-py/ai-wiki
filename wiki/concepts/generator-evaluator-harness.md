@@ -8,7 +8,7 @@ sources:
   - "summaries/2024-12-19_anthropic_building-effective-agents.md"
   - "summaries/2025-11-26_anthropic_effective-harnesses-long-running-agents.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-last_updated: "2026-05-05"
+timestamp: "2026-05-05"
 ---
 
 # Generator-Evaluator Harness

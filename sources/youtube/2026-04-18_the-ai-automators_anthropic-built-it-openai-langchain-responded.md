@@ -1,12 +1,12 @@
 ---
 title: "Anthropic Built It. OpenAI and LangChain Just Responded. You Now Have A Decision To Make."
-source_type: "youtube"
+type: "youtube"
 channel: "The AI Automators"
 date: "2026-04-18"
-url: "https://m.youtube.com/watch?v=YJCe8hvZrxs"
+resource: "https://m.youtube.com/watch?v=YJCe8hvZrxs"
 pillar: "ecosystem"
 tags: [managed-agents, claude, openai, langchain, agents, harness, sandbox, agent-frameworks, infrastructure, comparison]
-ingested: "2026-04-19"
+timestamp: "2026-04-19"
 extraction_method: "auto-captions"
 video_id: "YJCe8hvZrxs"
 duration: "21:15"

@@ -1,12 +1,12 @@
 ---
 title: "Finally. Agent Loops Clearly Explained."
-source_type: "youtube"
+type: "youtube"
 channel: "Nate Herk | AI Automation"
 date: "2026-06-19"
-url: "https://www.youtube.com/watch?v=EuzYhzB0vbI"
+resource: "https://www.youtube.com/watch?v=EuzYhzB0vbI"
 pillar: "building"
 tags: [agents, workflow, claude-code, loop-engineering, verification]
-ingested: "2026-06-23"
+timestamp: "2026-06-23"
 extraction_method: "auto-captions"
 video_id: "EuzYhzB0vbI"
 duration: "14:33"

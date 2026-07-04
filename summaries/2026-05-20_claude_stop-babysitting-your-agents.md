@@ -1,12 +1,12 @@
 ---
 title: "Stop babysitting your agents"
-source_type: "youtube"
+type: "summary"
 channel: "Claude"
 date: "2026-05-20"
-url: "https://www.youtube.com/watch?v=wI0ptqCSL0I"
+resource: "https://www.youtube.com/watch?v=wI0ptqCSL0I"
 pillar: "building"
 tags: [claude-code, agents, workflow, verification, automation, best-practices]
-ingested: "2026-05-27"
+timestamp: "2026-05-27"
 source_file: "sources/youtube/2026-05-20_claude_stop-babysitting-your-agents.md"
 ---
 

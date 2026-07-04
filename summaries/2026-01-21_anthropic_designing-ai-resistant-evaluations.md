@@ -1,12 +1,12 @@
 ---
 title: "Designing AI-resistant technical evaluations"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2026-01-21"
-url: "https://www.anthropic.com/engineering/AI-resistant-technical-evaluations"
+resource: "https://www.anthropic.com/engineering/AI-resistant-technical-evaluations"
 pillar: "ecosystem"
 tags: [hiring, evaluation, claude, performance-engineering, ai-resistance]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2026-01-21_anthropic_designing-ai-resistant-evaluations.md"
 ---
 

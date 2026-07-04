@@ -6,7 +6,7 @@ tags: [claude-code, planning, agents, workflow, multi-agent, opus-4-6, cloud-com
 sources:
   - "summaries/2026-04-06_nate-herk_planning-in-claude-code-just-got-a-huge-upgrade.md"
   - "summaries/2026-04-24_anthropic_claude-code-ultraplan-official-documentation.md"
-last_updated: "2026-04-24"
+timestamp: "2026-04-24"
 ---
 
 # Claude Code Ultra Plan

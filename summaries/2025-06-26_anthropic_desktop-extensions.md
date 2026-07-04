@@ -1,12 +1,12 @@
 ---
 title: "Desktop Extensions: One-click MCP server installation for Claude Desktop"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-06-26"
-url: "https://www.anthropic.com/engineering/desktop-extensions"
+resource: "https://www.anthropic.com/engineering/desktop-extensions"
 pillar: "ecosystem"
 tags: [mcp, claude-desktop, desktop-extensions, mcpb, packaging, enterprise]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2025-06-26_anthropic_desktop-extensions.md"
 ---
 

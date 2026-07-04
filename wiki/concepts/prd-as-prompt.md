@@ -6,7 +6,7 @@ tags: [prompt-engineering, architecture, bootstrap, agents, best-practices, karp
 sources:
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+timestamp: "2026-05-08"
 ---
 
 # PRD-as-Prompt Pattern

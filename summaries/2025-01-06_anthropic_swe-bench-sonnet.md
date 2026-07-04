@@ -1,12 +1,12 @@
 ---
 title: "Raising the bar on SWE-bench Verified with Claude 3.5 Sonnet"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-01-06"
-url: "https://www.anthropic.com/engineering/swe-bench-sonnet"
+resource: "https://www.anthropic.com/engineering/swe-bench-sonnet"
 pillar: "understanding"
 tags: [swe-bench, claude, agents, scaffolding, bash-tool, edit-tool, evaluation]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2025-01-06_anthropic_swe-bench-sonnet.md"
 ---
 

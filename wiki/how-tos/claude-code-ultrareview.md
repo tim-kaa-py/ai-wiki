@@ -5,7 +5,7 @@ pillar: "building"
 tags: [claude-code, ultrareview, code-review, multi-agent, cloud, pr-automation, research-preview, ci-integration]
 sources:
   - "summaries/2026-05-06_claude-code-docs_ultrareview.md"
-last_updated: "2026-05-06"
+timestamp: "2026-05-06"
 ---
 
 # Ultrareview (Claude Code)

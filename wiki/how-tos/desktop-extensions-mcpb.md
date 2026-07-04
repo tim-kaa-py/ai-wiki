@@ -5,7 +5,7 @@ pillar: "building"
 tags: [mcp, mcpb, desktop-extensions, claude-desktop, packaging, enterprise]
 sources:
   - "summaries/2025-06-26_anthropic_desktop-extensions.md"
-last_updated: "2026-04-20"
+timestamp: "2026-04-20"
 ---
 
 # Packaging MCP Servers as Desktop Extensions (.mcpb)

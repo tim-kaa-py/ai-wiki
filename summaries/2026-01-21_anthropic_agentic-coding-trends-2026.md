@@ -1,12 +1,12 @@
 ---
 title: "2026 Agentic Coding Trends Report"
-source_type: "paper"
+type: "summary"
 channel: "Anthropic"
 date: "2026-01-21"
-url: "https://resources.anthropic.com/hubfs/2026%20Agentic%20Coding%20Trends%20Report.pdf?hsLang=en"
+resource: "https://resources.anthropic.com/hubfs/2026%20Agentic%20Coding%20Trends%20Report.pdf?hsLang=en"
 pillar: "ecosystem"
 tags: [agents, agentic-coding, claude-code, multi-agent, trends, opinion, security, productivity]
-ingested: "2026-05-26"
+timestamp: "2026-05-26"
 source_file: "sources/papers/2026-01-21_anthropic_agentic-coding-trends-2026.md"
 ---
 

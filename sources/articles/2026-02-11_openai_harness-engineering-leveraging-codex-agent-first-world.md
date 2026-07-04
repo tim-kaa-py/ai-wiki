@@ -1,12 +1,12 @@
 ---
 title: "Harness Engineering: Leveraging Codex in an Agent-First World"
-source_type: "article"
+type: "article"
 channel: "OpenAI"
 date: "2026-02-11"
-url: "https://openai.com/index/harness-engineering/"
+resource: "https://openai.com/index/harness-engineering/"
 pillar: "building"
 tags: [harness-engineering, agents, agentic-coding-workflow, workflow, best-practices, code-review, monorepo, strategy]
-ingested: "2026-04-22"
+timestamp: "2026-04-22"
 extraction_method: "web-fetch"
 ---
 

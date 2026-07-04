@@ -1,12 +1,12 @@
 ---
 title: "LLM Wiki"
-source_type: "article"
+type: "article"
 channel: "Andrej Karpathy"
 date: "2026-04-02"
-url: "https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"
+resource: "https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"
 pillar: "building"
 tags: [karpathy, wiki, knowledge-management, rag, obsidian, markdown]
-ingested: "2026-04-09"
+timestamp: "2026-04-09"
 extraction_method: "web-fetch"
 ---
 

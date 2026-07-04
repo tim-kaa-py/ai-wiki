@@ -1,12 +1,12 @@
 ---
 title: "How to use Karpathy's Autoresearch to 10x Claude"
-source_type: "youtube"
+type: "youtube"
 channel: "Ben AI"
 date: "2026-04-07"
-url: "https://www.youtube.com/watch?v=bc4NrE0cOE0"
+resource: "https://www.youtube.com/watch?v=bc4NrE0cOE0"
 pillar: "building"
 tags: [auto-research, self-improving-ai, optimization, skills, claude-code, evals, agents]
-ingested: "2026-04-16"
+timestamp: "2026-04-16"
 extraction_method: "auto-captions"
 video_id: "bc4NrE0cOE0"
 duration: "19:46"

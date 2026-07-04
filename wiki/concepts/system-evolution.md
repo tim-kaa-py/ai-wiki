@@ -5,7 +5,7 @@ pillar: "building"
 tags: [agentic-engineering, claude-code, system-evolution, outer-loop, ai-layer, compounding, root-cause-analysis]
 sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
-last_updated: "2026-05-09"
+timestamp: "2026-05-09"
 ---
 
 # System Evolution (Outer-Loop AI-Layer RCA)

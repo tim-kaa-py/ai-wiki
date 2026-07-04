@@ -1,12 +1,12 @@
 ---
 title: "The Future of MCP — David Soria Parra, Anthropic"
-source_type: "youtube"
+type: "youtube"
 channel: "AI Engineer"
 date: "2026-04-19"
-url: "https://m.youtube.com/watch?v=v3Fr2JR47KA"
+resource: "https://m.youtube.com/watch?v=v3Fr2JR47KA"
 pillar: "understanding"
 tags: [mcp, protocol, agents, progressive-discovery, programmatic-tool-calling, skills, connectivity, anthropic]
-ingested: "2026-04-21"
+timestamp: "2026-04-21"
 extraction_method: "auto-captions"
 video_id: "v3Fr2JR47KA"
 duration: "18:45"

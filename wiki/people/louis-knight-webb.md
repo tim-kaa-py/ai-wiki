@@ -5,7 +5,7 @@ pillar: "ecosystem"
 tags: [agentic-coding-workflow, plan-and-review, parallel-agents, vibe-kanban, anti-patterns, claude-code, codex]
 sources:
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
-last_updated: "2026-05-09"
+timestamp: "2026-05-09"
 ---
 
 # Louis Knight-Webb

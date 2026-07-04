@@ -1,12 +1,12 @@
 ---
 title: "Claude Prompting Best Practices"
-source_type: "docs"
+type: "docs"
 channel: "Anthropic"
 date: "2026-04-13"
-url: "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+resource: "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
 pillar: "building"
 tags: [prompt-engineering, claude, agents, tool-use, thinking, agentic-engineering, best-practices, frontend-design]
-ingested: "2026-04-22"
+timestamp: "2026-04-22"
 extraction_method: "web-fetch"
 note: "Re-fetched 2026-04-22 to capture new Claude Opus 4.7 guidance section. Original ingest was 2026-04-13."
 ---

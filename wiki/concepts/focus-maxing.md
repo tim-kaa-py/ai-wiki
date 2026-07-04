@@ -6,7 +6,7 @@ tags: [anti-patterns, agentic-coding-workflow, parallel-agents, claude-code, wor
 sources:
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
   - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
-last_updated: "2026-05-27"
+timestamp: "2026-05-27"
 ---
 
 # Focus Maxing (Anti-Pattern)

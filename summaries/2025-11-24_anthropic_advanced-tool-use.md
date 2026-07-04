@@ -1,12 +1,12 @@
 ---
 title: "Introducing advanced tool use on the Claude Developer Platform"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-11-24"
-url: "https://www.anthropic.com/engineering/advanced-tool-use"
+resource: "https://www.anthropic.com/engineering/advanced-tool-use"
 pillar: "ecosystem"
 tags: [tool-use, claude-api, tool-search, programmatic-tool-calling, agents, context-management]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2025-11-24_anthropic_advanced-tool-use.md"
 ---
 

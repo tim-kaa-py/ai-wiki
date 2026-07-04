@@ -1,12 +1,12 @@
 ---
 title: "3 Claude Memory Systems to Get You Ahead of 99% of People"
-source_type: "youtube"
+type: "youtube"
 channel: "Simon Scrapes"
 date: "2026-05-16"
-url: "https://www.youtube.com/watch?v=rFWxRZ5D-lM"
+resource: "https://www.youtube.com/watch?v=rFWxRZ5D-lM"
 pillar: "building"
 tags: [claude-code, agents, workflow, memory, best-practices]
-ingested: "2026-05-17"
+timestamp: "2026-05-17"
 extraction_method: "auto-captions"
 video_id: "rFWxRZ5D-lM"
 duration: "23:12"

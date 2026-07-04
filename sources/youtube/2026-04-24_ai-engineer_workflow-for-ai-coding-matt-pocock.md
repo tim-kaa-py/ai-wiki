@@ -1,12 +1,12 @@
 ---
 title: "Full Walkthrough: Workflow for AI Coding — Matt Pocock"
-source_type: "youtube"
+type: "youtube"
 channel: "AI Engineer"
 date: "2026-04-24"
-url: "https://www.youtube.com/watch?v=-QFHIoCo-Ko"
+resource: "https://www.youtube.com/watch?v=-QFHIoCo-Ko"
 pillar: "building"
 tags: [claude-code, workflow, prd, kanban, ralph-loop, deep-modules, context-engineering, dumb-zone]
-ingested: "2026-05-08"
+timestamp: "2026-05-08"
 extraction_method: "auto-captions"
 video_id: "-QFHIoCo-Ko"
 duration: "1:36:30"

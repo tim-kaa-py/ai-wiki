@@ -8,7 +8,7 @@ sources:
   - "summaries/2025-11-04_anthropic_code-execution-with-mcp.md"
   - "summaries/2025-11-24_anthropic_advanced-tool-use.md"
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
-last_updated: "2026-04-21"
+timestamp: "2026-04-21"
 ---
 
 # MCP vs CLI

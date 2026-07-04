@@ -1,12 +1,12 @@
 ---
 title: "Create plugins"
-source_type: "article"
+type: "summary"
 channel: "Claude Code Docs"
 date: "2026-04-25"
-url: "https://code.claude.com/docs/en/plugins"
+resource: "https://code.claude.com/docs/en/plugins"
 pillar: "building"
 tags: [claude-code, plugins, skills, agents, hooks, mcp, workflow, reference, how-to]
-ingested: "2026-04-25"
+timestamp: "2026-04-25"
 source_file: "sources/articles/2026-04-25_claude-code-docs_create-plugins.md"
 ---
 

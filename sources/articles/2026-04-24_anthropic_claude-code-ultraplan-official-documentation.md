@@ -1,12 +1,12 @@
 ---
 title: "Claude Code Ultraplan — Official Documentation"
-source_type: "docs"
+type: "docs"
 channel: "Anthropic"
 date: "2026-04-24"
-url: "https://code.claude.com/docs/en/ultraplan"
+resource: "https://code.claude.com/docs/en/ultraplan"
 pillar: "building"
 tags: [claude-code, planning, how-to, reference, workflow]
-ingested: "2026-04-24"
+timestamp: "2026-04-24"
 extraction_method: "web-fetch"
 ---
 

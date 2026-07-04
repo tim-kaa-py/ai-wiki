@@ -7,7 +7,7 @@ sources:
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
   - "summaries/2025-09-29_anthropic_effective-context-engineering.md"
   - "summaries/2026-03-24_anthropic_harness-design-long-running-apps.md"
-last_updated: "2026-04-20"
+timestamp: "2026-04-20"
 ---
 
 # Natural Language Harness (NLH)

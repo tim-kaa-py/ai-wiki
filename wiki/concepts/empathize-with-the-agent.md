@@ -8,7 +8,7 @@ sources:
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
   - "summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md"
   - "summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
-last_updated: "2026-04-15"
+timestamp: "2026-04-15"
 ---
 
 # Empathize with the Agent

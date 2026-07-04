@@ -1,12 +1,12 @@
 ---
 title: "Code execution with MCP: Building more efficient agents"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-11-04"
-url: "https://www.anthropic.com/engineering/code-execution-with-mcp"
+resource: "https://www.anthropic.com/engineering/code-execution-with-mcp"
 pillar: "building"
 tags: [mcp, code-execution, agents, context-management, tool-use, progressive-disclosure]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2025-11-04_anthropic_code-execution-with-mcp.md"
 ---
 

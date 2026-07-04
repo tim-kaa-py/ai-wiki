@@ -8,7 +8,7 @@ sources:
   - "summaries/2026-02-11_openai_harness-engineering-leveraging-codex-agent-first-world.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
-last_updated: "2026-07-02"
+timestamp: "2026-07-02"
 ---
 
 # Code-as-Text Structural Tests

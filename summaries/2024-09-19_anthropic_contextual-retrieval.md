@@ -1,12 +1,12 @@
 ---
 title: "Introducing Contextual Retrieval"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2024-09-19"
-url: "https://www.anthropic.com/engineering/contextual-retrieval"
+resource: "https://www.anthropic.com/engineering/contextual-retrieval"
 pillar: "understanding"
 tags: [rag, retrieval, embeddings, bm25, contextual-retrieval, claude, prompt-caching]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2024-09-19_anthropic_contextual-retrieval.md"
 ---
 

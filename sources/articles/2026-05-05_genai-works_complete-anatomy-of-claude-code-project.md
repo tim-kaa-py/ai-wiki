@@ -1,12 +1,12 @@
 ---
 title: "The Complete Anatomy of a Claude Code Project - 2026"
-source_type: "article"
+type: "article"
 channel: "GenAI Works"
 date: "2026-05-05"
-url: ""
+resource: ""
 pillar: "building"
 tags: [claude-code, project-structure, cheatsheet, reference, hooks, skills, subagents, plugins, mcp, agent-teams]
-ingested: "2026-05-05"
+timestamp: "2026-05-05"
 extraction_method: "user-pasted"
 notes: "Source is a JPEG infographic dropped into inbox/. Watermarked GenAI Works. Original publication URL not provided by user — likely from social media (LinkedIn / X). The 'date' field is the ingestion date; image creation date unknown."
 ---

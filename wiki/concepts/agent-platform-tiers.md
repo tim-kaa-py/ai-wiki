@@ -8,7 +8,7 @@ sources:
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
   - "summaries/2026-04-15_anthropic_scaling-managed-agents.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
-last_updated: "2026-05-17"
+timestamp: "2026-05-17"
 ---
 
 # Agent Platform Tiers (Build-to-Buy Spectrum)

@@ -1,12 +1,12 @@
 ---
 title: "Work with sessions (Agent SDK)"
-source_type: "docs"
+type: "docs"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"
-url: "https://code.claude.com/docs/en/agent-sdk/sessions"
+resource: "https://code.claude.com/docs/en/agent-sdk/sessions"
 pillar: "building"
 tags: [agent-sdk, sessions, context-management, resume, fork, multi-turn, python, typescript]
-ingested: "2026-05-06"
+timestamp: "2026-05-06"
 extraction_method: "web-fetch"
 ---
 

@@ -6,7 +6,7 @@ tags: [meta-harness, harness-engineering, dspy, optimization, self-improving-ai,
 sources:
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
   - "summaries/2024-12-19_anthropic_building-effective-agents.md"
-last_updated: "2026-04-20"
+timestamp: "2026-04-20"
 ---
 
 # Meta Harness

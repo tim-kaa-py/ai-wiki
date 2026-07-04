@@ -1,12 +1,12 @@
 ---
 title: "The Complete Anatomy of a Claude Code Project - 2026"
-source_type: "article"
+type: "summary"
 channel: "GenAI Works"
 date: "2026-05-05"
-url: ""
+resource: ""
 pillar: "building"
 tags: [claude-code, project-structure, cheatsheet, reference, hooks, skills, subagents, plugins, mcp, agent-teams]
-ingested: "2026-05-05"
+timestamp: "2026-05-05"
 source_file: "sources/articles/2026-05-05_genai-works_complete-anatomy-of-claude-code-project.md"
 ---
 

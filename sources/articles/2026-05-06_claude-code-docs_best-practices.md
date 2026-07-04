@@ -1,12 +1,12 @@
 ---
 title: "Best practices for Claude Code"
-source_type: "docs"
+type: "docs"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"
-url: "https://code.claude.com/docs/en/best-practices"
+resource: "https://code.claude.com/docs/en/best-practices"
 pillar: "building"
 tags: [claude-code, best-practices, context-management, claude-md, skills, hooks, subagents, workflow, agentic-engineering]
-ingested: "2026-05-06"
+timestamp: "2026-05-06"
 extraction_method: "web-fetch"
 ---
 

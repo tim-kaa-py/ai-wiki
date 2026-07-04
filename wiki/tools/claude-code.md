@@ -37,7 +37,7 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_best-practices.md"
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
   - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
-last_updated: "2026-05-27"
+timestamp: "2026-05-27"
 ---
 
 # Claude Code

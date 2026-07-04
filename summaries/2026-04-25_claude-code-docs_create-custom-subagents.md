@@ -1,12 +1,12 @@
 ---
 title: "Create custom subagents (Claude Code Docs)"
-source_type: "article"
+type: "summary"
 channel: "Anthropic / Claude Code Docs"
 date: "2026-04-25"
-url: "https://code.claude.com/docs/en/sub-agents"
+resource: "https://code.claude.com/docs/en/sub-agents"
 pillar: "building"
 tags: [claude-code, subagents, agents, configuration, how-to, reference, hooks, permissions, mcp, context-management]
-ingested: "2026-04-25"
+timestamp: "2026-04-25"
 source_file: "sources/articles/2026-04-25_claude-code-docs_create-custom-subagents.md"
 ---
 

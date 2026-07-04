@@ -5,7 +5,7 @@ pillar: "building"
 tags: [claude-code, agents, skills, workflow, architecture, loop-engineering, second-brain, obsidian, distribution]
 sources:
   - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
-last_updated: "2026-06-29"
+timestamp: "2026-06-29"
 ---
 
 # Agentic OS (AIOS)

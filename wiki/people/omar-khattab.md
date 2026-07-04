@@ -5,7 +5,7 @@ pillar: "ecosystem"
 tags: [dspy, meta-harness, harness-engineering, optimization, stanford, researcher]
 sources:
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
-last_updated: "2026-04-19"
+timestamp: "2026-04-19"
 ---
 
 # Omar Khattab

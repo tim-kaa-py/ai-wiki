@@ -9,7 +9,7 @@ sources:
   - "summaries/2026-03-25_anthropic_claude-code-auto-mode.md"
   - "summaries/2025-10-20_anthropic_claude-code-sandboxing.md"
   - "summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
-last_updated: "2026-04-25"
+timestamp: "2026-04-25"
 ---
 
 # Claude Code Permissions

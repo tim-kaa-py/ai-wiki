@@ -1,12 +1,12 @@
 ---
 title: "Automate work with routines"
-source_type: "docs"
+type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"
-url: "https://code.claude.com/docs/en/routines"
+resource: "https://code.claude.com/docs/en/routines"
 pillar: "building"
 tags: [claude-code, routines, automation, scheduling, github-webhooks, api-triggers, cloud-infrastructure]
-ingested: "2026-05-06"
+timestamp: "2026-05-06"
 source_file: "sources/articles/2026-05-06_claude-code-docs_routines.md"
 ---
 

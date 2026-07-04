@@ -5,7 +5,7 @@ pillar: "ecosystem"
 tags: [model-behavior-engineer, evals, agents, roles, organization, prompt-engineering]
 sources:
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
-last_updated: "2026-04-20"
+timestamp: "2026-04-20"
 ---
 
 # Model Behavior Engineer (MBE)

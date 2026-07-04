@@ -5,7 +5,7 @@ pillar: "building"
 tags: [agentic-engineering, claude-code, ai-layer, global-rules, commands, skills, source-control, agent-architecture]
 sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
-last_updated: "2026-05-09"
+timestamp: "2026-05-09"
 ---
 
 # AI Layer (Rules + Commands + Skills)

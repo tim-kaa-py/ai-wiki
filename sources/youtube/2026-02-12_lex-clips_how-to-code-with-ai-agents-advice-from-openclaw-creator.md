@@ -1,14 +1,14 @@
 ---
 title: "How to code with AI agents - Advice from OpenClaw creator | Peter Steinberger and Lex Fridman"
-source_type: "youtube"
+type: "youtube"
 channel: "Lex Clips"
 date: "2026-02-12"
-url: "https://www.youtube.com/watch?v=wKy1_KLcxcs"
+resource: "https://www.youtube.com/watch?v=wKy1_KLcxcs"
 video_id: "wKy1_KLcxcs"
 duration: "31:13"
 pillar: "building"
 tags: [agentic-engineering, workflow, prompt-craft, soul-md, voice-input, codebase-design, engineering-leadership]
-ingested: "2026-02-12"
+timestamp: "2026-02-12"
 extraction_method: "auto-captions"
 ---
 

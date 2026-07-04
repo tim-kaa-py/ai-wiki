@@ -9,7 +9,7 @@ sources:
   - "summaries/2026-04-15_anthropic_scaling-managed-agents.md"
   - "summaries/2026-05-06_claude-code-docs_agent-sdk-overview.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
-last_updated: "2026-05-17"
+timestamp: "2026-05-17"
 ---
 
 # Claude Managed Agents

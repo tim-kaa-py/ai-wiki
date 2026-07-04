@@ -1,12 +1,12 @@
 ---
 title: "Planning In Claude Code Just Got a Huge Upgrade"
-source_type: "youtube"
+type: "youtube"
 channel: "Nate Herk | AI Automation"
 date: "2026-04-06"
-url: "https://www.youtube.com/watch?v=T4fXb3sbJIo"
+resource: "https://www.youtube.com/watch?v=T4fXb3sbJIo"
 pillar: "building"
 tags: [claude-code, agents, workflow, planning, how-to]
-ingested: "2026-04-24"
+timestamp: "2026-04-24"
 extraction_method: "auto-captions"
 video_id: "T4fXb3sbJIo"
 duration: "15:48"

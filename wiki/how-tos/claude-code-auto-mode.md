@@ -7,7 +7,7 @@ sources:
   - "summaries/2026-03-25_anthropic_claude-code-auto-mode.md"
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+timestamp: "2026-05-08"
 ---
 
 # Claude Code Auto Mode

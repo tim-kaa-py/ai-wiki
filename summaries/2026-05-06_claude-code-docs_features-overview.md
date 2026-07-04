@@ -1,12 +1,12 @@
 ---
 title: "Extend Claude Code"
-source_type: "docs"
+type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"
-url: "https://code.claude.com/docs/en/features-overview"
+resource: "https://code.claude.com/docs/en/features-overview"
 pillar: "building"
 tags: [claude-code, claude-md, skills, subagents, hooks, mcp, plugins, agent-teams, context-management, decision-framework]
-ingested: "2026-05-06"
+timestamp: "2026-05-06"
 source_file: "sources/articles/2026-05-06_claude-code-docs_features-overview.md"
 ---
 

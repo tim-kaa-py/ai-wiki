@@ -1,12 +1,12 @@
 ---
 title: "Context Is the New Code – Patrick Debois, Tessl"
-source_type: "youtube"
+type: "youtube"
 channel: "AI Engineer"
 date: "2026-05-03"
-url: "https://m.youtube.com/watch?v=bSG9wUYaHWU"
+resource: "https://m.youtube.com/watch?v=bSG9wUYaHWU"
 pillar: "building"
 tags: [context-engineering, agents, evaluation, workflow, skills, harness-engineering, best-practices]
-ingested: "2026-05-05"
+timestamp: "2026-05-05"
 extraction_method: "auto-captions"
 video_id: "bSG9wUYaHWU"
 duration: "27:13"

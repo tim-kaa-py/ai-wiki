@@ -5,7 +5,7 @@ pillar: "building"
 tags: [claude-code, code-review, github, multi-agent, pr-automation, review-md, claude-md, workflow, managed-service]
 sources:
   - "summaries/2026-05-06_claude-code-docs_code-review.md"
-last_updated: "2026-05-06"
+timestamp: "2026-05-06"
 ---
 
 # Code Review (Claude Code Managed Service)

@@ -1,12 +1,12 @@
 ---
 title: "Claude Code Status Line — Context Awareness + Rate Limit Dashboard"
-source_type: "article"
+type: "article"
 channel: "self"
 date: "2026-04-16"
-url: ""
+resource: ""
 pillar: "building"
 tags: [claude-code, workflow, how-to, reference, terminal, configuration, status-line]
-ingested: "2026-04-16"
+timestamp: "2026-04-16"
 extraction_method: "user-pasted"
 ---
 

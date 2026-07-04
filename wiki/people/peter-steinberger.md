@@ -6,7 +6,7 @@ tags: [agentic-engineering, openclaw, ios, engineering-leadership]
 sources:
   - "summaries/2026-02-12_lex-clips_how-to-code-with-ai-agents-advice-from-openclaw-creator.md"
   - "summaries/2026-06-19_nate-herk_agent-loops-clearly-explained.md"
-last_updated: "2026-06-23"
+timestamp: "2026-06-23"
 ---
 
 # Peter Steinberger

@@ -6,7 +6,7 @@ tags: [auto-research, self-improving-ai, optimization, evals, criteria-design, a
 sources:
   - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
-last_updated: "2026-04-19"
+timestamp: "2026-04-19"
 ---
 
 # Auto Research

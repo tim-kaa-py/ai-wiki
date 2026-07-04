@@ -1,12 +1,12 @@
 ---
 title: "How we built our multi-agent research system"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-06-13"
-url: "https://www.anthropic.com/engineering/multi-agent-research-system"
+resource: "https://www.anthropic.com/engineering/multi-agent-research-system"
 pillar: "understanding"
 tags: [multi-agent, research, orchestrator-worker, claude, prompt-engineering, evaluation, parallelization]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2025-06-13_anthropic_multi-agent-research-system.md"
 ---
 

@@ -13,7 +13,7 @@ sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
-last_updated: "2026-05-17"
+timestamp: "2026-05-17"
 ---
 
 # Context Engineering

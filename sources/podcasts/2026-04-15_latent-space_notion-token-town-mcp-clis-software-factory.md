@@ -1,14 +1,14 @@
 ---
 title: "Notion's Token Town: 5 Rebuilds, 100+ Tools, MCP vs CLIs and the Software Factory Future"
-source_type: "podcast"
+type: "podcast"
 channel: "Latent Space: The AI Engineer Podcast"
 date: "2026-04-15"
-url: "https://podcasts.apple.com/de/podcast/latent-space-the-ai-engineer-podcast/id1674008350?l=en-GB&i=1000761419695"
+resource: "https://podcasts.apple.com/de/podcast/latent-space-the-ai-engineer-podcast/id1674008350?l=en-GB&i=1000761419695"
 canonical_url: "https://www.latent.space/p/notion"
 youtube_url: "https://www.youtube.com/watch?v=ATt7QJgt-2k"
 pillar: "ecosystem"
 tags: [agents, mcp, notion, tool-use, architecture, building, ecosystem, software-factory]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 extraction_method: "auto-captions"
 duration: "1:17:00"
 guests: ["Sarah Sachs", "Simon Last"]

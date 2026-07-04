@@ -5,7 +5,7 @@ pillar: "building"
 tags: [security, prompt-injection, agents, skills, context-engineering, waf, supply-chain]
 sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-last_updated: "2026-05-05"
+timestamp: "2026-05-05"
 ---
 
 # Context Filter (WAF for Prompt Injection)

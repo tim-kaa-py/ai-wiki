@@ -1,12 +1,12 @@
 ---
 title: "Rethinking AI Agents: The Rise of Harness Engineering"
-source_type: "youtube"
+type: "summary"
 channel: "PY"
 date: "2026-04-14"
-url: "https://m.youtube.com/watch?v=Xxuxg8PcBvc"
+resource: "https://m.youtube.com/watch?v=Xxuxg8PcBvc"
 pillar: "understanding"
 tags: [harness-engineering, agents, agent-architecture, prompt-engineering, context-engineering, meta-harness, dspy, nlh, evaluation, claude-code]
-ingested: "2026-04-19"
+timestamp: "2026-04-19"
 source_file: "sources/youtube/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
 ---
 

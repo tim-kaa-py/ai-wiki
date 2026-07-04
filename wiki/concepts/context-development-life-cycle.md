@@ -5,7 +5,7 @@ pillar: "building"
 tags: [cdlc, context-engineering, agents, evaluation, skills, workflow, devops]
 sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-last_updated: "2026-05-05"
+timestamp: "2026-05-05"
 ---
 
 # Context Development Life Cycle (CDLC)

@@ -10,7 +10,7 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_hooks-guide.md"
   - "summaries/2026-05-06_claude-code-docs_memory.md"
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
-last_updated: "2026-05-17"
+timestamp: "2026-05-17"
 ---
 
 # Claude Code Hooks for Memory

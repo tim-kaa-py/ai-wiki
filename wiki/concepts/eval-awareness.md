@@ -5,7 +5,7 @@ pillar: "understanding"
 tags: [evaluation, eval-awareness, alignment, contamination, multi-agent, benchmarks]
 sources:
   - "summaries/2026-03-06_anthropic_eval-awareness-browsecomp.md"
-last_updated: "2026-04-20"
+timestamp: "2026-04-20"
 ---
 
 # Eval Awareness

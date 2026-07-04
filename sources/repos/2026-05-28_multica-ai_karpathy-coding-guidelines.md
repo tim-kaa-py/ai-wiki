@@ -1,12 +1,12 @@
 ---
 title: "Karpathy-Inspired Claude Code Guidelines"
-source_type: "repo"
+type: "repo"
 channel: "multica-ai"
 date: "2026-05-28"
-url: "https://github.com/multica-ai/andrej-karpathy-skills"
+resource: "https://github.com/multica-ai/andrej-karpathy-skills"
 pillar: "building"
 tags: [claude-code, prompt-engineering, agentic-coding-workflow, best-practices, anti-patterns, andrej-karpathy, agent-skills]
-ingested: "2026-05-28"
+timestamp: "2026-05-28"
 extraction_method: "web-fetch"
 ---
 

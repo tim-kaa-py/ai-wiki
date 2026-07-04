@@ -5,7 +5,7 @@ pillar: "ecosystem"
 tags: [langchain, langgraph, deep-agents, managed-agents, agent-frameworks, sandbox, agents, infrastructure]
 sources:
   - "summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md"
-last_updated: "2026-04-19"
+timestamp: "2026-04-19"
 ---
 
 # Deep Agents & Deep Agents Deploy

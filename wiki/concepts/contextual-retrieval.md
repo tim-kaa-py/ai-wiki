@@ -5,7 +5,7 @@ pillar: "understanding"
 tags: [rag, retrieval, embeddings, bm25, contextual-retrieval, reranking, prompt-caching, claude]
 sources:
   - "summaries/2024-09-19_anthropic_contextual-retrieval.md"
-last_updated: "2026-04-20"
+timestamp: "2026-04-20"
 ---
 
 # Contextual Retrieval

@@ -5,7 +5,7 @@ pillar: "building"
 tags: [architecture, ousterhout, deep-modules, agentic-coding-workflow, agent-skills, claude-code, best-practices, refactoring]
 sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+timestamp: "2026-05-08"
 ---
 
 # Deep Modules (Ousterhout, Applied to AI)

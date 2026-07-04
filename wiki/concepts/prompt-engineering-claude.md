@@ -7,7 +7,7 @@ sources:
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
   - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
-last_updated: "2026-04-22"
+timestamp: "2026-04-22"
 ---
 
 # Prompt Engineering for Claude

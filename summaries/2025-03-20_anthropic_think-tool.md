@@ -1,12 +1,12 @@
 ---
 title: "The 'think' tool: Enabling Claude to stop and think in complex tool use situations"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-03-20"
-url: "https://www.anthropic.com/engineering/claude-think-tool"
+resource: "https://www.anthropic.com/engineering/claude-think-tool"
 pillar: "understanding"
 tags: [think-tool, claude, tool-use, reasoning, tau-bench, swe-bench, agents]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2025-03-20_anthropic_think-tool.md"
 ---
 

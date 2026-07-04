@@ -5,7 +5,7 @@ pillar: "understanding"
 tags: [evaluation, hiring, ai-resistance, performance-engineering, interview-design]
 sources:
   - "summaries/2026-01-21_anthropic_designing-ai-resistant-evaluations.md"
-last_updated: "2026-04-20"
+timestamp: "2026-04-20"
 ---
 
 # AI-Resistant Evaluation Design

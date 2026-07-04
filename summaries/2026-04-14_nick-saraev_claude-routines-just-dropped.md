@@ -1,12 +1,12 @@
 ---
 title: "Claude Routines Just Dropped, And It's Perfect"
-source_type: "youtube"
+type: "summary"
 channel: "Nick Saraev"
 date: "2026-04-14"
-url: "https://www.youtube.com/watch?v=j3aXJNu9804"
+resource: "https://www.youtube.com/watch?v=j3aXJNu9804"
 pillar: "building"
 tags: [claude-code, agents, workflow, automation, how-to]
-ingested: "2026-04-15"
+timestamp: "2026-04-15"
 source_file: "sources/youtube/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
 ---
 

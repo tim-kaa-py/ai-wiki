@@ -5,7 +5,7 @@ pillar: "ecosystem"
 tags: [devops, context-engineering, cdlc, tessl, agents]
 sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-last_updated: "2026-05-05"
+timestamp: "2026-05-05"
 ---
 
 # Patrick Debois

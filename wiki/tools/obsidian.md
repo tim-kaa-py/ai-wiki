@@ -8,7 +8,7 @@ sources:
   - "summaries/2026-04-07_sayed-developer_why-andrej-karpathy-abandoned-rag-claude-code-obsidian.md"
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
   - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
-last_updated: "2026-06-29"
+timestamp: "2026-06-29"
 ---
 
 # Obsidian

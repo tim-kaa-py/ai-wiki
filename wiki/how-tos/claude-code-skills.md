@@ -9,7 +9,7 @@ sources:
   - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-last_updated: "2026-05-08"
+timestamp: "2026-05-08"
 ---
 
 # Claude Code Skills

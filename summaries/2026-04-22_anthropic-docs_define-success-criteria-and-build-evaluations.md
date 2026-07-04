@@ -1,12 +1,12 @@
 ---
 title: "Define success criteria and build evaluations"
-source_type: "article"
+type: "summary"
 channel: "Anthropic"
 date: "2026-04-22"
-url: "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+resource: "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
 pillar: "building"
 tags: [evaluation, testing, best-practices, how-to, prompt-engineering]
-ingested: "2026-04-22"
+timestamp: "2026-04-22"
 source_file: "sources/articles/2026-04-22_anthropic-docs_define-success-criteria-and-build-evaluations.md"
 ---
 

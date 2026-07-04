@@ -1,12 +1,12 @@
 ---
 title: "Quantifying infrastructure noise in agentic coding evals"
-source_type: "article"
+type: "article"
 channel: "Anthropic Engineering"
 date: "2026-04-18"
-url: "https://www.anthropic.com/engineering/infrastructure-noise"
+resource: "https://www.anthropic.com/engineering/infrastructure-noise"
 pillar: "understanding"
 tags: [evaluation, agents, benchmarks, infrastructure, swe-bench, terminal-bench]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 extraction_method: "web-fetch"
 ---
 

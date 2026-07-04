@@ -1,12 +1,12 @@
 ---
 title: "Orchestrate teams of Claude Code sessions"
-source_type: "docs"
+type: "summary"
 channel: "Anthropic (Claude Code Docs)"
 date: "2026-05-06"
-url: "https://code.claude.com/docs/en/agent-teams"
+resource: "https://code.claude.com/docs/en/agent-teams"
 pillar: "building"
 tags: [claude-code, agent-teams, multi-agent, parallel-agents, orchestration, subagents, coordination]
-ingested: "2026-05-06"
+timestamp: "2026-05-06"
 source_file: "sources/articles/2026-05-06_claude-code-docs_agent-teams.md"
 ---
 

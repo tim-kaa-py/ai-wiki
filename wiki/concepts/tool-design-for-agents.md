@@ -8,7 +8,7 @@ sources:
   - "summaries/2024-12-19_anthropic_building-effective-agents.md"
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
-last_updated: "2026-04-21"
+timestamp: "2026-04-21"
 ---
 
 # Tool Design for Agents

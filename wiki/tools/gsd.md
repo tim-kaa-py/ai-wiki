@@ -5,7 +5,7 @@ pillar: "building"
 tags: [claude-code, orchestration, agents, sub-agents, planning, gsd, workflow]
 sources:
   - "summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
-last_updated: "2026-04-15"
+timestamp: "2026-04-15"
 ---
 
 # GSD (Get Stuff Done)

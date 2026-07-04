@@ -14,7 +14,7 @@ sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
   - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
-last_updated: "2026-06-29"
+timestamp: "2026-06-29"
 ---
 
 # Agent Skills

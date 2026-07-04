@@ -1,12 +1,12 @@
 ---
 title: "Equipping agents for the real world with Agent Skills"
-source_type: "article"
+type: "summary"
 channel: "Anthropic Engineering"
 date: "2025-10-16"
-url: "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills"
+resource: "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills"
 pillar: "building"
 tags: [agent-skills, claude, skills, progressive-disclosure, agents, mcp, claude-code]
-ingested: "2026-04-20"
+timestamp: "2026-04-20"
 source_file: "sources/articles/2025-10-16_anthropic_agent-skills.md"
 ---
 

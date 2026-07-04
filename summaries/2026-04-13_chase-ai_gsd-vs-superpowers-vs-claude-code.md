@@ -1,12 +1,12 @@
 ---
 title: "GSD vs Superpowers vs Claude Code: A New AI King?"
-source_type: "youtube"
+type: "summary"
 channel: "Chase AI"
 date: "2026-04-13"
-url: "https://www.youtube.com/watch?v=celLbDMGy8w"
+resource: "https://www.youtube.com/watch?v=celLbDMGy8w"
 pillar: "ecosystem"
 tags: [claude-code, comparison, agents, workflow, gsd, superpowers, orchestration]
-ingested: "2026-04-15"
+timestamp: "2026-04-15"
 source_file: "sources/youtube/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
 ---
 

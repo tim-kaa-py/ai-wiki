@@ -1,12 +1,12 @@
 ---
 title: "FULL Guide to Becoming a Principled Agentic Engineer (Build Anything with AI)"
-source_type: "youtube"
+type: "youtube"
 channel: "Cole Medin"
 date: "2026-04-30"
-url: "https://www.youtube.com/watch?v=luBkbzjo-TA"
+resource: "https://www.youtube.com/watch?v=luBkbzjo-TA"
 pillar: "building"
 tags: [agentic-engineering, claude-code, workflow, planning, prompt-engineering]
-ingested: "2026-05-09"
+timestamp: "2026-05-09"
 extraction_method: "auto-captions"
 video_id: "luBkbzjo-TA"
 duration: "1:07:01"
