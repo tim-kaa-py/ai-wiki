@@ -4,6 +4,8 @@
 
 ## 2026-07-08
 
+**Update** TRIAGE: Pilot 2 (supervised, tuned pipeline) — 5 pages scanned (agent-evaluation, parallel-agent-patterns, mcp, reviewer-agents, claude-code-hooks-memory), 2 candidates surfaced, 0 confirmed (1 advocate concession, 1 Opus-judge dismissal), 5 near-misses correctly ruled out. Editorial fixes applied to mcp.md (heading rename) and reviewer-agents.md (coverage-first pointer). Zero judge-vs-user mismatches across both pilots; shadow mode (Phase 2) unlocked. Report: meta/triage-runs/2026-07-08-pilot-2.md.
+
 **Update** TRIAGE: Phase 0 pilot run (supervised) — 3 pages scanned (claude-code, context-engineering, agent-orchestration-patterns), 4 candidate tensions surfaced, 0 confirmed (all dismissed: 1 at mechanical verification, 2 by advocate concession, 1 by Opus judge), 0 resolved, 0 queued. Clean verdict cross-checked with an independent Opus detector pass — converged. Report: meta/triage-runs/2026-07-08-pilot-1.md.
 
 ## 2026-07-04

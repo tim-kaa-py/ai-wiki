@@ -11,7 +11,7 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_code-review.md"
   - "summaries/2026-05-06_claude-code-docs_ultrareview.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-timestamp: "2026-05-08"
+timestamp: "2026-07-08"
 ---
 
 # Reviewer Agents
@@ -39,7 +39,7 @@ Ryan's team runs a handful of personas, each scoped to a durable concern:
 - **Scalability engineer** — N+1 queries, unbounded concurrency, memory footprint
 - **Security reviewer** — input validation, auth boundaries, secret handling
 
-Each persona has its own doc (usually in `docs/review-personas/<persona>.md`) that defines the standard. The reviewer agent for that persona is prompted with the doc, the diff, and instructions to surface only P2+ issues — not every stylistic nit.
+Each persona has its own doc (usually in `docs/review-personas/<persona>.md`) that defines the standard. The reviewer agent for that persona is prompted with the doc, the diff, and instructions to surface only P2+ issues — not every stylistic nit. On Opus 4.7, apply this bar at the filter stage, not the finding stage — see [Coverage-First Prompting on Opus 4.7](#coverage-first-prompting-on-opus-47).
 
 ## How to Wire One
 

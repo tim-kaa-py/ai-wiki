@@ -13,14 +13,14 @@ sources:
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
-timestamp: "2026-05-17"
+timestamp: "2026-07-08"
 ---
 
 # MCP (Model Context Protocol)
 
 An open protocol from Anthropic for exposing tools, data, and prompts to LLM agents. MCP servers provide tools; MCP clients (Claude Desktop, Claude Code, IDEs) connect to them. Servers can be local (stdio) or remote (HTTP/SSE).
 
-## Two Inefficiencies MCP Has to Solve
+## Two Inefficiencies in MCP Deployments
 
 As MCP adoption grew, two context problems emerged:
 
