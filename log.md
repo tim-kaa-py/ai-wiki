@@ -4,6 +4,8 @@
 
 ## 2026-07-08
 
+**Update** TRIAGE: Full sweep (Phase 3, autonomous) — remaining 62 pages scanned in 4 batches; all 80 wiki pages now covered. 3 candidates: 1 confirmed tension (claude-routines four-vs-three trigger types, queued to meta/contradictions.md with strong (a) read), 1 dismissed by Opus judge (steinberger modality-vs-cadence), 1 reclassified as editorial (deep-modules stale count). Skim-hazard fix applied to harness-engineering.md. Report: meta/triage-runs/2026-07-08-sweep-1.md.
+
 **Update** TRIAGE: Shadow 1 (Phase 2) — 10 pages scanned, 1 candidate (harness-engineering resets pair) dismissed by advocate concession citing policy rules, 4 near-misses correctly ruled out, all pages clean. No auto-resolve verdicts produced; cumulative 18 pages / 0 confirmed tensions / 0 pipeline-vs-user disagreements. Report: meta/triage-runs/2026-07-08-shadow-1.md.
 
 **Update** TRIAGE: Pilot 2 (supervised, tuned pipeline) — 5 pages scanned (agent-evaluation, parallel-agent-patterns, mcp, reviewer-agents, claude-code-hooks-memory), 2 candidates surfaced, 0 confirmed (1 advocate concession, 1 Opus-judge dismissal), 5 near-misses correctly ruled out. Editorial fixes applied to mcp.md (heading rename) and reviewer-agents.md (coverage-first pointer). Zero judge-vs-user mismatches across both pilots; shadow mode (Phase 2) unlocked. Report: meta/triage-runs/2026-07-08-pilot-2.md.

@@ -21,7 +21,7 @@ sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
-timestamp: "2026-07-02"
+timestamp: "2026-07-08"
 ---
 
 # Harness Engineering
@@ -132,7 +132,7 @@ Production agents combine these. The architectural mix, not the model, drives th
 
 Every harness component encodes an assumption about what the model can't do — and those assumptions expire. Mature harness work therefore looks less like construction and more like pruning:
 
-- **Anthropic dropped context resets** once Opus 4.6 no longer needed them.
+- **Anthropic dropped context resets** once Opus 4.6 no longer needed them. (A need-based pruning call — distinct from the technique preference under [Context Engineering Inside the Harness](#context-engineering-inside-the-harness): *when* you reset across sessions, full resets with handoff artifacts still beat compaction.)
 - **Vercel removed 80% of an agent's tools** and got better results.
 - **Manus rewrote their harness 5x in 6 months.**
 - **Notion rewrote their agent harness five times** across ~3.5 years: JS coding-agent → XML representation → Notion-flavored markdown → SQLite → progressive disclosure with 100+ tools. Simon Last's framing: "I'm basically just doing that [rewriting everything] in a loop every six months."

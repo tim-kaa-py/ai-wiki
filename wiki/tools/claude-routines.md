@@ -18,7 +18,7 @@ Scheduled, triggered, or API-invoked Claude Code sessions that run autonomously 
 
 ## Why It Matters
 
-Routines are the missing trigger layer that makes Claude Code a complete automation platform. Previously, Claude could handle logic (natural language) and output (API calls, tools), but lacked the ability to fire autonomously on a schedule or in response to external events. Routines close that gap with four trigger types: schedule, webhook, API call, and GitHub event.
+Routines are the missing trigger layer that makes Claude Code a complete automation platform. Previously, Claude could handle logic (natural language) and output (API calls, tools), but lacked the ability to fire autonomously on a schedule or in response to external events. Routines close that gap with four trigger types: schedule, webhook, API call, and GitHub event. <!-- TENSION 2026-07-08: see meta/contradictions.md#2026-07-08-claude-routines-trigger-count -->
 
 Access the routines interface at: `claude.ai/code/routines`
 
