@@ -14,7 +14,7 @@ sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
-timestamp: "2026-05-17"
+timestamp: "2026-07-08"
 ---
 
 # Context Engineering
@@ -60,7 +60,7 @@ For multi-turn or multi-window tasks, Anthropic names three techniques — used 
 
 | Strategy | Mechanism | When to use |
 |----------|-----------|-------------|
-| **Compaction** | Summarize the session, reinitiate with the summary | Single long session, fresh restart acceptable |
+| **Compaction** | Summarize the session, reinitiate with the summary | Single long session, fresh restart acceptable — for cross-session work, see [Compaction vs Full Reset](#compaction-vs-full-reset) |
 | **Structured note-taking** | Persist artifacts to files outside the context window | State must survive compaction / restart / handoff |
 | **Sub-agent decomposition** | Spawn focused child agents that return condensed summaries | Parallelizable subtasks with well-bounded outputs |
 
