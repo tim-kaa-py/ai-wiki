@@ -4,6 +4,8 @@
 
 ## 2026-07-08
 
+**Update** LINT: post-triage health check — all 8 categories clean. Orphans: none (77/77 source-summary pairs, every summary wiki-referenced, 1 gist indexed). Stale: none. Index sync: no broken links, all 77 summaries + 80 wiki pages indexed, footer counts correct. Log sync: clean (12 apparent misses are the known 2026-05-06 BATCH-INGEST false positive). Contradictions: ledger has 1 entry, status resolved (claude-routines trigger count); no open tensions, no stray TENSION markers. Gaps: all high-frequency tags covered by wiki pages. OKF conformance: scripts/okf-check.py PASS. No fixes required.
+
 **Update** TRIAGE: Tension resolved — claude-routines trigger count settled (a) accept new after online verification against code.claude.com/docs/en/routines: three trigger types (schedule, API, GitHub event), webhook is wiring not a type. Page corrected with deprecation footnote, ledger entry flipped to resolved. Also fixed deep-modules.md stale count (Two → Three AI-specific arguments).
 
 **Update** TRIAGE: Full sweep (Phase 3, autonomous) — remaining 62 pages scanned in 4 batches; all 80 wiki pages now covered. 3 candidates: 1 confirmed tension (claude-routines four-vs-three trigger types, queued to meta/contradictions.md with strong (a) read), 1 dismissed by Opus judge (steinberger modality-vs-cadence), 1 reclassified as editorial (deep-modules stale count). Skim-hazard fix applied to harness-engineering.md. Report: meta/triage-runs/2026-07-08-sweep-1.md.
