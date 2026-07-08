@@ -9,7 +9,7 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_routines.md"
   - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
   - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
-timestamp: "2026-06-29"
+timestamp: "2026-07-08"
 ---
 
 # Claude Routines
@@ -18,7 +18,9 @@ Scheduled, triggered, or API-invoked Claude Code sessions that run autonomously 
 
 ## Why It Matters
 
-Routines are the missing trigger layer that makes Claude Code a complete automation platform. Previously, Claude could handle logic (natural language) and output (API calls, tools), but lacked the ability to fire autonomously on a schedule or in response to external events. Routines close that gap with four trigger types: schedule, webhook, API call, and GitHub event. <!-- TENSION 2026-07-08: see meta/contradictions.md#2026-07-08-claude-routines-trigger-count -->
+Routines are the missing trigger layer that makes Claude Code a complete automation platform. Previously, Claude could handle logic (natural language) and output (API calls, tools), but lacked the ability to fire autonomously on a schedule or in response to external events. Routines close that gap with three trigger types — schedule, API call, and GitHub event — with webhooks as the wiring, not a separate type: inbound "webhook" integration is the per-routine API endpoint, and routine chaining means one routine POSTing to the next one's endpoint.
+
+> Earlier versions of this page stated there were four trigger types including webhook, per Nick Saraev (2026-04-14); superseded by Anthropic's docs (verified against code.claude.com/docs/en/routines) on 2026-07-08.
 
 Access the routines interface at: `claude.ai/code/routines`
 
@@ -188,7 +190,7 @@ Anthropic's "Stop babysitting your agents" talk (Sid Benesaria, May 2026) frames
 | | `/loop` | Routines |
 |--|---------|----------|
 | Where it runs | Inside the **current local** Claude Code session | Remotely, in the **same cloud containers** as Claude Code on Web |
-| Trigger | Fixed time interval only | Time-based **or** event-based (schedule / webhook / API / GitHub event) |
+| Trigger | Fixed time interval only | Time-based **or** event-based (schedule / API / GitHub event) |
 | Lifecycle | Wakes the same session, re-runs the prompt | Each fire spawns a **new** session with a specified prompt |
 | Setup | `/loop <interval> <prompt>` in a running session | Routines tab in web or desktop app |
 | Bottleneck removed | Routine *monitoring* you'd otherwise do at the keyboard | Your machine being on at all |

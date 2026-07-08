@@ -6,7 +6,7 @@ pillar: "building"
 tags: [architecture, ousterhout, deep-modules, agentic-coding-workflow, agent-skills, claude-code, best-practices, refactoring]
 sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-timestamp: "2026-05-08"
+timestamp: "2026-07-08"
 ---
 
 # Deep Modules (Ousterhout, Applied to AI)
@@ -24,7 +24,7 @@ Shallow modules look modular but aren't — they push complexity *across* bounda
 
 ## Why Deep Modules Win for AI Codebases
 
-Two AI-specific arguments, both load-bearing:
+Three AI-specific arguments, all load-bearing:
 
 ### 1. Test Boundary Quality
 

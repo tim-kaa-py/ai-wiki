@@ -4,6 +4,8 @@
 
 ## 2026-07-08
 
+**Update** TRIAGE: Tension resolved — claude-routines trigger count settled (a) accept new after online verification against code.claude.com/docs/en/routines: three trigger types (schedule, API, GitHub event), webhook is wiring not a type. Page corrected with deprecation footnote, ledger entry flipped to resolved. Also fixed deep-modules.md stale count (Two → Three AI-specific arguments).
+
 **Update** TRIAGE: Full sweep (Phase 3, autonomous) — remaining 62 pages scanned in 4 batches; all 80 wiki pages now covered. 3 candidates: 1 confirmed tension (claude-routines four-vs-three trigger types, queued to meta/contradictions.md with strong (a) read), 1 dismissed by Opus judge (steinberger modality-vs-cadence), 1 reclassified as editorial (deep-modules stale count). Skim-hazard fix applied to harness-engineering.md. Report: meta/triage-runs/2026-07-08-sweep-1.md.
 
 **Update** TRIAGE: Shadow 1 (Phase 2) — 10 pages scanned, 1 candidate (harness-engineering resets pair) dismissed by advocate concession citing policy rules, 4 near-misses correctly ruled out, all pages clean. No auto-resolve verdicts produced; cumulative 18 pages / 0 confirmed tensions / 0 pipeline-vs-user disagreements. Report: meta/triage-runs/2026-07-08-shadow-1.md.
