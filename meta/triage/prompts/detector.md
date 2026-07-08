@@ -38,6 +38,15 @@ CLAIM B (line <n>): "<verbatim quote>"
 WHY THEY CONFLICT: <one sentence>
 ```
 
+HARD REQUIREMENT: both CLAIM A and CLAIM B must be verbatim quotes you
+copied from the page. If you cannot quote both sides of a candidate
+verbatim, do NOT report it as a candidate (it may go under NEAR-MISSES).
+
+After the candidates, add a `NEAR-MISSES:` section: pairs you examined
+and ruled out under the criteria above, each with both quotes verbatim
+(with line numbers) and one sentence on why you ruled it out. These feed
+a downstream adversarial review — report them honestly, not defensively.
+
 If a page has no candidates, list it under a final `CLEAN PAGES:` heading.
 Report every page exactly once. It is a valid and expected outcome that
 most or all pages are clean — do not lower the bar to produce findings.
