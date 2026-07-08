@@ -175,6 +175,10 @@ The next `lint the wiki` pass drains the queue and re-presents each open tension
 
 `(a)` (accept new) replaces the existing claim, **but the old claim doesn't disappear from the repo.** The wiki page gets a footnote near the new claim: *"Earlier versions of this page stated [old claim], per [source]; superseded by [new source] on [date]."* The original source and its summary are untouched. The wiki is lossy by design, but never silently lossy.
 
+### Retroactive scanning: the tension-triage skill
+
+Ingest-time detection only catches tensions as they enter. To find contradictions already sitting inside pages (manual edits, ingests that pre-date the system), say **"run tension triage"** or "scan the wiki for contradictions". A multi-agent pipeline scans pages batch-wise: a detector finds candidates, quotes are mechanically verified, an advocate and a harmonizer argue opposite sides, and an Opus judge rules. It may apply only non-destructive resolutions on its own ((b) keep old, (c) hold both — and only after a second Opus challenger confirms); anything needing your judgment lands in `meta/contradictions.md` for the next lint. Every run leaves a report in `meta/triage-runs/`. The agents follow the calibration rules in `meta/tension-policy.md`, which grow from your past decisions — if you want to supervise a run (see every verdict yourself), just say so. The full 80-page retroactive sweep was completed on 2026-07-08.
+
 ### Why this exists
 
 Without this step, every ingest implicitly *resolves* tensions by merging — usually by smoothing them into bland prose that reads fine and drops the disagreement. After a hundred ingests, the wiki reads as confident knowledge but is quietly misinformed. The contradiction menu is the only thing standing between you and that failure mode. See `CLAUDE.md` → [Contradiction Handling at Ingest](../CLAUDE.md#contradiction-handling-at-ingest) for the full contract.

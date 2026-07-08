@@ -232,6 +232,17 @@ Append-only ledger of tensions deferred at ingest via option `(q)`. The Lint Wor
 
 Copy this reference repo's [`meta/contradictions.md`](../meta/contradictions.md) verbatim into the new repo. Its header explains the schema (anchor format, required fields, append-only rule) and ends with `_No open contradictions._` as the empty state. No tokens need substitution — the file is topic-agnostic.
 
+### 4.9 Tension-triage pipeline (optional, retroactive)
+
+Ingest-time contradiction handling only covers new material. If the new repo accumulates pages before the handling exists (or after bulk manual edits), scaffold the retroactive scanner from this reference repo:
+
+- `.claude/skills/wiki-tension-triage/SKILL.md` — the orchestration contract (pipeline stages, tiered autonomy, supervised mode). Copy and adapt paths.
+- `meta/triage/prompts/` — five agent briefing templates (detector, conflict-advocate, harmonizer, judge, challenger). Topic-agnostic; copy verbatim.
+- `meta/tension-policy.md` — starts as a stub; populated by supervised pilot runs in the new domain (the calibration rules are domain-specific, do NOT copy this repo's rules).
+- `meta/triage-runs/` — empty dir for run reports.
+
+Design rationale and phasing (supervised pilots → shadow mode → autonomous sweep) are in `docs/superpowers/specs/2026-07-06-tension-triage-design.md`. Key invariants: detection is within-page only; the pipeline may autonomously apply only non-destructive resolutions ((b)/(c)) at strong confidence after a challenger pass; everything else goes to the `meta/contradictions.md` ledger.
+
 ---
 
 ## 5. Scripts
