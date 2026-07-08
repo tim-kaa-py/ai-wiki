@@ -2,6 +2,10 @@
 
 <!-- OKF log: date headings newest first, prose entries. Append-only. -->
 
+## 2026-07-08
+
+**Update** TRIAGE: Phase 0 pilot run (supervised) — 3 pages scanned (claude-code, context-engineering, agent-orchestration-patterns), 4 candidate tensions surfaced, 0 confirmed (all dismissed: 1 at mechanical verification, 2 by advocate concession, 1 by Opus judge), 0 resolved, 0 queued. Clean verdict cross-checked with an independent Opus detector pass — converged. Report: meta/triage-runs/2026-07-08-pilot-1.md.
+
 ## 2026-07-04
 
 **Update** LINT: post-OKF-migration health check — all 8 categories clean. Orphans: none (77/77 source-summary pairs, every summary referenced by >=1 wiki page, 1 gist correctly indexed). Stale: none (no wiki timestamp older than 90 days). Index sync: no broken links, no missing entries. Log sync: clean (12 apparent misses are the 2026-05-06 BATCH-INGEST pages, named in that entry rather than by slug — false positive). Contradictions: ledger empty, no open tensions, no stray TENSION markers. Gaps: all high-frequency tags have wiki pages. OKF conformance: scripts/okf-check.py PASS. Inbox: empty. No fixes required.
