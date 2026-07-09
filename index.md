@@ -126,6 +126,7 @@ okf_version: "0.1"
 
 ### Sources
 
+* [We just figured out how AI actually works (J-Space)](summaries/2026-07-08_matthew-berman_we-just-figured-out-how-ai-actually-works-j-space.md) - Matthew Berman walks through Anthropic's J-space / global workspace paper — a small set of privileged internal representations Claude can report on, reason with, and be steered through
 * [Rethinking AI Agents: The Rise of Harness Engineering (PY)](summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md) - Argues agents equal model plus harness, citing papers showing orchestration code drives large performance swings
 * [The Future of MCP — David Soria Parra, Anthropic (AI Engineer)](summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md) - Anthropic's David Soria Parra on why 2026 agents need a connectivity stack of Skills, MCP, and CLI/computer-use plus progressive discovery and programmatic tool calling
 * [Quantifying infrastructure noise in agentic coding evals (Anthropic)](summaries/2026-04-18_anthropic_quantifying-infrastructure-noise.md) - Shows infrastructure setup differences cause a 6-point spread on Terminal-Bench 2.0, so small leaderboard gaps may be noise not capability
@@ -142,6 +143,7 @@ okf_version: "0.1"
 
 ### Wiki Pages
 
+* [J-Space](wiki/concepts/j-space.md) - A small, privileged set of internal representations in Claude that the model can report on, reason with, and be steered through — Anthropic's concrete finding behind global workspace theory
 * [Harness Engineering](wiki/concepts/harness-engineering.md) - The discipline of designing and pruning everything around an agent that isn't model weights, the third era after prompt and context engineering
 * [Agent Orchestration Patterns](wiki/concepts/agent-orchestration-patterns.md) - Anthropic's five canonical agent orchestration building blocks that production harnesses compose to close the performance gap
 * [Agent Loops (Loop Engineering)](wiki/concepts/agent-loops.md) - Defines the reason-act-observe agent loop and Nate Herk's loop engineering mindset shift for designing systems that prompt agents
