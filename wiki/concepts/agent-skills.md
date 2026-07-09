@@ -118,11 +118,11 @@ See [MCP — Future of MCP / 2026 Roadmap](mcp.md#future-of-mcp--2026-roadmap).
 
 Skill frontmatter in Claude Code exposes two flags that gate **who** can trigger a skill:
 
-| Flag | Effect |
-|------|--------|
+| Flag                             | Effect                                                                                                                         |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `disable-model-invocation: true` | Only the user can invoke. Skill is removed from Claude's context entirely. Use for side-effect actions (`/deploy`, `/commit`). |
-| `user-invocable: false` | Only Claude can invoke. Hidden from the `/` menu. Use for background-knowledge skills (context-loaders). |
-| (default — both) | Description is always in context; body loads on invocation by either party. |
+| `user-invocable: false`          | Only Claude can invoke. Hidden from the `/` menu. Use for background-knowledge skills (context-loaders).                       |
+| (default — both)                 | Description is always in context; body loads on invocation by either party.                                                    |
 
 This is orthogonal to L1/L2/L3 progressive disclosure: invocation control decides *who can pull the skill in*, progressive disclosure decides *how much loads when they do*.
 
