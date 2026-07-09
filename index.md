@@ -168,6 +168,7 @@ okf_version: "0.1"
 * [Advanced tool use on the Claude Developer Platform (Anthropic)](summaries/2025-11-24_anthropic_advanced-tool-use.md) - Introduces three beta tool-use features: Tool Search, Programmatic Tool Calling, and Tool Use Examples
 * [Postmortem of three recent issues (Anthropic)](summaries/2025-09-17_anthropic_postmortem-three-recent-issues.md) - Anthropic's postmortem on three infrastructure bugs in Aug-Sep 2025 that degraded Claude output quality
 * [Desktop Extensions: One-click MCP install (Anthropic)](summaries/2025-06-26_anthropic_desktop-extensions.md) - Covers Desktop Extensions, the .mcpb packaging format for one-click MCP server installation in Claude Desktop
+* [Open Knowledge Format (OKF) v0.1 Specification (Google Cloud Platform)](summaries/2026-06-12_google-cloud_open-knowledge-format-okf-v0-1-spec.md) - Google's vendor-neutral spec for knowledge as markdown-plus-frontmatter bundles, standardizing only a required type field and a permissive consumption model
 
 ### Wiki Pages
 
@@ -184,6 +185,7 @@ okf_version: "0.1"
 * [Software Factory](wiki/concepts/software-factory.md) - Simon Last's framing of coding agents as the kernel of AGI, forming an automated loop for building and maintaining software
 * [Model Behavior Engineer (MBE)](wiki/concepts/model-behavior-engineer.md) - Notion's non-engineering career track for people who own and shape how an organization's AI behaves
 * [The Collaboration Paradox](wiki/concepts/collaboration-paradox.md) - Anthropic's finding that developers use AI in most work yet fully delegate very few tasks, reframing the right success metric
+* [Open Knowledge Format (OKF)](wiki/concepts/open-knowledge-format.md) - Google's vendor-neutral v0.1 spec for representing knowledge as a git-shippable directory of markdown-plus-frontmatter bundles, standardizing only a required type field and a permissive consumption model
 
 ## My Lab
 

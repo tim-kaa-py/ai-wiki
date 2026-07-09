@@ -2,6 +2,10 @@
 
 <!-- OKF log: date headings newest first, prose entries. Append-only. -->
 
+## 2026-07-09
+
+**Creation** INGEST: [Open Knowledge Format (OKF) v0.1 Specification](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf) (Google Cloud Platform, repo, Deep Dive) — the vendor-neutral markdown+frontmatter knowledge-bundle spec this wiki now conforms to. Focus per user: the spec itself + design philosophy (reference agent and OKF-vs-wiki mapping deliberately excluded). Public source, source scan skipped; summary confidentiality scan CLEAR. CONNECT: created new concept page wiki/concepts/open-knowledge-format.md; merged an orthogonal cross-reference into wiki/concepts/llm-wiki-pattern.md ("From Convention to Specification" section + Related Pages + sources/timestamp). No tensions surfaced. Indexed under AI Ecosystem (source + wiki page).
+
 ## 2026-07-08
 
 **Update** LINT: post-triage health check — all 8 categories clean. Orphans: none (77/77 source-summary pairs, every summary wiki-referenced, 1 gist indexed). Stale: none. Index sync: no broken links, all 77 summaries + 80 wiki pages indexed, footer counts correct. Log sync: clean (12 apparent misses are the known 2026-05-06 BATCH-INGEST false positive). Contradictions: ledger has 1 entry, status resolved (claude-routines trigger count); no open tensions, no stray TENSION markers. Gaps: all high-frequency tags covered by wiki pages. OKF conformance: scripts/okf-check.py PASS. No fixes required.

@@ -10,7 +10,8 @@ sources:
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
   - "summaries/2026-04-22_nate-b-jones_karpathy-wiki-vs-open-brain.md"
   - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
-timestamp: "2026-06-29"
+  - "summaries/2026-06-12_google-cloud_open-knowledge-format-okf-v0-1-spec.md"
+timestamp: "2026-07-09"
 ---
 
 # LLM Wiki Pattern
@@ -137,8 +138,13 @@ Karpathy's original system ingests **external data** — web articles, papers, r
 
 The internal variant captures **tacit knowledge** — decisions, lessons learned, action items — that doesn't exist anywhere else in the codebase. Without it, answering codebase-specific questions requires searching git logs (incomplete) or spawning sub-agents (slow). *(Source: Cole Medin)*
 
+## From Convention to Specification (OKF)
+
+The pattern's load-bearing conventions — a directory of markdown files, `index.md` as the per-level map, frontmatter for the few queryable fields — were formalized by Google Cloud into the [Open Knowledge Format (OKF)](open-knowledge-format.md), a vendor-neutral v0.1 spec. OKF is the *specified* counterpart to this ad-hoc pattern: it pins down the minimal rules two independent tools must agree on to exchange a corpus (a required `type` frontmatter field; reserved `index.md`/`log.md` semantics; untyped markdown cross-links) while deliberately leaving folder taxonomy, tooling, and storage unspecified. Notably, OKF's asymmetric conformance model — a few hard rules on producers, a MUST-NOT-reject list for consumers (missing fields, unknown types, broken links are all tolerated) — directly addresses this pattern's reality that bundles are continuously refactored and partially agent-generated. It does *not*, however, resolve the concurrent-write and team-fracture failure modes named above; OKF standardizes the substrate, not the single-writer discipline the wiki still presupposes. *(Source: OKF v0.1 spec)*
+
 ## Related Pages
 
+- [Open Knowledge Format (OKF)](open-knowledge-format.md) — the vendor-neutral spec that standardizes this pattern's markdown+frontmatter+index substrate
 - [Claude Code](../tools/claude-code.md) — the LLM tool that maintains the wiki
 - [Obsidian](../tools/obsidian.md) — visualization frontend for the wiki
 - [Andrej Karpathy](../people/andrej-karpathy.md) — originator of the pattern
