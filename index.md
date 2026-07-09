@@ -187,10 +187,6 @@ okf_version: "0.1"
 * [The Collaboration Paradox](wiki/concepts/collaboration-paradox.md) - Anthropic's finding that developers use AI in most work yet fully delegate very few tasks, reframing the right success metric
 * [Open Knowledge Format (OKF)](wiki/concepts/open-knowledge-format.md) - Google's vendor-neutral v0.1 spec for representing knowledge as a git-shippable directory of markdown-plus-frontmatter bundles, standardizing only a required type field and a permissive consumption model
 
-## My Lab
-
-*No experiments yet.*
-
 ## About This Wiki
 
 - [User Documentation](docs/user-documentation.md) — how to use this system

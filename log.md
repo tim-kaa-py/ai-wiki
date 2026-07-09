@@ -4,6 +4,8 @@
 
 ## 2026-07-09
 
+**Update** STRUCTURE: Removed the unused My Lab pillar — zero files ever carried pillar "lab" (verified across sources/, summaries/, wiki/). CLAUDE.md Four Pillars → Three Pillars (table row + pillar enum), index.md My Lab section deleted, docs/concept.md example pillars and template pointer synced per Self-Documentation Rule. Reversible in one commit if experiments later warrant a wiki pillar.
+
 **Creation** INGEST: [Open Knowledge Format (OKF) v0.1 Specification](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf) (Google Cloud Platform, repo, Deep Dive) — the vendor-neutral markdown+frontmatter knowledge-bundle spec this wiki now conforms to. Focus per user: the spec itself + design philosophy (reference agent and OKF-vs-wiki mapping deliberately excluded). Public source, source scan skipped; summary confidentiality scan CLEAR. CONNECT: created new concept page wiki/concepts/open-knowledge-format.md; merged an orthogonal cross-reference into wiki/concepts/llm-wiki-pattern.md ("From Convention to Specification" section + Related Pages + sources/timestamp). No tensions surfaced. Indexed under AI Ecosystem (source + wiki page).
 
 ## 2026-07-08

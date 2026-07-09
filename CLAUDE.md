@@ -38,14 +38,13 @@ Default model: **Sonnet**. The main session runs on Sonnet for orchestration and
 
 **When to skip Opus:** If the source is purely instructional (feature walkthrough, tutorial) with no argumentative content, Steps 5 and 7 can stay on Sonnet. The user can override with "use Opus for this one" or "Sonnet is fine."
 
-## Four Pillars
+## Three Pillars
 
 | Pillar | Slug | What goes here |
 |--------|------|---------------|
 | Building with AI | `building` | Hands-on coding, workflows, agent patterns, tool usage |
 | Understanding AI | `understanding` | How things work — models, architectures, training, theory |
 | AI Ecosystem | `ecosystem` | Tools, products, companies, releases, comparisons |
-| My Lab | `lab` | Personal experiments, trials, what worked, what didn't |
 
 ## Source Types & Auto-Detection
 
@@ -82,7 +81,7 @@ type: "youtube|podcast|article|paper|repo|docs|note"
 channel: "<author/channel/org>"
 date: "<YYYY-MM-DD>"  # publication date
 resource: "<url>"
-pillar: "building|understanding|ecosystem|lab"
+pillar: "building|understanding|ecosystem"
 tags: [tag1, tag2]
 timestamp: "<YYYY-MM-DD>"
 extraction_method: "auto-captions|manual-captions|whisper-local|web-fetch|pdf-extract|user-pasted"

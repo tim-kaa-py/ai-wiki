@@ -44,7 +44,7 @@ An LLM-maintained personal knowledge wiki. The human curates sources (URLs, file
 Before writing any files, interview the user to define the topic-specific shape of their wiki. Ask these questions conversationally (one or two at a time):
 
 1. **Topic & scope.** "What's the topic? One sentence describing what belongs in this wiki and what doesn't."
-2. **Pillars (3–5).** "What are the 3–5 top-level categories you want to organize knowledge under?" Example for AI: *Building with AI / Understanding AI / AI Ecosystem / My Lab*. Example for personal finance: *Investing / Budgeting / Tax & Legal / My Portfolio*.
+2. **Pillars (3–5).** "What are the 3–5 top-level categories you want to organize knowledge under?" Example for AI: *Building with AI / Understanding AI / AI Ecosystem*. Example for personal finance: *Investing / Budgeting / Tax & Legal / My Portfolio*.
 3. **Expected source types.** "Which of these will you actually feed in: YouTube, podcasts, articles/blogs, academic papers, GitHub repos, official docs, personal notes? Any others?"
 4. **Starter tag taxonomy.** "List 5–15 tags you already know you'll use. Don't overthink — tags grow organically."
 5. **Primary interest lens.** "When I summarize a source, what should I bias toward capturing? (e.g., actionable how-tos, argument structures, tool comparisons, historical context.)"
@@ -121,7 +121,7 @@ This is the **most important file** — it's what tells you (and every future Cl
 Use the reference implementation in this repo as your template: [`CLAUDE.md`](../CLAUDE.md). Copy it verbatim, then edit:
 
 - Replace the "AI Knowledge Wiki" heading/intro with the user's topic statement.
-- Replace the **Four Pillars** table with the pillars from bootstrap Q2.
+- Replace the **Three Pillars** table with the pillars from bootstrap Q2 (the section heading should match the user's pillar count).
 - Replace **Source Types & Auto-Detection** rows if the user's source mix differs.
 - Replace **Tag Taxonomy** categories with the user's starter tags from Q4.
 - If the user has a single model only (Q6), replace the **Model Routing** section with: *"Single-model mode: all steps run on the user's available model. No sub-agent delegation."*
