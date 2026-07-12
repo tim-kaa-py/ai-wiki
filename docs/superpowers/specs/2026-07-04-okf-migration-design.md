@@ -2,6 +2,7 @@
 
 **Date:** 2026-07-04
 **Status:** Approved by user (interview 2026-07-04)
+**Outcome:** Executed 2026-07-04 — full migration landed the same day (`OKF CHECK: PASS` since; enforced by lint and CI). See `log.md` 2026-07-04.
 **Spec reference:** [Open Knowledge Format (OKF) v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)
 
 ## Goal

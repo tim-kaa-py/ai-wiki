@@ -41,6 +41,10 @@ Every ingest runs a pipeline defined in [`CLAUDE.md`](CLAUDE.md): metadata extra
 | [`log.md`](log.md) | Chronological record of every ingest, lint, and structural change |
 | [`gists/`](gists/) | Reusable Claude Code prompts, shareable standalone |
 
+## Want this for your own topic?
+
+The whole pattern is reproducible — none of it is specific to AI as a subject. **[`docs/concept.md`](docs/concept.md) is the gist:** a self-contained recreation guide that a Claude Code session (or any capable coding agent) can execute top-to-bottom to scaffold the same system for any topic — cooking, personal finance, a research field. It walks the agent through a bootstrap interview (your topic, pillars, source types, interest lens), generates the operating contract, copies the scripts, and sets up the GitHub repo. Point an agent at it and say "build me one of these about X".
+
 ## Repository layout
 
 ```
@@ -50,6 +54,7 @@ wiki/        synthesized pages, maintained over time
 notes/       per-source ingest notes (user focus + confirmed discoveries)
 meta/        contradiction ledger, tension policy, triage-run reports
 gists/       user-authored, reusable Claude Code prompts
+ai-research/ dated discovery reports from the optional daily briefing (never ingested)
 scripts/     transcript extraction, local Whisper fallback, OKF conformance check (+ tests)
 docs/        user documentation, recreation guide, design specs & plans
 ```

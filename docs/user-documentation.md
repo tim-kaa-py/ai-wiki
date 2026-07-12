@@ -34,6 +34,9 @@ Plus:
 - `gists/index.md` — index of your authored gists.
 - `log.md` — chronological record of every ingest.
 - `inbox/` — drop unprocessed files here.
+- `notes/` — your focus notes from each deep-dive ingest (what *you* wanted captured). The agent writes them; they're yours to reread.
+- `meta/` — the contradiction ledger (`contradictions.md`), the tension-triage calibration policy, and triage-run reports. See [What Happens at a Contradiction](#what-happens-at-a-contradiction).
+- `ai-research/` — dated discovery reports from the optional daily briefing (see [Daily AI briefing](#8-daily-ai-briefing-optional)). Not part of the wiki; nothing here is ingested.
 
 ---
 
@@ -66,6 +69,8 @@ Example prompts:
 > Deep-dive this: https://youtube.com/watch?v=xyz
 >
 > Quick clip: https://example.com/longread *(force Tier 1 on a source the agent would normally deep-dive)*
+
+For podcast episodes there's a dedicated skill: say **"/podcast-ingest \<episode URL\>"** (Apple Podcasts, Spotify, RSS, or any episode link). It handles the messier transcript acquisition (author website → YouTube mirror → manual paste) and lets you pick which discovered sections to keep before summarizing.
 
 ### 2. Ingest with notes
 
@@ -124,7 +129,7 @@ Gists are *yours* — they're not summarized, not cross-linked into the wiki, an
 
 ### 6. Lint the wiki
 
-Monthly-ish hygiene. The agent drains the contradiction queue at `meta/contradictions.md` first (re-presenting each open tension with a fresh recommendation), then checks for orphan sources, stale pages, index drift, additional contradictions, and tag gaps. You approve fixes before they execute. See also [What Happens at a Contradiction](#what-happens-at-a-contradiction).
+Monthly-ish hygiene. The agent drains the contradiction queue at `meta/contradictions.md` first (re-presenting each open tension with a fresh recommendation), then checks for orphan sources, stale pages, index drift, log drift, additional contradictions, tag gaps, and OKF conformance (`scripts/okf-check.py` — the same check CI runs on every push). You approve fixes before they execute. See also [What Happens at a Contradiction](#what-happens-at-a-contradiction).
 
 > Lint the wiki.
 
@@ -139,6 +144,12 @@ You are in charge. Useful overrides:
 > Don't create a new wiki page — just merge into the existing \<page\>.
 >
 > Redo the summary — bias it toward \<angle\>.
+
+### 8. Daily AI briefing (optional)
+
+> /daily-ai-briefing
+
+A discovery tool, separate from the wiki: it checks watched YouTube channels, trending Claude Code videos, Karpathy's gists, and a few AI blogs for anything new since the last run, then writes a dated report to `ai-research/` and commits it. **Nothing from a briefing is ingested** — if a report surfaces something worth keeping, paste its URL back in as a normal ingest. Requires `yt-dlp`; the trending section additionally wants a `YOUTUBE_API_KEY` env var and degrades gracefully without it.
 
 ---
 
@@ -285,6 +296,8 @@ git push
 
 If the repo is new and not yet on GitHub, ask the agent to run the setup (see `concept.md` §6) — it uses `gh repo create`.
 
+**CI runs on every push.** A GitHub Actions workflow (`.github/workflows/checks.yml`) re-validates OKF conformance and runs the script tests each time you (or the agent) push. If a push breaks conformance, GitHub emails you within a minute and the README badge turns red — you don't have to wait for the next lint pass to find out. Free for public repos.
+
 ---
 
 ## Customizing the System
@@ -344,6 +357,7 @@ $ claude
 - [`log.md`](../log.md) — chronological ingest history.
 - [`scripts/extract-transcript.py`](../scripts/extract-transcript.py) — YouTube/podcast caption extractor.
 - [`scripts/transcribe-audio.py`](../scripts/transcribe-audio.py) — local audio→text fallback (whisper.cpp) for sources with no captions.
+- [`scripts/okf-check.py`](../scripts/okf-check.py) — OKF v0.1 conformance checker; run by the Lint Workflow and by CI on every push.
 - [`docs/private-modules.md`](private-modules.md) — pattern for author-private extensions mounted inside this repo (some skills may not be available in a public clone).
 
 ---
@@ -354,8 +368,8 @@ New to the wiki? These are the questions worth asking first. Open the repo in Cl
 
 **Setup**
 - "How do I set up the Claude Code status bar?"
-- "How do I set up a VS Code keybinding to open a Claude Code terminal with Ctrl+C?"
-- "How do I make Shift+Enter work for multi-line input in Git Bash and the VS Code terminal with Claude Code?"
+- "How do I set up a keybinding that opens Claude Code as a full VS Code editor tab?"
+- "How do I make Shift+Enter insert a newline instead of submitting in my terminal with Claude Code?"
 - "How do I use Obsidian to browse this wiki?"
 
 **Getting started with Claude Code**

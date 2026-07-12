@@ -21,9 +21,9 @@ The private module's directory is listed in `ai-wiki/.gitignore`, so it never en
 
 ## What's private (currently)
 
-| Path | Purpose |
-|------|---------|
-| `linkedin/` | LinkedIn publishing and profile management. Skill: `linkedin-post`. |
+| Path | Purpose | Proxy skills |
+|------|---------|--------------|
+| `linkedin/` | LinkedIn publishing and profile management — drafting posts from wiki summaries, gists, or raw URLs, and snapshotting the author's own profile sections. | `linkedin-post`, `linkedin-gist-post`, `linkedin-url-post`, `linkedin-profile-extract` |
 
 More may be added over time.
 

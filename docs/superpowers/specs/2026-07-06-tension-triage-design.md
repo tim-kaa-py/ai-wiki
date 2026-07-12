@@ -2,6 +2,7 @@
 
 **Date:** 2026-07-06
 **Status:** Approved by user (interview 2026-07-06)
+**Outcome:** Executed 2026-07-06 → 2026-07-08 — pilots, shadow mode, and the full 80-page sweep completed; pipeline packaged as `.claude/skills/wiki-tension-triage/`. Run reports in `meta/triage-runs/`; see `log.md` 2026-07-08.
 **Pattern reference:** `~/.claude/skills/pr-multi-agent-review/SKILL.md` (2-iteration adversarial multi-agent review)
 
 ## Problem

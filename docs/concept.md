@@ -182,8 +182,15 @@ OKF v0.1 shape: `## YYYY-MM-DD` headings, newest date first; each entry is a lin
 # Obsidian local config (if the user uses Obsidian as a frontend)
 .obsidian/
 
+# Python bytecode cache (scripts/ ships Python + tests)
+__pycache__/
+*.pyc
+
 # Claude Code local settings
 .claude/settings.local.json
+
+# Local secrets — never commit
+.env
 
 # OS
 .DS_Store
@@ -196,7 +203,7 @@ Default to **CC BY 4.0** for a knowledge repo (content, not code). Fetch the tex
 
 ### 4.6 `README.md`
 
-Minimal pointer file:
+At scaffold time, a minimal pointer file is enough:
 
 ```markdown
 # <Topic> Knowledge Wiki
@@ -208,6 +215,8 @@ An LLM-maintained knowledge wiki about **<topic>**.
 - **Operating contract for Claude Code:** see [CLAUDE.md](CLAUDE.md)
 - **Browse sources:** [index.md](index.md)
 ```
+
+Once the wiki has real content (a few dozen sources), upgrade it to a proper landing page — overview paragraph, architecture diagram, entry-point table, CI badge (see §6), licensing note. Use this reference repo's [`README.md`](../README.md) as the template. An empty repo doesn't need the sales pitch; a grown one shouldn't greet visitors with four bullet points.
 
 ### 4.7 `gists/index.md` (only if Q8 = yes)
 
@@ -274,6 +283,8 @@ Design points worth preserving on recreation:
 
 Copy [`scripts/okf-check.py`](../scripts/okf-check.py) into the new repo at the same path. It validates that `sources/`, `summaries/`, `wiki/`, `index.md`, and `log.md` conform to [OKF v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) (correct frontmatter field names — `type`, `resource`, `timestamp`, `description` — plus the `index.md`/`log.md` shapes above). Run it with `python3 scripts/okf-check.py`; it exits 0 and prints `OKF CHECK: PASS` when the bundle conforms. Wire it into the Lint Workflow (`CLAUDE.md` → "Lint Workflow" → OKF CONFORMANCE step) so drift gets caught on every lint pass, not just at scaffold time.
 
+Also copy [`scripts/tests/`](../scripts/tests/) — unit tests for the checker (stdlib `unittest`, no dependencies). Run with `python3 -m unittest discover -s scripts/tests`. They are the checker's safety net when you adapt it to a different frontmatter mix.
+
 ### 5.4 Optional future scripts
 
 Leave `scripts/` open for additions (e.g., paper fetchers, lint helpers). Do not pre-create them.
@@ -296,7 +307,9 @@ gh repo create <owner>/<repo-name> --<public|private> --source=. --remote=origin
 
 Substitute `<public|private>` based on bootstrap Q7.
 
-**Do not** configure branch protection, CI, or issue templates in the initial scaffold. Those are optional follow-ons the user can request later (e.g., a GitHub Action that runs the Lint Workflow on PRs, issue templates for "new source to ingest").
+**Do not** configure branch protection or issue templates in the initial scaffold — those are optional follow-ons the user can request later.
+
+**CI is the one follow-on worth proposing early.** Once `okf-check.py` and its tests are in place, a ~20-line GitHub Actions workflow re-validates the bundle on every push (free for public repos, 2,000 min/month free for private). Copy this reference repo's [`.github/workflows/checks.yml`](../.github/workflows/checks.yml) verbatim and add the badge to `README.md`. Sessions that edit files can introduce frontmatter drift; CI catches it within a minute instead of at the next lint pass. Offer it after the first successful ingest, not before — an empty bundle has nothing to check.
 
 After the push, confirm the repo URL with the user and stop. Do **not** ingest any sources until the user invokes the workflow.
 

@@ -1,5 +1,7 @@
 # Wiki Tension Triage — Pilot (Phase 0 + 1) Implementation Plan
 
+> **Outcome:** Executed 2026-07-08 — both supervised pilots ran clean (0 confirmed tensions, 0 judge-vs-user mismatches), policy v1 distilled, shadow mode unlocked. Phases 2–4 (shadow, full sweep, skill packaging) proceeded the same day without a separate plan; see `log.md` 2026-07-08 and `meta/triage-runs/`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans (inline). Tasks 3–4 are interactive orchestration with the user in the loop and CANNOT be delegated to implementer subagents. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Stand up the multi-agent tension-triage pipeline, run it supervised on 5 pilot wiki pages, and distill the user's decisions into `meta/tension-policy.md`.
