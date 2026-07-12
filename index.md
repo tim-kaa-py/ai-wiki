@@ -68,6 +68,7 @@ okf_version: "0.1"
 * [Introduction To Understanding RAG (Krish Naik)](summaries/2025-08-31_krish-naik_introduction-to-understanding-rag.md) - A foundational walkthrough of RAG — what it is, why it beats fine-tuning for private/changing data, and its two pipelines (data injection and retrieval)
 * [MCP vs API: Simplifying AI Agent Integration with External Data (IBM Technology)](summaries/2025-05-05_ibm-technology_mcp-vs-api-ai-agent-integration.md) - IBM Technology on how MCP standardizes AI-agent integration versus general-purpose APIs — architecture, primitives, dynamic discovery, and why the two are layers not rivals
 * [Graph RAG and Hybrid Search (GenPulse)](summaries/2026-07-07_genpulse_graph-rag-and-hybrid-search.md) - Advanced retrieval beyond pure vector search — hybrid (dense + sparse/BM25) search fused via RRF, knowledge-graph triplets, and hybrid RAG that combines both
+* [HybridRAG: A Fusion of Graph and Vector Retrieval — Mitesh Patel, NVIDIA (AI Engineer)](summaries/2025-07-22_ai-engineer_hybridrag-fusion-graph-vector-retrieval-mitesh-patel-nvidia.md) - An NVIDIA practitioner's guide to building production graph + hybrid RAG — triplet extraction via ontology-guided prompting, multi-hop retrieval, Ragas/reward-model evaluation, and the 80/20 optimization reality
 
 ### Wiki Pages
 
@@ -204,4 +205,4 @@ okf_version: "0.1"
 
 ---
 
-**83 sources** | **86 wiki pages** | [Ingest Log](log.md)
+**84 sources** | **86 wiki pages** | [Ingest Log](log.md)

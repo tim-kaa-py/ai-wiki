@@ -13,7 +13,7 @@ sources:
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2026-04-22_anthropic-docs_define-success-criteria-and-build-evaluations.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-timestamp: "2026-05-05"
+timestamp: "2026-07-12"
 ---
 
 # Agent Evaluation
@@ -92,6 +92,8 @@ def build_grader_prompt(answer, rubric):
     <answer>{answer}</answer>
     Think through your reasoning in <thinking> tags, then output 'correct' or 'incorrect' in <result> tags."""
 ```
+
+**Applied to RAG:** RAG-specific evaluation reuses this exact methodology — [Hybrid RAG](./hybrid-rag.md) covers the RAG instances (the **Ragas** end-to-end eval library and NVIDIA's **Nemotron-4 340B reward model** as an LLM judge), scored on faithfulness, answer relevancy, and retrieval precision/recall.
 
 ### Eval method × criteria mapping
 
