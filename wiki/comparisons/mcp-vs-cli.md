@@ -9,7 +9,7 @@ sources:
   - "summaries/2025-11-04_anthropic_code-execution-with-mcp.md"
   - "summaries/2025-11-24_anthropic_advanced-tool-use.md"
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
-timestamp: "2026-04-21"
+timestamp: "2026-07-12"
 ---
 
 # MCP vs CLI
@@ -81,6 +81,7 @@ Notion's additional constraint: they are the system of record for their customer
 ## Related Pages
 
 - [MCP (Model Context Protocol)](../concepts/mcp.md) — protocol overview, advanced tool-use features, code-execution pattern
+- [MCP vs API](./mcp-vs-api.md) — sibling comparison: MCP vs general-purpose APIs (architecture, dynamic discovery, "layers not adversaries")
 - [Tool Design for Agents](../concepts/tool-design-for-agents.md) — ACI principles that apply to both surfaces
 - [Harness Engineering](../concepts/harness-engineering.md) — progressive disclosure, give-the-model-what-it-wants
 - [Software Factory](../concepts/software-factory.md) — why self-repair capability matters

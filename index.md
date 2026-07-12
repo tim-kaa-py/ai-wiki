@@ -66,6 +66,7 @@ okf_version: "0.1"
 * [Why The Best Engineers Are Solving Code Review Bottlenecks (Beyond Coding)](summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md) - Argues that once code generation is cheap, review becomes the bottleneck, and proposes stop-hook guardrails plus behavioral tests instead of human review
 * [Is RAG Still Needed? Choosing the Best Approach for LLMs (IBM Technology)](summaries/2026-03-09_ibm-technology_is-rag-still-needed-rag-vs-long-context.md) - IBM Technology's decision framework for RAG vs long context — three pros for each, and the use cases that determine which to choose
 * [Introduction To Understanding RAG (Krish Naik)](summaries/2025-08-31_krish-naik_introduction-to-understanding-rag.md) - A foundational walkthrough of RAG — what it is, why it beats fine-tuning for private/changing data, and its two pipelines (data injection and retrieval)
+* [MCP vs API: Simplifying AI Agent Integration with External Data (IBM Technology)](summaries/2025-05-05_ibm-technology_mcp-vs-api-ai-agent-integration.md) - IBM Technology on how MCP standardizes AI-agent integration versus general-purpose APIs — architecture, primitives, dynamic discovery, and why the two are layers not rivals
 
 ### Wiki Pages
 
@@ -86,6 +87,7 @@ okf_version: "0.1"
 * [Claude Code Orchestration Layers](wiki/comparisons/claude-code-orchestration-layers.md) - Head-to-head comparison of vanilla Claude Code, Superpowers, and GSD building the same benchmark project
 * [Retrieval-Augmented Generation (RAG)](wiki/concepts/rag.md) - How RAG grounds an LLM in an external knowledge base via a data-injection pipeline and a retrieval pipeline, instead of retraining
 * [RAG vs Long Context](wiki/comparisons/rag-vs-long-context.md) - A decision framework for RAG vs long context — three symmetric pros each, resolved by data shape rather than by which is 'better'
+* [MCP vs API](wiki/comparisons/mcp-vs-api.md) - How MCP standardizes AI-agent integration versus general-purpose APIs — shared client-server roots, MCP's dynamic discovery and uniform interface, and why the two are layers not rivals
 * [GSD](wiki/tools/gsd.md) - A Claude Code orchestration framework adding rigid phase-based planning and sub-agent-driven development
 * [Superpowers](wiki/tools/superpowers.md) - A Claude Code plugin adding skill-based orchestration, visual design iteration, and TDD-driven development
 * [Claude Code Status Line Setup](wiki/how-tos/claude-code-status-line.md) - How to configure a three-line status bar showing context, cost, rate limits, and git branch
@@ -200,4 +202,4 @@ okf_version: "0.1"
 
 ---
 
-**81 sources** | **84 wiki pages** | [Ingest Log](log.md)
+**82 sources** | **85 wiki pages** | [Ingest Log](log.md)

@@ -13,12 +13,29 @@ sources:
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
-timestamp: "2026-07-08"
+  - "summaries/2025-05-05_ibm-technology_mcp-vs-api-ai-agent-integration.md"
+timestamp: "2026-07-12"
 ---
 
 # MCP (Model Context Protocol)
 
 An open protocol from Anthropic for exposing tools, data, and prompts to LLM agents. MCP servers provide tools; MCP clients (Claude Desktop, Claude Code, IDEs) connect to them. Servers can be local (stdio) or remote (HTTP/SSE).
+
+## Architecture & Primitives
+
+MCP (introduced by Anthropic in late 2024) is often described as "a USB-C port for AI applications" — one common standard so any external service connects the same way, regardless of who built it. It is a client-server protocol with three roles:
+
+- **Host** — the application the user runs; it hosts one or more MCP clients.
+- **Client** — opens a **JSON-RPC 2.0 session** and connects to exactly one server.
+- **Server** — exposes capabilities and executes the underlying function when a tool is invoked (typically one server per system: database, code repo, email).
+
+A server can expose three kinds of **primitive** (many servers implement only the first):
+
+1. **Tools** — discrete actions the model can call, each advertised with name, description, and input/output schema.
+2. **Resources** — read-only data items served on demand (files, a database schema, document contents).
+3. **Prompt templates** — predefined suggested prompts.
+
+Clients discover all three at runtime via `tools/list`, `resources/list`, and `prompts/list`, so agents pick up new capability without redeploying code. For how this compares to plain APIs, see [MCP vs API](../comparisons/mcp-vs-api.md).
 
 ## Two Inefficiencies in MCP Deployments
 
@@ -147,6 +164,7 @@ Mahes (Anthropic Platform team, May 2026) places MCP as the **first** in a delib
 - [Desktop Extensions (.mcpb)](../how-tos/desktop-extensions-mcpb.md) — packaging and enterprise deployment.
 - [Think Tool](./think-tool.md) — a reasoning tool that works well inside long MCP tool chains.
 - [MCP vs CLI](../comparisons/mcp-vs-cli.md) — per-capability decision framework.
+- [MCP vs API](../comparisons/mcp-vs-api.md) — foundational comparison with general-purpose APIs (architecture, primitives, "layers not adversaries").
 - [PIV Loop](./piv-loop.md) — the per-ticket workflow that consumes the Atlassian MCP server.
 - [Agentic Coding Workflow § The Cole Medin Pipeline](../how-tos/agentic-coding-workflow.md#the-cole-medin-pipeline-ideate--piv--evolve) — full pipeline context.
 - [Agent Skills](agent-skills.md) — the next primitive after MCP in Anthropic's progression.
