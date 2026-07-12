@@ -195,6 +195,7 @@ Without this step, every ingest implicitly *resolves* tensions by merging — us
 | Common podcast hosts | podcast | Deep dive |
 | arxiv.org / `.pdf` | paper | Deep dive |
 | github.com | repo | Deep dive |
+| Official vendor documentation pages | docs | Quick clip |
 | Anything else | article | Quick clip |
 | Anything in `inbox/` | article | Quick clip |
 

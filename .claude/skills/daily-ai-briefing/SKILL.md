@@ -9,12 +9,13 @@ decision is covered by the instructions. If a single step fails, note it inline
 and continue; never abort the full run over a partial failure.
 
 <context>
-  Repo path:      C:\Users\TimKüllmey\local_dev\ai-wiki
-  Report output:  ai-research\YYYY-MM-DD_briefing.md  (today's actual date)
-  State:          The most recent file in ai-research\ is your record of what
+  Repo path:      the root of this repo (the directory containing this
+                  .claude/ folder); all paths below are relative to it
+  Report output:  ai-research/YYYY-MM-DD_briefing.md  (today's actual date)
+  State:          The most recent file in ai-research/ is your record of what
                   was already reported. Read it first. If none exists, treat
                   everything as new and set LAST_DATE to 7 days ago.
-  Scope boundary: Never touch sources\, summaries\, wiki\, index.md, or
+  Scope boundary: Never touch sources/, summaries/, wiki/, index.md, or
                   log.md. This is a discovery tool — nothing gets ingested
                   into the wiki.
 </context>
@@ -22,7 +23,7 @@ and continue; never abort the full run over a partial failure.
 ## Step 0 — Orient
 
 1. Set TODAY to the current date in YYYY-MM-DD format.
-2. List ai-research\ and take the lexicographically last filename — that is
+2. List ai-research/ and take the lexicographically last filename — that is
    the most recent report.
 3. Read it in full and extract:
    - All YouTube video IDs (11-char alphanumeric strings in youtube.com URLs)
@@ -204,14 +205,14 @@ Use exactly this structure:
 [content]
 ```
 
-Write to: ai-research\YYYY-MM-DD_briefing.md
+Write to: ai-research/YYYY-MM-DD_briefing.md
 
 ---
 
 ## Step 7 — Commit and Push
 
 ```
-git add ai-research\YYYY-MM-DD_briefing.md
+git add ai-research/YYYY-MM-DD_briefing.md
 git commit -m "briefing: YYYY-MM-DD"
 git push
 ```

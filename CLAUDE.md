@@ -54,12 +54,13 @@ Default model: **Sonnet**. The main session runs on Sonnet for orchestration and
 | Podcast URLs (common hosts) | podcast | `sources/podcasts/` | Deep dive |
 | arxiv.org, .pdf file | paper | `sources/papers/` | Deep dive |
 | github.com (not gist) | repo | `sources/repos/` | Deep dive |
+| Official vendor documentation pages | docs | `sources/docs/` | Quick clip |
 | Any other URL | article | `sources/articles/` | Quick clip |
 | File in `inbox/` | article | `sources/articles/` | Quick clip |
 | User says "deep dive" | (any) | — | Deep dive (override) |
 | User says "quick" or "clip" | (any) | — | Quick clip (override) |
 
-**Folder naming convention:** All `sources/` subdirectories use the **plural** form of the source type (`articles/`, `podcasts/`, `papers/`, `repos/`). Exception: `youtube/` stays singular — "youtubes" is not valid English for a proper noun.
+**Folder naming convention:** All `sources/` subdirectories use the **plural** form of the source type (`articles/`, `podcasts/`, `papers/`, `repos/`, `docs/`). Exception: `youtube/` stays singular — "youtubes" is not valid English for a proper noun.
 
 ## Slug Format
 
@@ -702,7 +703,7 @@ After editing the docs:
 ### Out of this rule's scope
 
 - `MEMORY.md` — session-side memory, not repo documentation.
-- `README.md` — minimal pointer file; update only if links break or top-level structure changes.
+- `README.md` — public landing page for GitHub visitors (overview, architecture diagram, entry-point links, CI badge, licensing note). Update when top-level structure, entry points, or badges change — it does not participate in the CLAUDE.md sync contract.
 
 ### Enforcement
 

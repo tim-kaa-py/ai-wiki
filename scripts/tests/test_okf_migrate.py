@@ -1,7 +1,7 @@
 import unittest, importlib.util, pathlib
 
 spec = importlib.util.spec_from_file_location(
-    "okf_migrate", pathlib.Path(__file__).parent.parent / "okf-migrate-frontmatter.py")
+    "okf_migrate", pathlib.Path(__file__).parent.parent / "migrations" / "okf-migrate-frontmatter.py")
 m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
 
