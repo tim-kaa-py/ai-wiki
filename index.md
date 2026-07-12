@@ -64,6 +64,7 @@ okf_version: "0.1"
 * [Stop babysitting your agents (Claude)](summaries/2026-05-20_claude_stop-babysitting-your-agents.md) - Argues attention becomes the bottleneck as models improve, and proposes self-verification, multi-Claude parallelism, and background routines
 * [Karpathy-Inspired Claude Code Guidelines (multica-ai)](summaries/2026-05-28_multica-ai_karpathy-coding-guidelines.md) - Describes a viral CLAUDE.md artifact distilling Karpathy's coding pitfalls into four operational principles for guardrails
 * [Why The Best Engineers Are Solving Code Review Bottlenecks (Beyond Coding)](summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md) - Argues that once code generation is cheap, review becomes the bottleneck, and proposes stop-hook guardrails plus behavioral tests instead of human review
+* [Is RAG Still Needed? Choosing the Best Approach for LLMs (IBM Technology)](summaries/2026-03-09_ibm-technology_is-rag-still-needed-rag-vs-long-context.md) - IBM Technology's decision framework for RAG vs long context — three pros for each, and the use cases that determine which to choose
 
 ### Wiki Pages
 
@@ -82,6 +83,7 @@ okf_version: "0.1"
 * [Claude Routines](wiki/tools/claude-routines.md) - How scheduled, triggered, or API-invoked Claude Code sessions turn Claude into a no-code automation platform
 * [Claude Routines vs n8n](wiki/comparisons/claude-routines-vs-n8n.md) - Compares Claude Routines' natural-language automation against n8n/Make.com's node-based workflow builders
 * [Claude Code Orchestration Layers](wiki/comparisons/claude-code-orchestration-layers.md) - Head-to-head comparison of vanilla Claude Code, Superpowers, and GSD building the same benchmark project
+* [RAG vs Long Context](wiki/comparisons/rag-vs-long-context.md) - A decision framework for RAG vs long context — three symmetric pros each, resolved by data shape rather than by which is 'better'
 * [GSD](wiki/tools/gsd.md) - A Claude Code orchestration framework adding rigid phase-based planning and sub-agent-driven development
 * [Superpowers](wiki/tools/superpowers.md) - A Claude Code plugin adding skill-based orchestration, visual design iteration, and TDD-driven development
 * [Claude Code Status Line Setup](wiki/how-tos/claude-code-status-line.md) - How to configure a three-line status bar showing context, cost, rate limits, and git branch
@@ -196,4 +198,4 @@ okf_version: "0.1"
 
 ---
 
-**79 sources** | **82 wiki pages** | [Ingest Log](log.md)
+**80 sources** | **83 wiki pages** | [Ingest Log](log.md)

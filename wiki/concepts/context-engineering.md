@@ -14,7 +14,8 @@ sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
-timestamp: "2026-07-08"
+  - "summaries/2026-03-09_ibm-technology_is-rag-still-needed-rag-vs-long-context.md"
+timestamp: "2026-07-12"
 ---
 
 # Context Engineering
@@ -28,6 +29,8 @@ Transformer attention is O(n²) over tokens. As context fills, each token gets a
 > **More context ≠ better answers.**
 
 Pre-loading reference docs, chat history, and tool output into the system prompt is usually worse than loading nothing and retrieving on demand.
+
+The same effect shows up in the RAG-vs-long-context debate under the name **needle-in-a-haystack**: as a window grows to hundreds of thousands of tokens, attention dilutes and a fact buried in the middle gets missed or hallucinated around. This is why "just dump everything in" is not a universal win — see [RAG vs Long Context](../comparisons/rag-vs-long-context.md) for when retrieval-and-filter beats stuffing the window.
 
 Related failure mode documented in Anthropic's long-running-apps work (March 2026): **context anxiety** — models prematurely conclude work as their context fills. The window pressure itself biases the agent toward declaring "done."
 
@@ -173,3 +176,4 @@ The hidden cost (from Debois's Q&A): the time you save by writing context instea
 - [Smart Zone vs Dumb Zone](smart-zone.md) — operational ~100K threshold and `/clear` discipline
 - [Plan and Review](plan-and-review.md) — Knight-Webb's time-axis discipline (5-minute threshold) that complements this context-axis frame
 - [Agent Memory Systems](agent-memory-systems.md) — storage/injection/recall framework applied to runtime memory layers
+- [RAG vs Long Context](../comparisons/rag-vs-long-context.md) — the same context-rot / attention-dilution effect, applied to the document-QA architecture choice
