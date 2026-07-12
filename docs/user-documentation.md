@@ -368,14 +368,22 @@ New to the wiki? These are the questions worth asking first. Open the repo in Cl
 
 **Setup**
 - "How do I set up the Claude Code status bar?"
-- "How do I set up a keybinding that opens Claude Code as a full VS Code editor tab?"
-- "How do I make Shift+Enter insert a newline instead of submitting in my terminal with Claude Code?"
-- "How do I use Obsidian to browse this wiki?"
 
 **Getting started with Claude Code**
-- "What are the best practices for working with Claude Code?"
+- "When should I use a skill vs. a subagent vs. a hook vs. MCP?"
+- "What should go into my CLAUDE.md, and what shouldn't?"
+- "How do I reduce permission prompts without giving up safety?"
 
-*More recommendations will be added here over time.*
+**Understand the big ideas**
+- "Explain harness engineering and why it's called the third era after prompt and context engineering."
+- "Give me concrete tactics for keeping my context window clean."
+- "Compare the agent memory systems covered in this wiki and tell me which fits a solo developer."
+- "What is the LLM-wiki pattern this repo is built on — and what are its known failure modes?"
+
+**See the wiki do its thing**
+- "Where do my sources disagree? Show me the unresolved tensions."
+- "What are the 5 levels of AI coding? Ask me questions to place me on the ladder."
+- "GSD vs. Superpowers vs. vanilla Claude Code — what does the evidence in this wiki say?"
 
 ---
 
