@@ -6,6 +6,7 @@ pillar: "building"
 tags: [rag, architecture, embeddings, vector-database, tutorial]
 sources:
   - "summaries/2025-08-31_krish-naik_introduction-to-understanding-rag.md"
+  - "summaries/2026-07-07_genpulse_graph-rag-and-hybrid-search.md"
 timestamp: "2026-07-12"
 ---
 
@@ -73,7 +74,7 @@ query → embed → similarity search → retrieve context → build prompt → 
 |-------|-----------|
 | **Embedding** | A numerical (vector) representation of text produced by an embedding model. Applied to every chunk at injection time and to the query at retrieval time. |
 | **Vector** | The embedding itself — a point in high-dimensional space that lets you run mathematical similarity algorithms over meaning rather than exact keywords. |
-| **Vector database / vector store** | A specialized store that holds vectors and supports fast similarity search over them. It is what lets a query retrieve the semantically closest chunks instead of doing exact keyword matching. |
+| **Vector database / vector store** | A specialized store that holds vectors and supports fast similarity search over them. It is what lets a query retrieve the semantically closest chunks instead of doing exact keyword matching. (This semantic-only matching is also a blind spot: pure vector search misses *literal* exact tokens like error codes and IDs — addressed by hybrid search; see [Hybrid RAG](./hybrid-rag.md).) |
 | **Similarity search / cosine similarity** | The retrieval mechanism: given the query's vector, find the stored chunk vectors that are "closest" in vector space. **Cosine similarity** — the angle between two vectors as a proximity/relevance score — is the named technique. |
 | **Chunking & parsing** | *Parsing* prepares raw source text; *chunking* splits it into appropriately-sized pieces before embedding. The creator singles this out as the make-or-break step: "if you crack this step then developing a RAG application becomes very easy." |
 | **Context** | The retrieved chunks passed to the LLM alongside the prompt. In "what is the leave policy of my company?", the vector store returns the relevant policy text, and that text — sent to the LLM — is the context it answers from. |
@@ -98,6 +99,7 @@ Perplexity is a production RAG-style system: it connects to retrievers, tools, a
 
 ## Related Pages
 
+- [Hybrid RAG: Hybrid Search and Graph RAG](./hybrid-rag.md) — advanced retrieval beyond pure vector search: hybrid (dense + sparse/BM25) search fused via RRF, plus knowledge-graph triplets, fixing the exact-match blind spot and adding relational reasoning.
 - [RAG vs Long Context](../comparisons/rag-vs-long-context.md) — the upstream architecture choice: retrieve-and-filter (RAG) vs. dumping full documents into a large context window, decided by data shape.
 - [Contextual Retrieval](contextual-retrieval.md) — Anthropic's chunking technique that reduces RAG's silent-retrieval-failure rate by situating each chunk before embedding.
 - [Context Engineering](context-engineering.md) — the broader discipline of curating what tokens occupy the window; RAG's "retrieve on demand" is one instance of just-in-time retrieval.

@@ -67,6 +67,7 @@ okf_version: "0.1"
 * [Is RAG Still Needed? Choosing the Best Approach for LLMs (IBM Technology)](summaries/2026-03-09_ibm-technology_is-rag-still-needed-rag-vs-long-context.md) - IBM Technology's decision framework for RAG vs long context — three pros for each, and the use cases that determine which to choose
 * [Introduction To Understanding RAG (Krish Naik)](summaries/2025-08-31_krish-naik_introduction-to-understanding-rag.md) - A foundational walkthrough of RAG — what it is, why it beats fine-tuning for private/changing data, and its two pipelines (data injection and retrieval)
 * [MCP vs API: Simplifying AI Agent Integration with External Data (IBM Technology)](summaries/2025-05-05_ibm-technology_mcp-vs-api-ai-agent-integration.md) - IBM Technology on how MCP standardizes AI-agent integration versus general-purpose APIs — architecture, primitives, dynamic discovery, and why the two are layers not rivals
+* [Graph RAG and Hybrid Search (GenPulse)](summaries/2026-07-07_genpulse_graph-rag-and-hybrid-search.md) - Advanced retrieval beyond pure vector search — hybrid (dense + sparse/BM25) search fused via RRF, knowledge-graph triplets, and hybrid RAG that combines both
 
 ### Wiki Pages
 
@@ -86,6 +87,7 @@ okf_version: "0.1"
 * [Claude Routines vs n8n](wiki/comparisons/claude-routines-vs-n8n.md) - Compares Claude Routines' natural-language automation against n8n/Make.com's node-based workflow builders
 * [Claude Code Orchestration Layers](wiki/comparisons/claude-code-orchestration-layers.md) - Head-to-head comparison of vanilla Claude Code, Superpowers, and GSD building the same benchmark project
 * [Retrieval-Augmented Generation (RAG)](wiki/concepts/rag.md) - How RAG grounds an LLM in an external knowledge base via a data-injection pipeline and a retrieval pipeline, instead of retraining
+* [Hybrid RAG: Hybrid Search and Graph RAG](wiki/concepts/hybrid-rag.md) - Advanced retrieval beyond pure vector search — hybrid (dense + sparse/BM25) search fused via RRF, knowledge-graph triplets, and hybrid RAG that fuses both as a retrieval safety net
 * [RAG vs Long Context](wiki/comparisons/rag-vs-long-context.md) - A decision framework for RAG vs long context — three symmetric pros each, resolved by data shape rather than by which is 'better'
 * [MCP vs API](wiki/comparisons/mcp-vs-api.md) - How MCP standardizes AI-agent integration versus general-purpose APIs — shared client-server roots, MCP's dynamic discovery and uniform interface, and why the two are layers not rivals
 * [GSD](wiki/tools/gsd.md) - A Claude Code orchestration framework adding rigid phase-based planning and sub-agent-driven development
@@ -202,4 +204,4 @@ okf_version: "0.1"
 
 ---
 
-**82 sources** | **85 wiki pages** | [Ingest Log](log.md)
+**83 sources** | **86 wiki pages** | [Ingest Log](log.md)

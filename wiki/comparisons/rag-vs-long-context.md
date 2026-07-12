@@ -68,6 +68,7 @@ A **hybrid of both** is a legitimate answer in between.
 
 - [Retrieval-Augmented Generation (RAG)](../concepts/rag.md) — the foundational page: what RAG is, the data-injection and retrieval pipelines, and the building blocks assumed here.
 - [Contextual Retrieval](../concepts/contextual-retrieval.md) — Anthropic's technique for *reducing* RAG's silent-failure rate (35–67% fewer retrieval misses) when you are on the RAG side of this decision.
+- [Hybrid RAG: Hybrid Search and Graph RAG](../concepts/hybrid-rag.md) — advanced retrieval on the RAG side of this trade-off: hybrid (dense + sparse/BM25) search fused via RRF and knowledge-graph triplets, hardening the probabilistic-retrieval weakness listed above.
 - [Context Engineering](../concepts/context-engineering.md) — the "more context ≠ better answers" / context-rot principle that underpins the needle-in-a-haystack argument for RAG.
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md) — a related scale-based partition: Karpathy's pattern abandons RAG at personal scale (~100 sources) where the LLM can hold an index directly.
 - [Smart Zone vs Dumb Zone](../concepts/smart-zone.md) — the operational ceiling behind attention dilution: bigger windows ship "more dumb zone," not proportionally more usable reasoning.
