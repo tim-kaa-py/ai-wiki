@@ -55,5 +55,6 @@ Contextual Retrieval assumes you have already decided to *use* RAG. That prior d
 
 ## Related
 
+- [Retrieval-Augmented Generation (RAG)](./rag.md) — the foundational technique this improves: standard chunk → embed → vector-store retrieval, whose silent-failure weakness Contextual Retrieval targets.
 - [RAG vs Long Context](../comparisons/rag-vs-long-context.md) — the upstream decision (retrieve vs. dump everything in) that determines whether you reach for this technique in the first place.
 - [LLM Wiki Pattern](./llm-wiki-pattern.md) — interesting tension: Karpathy's wiki pattern **abandons RAG** for personal knowledge bases (~100 sources) because the LLM can maintain an index directly. Contextual Retrieval goes the other direction — it **improves RAG** for production knowledge bases where the corpus exceeds what fits in context. The two approaches partition by scale: wiki pattern at personal scale, contextual retrieval at production scale.

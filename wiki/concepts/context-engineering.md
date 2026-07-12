@@ -177,3 +177,4 @@ The hidden cost (from Debois's Q&A): the time you save by writing context instea
 - [Plan and Review](plan-and-review.md) — Knight-Webb's time-axis discipline (5-minute threshold) that complements this context-axis frame
 - [Agent Memory Systems](agent-memory-systems.md) — storage/injection/recall framework applied to runtime memory layers
 - [RAG vs Long Context](../comparisons/rag-vs-long-context.md) — the same context-rot / attention-dilution effect, applied to the document-QA architecture choice
+- [Retrieval-Augmented Generation (RAG)](rag.md) — foundational reference for the retrieve-on-demand mechanism that just-in-time retrieval generalizes

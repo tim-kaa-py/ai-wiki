@@ -66,6 +66,7 @@ A **hybrid of both** is a legitimate answer in between.
 
 ## Related Pages
 
+- [Retrieval-Augmented Generation (RAG)](../concepts/rag.md) — the foundational page: what RAG is, the data-injection and retrieval pipelines, and the building blocks assumed here.
 - [Contextual Retrieval](../concepts/contextual-retrieval.md) — Anthropic's technique for *reducing* RAG's silent-failure rate (35–67% fewer retrieval misses) when you are on the RAG side of this decision.
 - [Context Engineering](../concepts/context-engineering.md) — the "more context ≠ better answers" / context-rot principle that underpins the needle-in-a-haystack argument for RAG.
 - [LLM Wiki Pattern](../concepts/llm-wiki-pattern.md) — a related scale-based partition: Karpathy's pattern abandons RAG at personal scale (~100 sources) where the LLM can hold an index directly.
