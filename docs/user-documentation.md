@@ -368,6 +368,7 @@ New to the wiki? These are the questions worth asking first. Open the repo in Cl
 
 **Setup**
 - "How do I set up the Claude Code status bar?"
+- "How do I use Obsidian to browse this wiki?"
 
 **Getting started with Claude Code**
 - "When should I use a skill vs. a subagent vs. a hook vs. MCP?"
