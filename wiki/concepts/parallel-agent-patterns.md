@@ -12,7 +12,8 @@ sources:
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
-timestamp: "2026-05-26"
+  - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
+timestamp: "2026-07-25"
 ---
 
 # Parallel Agent Patterns
@@ -115,7 +116,17 @@ The May 2026 docs ship an experimental productized version of peer-to-peer paral
 - **Subagents = hub-and-spoke** — children only report back to the main agent.
 - **Agent teams = peer-to-peer** — teammates can message each other directly.
 
-The trigger to graduate from subagents to agent teams: when you find yourself wishing subagents could share findings with each other.
+The trigger to graduate from subagents to agent teams, per Anthropic's docs: "when you find yourself wishing subagents could share findings with each other" *(Source: Claude Code Docs — Agent Teams, 2026-05)*. That remains the right default for genuinely iterative work — competing-hypotheses debugging, where a teammate must revise its position after being challenged, is exactly what peer messaging buys.
+
+But "wishing they could talk" has a cheaper middle rung, and STORM is the worked example of it. Nate Herk's `storm-research` skill wants adversarial cross-examination between five lenses and cannot have it — subagents can't message each other — so it does the cross-examination **centrally**, in a single contradiction-map prompt run over the sealed lens outputs. His read: STORM "gets most of the adversarial benefit anyway" *(Source: Nate Herk, `storm-research` skill, 2026-06)*. The cost is bounded and the topology stays hub-and-spoke.
+
+So the graduation ladder is three rungs, not two:
+
+1. **Plain subagents** — workers report back; the lead concatenates.
+2. **Subagents + a central contradiction pass** — workers report back sealed; one downstream prompt cross-examines their outputs against each other. Buys disagreement-surfacing at roughly one extra prompt. Ceiling: the challenge is one-shot over frozen positions — no worker ever responds to being contradicted.
+3. **Agent teams** — peer messaging. Pay the linear per-teammate cost when a worker must *revise* in response to being challenged, i.e. when the value is in the back-and-forth rather than in surfacing the disagreement once.
+
+The discriminating question is therefore not "do I wish they could talk?" but **"does a worker need to change its answer after hearing the objection?"** If surfacing the conflict is enough, rung 2 does it for a fraction of the cost. If the answer must survive rebuttal *and revision* — a proposed fix that has to be defended, amended, re-attacked — rung 3 is the correct spend, and rung 2 will silently ship the un-revised position.
 
 ### Strongest Use Case: Competing Hypotheses Debugging
 
@@ -195,6 +206,22 @@ This is the same fresh-context-reviewer principle from [Reviewer Agents](reviewe
 
 When you can't, fall back to single-stream Ralph or the lock-file pattern.
 
+## Pattern 5: Persona Fan-Out with a Verification Fleet (STORM)
+
+**Source: Nate Herk — `storm-research` Claude skill (2026-06).**
+
+A research-domain instantiation of orchestrator-worker with two features the coding-oriented patterns above don't have: the workers are differentiated by **persona** rather than by work item, and a **separate verification fleet** re-checks their output before delivery.
+
+Shape: five persona lenses (practitioner / academic / skeptic / economist / historian) run in parallel as subagents on the same topic → a contradiction-map prompt cross-examines their sealed outputs → synthesis → ~6 verification agents check every citation against its primary source and label it `confirmed` / `corrected` / `demoted`. Roughly 12 agents per run.
+
+Three properties worth carrying into other fan-out designs:
+
+- **Fan-out is fixed, not data-driven.** A constant persona count makes cost and rate-limit exposure predictable per run — unlike a Kanban DAG or a lock-file queue, where the fan-out width is whatever the backlog happens to be. If you widen the roster, widen the verification budget with it.
+- **Differentiation lives in the prompt, not the work split.** All workers see the same input; only their persona differs. This is what buys coverage of questions no single research plan would think to ask.
+- **Verification is a distinct phase with its own agents.** The generating lenses are optimizing for evidence supporting their angle, so the audit is performed by agents that did not produce the claims — the same maker-checker split as Sandcastle's fresh-context reviewer, applied to facts rather than diffs.
+
+Because the lenses are subagents, they cannot message each other: all cross-examination happens once, centrally, in the contradiction-map prompt, over frozen outputs. No lens responds to being contradicted. See [Multi-Perspective Research (STORM Pattern)](multi-perspective-research.md) for the full four-prompt chain, the per-stage model split, and the caveats on its published benchmark.
+
 ## When to Use Which
 
 | Dimension | Lock-file agent teams | Orchestrator-worker | Claude Code Agent Teams | Sandcastle |
@@ -245,3 +272,4 @@ The architectural point: a working agent only sees its own session. Cross-agent 
 - [Louis Knight-Webb](../people/louis-knight-webb.md) — Vibe Kanban author
 - [Agent Memory Systems](agent-memory-systems.md) — multi-agent memory primitives: permission scopes, OCC, version history
 - [Dreaming](dreaming.md) — out-of-band consolidator that owns the cross-session perspective
+- [Multi-Perspective Research (STORM Pattern)](multi-perspective-research.md) — Pattern 5 in full: persona fan-out, contradiction map, verification fleet

@@ -10,7 +10,8 @@ sources:
   - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-timestamp: "2026-05-08"
+  - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
+timestamp: "2026-07-25"
 ---
 
 # Claude Code Skills
@@ -212,6 +213,23 @@ Combine with `disable-model-invocation` for defense in depth on side-effect skil
 | **Forked-subagent skill** | Heavy reads or untrusted execution — set `context: fork`, choose `agent` |
 | **Live-data skill** | Skill needs current state — use `` !`command` `` injection in the body |
 | **Reference skill** | Long material — split into `SKILL.md` + sibling files; reference them by relative path |
+| **Templated-output skill** | The skill produces a recurring deliverable (report, briefing, review) — ship an output template as a sibling file so every run has the same shape |
+
+### Two-File Skill: Body + Output Template
+
+A minimal but high-leverage variant of the Reference-skill split, for skills whose *output* is the deliverable. Nate Herk's `storm-research` skill is the whole artifact in two files:
+
+```
+.claude/skills/storm-research/
+├── skill.md              # the master prompt: phases, personas, prompt chain
+└── report-template.html  # referenced by skill.md for output consistency
+```
+
+The template exists purely so that "every time I run this you're going to give me a report that always looks like this." Stable output shape is the feature: it makes successive runs comparable and skimmable, and it removes formatting decisions from the model's per-run judgment. The deflationary framing that goes with it — *a skill is basically just a master prompt* — is what makes forking one cheap: there is nothing to reverse-engineer beyond the text, so you copy the two files and swap the domain-specific parts.
+
+Installation is equally deflationary: hand both files to Claude and say "this is a skill called storm research, put it in the `.claude` folder."
+
+See [Multi-Perspective Research (STORM Pattern)](../concepts/multi-perspective-research.md) for the pipeline the skill body encodes.
 
 ## Migration: Custom Commands → Skills
 
@@ -272,3 +290,4 @@ See [Agent Skills § Skill Kit as Owned Planning Stack](../concepts/agent-skills
 - [Claude Code Hooks for Memory](claude-code-hooks-memory.md) — `.claude/settings.json` lifecycle hooks
 - [Claude Code Auto Mode](claude-code-auto-mode.md) — classifier-gated permission mode
 - [Claude Code Plugins](claude-code-plugins.md) — packaging skills + agents + hooks + monitors for distribution
+- [Multi-Perspective Research (STORM Pattern)](../concepts/multi-perspective-research.md) — worked example of the two-file templated-output skill

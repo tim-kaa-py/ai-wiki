@@ -11,7 +11,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_code-review.md"
   - "summaries/2026-05-06_claude-code-docs_ultrareview.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-timestamp: "2026-07-08"
+  - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
+timestamp: "2026-07-25"
 ---
 
 # Reviewer Agents
@@ -135,9 +136,21 @@ Both run **independent verification fleets** — every finding is reproduced by 
 
 The `gh api` JSON severity counts (Code Review) and `claude ultrareview --json` output let you wire either into a CI gate that fails the build on Important findings — Code Review itself completes with `neutral` conclusion and never blocks merge by itself.
 
+## Beyond Code: Reviewer Personas Over Research Output
+
+The same machinery transfers to non-code artifacts, where the "diff" is a set of factual claims rather than a patch. Nate Herk's `storm-research` skill (June 2026) is the clearest worked example: five persona lenses generate research independently, then a separate fleet of roughly six verification agents re-checks the output. Two conventions from it are worth importing into any reviewer-agent harness:
+
+- **A per-item verdict vocabulary.** Every citation is checked against its **primary source** and labelled `confirmed` / `corrected` / `demoted`, collected into a source ledger at the bottom of the deliverable. This is the artifact-level equivalent of severity labels on findings — it makes the review auditable rather than narrative.
+- **Provenance and dissent, not just a score.** Each finding carries a reliability rating *plus* which personas supported it and which challenged it. "Reliability 7/10 — supported by the reliability lens, challenged by the production-ops lens" is far more actionable than a bare confidence number, and it preserves the disagreement instead of averaging it away.
+
+The versioning discipline that follows is the useful operational rule: **the unverified draft (V1) and the verified output (V2) are separate deliverables**, and only V2 is consumable. Nate is explicit that his own V1 contained claims that "just wasn't correct." If a pipeline has to be shortened for cost, cut a generating persona — not the verifier.
+
+The reason this works is the same self-evaluation-bias argument as [Fresh Context per Reviewer](#fresh-context-per-reviewer-pocock): the generating personas are optimizing for finding evidence *for* their angle, not for auditing it, so the check must be performed by agents that did not produce the claim. See [Multi-Perspective Research (STORM Pattern)](multi-perspective-research.md) for the full pipeline.
+
 ## Related Pages
 
 - [Harness Engineering](harness-engineering.md) — the parent discipline
+- [Multi-Perspective Research (STORM Pattern)](multi-perspective-research.md) — persona-based review applied to research claims instead of diffs
 - [Code-as-Text Structural Tests](code-as-text-structural-tests.md) — the deterministic counterpart
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — where reviewer agents fit in daily practice
 - [Claude Code](../tools/claude-code.md) — writer/reviewer pattern, agent SDK for wiring

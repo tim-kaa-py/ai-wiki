@@ -13,7 +13,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_agent-teams.md"
   - "summaries/2026-05-06_claude-code-docs_features-overview.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-timestamp: "2026-05-08"
+  - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
+timestamp: "2026-07-25"
 ---
 
 # Agent Orchestration Patterns (Anthropic's Five Canonical)
@@ -98,7 +99,7 @@ Anthropic's May 2026 Claude Code docs draw an explicit architectural line betwee
 | Trigger to use | Side task that returns one result | Multiple workers need to share / challenge findings |
 | Maturity | GA in Claude Code | Experimental flag (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`) |
 
-The graduation rule: when you find yourself wishing subagents could share findings with each other, you've hit the limit of hub-and-spoke and need peer-to-peer. See [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md) and [Parallel Agent Patterns](parallel-agent-patterns.md).
+The graduation rule, per Anthropic's docs: when you find yourself wishing subagents could share findings with each other, you've hit the limit of hub-and-spoke and need peer-to-peer. Sharpen it with one intermediate step before paying the linear per-teammate cost — a **central contradiction pass** over sealed subagent outputs (one downstream prompt that cross-examines what the workers returned) captures most of the adversarial benefit while staying hub-and-spoke; STORM's contradiction map is the worked example *(Source: Nate Herk, `storm-research` skill, 2026-06)*. Graduate to agent teams when a worker must **revise** in response to being challenged, not merely when you want the disagreement visible. See [Parallel Agent Patterns § Pattern 3](parallel-agent-patterns.md) for the three-rung ladder, plus [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md).
 
 ## The ~90% Rule
 
@@ -118,6 +119,28 @@ On SWE-bench Verified and OS World:
 | Multi-candidate search | –2.4 | –5.6 |
 
 Read: **more structure is not always better.** Default to the smallest harness that passes your eval and only widen search when the narrow path clearly fails.
+
+## Unresolved Tensions
+
+### Is a verification layer worth its cost? (surfaced 2026-07-25)
+
+**Existing position** — *source: `summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md` (NLH ablation, this page § Ablation Findings):*
+
+> | Module | SWE-bench ∆ | OS World ∆ |
+> |--------|-------------|------------|
+> | Self-evolution (narrow acceptance-gated attempt loop) | **+4.8** | **+2.7** |
+> | Verifiers | –0.8 | –8.4 |
+> | Multi-candidate search | –2.4 | –5.6 |
+>
+> Read: **more structure is not always better.** Default to the smallest harness that passes your eval and only widen search when the narrow path clearly fails.
+
+**New position** — *source: `summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md` (Key Takeaway 2):*
+
+> "The verification layer is not polish; it is the thing that makes the output usable."
+
+> "If you cut a phase for speed, cut the historian, not the verifier."
+
+The two sources operate in different domains — coding agents with automatic test oracles (NLH's SWE-bench / OS World) versus research with no ground-truth oracle (STORM) — which is an untested hypothesis for why they diverge, not an established reconciliation.
 
 ## Related Pages
 

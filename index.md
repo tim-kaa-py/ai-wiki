@@ -8,6 +8,7 @@ okf_version: "0.1"
 
 ### Sources
 
+* [Stanford's Method Turns Claude Into a PHD Level Research Team (Nate Herk)](summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md) - Nate Herk packages Stanford's STORM multi-perspective research method into a Claude skill that runs five expert lenses in parallel, maps their contradictions, and verifies every citation before delivering
 * [The Agentic OS Setup That Will 10x Claude Code (Chase AI)](summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md) - Describes a four-level agentic OS where codified skills and a memory/file structure carry most of the value over custom UI layers
 * [Finally. Agent Loops Clearly Explained. (Nate Herk)](summaries/2026-06-19_nate-herk_agent-loops-clearly-explained.md) - Defines an agent loop as reason-act-observe-repeat and argues verification quality matters more than looping itself
 * [Harness Engineering: How to Build Software When Humans Steer, Agents Execute — Ryan Lopopolo, OpenAI](summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md) - Argues that once code is free, engineers should build the harness (docs, lints, tests, reviewer agents) that steers coding agents instead of reviewing every PR
@@ -90,6 +91,7 @@ okf_version: "0.1"
 * [Retrieval-Augmented Generation (RAG)](wiki/concepts/rag.md) - How RAG grounds an LLM in an external knowledge base via a data-injection pipeline and a retrieval pipeline, instead of retraining
 * [Hybrid RAG: Hybrid Search and Graph RAG](wiki/concepts/hybrid-rag.md) - Advanced retrieval beyond pure vector search — hybrid (dense + sparse/BM25) search fused via RRF, knowledge-graph triplets, and hybrid RAG that fuses both as a retrieval safety net
 * [RAG vs Long Context](wiki/comparisons/rag-vs-long-context.md) - A decision framework for RAG vs long context — three symmetric pros each, resolved by data shape rather than by which is 'better'
+* [Multi-Perspective Research (STORM Pattern)](wiki/concepts/multi-perspective-research.md) - A research topology where several persona lenses research independently, a contradiction pass cross-examines them, and a separate verification fleet checks every citation against its primary source
 * [MCP vs API](wiki/comparisons/mcp-vs-api.md) - How MCP standardizes AI-agent integration versus general-purpose APIs — shared client-server roots, MCP's dynamic discovery and uniform interface, and why the two are layers not rivals
 * [GSD](wiki/tools/gsd.md) - A Claude Code orchestration framework adding rigid phase-based planning and sub-agent-driven development
 * [Superpowers](wiki/tools/superpowers.md) - A Claude Code plugin adding skill-based orchestration, visual design iteration, and TDD-driven development
@@ -205,4 +207,4 @@ okf_version: "0.1"
 
 ---
 
-**84 sources** | **86 wiki pages** | [Ingest Log](log.md)
+**85 sources** | **87 wiki pages** | [Ingest Log](log.md)

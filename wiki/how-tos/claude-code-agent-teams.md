@@ -24,7 +24,7 @@ Agent teams (experimental, disabled by default) coordinate multiple independent 
 | Cost | One subagent at a time, summary back | Linear in teammate count — every teammate is a full session |
 | Right when | Independent task that returns one result | Multiple teammates need to share/challenge findings |
 
-**Trigger to graduate from subagents to teams:** when you find yourself wishing subagents could share findings with each other.
+**Trigger to graduate from subagents to teams:** when you find yourself wishing subagents could share findings with each other — specifically, when a worker needs to **revise** its answer after being challenged. If you only need the disagreement surfaced, a central contradiction pass over sealed subagent outputs is cheaper and stays hub-and-spoke; see [Parallel Agent Patterns § Pattern 3](../concepts/parallel-agent-patterns.md).
 
 ## Enable Agent Teams
 
