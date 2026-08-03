@@ -21,7 +21,8 @@ sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
-timestamp: "2026-07-08"
+  - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
+timestamp: "2026-08-03"
 ---
 
 # Harness Engineering
@@ -68,10 +69,27 @@ Each era swallows the prior one. Harness engineering absorbs prompt + context wo
 1. **6x performance variation from the harness alone** — Stanford measurement; LangChain's coding agent jumped from outside the top 30 to rank 5 on terminal-bench by modifying only harness infrastructure.
 2. **~90% of compute flows through delegated child agents, not the parent.** The harness is an orchestration pattern, not a reasoning pattern.
 3. **Self-evolution is the only consistently helpful module** across SWE-bench Verified (+4.8) and OS World (+2.7) in the NLH ablation.
-4. **Verifiers and multi-candidate search actively hurt** on the same benchmarks (–0.8/–8.4 and –2.4/–5.6).
+4. **Verifier *modules* and multi-candidate search actively hurt** on the same benchmarks (–0.8/–8.4 and –2.4/–5.6). See the scope note below — this is a narrower claim than "verification doesn't help."
 5. **Representation alone can move a benchmark 16.8 points.** OS Symphony rewritten as NLH (same strategy, different expression) went 30.4% → 47.2%, 361 → 141 min runtime, 1,200 → 34 LLM calls.
 6. **A harness optimized on one model transfers to five others and improves all of them.**
 7. **Smaller model + optimized harness beats larger model.** Haiku + Meta Harness outranks Opus + Meta Harness (76.4% on terminal-bench 2).
+
+### Scope Note: Two Different Things Called "Verification"
+
+Finding 4 above and the verification-first guidance elsewhere on this page point in opposite directions only if "verifier" means one thing. It doesn't:
+
+| | **Verifier module** (NLH finding 4) | **Verification channel** (Cherny, Anthropic docs, Carlini) |
+|--|--------------------------------------|------------------------------------------------------------|
+| What it is | A harness component that re-judges the agent's own output | An external artifact the agent can consult for ground truth |
+| Signal source | Another LLM call, same or similar model | Test suite, type check, screenshot pixel-diff, fuzzer, numerical reference |
+| Failure mode | Correlated error — the judge shares the generator's blind spots; adds latency and calls for little independent signal | Weak or absent coverage — the agent optimizes toward whatever the check happens to measure |
+| Measured effect | Net negative on SWE-bench Verified / OS World in the NLH ablation | 2-3× quality (Cherny); the binding constraint on 16-agent autonomy (Carlini) |
+
+The distinction is what reconciles finding 4 with *"verification I think is probably the single most important thing that people do not get right"* (Cherny, [20:25-20:35]) and with Carlini's *"the task verifier must be nearly perfect."* Cherny's flagship case is a pixel diff against a running reference app — not an LLM re-reading a diff and grading it.
+
+**Honesty caveat on the mapping.** NLH's precise definition of its "verifier" module is inferred here from a summary of the paper, not read from the paper itself. The reconciliation is therefore a *probable* reading, not a verified one. If NLH's verifier module turns out to have had access to ground-truth signals (test results rather than model judgment), finding 4 becomes a genuine counterexample to the verification-first consensus and this note should be replaced by an open tension. Treat that as the check to run if you ever read the paper directly.
+
+**What the two claims do agree on:** neither supports adding a verification *stage* for its own sake. Finding 4 says a judge without independent signal is worse than nothing; Cherny says build the ground-truth channel *before* writing the prompt. Both are arguments against verification theater — the disagreement is only about which artifact counts as verification.
 
 ## The Agentic Loop and Tool Categories (Anthropic Canonical)
 
@@ -138,6 +156,52 @@ Every harness component encodes an assumption about what the model can't do — 
 - **Notion rewrote their agent harness five times** across ~3.5 years: JS coding-agent → XML representation → Notion-flavored markdown → SQLite → progressive disclosure with 100+ tools. Simon Last's framing: "I'm basically just doing that [rewriting everything] in a loop every six months."
 
 The harness space doesn't shrink as models improve — it moves. Re-audit the harness on every model upgrade and actively delete scaffolding that no longer earns its keep.
+
+### Ablation: The Named Procedure (Cherny, July 2026)
+
+Boris Cherny supplies the *method* the section above only gestures at, plus the largest published datapoint for it: **Claude Code cut 80% of its system prompt on the Opus 5 release.** The procedure is borrowed straight from research practice:
+
+> "You delete the entire system prompt and then you bring it back line by line to figure out what is the impact of each individual line." [06:01-06:09]
+
+He classifies it explicitly as a species of eval — *"an eval where you delete things to figure out the impact"* [06:14-06:17] — and Anthropic runs the same procedure on tools: *"we unship tools all the time."*
+
+**The instrument.** `CLAUDE_CODE_SIMPLE=1` is an undocumented environment variable that strips *all* system prompts including tool prompts. Its purpose is internal ablation, and the finding is counterintuitive:
+
+```bash
+claude --system-prompt "<your minimal prompt>"   # override entirely
+CLAUDE_CODE_SIMPLE=1 claude                      # strip everything
+```
+
+> "The model is actually a little bit more intelligent without these prompts." [05:05-05:10]
+
+The immediate qualifier matters as much as the finding: you still want *some* prompts in the shipped product *"because it helps you use the product"* [05:13-05:24]. **The prompt's remaining job is product behavior, not model capability** — those are now separable concerns. This is why 80% could go while Claude Code still feels like Claude Code, and why what remains in the harness is *"almost all... about safety and permissions and static analysis and there's a bunch of UI code"* [06:22-06:37].
+
+**The rebuild order: delete → use → add back only on *repeated* stumbles.**
+
+- *"You don't want to guess what's the instruction that the model needs because you might not predict it correctly"* [07:49-07:55] — so don't rebuild from a design; rebuild from observed failure.
+- Add back *"only when you see it repeatedly stumble on the same thing"* [08:14-08:20], because *"the model is going to read this instruction every single time you use it"* [08:21-08:27].
+
+The evidentiary bar for a new prompt line is **repetition**, not one bad run — which inverts normal engineering, where you fix a bug the first time you see it. A single failure is indistinguishable from sampling noise. The grounding premise is that the artifact is organic rather than designed: *"almost like a living creature... every model generation, it behaves differently. It has a slightly different personality"* [08:55-09:13]. Empirical observation, not up-front system design.
+
+**It applies to your own config, not just to harness builders:**
+
+> "For people that aren't building agentic products, but you're using Claude Code, every 6 months delete your Claude MD. Delete your skills. Delete your hooks. See what the model does and it might surprise you." [06:55-07:08]
+
+Practical softening: git-stash `CLAUDE.md`, `.claude/skills/`, and hooks for a week rather than deleting outright, keep a stumble log, and reinstate only the lines that provably earn their tokens. *(Source: Boris Cherny, Y Combinator 2026-07-27.)*
+
+### Diagnose the Failure Class Before Escalating: Prompt → Skill → MCP
+
+Cherny's escalation ladder for when the model struggles is a diagnosis-first refinement of the [Extension Decision Map](#extension-decision-map-friction-driven) above:
+
+> "You have to see where it struggles and then you have to fix that either with better prompting or with a skill or if the model's missing context like give it a MCP so it can pull in the context that it needs." [23:44-23:58]
+
+| Failure class | Fix |
+|---------------|-----|
+| Wrong framing | Prompt |
+| Missing procedure | Skill |
+| Missing context | MCP |
+
+The rule is not "escalate in order" but **classify first, then pick** — don't reach for the heaviest tool because the light one failed once. Combined with the repeated-stumble bar above, this is the discipline that keeps the extension layer from accreting.
 
 ## Give the Model What It Wants
 
@@ -410,3 +474,6 @@ Generalization: every prompt in the harness encodes an assumption about the prio
 - [Dreaming](dreaming.md) — operationalization of "one objective per agent" applied to memory curation
 - [Cognitive Debt](cognitive-debt.md) — the human-side risk the guardrail loop is meant to contain
 - [Florian Buetow](../people/florian-buetow.md) — harness-over-model experiment, horizontal/vertical scaling, stop-hook guardrail loop
+- [Boris Cherny](../people/boris-cherny.md) — ablation discipline, the 80% prompt cut, product overhang
+- [Product Overhang and Hobbling](product-overhang.md) — why expired scaffolding stops being neutral and starts obstructing
+- [Dynamic Workflows](dynamic-workflows.md) — orchestration as an axis of test-time compute

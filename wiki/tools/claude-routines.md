@@ -9,7 +9,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_routines.md"
   - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
   - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
-timestamp: "2026-07-08"
+  - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
+timestamp: "2026-08-03"
 ---
 
 # Claude Routines
@@ -197,6 +198,32 @@ Anthropic's "Stop babysitting your agents" talk (Sid Benesaria, May 2026) frames
 
 Example: `/loop 10m babysit my open PRs` wakes the session every 10 minutes, re-runs the prompt, and — given a strong CLAUDE.md and connected tools — figures out what to do on its own. Routines are the same idea promoted to the cloud with richer triggers: the talk cites a team routine that updates docs daily, and another that scans issues/feedback and posts to Slack every six hours.
 
+### The Third Primitive: Dynamic Workflows
+
+Boris Cherny (July 2026) adds the primitive the `/loop`-vs-Routines table above doesn't cover, and gives the whole taxonomy a cleaner discriminator than *where it runs*: **whether context is shared** [27:40-28:11].
+
+| Primitive | Shape | Context | Location |
+|-----------|-------|---------|----------|
+| **Dynamic workflow** | One task broken into chunks | **Shared context** across chunks | Sandboxed VM orchestrated by Claude |
+| **Loop** | One repetitive task, re-run on a cadence | No shared context; may share **memory** | Local — "a cron job" |
+| **Routine** | Same as a loop | No shared context; may share memory | Cloud — "so you can close your laptop" |
+
+Cherny's own gloss: a workflow is *one task broken into chunks*, while loops and routines are *one repetitive task that doesn't share context but might share memory*, run hourly or daily. **Reach for a workflow when a single large task decomposes; reach for a routine when the same context-free chore recurs.** See [Dynamic Workflows](../concepts/dynamic-workflows.md). *(Source: Boris Cherny, Y Combinator 2026-07-27)*
+
+### Anthropic's Own Self-Maintenance Fleet
+
+The strongest published datapoint for what routines are actually for. Anthropic runs **~20-30 daily routines** across its CLI, iOS, Android, and desktop codebases [28:11-29:54]:
+
+- Dead-code cleanup
+- Shipping fully-rolled-out experiments
+- Adding test coverage
+- Deleting useless tests *"added by older models or added by people"*
+- **"Abstraction police"** — finding near-duplicate abstractions across a large codebase and unifying them
+
+Two details worth carrying over. First, **each routine is roughly one sentence** — the dead-code routine wasn't told how to find dead code, and *"it'll look for dead code... using static and dynamic analysis. We didn't prompt that. It just kind of figured it out"* [28:38-28:45]. This is a direct counterweight to the "routine prompts must be exhaustive SOPs" guidance above: the SOP discipline is for routines with external side effects and ambiguous inputs; a repo-scoped maintenance chore with an obvious success criterion needs far less. Second, Cherny's claim about the aggregate: they do *"the work of dozens or hundreds of engineers"* [29:54-30:06].
+
+The profile that fits: tasks that are trivially describable and prohibitively tedious for a human at repo scale. Start there rather than with your most complex automation. *(Source: Boris Cherny, Y Combinator 2026-07-27)*
+
 The talk's framing thesis: both rungs exist to **push bookkeeping off your keyboard** (PR babysitting, doc updates, triage, keeping CI green) — work that needs to *run*, not to have you present. See [Focus Maxing](../concepts/focus-maxing.md) for the attention-budget argument this serves. *(Source: Claude — Stop babysitting your agents.)*
 
 ## Related Pages
@@ -207,3 +234,5 @@ The talk's framing thesis: both rungs exist to **push bookkeeping off your keybo
 - [Prompt Engineering for Claude](../concepts/prompt-engineering-claude.md) -- prompt design principles applicable to routine prompts
 - [Focus Maxing](../concepts/focus-maxing.md) -- the attention-budget argument `/loop` and Routines serve
 - [Agentic OS](../concepts/agentic-os.md) -- the skill -> automation -> loop promotion path; routines as the Level-1 automation runtime
+- [Dynamic Workflows](../concepts/dynamic-workflows.md) -- the shared-context sibling primitive
+- [Boris Cherny](../people/boris-cherny.md) -- source of the workflow/loop/routine taxonomy

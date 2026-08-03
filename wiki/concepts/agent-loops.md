@@ -13,7 +13,8 @@ tags:
 sources:
   - summaries/2026-06-19_nate-herk_agent-loops-clearly-explained.md
   - summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md
-timestamp: 2026-06-29
+  - summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md
+timestamp: 2026-08-03
 ---
 
 # Agent Loops (Loop Engineering)
@@ -77,6 +78,24 @@ Practitioner heuristics about loops are **role-dependent**. Peter Steinberger ru
 
 This is also why the cost framing here (knowledge-work loops kept short) sits comfortably alongside the much larger spend justified for high-value coding loops in [Generator-Evaluator Harness § The Cost Reality](generator-evaluator-harness.md#the-cost-reality): both gate on value-per-run, but the value ceiling differs by domain.
 
+## The Verification Pillar at Multi-Day Scale (Cherny)
+
+Nate's claim that *"a loop is only as good as its done-check"* gets its strongest independent confirmation — and its mechanism — from Boris Cherny (July 2026). His account of *why* verification is load-bearing over long horizons:
+
+- Modern models can sustain a task for days or weeks.
+- Over that horizon the binding constraint stops being capability and becomes **drift** — *"this is about hallucination"* [22:26-22:29].
+- A model with a way to check its own work *"doesn't get stuck, and it will just go"* [22:41-22:48]; without one, errors compound silently and unrecoverably.
+
+So the done-check isn't only a *stop* condition — it's the mechanism that keeps the loop's intermediate states anchored. This reframes the "verification is where loops are won or lost" claim: the verifier is doing continuous correction, not just gating the exit.
+
+His canonical loop prompt is task + verification channel + exit condition and nothing else — *"Rewrite the Electron app in Swift. Run the Electron app in the Mac virtual machine, screenshot it, and then look pixel by pixel, compare it to the Swift version. Don't stop until you're done."* Note that *"don't stop until you're done"* is the un-objective phrasing Nate warns against; it works here **because the pixel-diff supplies the objective criterion**. The lesson is not that subjective stop-phrases are fine, but that a strong verification channel can carry a loose exit clause.
+
+**One important divergence from the sizing guidance above.** Nate's productive loops sit at *"35 minutes to a couple of hours"* and he judges 12-hour-plus runs generally not worth it; Cherny's flagship runs are 11 and 14+ days. The reconciliation is the [role-dependence caveat](#loop-advice-doesnt-transfer-11-across-roles) plus verification strength: Cherny's long runs are exactly the cases where a near-perfect automated verifier exists (a well-tested runtime, a pixel diff). Absent that, Nate's ceiling is the safer default — a long loop without a hard verifier is the failure mode, not the duration itself.
+
+### Escalating When the Loop Stalls
+
+Cherny's ladder for a loop that keeps struggling — diagnose the failure class first, don't reach for the heaviest tool: **wrong framing → prompt; missing procedure → skill; missing context → MCP** [23:44-23:58]. *(Source: Boris Cherny, Y Combinator 2026-07-27)*
+
 ## Self-Improving Loops Need a State Structure (Chase AI)
 
 Nate Herk's framing covers loop *logic* (reason-act-observe, goal vs verification). Chase AI adds the **infrastructure** a self-improving loop needs: somewhere to **log past runs** so each iteration can read prior ones and improve. That log must live in the same coherent memory/state "map" the agent already navigates — it is not a side file. This is why, in the [Agentic OS](agentic-os.md) framing, the loop engine (Level 1) and the state structure (Level 2) are inseparable: the loop is the engine, the logged state is its memory. A "second brain" *is* this logged, navigable store the loop both reads and writes. *(Source: Chase AI)*
@@ -91,3 +110,5 @@ Nate Herk's framing covers loop *logic* (reason-act-observe, goal vs verificatio
 - [Agent Evaluation](agent-evaluation.md) — how to make the verification pillar measurable (graders, rubrics, success criteria)
 - [Peter Steinberger](../people/peter-steinberger.md) — the "run everything as loops" end of the role spectrum
 - [Agentic OS](agentic-os.md) — loops as the Level-1 backbone, fed by the Level-2 state map; the skill → automation → loop promotion path
+- [Dynamic Workflows](dynamic-workflows.md) — the shared-context sibling of a loop; workflow vs loop vs routine taxonomy
+- [Boris Cherny](../people/boris-cherny.md) — the multi-day-horizon case for verification

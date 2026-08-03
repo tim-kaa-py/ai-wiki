@@ -15,7 +15,8 @@ sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
   - "summaries/2026-03-09_ibm-technology_is-rag-still-needed-rag-vs-long-context.md"
-timestamp: "2026-07-12"
+  - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
+timestamp: "2026-08-03"
 ---
 
 # Context Engineering
@@ -80,6 +81,12 @@ Pattern: commit-per-feature + progress file + `init.sh` (see [Harness Engineerin
 3. **Push state outside the window.** Files, progress logs, commits.
 4. **Tools must not overlap.** Each tool has one clear purpose.
 5. **Re-audit on every model upgrade.** Newer models handle more natively; subtract scaffolding that's no longer needed (see craft of subtraction in [Harness Engineering](harness-engineering.md)).
+
+### Rule 5, Taken Seriously: The 80% Cut
+
+The most aggressive published instance of rule 5. Claude Code deleted **80% of its system prompt** on the Opus 5 release, because most of it was *"correcting for these behaviors that the model should have known, but it didn't. Now, Opus 5 just does it"* [04:20-04:29]. The context-engineering reason this is not just tidiness: *"the model is going to read this instruction every single time you use it"* [08:21-08:27] — a stale instruction is rent paid on every invocation, and ablation shows the model is slightly *more* capable without the accumulated corrections.
+
+The upgrade to rule 5 is procedural: **re-audit is not enough, because you can't tell by reading which lines still earn their slot.** The method is ablation — delete everything, then add back only on *repeated* stumbles — and it applies to user-side context artifacts too: *"every 6 months delete your Claude MD. Delete your skills. Delete your hooks"* [06:55-07:08]. See [Harness Engineering § Ablation](harness-engineering.md#ablation-the-named-procedure-cherny-july-2026) for the full procedure and the `CLAUDE_CODE_SIMPLE=1` instrument. *(Source: Boris Cherny, Y Combinator 2026-07-27)*
 
 ## Token Data: What Claude Code Actually Loads
 
@@ -178,3 +185,4 @@ The hidden cost (from Debois's Q&A): the time you save by writing context instea
 - [Agent Memory Systems](agent-memory-systems.md) — storage/injection/recall framework applied to runtime memory layers
 - [RAG vs Long Context](../comparisons/rag-vs-long-context.md) — the same context-rot / attention-dilution effect, applied to the document-QA architecture choice
 - [Retrieval-Augmented Generation (RAG)](rag.md) — foundational reference for the retrieve-on-demand mechanism that just-in-time retrieval generalizes
+- [Boris Cherny](../people/boris-cherny.md) — the 80% cut and the ablation discipline behind rule 5

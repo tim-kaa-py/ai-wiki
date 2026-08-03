@@ -21,7 +21,8 @@ sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
-timestamp: "2026-07-02"
+  - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
+timestamp: "2026-08-03"
 ---
 
 # Agentic Coding Workflow
@@ -602,6 +603,47 @@ See [Plan and Review](../concepts/plan-and-review.md) for the full thesis page i
 
 *(Source: Louis Knight-Webb, Vibe Kanban — AI Engineer 2026)*
 
+## Build the Verification Substrate Before the Prompt (Cherny, July 2026)
+
+The verification guidance above ("give the agent a feedback loop", "always include 'and verify by X'") treats verification as a *line in the prompt*. Cherny's July 2026 update treats it as **infrastructure you provision first**, and inverts the effort ratio:
+
+> "How do you make it possible for Claude to verify its work along the way? And the verification I think is probably the single most important thing that people do not get right." [20:25-20:35]
+
+**The routine, in order:**
+
+1. **Answer one question before writing anything:** what artifact can the model inspect to know it's wrong? Test suite, screenshot diff, type check, fuzzer, numerical reference. **If there isn't one, build it first** — that is the task, not a prerequisite to the task.
+2. **Provision the substrate.** For the 14+ day Electron→Swift rewrite this meant a macOS GitHub Actions runner (to run the VM) and an empty target repo — set up *before* prompting [21:00-21:33].
+3. **Then write one paragraph:** task + guardrails + exit criteria.
+
+The resulting prompt is short precisely because the loop carries the weight:
+
+```
+Rewrite the Electron app in Swift.
+Run the Electron app in the Mac virtual machine, screenshot it,
+and then look pixel by pixel, compare it to the Swift version.
+Don't stop until you're done.
+```
+
+Cherny's gloss on why no orchestration was needed: *"You don't need slash goal, you don't need slash loop. These help, but really all you need is give the model the task, give it a way to verify the output of its work so it doesn't get stuck, and it will just go"* [22:33-22:48]. Note this is a claim about *well-verified* tasks — the [Pocock](#the-pocock-pipeline-grill--prd--kanban--loop) and [Medin](#the-cole-medin-pipeline-ideate--piv--evolve) pipelines earn their structure on work where the verifier is weaker or the decomposition is the hard part.
+
+### Give It Tasks Slightly Too Hard — and Keep a "Not Yet Possible" List
+
+The companion practice. Cherny's Bun example: the team had been using Claude only to *fuzz* for memory leaks case-by-case, but Jared retried the full Zig→Rust runtime rewrite on **every model release**. It first became possible with Fable — one prompt plus steering, 11 days, now in production, against a human estimate of *"definitely over a year"* [16:33-18:16].
+
+**How to apply:** maintain a written list of concrete tasks that are currently out of reach, and re-run it on each model release. Bun was a good candidate partly because *"it's very, very well tested... it's easy to know if you did the right thing"* [17:16-17:24] — verification strength is what makes a too-hard task safe to attempt. See [Product Overhang and Hobbling](../concepts/product-overhang.md).
+
+### When It Struggles: Diagnose the Failure Class
+
+Escalate by *type*, not by weight [23:44-23:58]:
+
+| Symptom | Fix |
+|---------|-----|
+| Wrong framing | Better prompt |
+| Missing procedure | Skill |
+| Missing context | MCP |
+
+*(Source: Boris Cherny, Y Combinator 2026-07-27)*
+
 ## Anti-Patterns to Avoid
 
 - Over-engineering prompt pipelines (the "agentic trap")
@@ -618,6 +660,31 @@ See [Plan and Review](../concepts/plan-and-review.md) for the full thesis page i
 - **Skipping the verification feedback loop** — without tests/typecheck/lint in the loop, Claude is "basically guessing"; with a feedback loop quality is 2-3x higher *(Source: Boris Cherny, Creator of Claude Code)*
 - **Focus maxing** — tools and workflows that pull you in and out of context every 30 seconds to babysit short agent runs. Optimize for *contiguous* attention blocks, not 30-second bursts; redesign the harness if a workflow demands attention more than once every 5 minutes. See [Focus Maxing](../concepts/focus-maxing.md). *(Source: Louis Knight-Webb, Vibe Kanban)*
 - **Defaulting to one workflow style for all tasks** — plan-heavy is wrong for front-end feature work (too stateful); in-the-loop is wrong for everything else. Use [the work-type matrix](#the-work-type-matrix) per task, not as a global default. *(Source: Louis Knight-Webb, Vibe Kanban)*
+
+## Unresolved Tensions
+
+Page-level tensions across sources. (The Pocock pipeline carries [its own two open problems](#unresolved-tensions) scoped to that pipeline.)
+
+### How detailed should the spec handed to an agent be?
+
+*Surfaced 2026-08-03.*
+
+**Position A — detail is the thing you scale up.** [Source: `summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md` (Nate B Jones / Dan Shapiro), via [Core Principles](#core-principles) #9]
+
+> "Practice writing specs detailed enough for an AI agent to implement without human intervention."
+
+**Position B — detail is the characteristic senior-engineer failure mode.** [Source: `summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md`, [14:59-15:26]]
+
+> "A really common mistake... they just give it like way over specific instructions... You want to describe the task, you want to describe the guardrails, you want to describe like the exit criteria, and then just let the model cook."
+
+**Why this is held rather than merged.** The disagreement is load-bearing for daily practice, and both sides come with strong framing that resists smoothing. Shapiro's maturity ladder makes spec precision the defining skill of Levels 4-5 ("code is a black box"); Cherny says the instinct is *negative transfer* from pre-LLM engineering and that *"it's a journey to unlearn it"* [24:29-24:35], naming over-specification as self-inflicted [hobbling](../concepts/product-overhang.md) — the human's solution path crowding out the model's better one.
+
+**Contested ground vs. common ground.** They do not disagree about everything:
+
+- **Agreed:** ambiguity about *what* and about *done* is fatal. Cherny's "guardrails + exit criteria" and Shapiro's "spec precise enough to implement unattended" want the same thing here.
+- **Contested:** *method* prescription. Whether "detailed enough to implement without human intervention" licenses step-by-step ordering is exactly what Cherny denies — *"you must do like one, then two, then three, then four"* [15:08-15:14] is his example of the mistake.
+
+**The synthesis that was available and not taken:** "complete about *what* and *done*, minimal about *how*." Buetow's behavioral-tests bridge in principle #9 already does half this work by moving enforcement out of the spec and into the runtime loop. It is recorded here rather than written into the page because the two sources genuinely differ on whether spec detail is an asset to accumulate or a habit to unlearn — and a reader deciding how to write tomorrow's prompt is better served seeing both than seeing a reconciliation that neither author endorsed.
 
 ## Related Pages
 
@@ -644,3 +711,6 @@ See [Plan and Review](../concepts/plan-and-review.md) for the full thesis page i
 - [Plan and Review](../concepts/plan-and-review.md) — Knight-Webb's thesis-level frame: 5-min/30-min, work-type matrix, time horizon
 - [Focus Maxing](../concepts/focus-maxing.md) — the named anti-pattern from Knight-Webb's talk
 - [Louis Knight-Webb](../people/louis-knight-webb.md) — Vibe Kanban founder; author of the plan-and-review framing
+- [Boris Cherny](../people/boris-cherny.md) — verification-first, plan mode, permissions, ablation
+- [Product Overhang and Hobbling](../concepts/product-overhang.md) — the "not yet possible" list as a product-overhang radar
+- [Dynamic Workflows](../concepts/dynamic-workflows.md) — "use a workflow" for large decomposable tasks

@@ -13,7 +13,8 @@ sources:
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2026-04-22_anthropic-docs_define-success-criteria-and-build-evaluations.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-timestamp: "2026-07-12"
+  - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
+timestamp: "2026-08-03"
 ---
 
 # Agent Evaluation
@@ -187,6 +188,24 @@ Because evals are non-deterministic, "did it pass?" is the wrong question. Deboi
 This is per-eval SLOs rather than aggregate metrics. It diverges from common framings that average over a suite: when one eval is critical and another is nice-to-have, averaging hides the signal. Pair this with [pass@k vs pass^k](#non-determinism-passk-vs-passk) above — pass^k is the limiting case (budget = N/N), pass@k is "any one passes" (budget = 1/N), and most production evals sit somewhere in between with explicit per-eval thresholds.
 
 Operational rule: in CI, fail the build only if a critical eval drops *below its budget*, not on any individual flake. Allow nice-to-have evals to be flaky without blocking merges; surface them as warnings.
+
+## Unresolved Tensions
+
+### Can a frontier eval tier survive capability cycles, or do all evals expire in 1-3 generations?
+
+*Surfaced 2026-08-03.*
+
+**Position A — a deliberately-hard tier is a durable solution to saturation.** [Source: `summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md`, via [Three-Tier Eval Stack](#three-tier-eval-stack-notion-april-2026)]
+
+> "Why the 30% tier matters: once all evals sit at ≥90% pass, they can't distinguish a better model from a worse one — you've saturated. The frontier tier is the only tier that keeps giving signal through capability cycles, and Notion built theirs in partnership with Anthropic and OpenAI for exactly that reason."
+
+**Position B — saturation and disposal are unavoidable, frontier tier included.** [Source: `summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md`, [10:01-10:19]]
+
+> "An eval might live for maybe one, two, three model generations... very often we just saturate the eval, and then we have to throw it away."
+
+**Why this is held rather than merged.** Cherny is not making an offhand remark — the summary records him explicitly pushing back on the interviewer's cleaner framing that evals are the constant while code and prompts are disposable. Notion frames the frontier tier as the thing that *solves* saturation; Cherny frames it as merely delaying it. The operational consequence differs: Position A justifies staffing a lasting tier (Notion formalized the [Model Behavior Engineer](#model-behavior-engineer-mbe) track partly around it); Position B says budget for scheduled replacement and treat eval saturation as a recurring event, building the next suite from where the *current* model struggles rather than where the old one did.
+
+**The reading that would dissolve it** (not adopted here): the two may be compatible at different timescales — a frontier tier that lasts three generations *is* "the only tier still giving signal" relative to tiers that saturate in one. If a future source pins down how long Notion's *Last Exam* actually held, this collapses to a quantitative question rather than a disagreement.
 
 ## Sources
 

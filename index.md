@@ -70,6 +70,7 @@ okf_version: "0.1"
 * [MCP vs API: Simplifying AI Agent Integration with External Data (IBM Technology)](summaries/2025-05-05_ibm-technology_mcp-vs-api-ai-agent-integration.md) - IBM Technology on how MCP standardizes AI-agent integration versus general-purpose APIs — architecture, primitives, dynamic discovery, and why the two are layers not rivals
 * [Graph RAG and Hybrid Search (GenPulse)](summaries/2026-07-07_genpulse_graph-rag-and-hybrid-search.md) - Advanced retrieval beyond pure vector search — hybrid (dense + sparse/BM25) search fused via RRF, knowledge-graph triplets, and hybrid RAG that combines both
 * [HybridRAG: A Fusion of Graph and Vector Retrieval — Mitesh Patel, NVIDIA (AI Engineer)](summaries/2025-07-22_ai-engineer_hybridrag-fusion-graph-vector-retrieval-mitesh-patel-nvidia.md) - An NVIDIA practitioner's guide to building production graph + hybrid RAG — triplet extraction via ontology-guided prompting, multi-hop retrieval, Ragas/reward-model evaluation, and the 80/20 optimization reality
+* [Boris Cherny: We Cut 80% of Claude Code's Prompt (Y Combinator)](summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md) - Claude Code's creator on deleting 80% of the system prompt via ablations, hard-task-plus-verification as the core skill, and dynamic workflows as a new axis of test-time compute
 
 ### Wiki Pages
 
@@ -132,6 +133,8 @@ okf_version: "0.1"
 * [Dreaming](wiki/concepts/dreaming.md) - Anthropic's out-of-band batch process that mines agent transcripts across sessions to consolidate and diff a shared memory store
 * [Cognitive Debt](wiki/concepts/cognitive-debt.md) - Florian Buetow's two failure modes for engineers who stop understanding their own codebase as AI writes more of the code
 * [Florian Buetow](wiki/people/florian-buetow.md) - Engineer arguing that engineered guardrail environments, not human review, must catch agent code errors
+* [Product Overhang](wiki/concepts/product-overhang.md) - Boris Cherny's paired concepts of product overhang (capabilities today's models have that no product elicits) and hobbling (products actively getting in the model's way)
+* [Dynamic Workflows](wiki/concepts/dynamic-workflows.md) - Claude Code's sandboxed agent-orchestration primitive — an "algebra for agents" Cherny frames as a new axis of test-time compute
 
 ## Understanding AI
 
@@ -188,6 +191,7 @@ okf_version: "0.1"
 * [Andrej Karpathy](wiki/people/andrej-karpathy.md) - AI researcher and originator of the LLM wiki pattern for maintaining personal knowledge bases with LLMs
 * [Peter Steinberger](wiki/people/peter-steinberger.md) - OpenClaw creator and vocal agentic-coding practitioner known for the Agentic Trap curve and soul.md concept
 * [Patrick Debois](wiki/people/patrick-debois.md) - DevOps originator now applying SDLC discipline to context engineering via the Context Development Life Cycle
+* [Boris Cherny](wiki/people/boris-cherny.md) - Creator of Claude Code, arguing for empirical harness-building: delete the prompt, give hard tasks, build verification channels
 * [Agent Platform Tiers](wiki/concepts/agent-platform-tiers.md) - A five-tier build-to-buy spectrum for positioning an agentic system, from full control to full vendor convenience
 * [Claude Managed Agents](wiki/tools/claude-managed-agents.md) - Anthropic's fully cloud-hosted agent platform bundling model harness and sandboxed execution
 * [Deep Agents & Deep Agents Deploy](wiki/tools/deep-agents-deploy.md) - LangChain's open-source Deep Agents harness library and its managed LangSmith deployment wrapper
@@ -207,4 +211,4 @@ okf_version: "0.1"
 
 ---
 
-**85 sources** | **87 wiki pages** | [Ingest Log](log.md)
+**86 sources** | **90 wiki pages** | [Ingest Log](log.md)

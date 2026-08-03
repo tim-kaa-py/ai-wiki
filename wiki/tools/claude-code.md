@@ -38,7 +38,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_best-practices.md"
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
   - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
-timestamp: "2026-05-27"
+  - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
+timestamp: "2026-08-03"
 ---
 
 # Claude Code
@@ -187,6 +188,32 @@ Boris Cherny (creator of Claude Code) says the single most impactful practice is
 ```
 
 *(Source: Boris Cherny, Creator of Claude Code)*
+
+**The long-horizon version (July 2026).** Cherny later sharpened this from "highest-impact practice" to *the* skill: over multi-day runs the binding constraint stops being capability and becomes drift — *"this is about hallucination"* [22:26-22:29]. A model with a way to check its own work *"doesn't get stuck, and it will just go."* His flagship artifact is the Electron→Swift rewrite, still running at 14+ days, whose entire prompt is a verification loop with an exit condition:
+
+```
+Rewrite the Electron app in Swift.
+Run the Electron app in the Mac virtual machine, screenshot it,
+and then look pixel by pixel, compare it to the Swift version.
+Don't stop until you're done.
+```
+
+The work went into the substrate, not the wording — a macOS GitHub Actions runner for the VM and an empty target repo, provisioned *before* prompting. **Before writing the prompt, answer: what artifact can the model inspect to know it's wrong?** Test suite, screenshot diff, type check, fuzzer. If there isn't one, build it first. *(Source: Boris Cherny, Y Combinator 2026-07-27)*
+
+### System-Prompt Ablation Switches
+
+Two undocumented-to-lightly-documented levers for auditing what the prompt is actually buying you:
+
+```bash
+claude --system-prompt "<your minimal prompt>"   # override the system prompt entirely
+CLAUDE_CODE_SIMPLE=1 claude                      # strip ALL system prompts, including tool prompts
+```
+
+`CLAUDE_CODE_SIMPLE=1` is the internal ablation instrument behind the **80% system-prompt cut** Claude Code shipped with Opus 5. The finding worth knowing before you reach for it: *"the model is actually a little bit more intelligent without these prompts"* — but the shipped product keeps some anyway, because they encode *product behavior* rather than model capability. Run either against a task you know well, and keep a short A/B list of what actually regressed. See [Harness Engineering § Ablation](../concepts/harness-engineering.md#ablation-the-named-procedure-cherny-july-2026). *(Source: Boris Cherny, Y Combinator 2026-07-27)*
+
+### Dynamic Workflows
+
+Say **"use a workflow"** — no syntax. Claude starts a VM inside a Bun sandbox and orchestrates agents in a fan-out → verify/summarize → fan-out shape, at thousands-of-agents scale. Distinct from `/loop` and Routines: a workflow is *one task chunked with shared context*; loops and routines are *one repetitive task with no shared context*. See [Dynamic Workflows](../concepts/dynamic-workflows.md).
 
 ### Session Mobility
 | Command | Direction | Use case |
@@ -601,3 +628,6 @@ Contrast with the hierarchical **orchestrator-worker** pattern of the multi-agen
 - [Managed Agent Platforms](../comparisons/managed-agent-platforms.md) — Claude Managed Agents vs Deep Agents Deploy vs OpenAI Agents SDK
 - [Harness Engineering](../concepts/harness-engineering.md) — the discipline the Meta Harness work sits inside
 - [Meta Harness](../concepts/meta-harness.md) — the research loop that uses Claude Code as its proposer
+- [Boris Cherny](../people/boris-cherny.md) — creator; verification-first, ablation, product overhang
+- [Dynamic Workflows](../concepts/dynamic-workflows.md) — the "use a workflow" orchestration primitive
+- [Product Overhang and Hobbling](../concepts/product-overhang.md) — Claude Code as an un-hobbling of Sonnet 3.5

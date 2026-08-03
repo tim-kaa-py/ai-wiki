@@ -13,7 +13,8 @@ sources:
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
   - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
-timestamp: "2026-07-25"
+  - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
+timestamp: "2026-08-03"
 ---
 
 # Parallel Agent Patterns
@@ -222,6 +223,24 @@ Three properties worth carrying into other fan-out designs:
 
 Because the lenses are subagents, they cannot message each other: all cross-examination happens once, centrally, in the contradiction-map prompt, over frozen outputs. No lens responds to being contradicted. See [Multi-Perspective Research (STORM Pattern)](multi-perspective-research.md) for the full four-prompt chain, the per-stage model split, and the caveats on its published benchmark.
 
+## Pattern 6: Dynamic Workflows — Model-Decided Fan-Out (Cherny)
+
+**Source: Boris Cherny — Y Combinator, 2026-07.**
+
+The productized Claude Code primitive, invoked by saying **"use a workflow."** Bun is used as a sandbox, a VM runs inside it, and Claude orchestrates agents within that VM in a **fan-out → verify/summarize → fan-out** shape [26:09-26:29], at thousands-to-tens-of-thousands of agents per task [24:50-24:57].
+
+What distinguishes it from Patterns 1-5 is **who decides the fan-out width and when**:
+
+| | Patterns 1-5 | Dynamic workflows |
+|--|-------------|-------------------|
+| Fan-out width | Set by your backlog (Kanban DAG, lock-file queue) or a fixed roster (STORM's five personas) | Decided by the model, at runtime, from the task |
+| Structure | Authored before the run — a DAG file, a pipeline, a persona list | Composed on the fly from two primitives |
+| Interface | Configuration | *"Essentially an algebra for agents"* — run in sequence, run in parallel, compose [26:29-26:47] |
+
+The cost-predictability trade is the mirror image of STORM's fixed roster (Pattern 5): a fixed persona count makes per-run cost and rate-limit exposure predictable; a model-decided composition does not. Reach for a workflow when the decomposition is the thing you can't specify in advance; keep an authored DAG when you need to budget the run.
+
+Cherny's larger claim — that this constitutes a genuinely **new axis of test-time compute**, pushable without waiting for a new model — is developed on [Dynamic Workflows](dynamic-workflows.md), along with the reasons to hold it at arm's length.
+
 ## When to Use Which
 
 | Dimension | Lock-file agent teams | Orchestrator-worker | Claude Code Agent Teams | Sandcastle |
@@ -236,7 +255,7 @@ Because the lenses are subagents, they cannot message each other: all cross-exam
 
 ## Shared Principles
 
-- **Verification beats orchestration.** In both patterns, the quality ceiling is set by how well you can tell good output from bad.
+- **Verification beats orchestration.** In both patterns, the quality ceiling is set by how well you can tell good output from bad. Cherny states the strong form of this from inside Anthropic: *"You don't need slash goal, you don't need slash loop. These help, but really all you need is give the model the task, give it a way to verify the output of its work so it doesn't get stuck, and it will just go"* [22:33-22:48]. Read alongside Carlini's *"the task verifier must be nearly perfect"* — same conclusion, opposite ends of the orchestration-complexity spectrum.
 - **Parallelism is expensive.** 15× tokens (research system) or 2,000 sessions (compiler). Only justified for high-value work.
 - **Keep coordination thin.** Lock files or lead-agent dispatch — not elaborate messaging protocols.
 - **Most effort is not in the agent.** It's in tests, tool descriptions, and the evaluation loop.
@@ -273,3 +292,5 @@ The architectural point: a working agent only sees its own session. Cross-agent 
 - [Agent Memory Systems](agent-memory-systems.md) — multi-agent memory primitives: permission scopes, OCC, version history
 - [Dreaming](dreaming.md) — out-of-band consolidator that owns the cross-session perspective
 - [Multi-Perspective Research (STORM Pattern)](multi-perspective-research.md) — Pattern 5 in full: persona fan-out, contradiction map, verification fleet
+- [Dynamic Workflows](dynamic-workflows.md) — Pattern 6 in full: algebra for agents, the test-time-compute argument
+- [Boris Cherny](../people/boris-cherny.md) — dynamic workflows, verification-over-orchestration

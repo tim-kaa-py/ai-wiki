@@ -8,7 +8,8 @@ sources:
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
   - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
-timestamp: "2026-04-22"
+  - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
+timestamp: "2026-08-03"
 ---
 
 # Prompt Engineering for Claude
@@ -175,11 +176,57 @@ Supports up to 2576px / 3.75MP. Anthropic recommends 1080p for cost/performance 
 ### Response Length Calibration
 Opus 4.7 calibrates length to task complexity rather than using a fixed verbosity — shorter on simple lookups, much longer on open-ended analysis. If your product depends on a specific style, positive examples of the desired concision beat "don't be verbose" instructions.
 
+## The Prompt as Expiring Debt (Cherny, July 2026)
+
+Everything above describes how to *write* a prompt. Boris Cherny's July 2026 argument is about how long a prompt should be allowed to *live* — and his answer is: only until the next model release.
+
+**Claude Code deleted 80% of its system prompt on the Opus 5 release.** The reason is not that the prompt was badly written:
+
+> Most of it was *"correcting for these behaviors that the model should have known, but it didn't. Now, Opus 5 just does it."* [04:20-04:29]
+
+The reasoning chain:
+
+- Every model generation is materially different — *"something that you did for one model maybe 3 months ago, it just might not translate at all to the next model"* [04:07-04:14].
+- Most prompt lines exist to *correct model deficiencies*, not to *add capability*.
+- Prompt tokens are paid on **every single invocation**, and ablation shows the model is slightly *more* intelligent without them.
+- Therefore carrying a prompt forward means carrying corrections for a model that no longer exists — a pure cost with a negative capability effect.
+
+Operationally this makes the prompt an artifact you **delete and rebuild**, not append to. The rebuild order is delete → use → add back only on *repeated* stumbles; the ablation method and the `CLAUDE_CODE_SIMPLE=1` instrument are documented on [Harness Engineering § Ablation](harness-engineering.md#ablation-the-named-procedure-cherny-july-2026). The patterns on this page are not thereby wrong — they are what you write *when* a line has earned its place.
+
+### Task + Guardrails + Exit Criteria
+
+Cherny's positive prescription for prompt shape, and the corrective to the over-specification failure mode:
+
+> "A really common mistake... they just give it like way over specific instructions... You want to describe the task, you want to describe the guardrails, you want to describe like the exit criteria, and then just let the model cook." [14:59-15:26]
+
+Three things only. Every step-by-step ordering instruction — *"you must do like one, then two, then three, then four"* [15:08-15:14] — is a candidate for deletion, because it constrains the model to the human's solution path and forfeits its own. The altitude test: *"treat this thing like you would a coworker. I think that's the level of intelligence that it's at now"* [24:35-24:42]. Before sending, ask whether you would give a competent colleague this level of direction.
+
+Note the interaction with Opus 4.7's [more literal instruction following](#more-literal-instruction-following): being *explicit about scope* is not the same as being *prescriptive about method*. State what "every section" means; don't dictate the order the sections get written in.
+
+### The Worked Example
+
+The 14+ day Electron→Swift rewrite prompt, in full [21:33-21:54] — note that it is task + verification loop + exit condition, and nothing else:
+
+```
+Rewrite the Electron app in Swift.
+Run the Electron app in the Mac virtual machine, screenshot it,
+and then look pixel by pixel, compare it to the Swift version.
+Don't stop until you're done.
+```
+
+The prompt is short precisely because the verification loop carries the weight. The setup that preceded it — a macOS GitHub Actions runner for the VM plus an empty target repo [21:00-21:33] — is where the actual work went. **Provision the verification substrate first, then write one paragraph.**
+
 ## Where Prompt Engineering Sits Now (2026)
 
 The 2026 framing from harness-engineering research: there have been three eras in four years — **prompt engineering → context engineering → harness engineering**. Each swallows the prior one. Prompt engineering didn't vanish; it became a sub-component of the harness. The patterns on this page (XML structuring, positive framing, examples, adaptive thinking) still apply — they now live *inside* system prompts, tool descriptions, execution contracts, and sub-agent definitions rather than being the whole game.
 
 Practical upshot: when your agent underperforms, the first audit is no longer "tweak the prompt" — it's "audit the harness (patterns, prompts, verification, memory) before considering a model upgrade." See [Harness Engineering](harness-engineering.md). *(Source: PY — Rise of Harness Engineering)*
+
+Cherny names a **fourth** wave from inside Anthropic, and it isn't a discipline about text at all:
+
+> "The skill nowadays is less about prompt engineering and more about figuring out how do you give Claude a hard task that seems a little bit too hard. And then how do you make it possible for Claude to verify its work." [20:13-20:29]
+
+Prompt engineer → context engineer → harness engineer → **hard task + self-verification**. He is explicit that this is not an endpoint either: *"these will kind of like come and go"* [20:08-20:13]. The practical consequence for anyone reading this page top-to-bottom: the marginal return on a better-worded prompt is small compared with the marginal return on building a verification channel the model can consult. *(Source: Boris Cherny, Y Combinator 2026-07-27)*
 
 ## Related Pages
 
@@ -187,4 +234,6 @@ Practical upshot: when your agent underperforms, the first audit is no longer "t
 - [Claude Code](../tools/claude-code.md) — the tool where these patterns are applied
 - [Claude Routines](../tools/claude-routines.md) — autonomous sessions where prompt design is critical
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — practical workflow incorporating these principles
-- [Harness Engineering](harness-engineering.md) — the era that absorbs prompt + context engineering
+- [Harness Engineering](harness-engineering.md) — the era that absorbs prompt + context engineering; ablation procedure lives here
+- [Product Overhang and Hobbling](product-overhang.md) — over-specification framed as self-inflicted hobbling
+- [Boris Cherny](../people/boris-cherny.md) — the prompt-as-expiring-debt argument

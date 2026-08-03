@@ -7,7 +7,8 @@ tags: [claude-code, comparison, orchestration, gsd, superpowers, agents, sub-age
 sources:
   - "summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
   - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
-timestamp: "2026-04-25"
+  - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
+timestamp: "2026-08-03"
 ---
 
 # Claude Code Orchestration Layers
@@ -89,6 +90,18 @@ Chase's framing: "The gap between baseline Claude Code and these things has shru
 
 Re-evaluate orchestration layers periodically — features that justified them months ago may now be native to Claude Code.
 
+## The Creator's Version of the Same Verdict (Cherny, July 2026)
+
+Chase's argument for vanilla is *economic* — same quality, less time. Boris Cherny reaches the same recommendation from a different premise: **the scaffolding is substituting for the thing that actually matters, which is verification.**
+
+> "You don't need slash goal, you don't need slash loop. These help, but really all you need is give the model the task, give it a way to verify the output of its work so it doesn't get stuck, and it will just go." [22:33-22:48]
+
+Note the two hedges. He says orchestration primitives *"help"* — this is not a claim that they are worthless — and the evidence is a 14+ day Electron→Swift rewrite where the verification channel (a Mac VM running the old app, screenshotted and pixel-diffed against the new one) was strong enough to carry a multi-week run unaided.
+
+**The practical refinement to the decision framework above:** before escalating to an orchestration layer because a task feels complex, check whether the real gap is a missing verifier. A weak verifier is the failure that orchestration *appears* to fix — more planning phases and more sub-agent handoffs create the impression of rigor without adding any signal about whether the output is correct. If you can build a test suite, screenshot diff, or type-check loop instead, that is the cheaper and more durable move. See [Agentic Coding Workflow § Build the Verification Substrate Before the Prompt](../how-tos/agentic-coding-workflow.md#build-the-verification-substrate-before-the-prompt-cherny-july-2026).
+
+This also sharpens the "line in the sand" argument: the threshold question isn't only *"is this task complex enough?"* but *"can the agent tell whether it's succeeding?"* — a question you can actually answer before starting. *(Source: Boris Cherny, Y Combinator 2026-07-27)*
+
 ## Cost Considerations
 
 GSD 2.0 does not support the Claude Code max plan, forcing users to pay full per-token prices. At 1.2M tokens per project, this makes GSD economically unviable for most users. Check GSD's GitHub for updates on max plan compatibility before adopting.
@@ -101,3 +114,5 @@ GSD 2.0 does not support the Claude Code max plan, forcing users to pay full per
 - [Claude Routines](../tools/claude-routines.md) — a different kind of orchestration (autonomous scheduled agents, not dev workflow)
 - [Empathize with the Agent](../concepts/empathize-with-the-agent.md) — the "agentic trap" that orchestration layers exemplify
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — practical workflow guide
+- [Boris Cherny](../people/boris-cherny.md) — the verification-not-orchestration version of the same verdict
+- [Dynamic Workflows](../concepts/dynamic-workflows.md) — the first-party orchestration primitive, distinct from third-party layers

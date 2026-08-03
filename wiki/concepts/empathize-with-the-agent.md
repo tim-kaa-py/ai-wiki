@@ -9,7 +9,8 @@ sources:
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
   - "summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md"
   - "summaries/2026-04-13_chase-ai_gsd-vs-superpowers-vs-claude-code.md"
-timestamp: "2026-04-15"
+  - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
+timestamp: "2026-08-03"
 ---
 
 # Empathize with the Agent
@@ -73,6 +74,24 @@ The core blocker: developers cannot let go of reading every line of code. This i
 
 **The METR study confirms the cost:** developers using AI completed tasks 19% slower but believed they were 24% faster. The gap between perception and reality is a direct consequence of failing to redesign the workflow around agent capabilities — treating the agent as a junior to be supervised line-by-line rather than a team member to be directed and evaluated at a higher level. *(Source: Nate B Jones / Dan Shapiro)*
 
+## Cherny's Independent Convergence: Over-Specification as the Senior-Engineer Failure Mode
+
+Boris Cherny (creator of Claude Code, July 2026) arrives at Steinberger's "expertise is almost a burden" observation from inside Anthropic and names its concrete symptom — over-specification:
+
+> "When I look at engineers that have been coding for years or for decades, this is a really really common failure mode: trying to over specify... get the model to do the task exactly the way that you would have done it. And that's just not the way the model works." [24:07-24:29]
+
+Two things this adds to the page.
+
+**First, the mechanism.** Pre-LLM engineering rewarded exhaustive specification — big designs, big test suites, everything thought through up front. That instinct transfers directly as step-by-step prompting. But over-specifying constrains the model to the human's solution path and forfeits its own, often better, approach. Experience is *negative* transfer here, and *"it's a journey to unlearn it"* [24:29-24:35]. This is the same conclusion as [Why Expert Programmers Struggle](#why-expert-programmers-struggle), reached from the tool-builder's side rather than the practitioner's.
+
+**Second, a sharper altitude test than the new-employee analogy.** Anthropic's official framing is "brilliant but new employee." Cherny updates the calibration:
+
+> "Treat this thing like you would a coworker. I think that's the level of intelligence that it's at now." [24:35-24:42]
+
+The difference matters operationally. You brief a *new employee* on context they lack; you do not tell a *coworker* which order to do the steps in. Before sending a prompt, ask whether you'd give a competent colleague that level of step-by-step direction — if not, cut it. The positive shape is task + guardrails + exit criteria; see [Prompt Engineering for Claude § Task + Guardrails + Exit Criteria](prompt-engineering-claude.md#task--guardrails--exit-criteria).
+
+Cherny also gives the failure a name that ties it back to product strategy: over-specification is **self-inflicted hobbling** — structurally the same failure as a product that blocks a capability the model already has, applied at the prompt level. See [Product Overhang and Hobbling](product-overhang.md). *(Source: Boris Cherny, Y Combinator 2026-07-27)*
+
 ## Anthropic's Validation
 
 Anthropic's official prompting best practices independently converge on this same insight. They describe Claude as a "brilliant but new employee who lacks context on your norms and workflows." Their golden rule: show your prompt to a colleague with minimal context — if they'd be confused, Claude will be too. This is essentially "empathize with the agent" stated as corporate doctrine. *(Source: Anthropic Prompting Best Practices)*
@@ -83,4 +102,6 @@ Anthropic's official prompting best practices independently converge on this sam
 - [Five Levels of AI Coding](five-levels-of-ai-coding.md) — the maturity model where empathy determines progression
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md)
 - [Peter Steinberger](../people/peter-steinberger.md)
+- [Boris Cherny](../people/boris-cherny.md) — independent convergence from the tool-builder's side
+- [Product Overhang and Hobbling](product-overhang.md) — over-specification as self-inflicted hobbling
 - [Claude Code](../tools/claude-code.md)

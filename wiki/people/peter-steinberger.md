@@ -59,3 +59,4 @@ Cited (by Nate Herk, 2026-06-19) as the high end of the "run everything as agent
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md)
 - [Empathize with the Agent](../concepts/empathize-with-the-agent.md)
 - [Claude Code](../tools/claude-code.md)
+- [Boris Cherny](boris-cherny.md) — the other end of the loop-engineering spectrum; independently reaches the same "expertise is a burden" conclusion
