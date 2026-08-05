@@ -22,7 +22,8 @@ sources:
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
-timestamp: "2026-08-03"
+  - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
+timestamp: "2026-08-05"
 ---
 
 # Harness Engineering
@@ -188,6 +189,10 @@ The evidentiary bar for a new prompt line is **repetition**, not one bad run —
 > "For people that aren't building agentic products, but you're using Claude Code, every 6 months delete your Claude MD. Delete your skills. Delete your hooks. See what the model does and it might surprise you." [06:55-07:08]
 
 Practical softening: git-stash `CLAUDE.md`, `.claude/skills/`, and hooks for a week rather than deleting outright, keep a stumble log, and reinstate only the lines that provably earn their tokens. *(Source: Boris Cherny, Y Combinator 2026-07-27.)*
+
+**Second-source corroboration, with a caveat about its weight.** A separate Anthropic voice — engineer Tariq, in "The new rules of context engineering for Claude 5 models" — independently reports the same 80%+ cut with **no measurable loss on coding evals**, and the same judgment-over-rules direction (see [Prompt Engineering § Prescriptions → Criteria](prompt-engineering-claude.md#prescriptions--criteria-the-beforeafter-artifact) for the before/after artifact). This wiki has that account only *secondhand*, via a video summarizing the article, and it arrives without eval names or magnitudes. Where the two agree, cite Cherny — the firsthand interview. The corroboration raises confidence that the cut happened and roughly how large it was; it does not add independent evidence for *why* it worked. The article itself has not been ingested and is the obvious next source.
+
+Note also the asymmetry in what the two sources recommend doing about it. Cherny's prescription is destructive and periodic — delete everything every six months, see what breaks. Tariq's, as reported, is structural — reorganize CLAUDE.md into a [router](context-engineering.md#claudemd-as-router-not-repository) so that rarely-needed content is deferred rather than deleted. These are complementary rather than competing: routing reduces what you pay for unconditionally, ablation determines whether a line deserves to exist at all. Routing a line that should have been deleted just moves the dead weight one hop away.
 
 ### Diagnose the Failure Class Before Escalating: Prompt → Skill → MCP
 

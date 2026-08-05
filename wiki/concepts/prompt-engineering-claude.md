@@ -9,7 +9,8 @@ sources:
   - "summaries/2026-04-14_nick-saraev_claude-routines-just-dropped.md"
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
-timestamp: "2026-08-03"
+  - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
+timestamp: "2026-08-05"
 ---
 
 # Prompt Engineering for Claude
@@ -193,6 +194,28 @@ The reasoning chain:
 
 Operationally this makes the prompt an artifact you **delete and rebuild**, not append to. The rebuild order is delete → use → add back only on *repeated* stumbles; the ablation method and the `CLAUDE_CODE_SIMPLE=1` instrument are documented on [Harness Engineering § Ablation](harness-engineering.md#ablation-the-named-procedure-cherny-july-2026). The patterns on this page are not thereby wrong — they are what you write *when* a line has earned its place.
 
+### Prescriptions → Criteria: The Before/After Artifact
+
+Cherny's argument above is about *how long* a line lives. A second Anthropic voice — engineer **Tariq**, in "The new rules of context engineering for Claude 5 models," reported secondhand via Jay E / RoboNuggets — supplies the clearest artifact for *what changes in kind* when you rewrite one. It also independently corroborates the 80%-cut datapoint, though as a secondhand account of a written article it is weaker evidence than the Cherny interview.
+
+The reported before/after from Claude Code's own system prompt [06:11-06:42]:
+
+```
+# Before (Opus 4 era)
+Default to writing no comments.
+Never write multi-paragraph docstrings.
+
+# After (Claude 5 era)
+Write code that reads like the surrounding code.
+Match its comment density, naming, and idiom.
+```
+
+The stated *then* rationale is worth keeping: at launch Anthropic needed hard guarantees against worst-case behaviour (deleting files, and so on), so the prompt carried "particularly strong guidance and rules that might not always be true." The guarantee was bought by accepting that the rule would sometimes be wrong.
+
+What changed is not length but **grammar**: the old line specifies an *output*, the new line specifies a *criterion* and delegates the output. That is the reusable test. Open a prompt or CLAUDE.md and mark every line that names an output rather than a standard; for each, ask whether a competent senior engineer with access to the codebase would need to be told it. If the line exists because you got burned once, rewrite it as the judgment you actually wanted rather than the behaviour you demanded.
+
+This is the same delegation move as [Task + Guardrails + Exit Criteria](#task--guardrails--exit-criteria) below, applied one level down — to the individual line rather than the prompt's overall shape. *(Source: Tariq via Jay E / RoboNuggets, 2026-08-03 — secondhand)*
+
 ### Task + Guardrails + Exit Criteria
 
 Cherny's positive prescription for prompt shape, and the corrective to the over-specification failure mode:
@@ -227,6 +250,24 @@ Cherny names a **fourth** wave from inside Anthropic, and it isn't a discipline 
 > "The skill nowadays is less about prompt engineering and more about figuring out how do you give Claude a hard task that seems a little bit too hard. And then how do you make it possible for Claude to verify its work." [20:13-20:29]
 
 Prompt engineer → context engineer → harness engineer → **hard task + self-verification**. He is explicit that this is not an endpoint either: *"these will kind of like come and go"* [20:08-20:13]. The practical consequence for anyone reading this page top-to-bottom: the marginal return on a better-worded prompt is small compared with the marginal return on building a verification channel the model can consult. *(Source: Boris Cherny, Y Combinator 2026-07-27)*
+
+## Unresolved Tensions
+
+### Are few-shot examples a steering asset or a constraint on exploration? *(surfaced 2026-08-05)*
+
+**Existing position** — [§ Use 3-5 Examples in XML Tags](#use-3-5-examples-in-xml-tags) above *(source: `summaries/2026-04-13_anthropic_claude-prompting-best-practices.md` — Anthropic official, April 2026)*:
+
+> "Few-shot examples are the most reliable steering mechanism. Wrap in `<example>` / `<examples>` tags. Make examples relevant, diverse (covering edge cases), and structured."
+
+**New position** — *(source: `summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md`, [08:25-08:51]; reported secondhand from Tariq, Anthropic — "Rule 2: Examples → design interfaces")*:
+
+> examples "actually constrain them to a certain exploration space" — give an interface, a set of guidelines and constraints, and let the model explore inside it.
+
+**Why this is held open rather than merged.** Both positions are Anthropic-attributed and neither has aged out: the existing line is first-party guidance from April 2026, the new one is reported first-party guidance for the following model generation. This is a live disagreement *inside one vendor*, not an outsider challenging a canon — which is precisely the case where silently overwriting one with the other would destroy the useful information.
+
+**Note the wiki is not neutral here.** [Tool Design for Agents § Goals Over Few-Shots](tool-design-for-agents.md#goals-over-few-shots-distributed-tool-ownership) already leans toward the new position from a different direction (Notion's organizational-scaling argument: few-shot-based tool specification bottlenecks feature teams). That makes it *more* important to record that this page — the canonical prompting reference — still says the opposite, rather than less.
+
+**The likely resolution, if someone wants to attempt it:** the two may be reconcilable on scope. Examples plausibly remain right for *arbitrary formats that must be matched exactly*, and wrong for *approach*, where they read as "do it this way" even when you meant "here's one way." A synthesis along that line would be more useful than a standing tension — but it needs a source, not an inference.
 
 ## Related Pages
 

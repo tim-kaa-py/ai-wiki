@@ -39,7 +39,8 @@ sources:
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
   - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
-timestamp: "2026-08-03"
+  - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
+timestamp: "2026-08-05"
 ---
 
 # Claude Code
@@ -62,6 +63,8 @@ Sessions are independent by default — each new session starts fresh. Persisten
 | **Auto memory** (`~/.claude/projects/<project>/memory/`) | Claude | Learnings, build commands, debugging patterns Claude discovered |
 
 Don't conflate them: **CLAUDE.md is instructions, auto memory is learnings.** Curate CLAUDE.md deliberately; let auto memory grow organically. Run `/memory` to audit auto memory; run `/init` to generate a starter CLAUDE.md.
+
+The reported Claude 5-generation shift is from *manual* memory (users prompted to write to CLAUDE.md via the `#` hotkey) to *automatic* memory (Claude saves what it judges relevant to the work and to you). The caveat is the practical one: automatic memory optimises for what the **model** judges salient, which is not necessarily what **you** judge salient. The `#` hotkey remains the cheapest way to force a specific fact in, and closing a substantive session with an explicit "remember X" is worth the one line. *(Source: Jay E / RoboNuggets, 2026-08-03)* See [Agent Memory Systems § Automatic Capture and the Salience Gap](../concepts/agent-memory-systems.md#automatic-capture-and-the-salience-gap).
 
 ### CLAUDE.md Scoping (Four Levels)
 
@@ -131,7 +134,20 @@ Important skill instructions go **near the top of SKILL.md** (truncation keeps t
 /context    # Live breakdown of context usage by category with optimization suggestions
 /memory     # See which CLAUDE.md and auto memory files loaded at startup
 /compact    # Summarize conversation to free context space (supports /compact "<focus>")
+/doctor     # Health check of the install + accumulated config (see below)
 ```
+
+### `/doctor` — Setup Health Check
+
+Ships with recent Claude Code. Five things it checks:
+
+1. **Install health** — broken or duplicate installs, file-path problems, version lag.
+2. **Dead weight in skills and MCP servers** — superseded skills to archive, servers to disable, leftover demo plugins.
+3. **CLAUDE.md thinning** — proposes trims.
+4. **Slow hooks** — flags hooks that add per-turn latency.
+5. **Reports before applying** — asks for confirmation rather than fixing silently.
+
+Worth a recurring cadence (monthly is a reasonable default) on any setup that accumulates skills and MCP servers. Note this is a *config-hygiene* instrument and not a substitute for [ablation](../concepts/harness-engineering.md#ablation-the-named-procedure-cherny-july-2026): `/doctor` finds what is broken, duplicated, or obviously unused; ablation finds what is *intact and used and still not earning its tokens*. Cherny's six-month delete-everything ritual answers a question `/doctor` cannot ask. *(Source: Jay E / RoboNuggets, 2026-08-03)*
 
 ## Extension Decision Map (Anthropic Official)
 
@@ -477,6 +493,8 @@ For every line in CLAUDE.md, ask: **"Would removing this make Claude wrong?"** I
 - **Hooks** = deterministic — use for what must happen every time, not things Claude should "usually" do
 
 CLAUDE.md is *advisory*. Hooks are *deterministic*. Don't put things in CLAUDE.md that need to happen reliably.
+
+**The router framing (2026).** Reported Anthropic guidance for the Claude 5 generation goes further than "prune": CLAUDE.md "becomes more powerful if you make it function as a router to your tree of files" rather than a central repository of every practice. Split by *when* content is needed, not by topic — everything needed on every turn stays, everything else moves to a domain file with one routing line pointing at it. See [Context Engineering § CLAUDE.md as Router, Not Repository](../concepts/context-engineering.md#claudemd-as-router-not-repository) for the sub-router pattern and the per-session token-cost argument. *(Source: Tariq via Jay E / RoboNuggets — secondhand)*
 
 ### The After-2-Corrections Rule
 

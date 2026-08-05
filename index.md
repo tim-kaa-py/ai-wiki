@@ -71,6 +71,7 @@ okf_version: "0.1"
 * [Graph RAG and Hybrid Search (GenPulse)](summaries/2026-07-07_genpulse_graph-rag-and-hybrid-search.md) - Advanced retrieval beyond pure vector search — hybrid (dense + sparse/BM25) search fused via RRF, knowledge-graph triplets, and hybrid RAG that combines both
 * [HybridRAG: A Fusion of Graph and Vector Retrieval — Mitesh Patel, NVIDIA (AI Engineer)](summaries/2025-07-22_ai-engineer_hybridrag-fusion-graph-vector-retrieval-mitesh-patel-nvidia.md) - An NVIDIA practitioner's guide to building production graph + hybrid RAG — triplet extraction via ontology-guided prompting, multi-hop retrieval, Ragas/reward-model evaluation, and the 80/20 optimization reality
 * [Boris Cherny: We Cut 80% of Claude Code's Prompt (Y Combinator)](summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md) - Claude Code's creator on deleting 80% of the system prompt via ablations, hard-task-plus-verification as the core skill, and dynamic workflows as a new axis of test-time compute
+* [Claude Code Just Changed Forever (6 NEW Rules by Anthropic Engineers) (Jay E | RoboNuggets)](summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md) - Secondhand breakdown of an Anthropic engineer's 'new rules of context engineering for Claude 5 models' — six then→now shifts including judgment over rules, progressive disclosure via router CLAUDE.md, and richer-than-markdown references
 
 ### Wiki Pages
 
@@ -211,4 +212,4 @@ okf_version: "0.1"
 
 ---
 
-**86 sources** | **90 wiki pages** | [Ingest Log](log.md)
+**87 sources** | **90 wiki pages** | [Ingest Log](log.md)

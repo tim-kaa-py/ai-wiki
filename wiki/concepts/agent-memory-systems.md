@@ -7,7 +7,8 @@ tags: [memory, agents, claude-code, context-engineering, hooks, best-practices, 
 sources:
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
-timestamp: "2026-05-17"
+  - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
+timestamp: "2026-08-05"
 ---
 
 # Agent Memory Systems: Storage / Injection / Recall
@@ -120,6 +121,20 @@ Both ride the hooks surface; both apply the storage/injection/recall lens; they 
 3. **Don't pick one open-source system over another** when they target different cells in the table. Layer them.
 4. **Treat injection as a fixed per-session token budget.** Frozen snapshots cached at ~1,300–3,000 tokens are cheap; uncapped snippet files are not.
 5. **Build recall in tiers,** cheapest check first. In-context check → fast index → expand → raw transcript.
+
+## Automatic Capture and the Salience Gap
+
+A *storage*-cell development, and the one place the framework above needs an amendment for the Claude 5 generation. Reported Anthropic guidance (Tariq's "new rules" article, secondhand via Jay E / RoboNuggets, 2026-08-03) frames it as a then→now reversal: **then**, users were told to write to CLAUDE.md explicitly via the `#` hotkey; **now**, Claude Code saves memories relevant to the work and to the user automatically [16:24-17:11].
+
+The caveat that matters, and it is the reporter's own rather than the article's: he does observe automatic saves happening, but after a genuinely productive session he still explicitly asks Claude to remember. **Automatic memory optimises for what the model judges salient, which is not necessarily what you judge salient.**
+
+This is worth naming as a distinct failure mode because the storage/injection/recall table above only asks *whether* a system writes, not *whose* judgment decides what gets written. Automatic capture converts a coverage problem into a **selection** problem — the store is no longer thin because nothing was written, it is thin in the specific places where the model's salience model and yours diverge. That divergence is invisible from inside the system: you find out at recall time, when the thing you assumed was captured isn't.
+
+Practical consequences:
+
+- The `#` hotkey is not deprecated by automatic memory — it is now the **override channel** for the selection problem, and it is the cheapest one available.
+- End substantive sessions with an explicit "remember X," or a short session-review step. One line, and it is the only lever that acts on salience rather than on volume.
+- This sharpens rather than contradicts the automemory verdict in the table above ("captures little"): the volume complaint and the salience complaint are different, and a system can improve on the first while leaving the second entirely open.
 
 ## The Platform View: Memory as a Primitive (Anthropic)
 

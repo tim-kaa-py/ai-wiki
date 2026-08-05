@@ -3,7 +3,7 @@ title: "Context Engineering"
 description: "The discipline of curating what tokens occupy a model's context window across a session, as the successor to prompt engineering"
 type: "concept"
 pillar: "understanding"
-tags: [context-engineering, context-rot, just-in-time-retrieval, sub-agents, compaction, prompt-engineering, agents, cdlc]
+tags: [context-engineering, context-rot, just-in-time-retrieval, sub-agents, compaction, prompt-engineering, agents, cdlc, progressive-disclosure, claude-md]
 sources:
   - "summaries/2025-09-29_anthropic_effective-context-engineering.md"
   - "summaries/2026-03-24_anthropic_harness-design-long-running-apps.md"
@@ -16,7 +16,8 @@ sources:
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
   - "summaries/2026-03-09_ibm-technology_is-rag-still-needed-rag-vs-long-context.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
-timestamp: "2026-08-03"
+  - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
+timestamp: "2026-08-05"
 ---
 
 # Context Engineering
@@ -141,6 +142,40 @@ Rules in `.claude/rules/` with `paths:` frontmatter only load when Claude reads 
 
 This is the practical instrument panel for the abstract context-engineering discipline above.
 
+## CLAUDE.md as Router, Not Repository
+
+The user-facing form of progressive disclosure, reported from an article by Anthropic engineer **Tariq** ("The new rules of context engineering for Claude 5 models") — *secondhand, via Jay E / RoboNuggets; the article itself has not been ingested.* Progressive disclosure is defined there as **"loading the right context at the right times."** The reported reversal:
+
+> **Then:** CLAUDE.md as "a central repository of every known practice that you might run into."
+> **Now:** it "becomes more powerful if you make it function as a router to your tree of files" [11:45-11:53].
+
+The stated reason is capability-side: Claude Code's system prompt used to carry a detailed code-review verification procedure — rarely needed, crucial when needed — because the model couldn't be trusted to go fetch it. Claude 5-generation models are said to be competent at fetching what they need, so it can be deferred.
+
+**The split rule that makes this operational:** split CLAUDE.md by *when the content is needed*, not by topic. Anything needed on every turn stays; anything needed only in a particular kind of session moves out to a domain file with one routing line pointing at it.
+
+### The Sub-Router Pattern
+
+Jay E's own two-level instantiation (his extension, not the article's — the article as reported says only "tree of files"):
+
+```
+CLAUDE.md  (thin router — "which department is this?")
+  ├── content.md    → ideation skills, research/production refs, video skills
+  ├── community.md
+  ├── product.md
+  ├── personal.md
+  └── business.md
+```
+
+Motivated by a 57,000-file workspace, but the pattern is generic: identify the "departments" of your work and give each a sub-index. Rule of thumb from the same source — past ~5 domains, add the middle layer rather than widening the router.
+
+### The Token-Cost Corollary
+
+Also Jay's own argument, not attributed to the article, and worth separating because **it survives even if you are sceptical of the capability-jump premise.** CLAUDE.md is injected at the top of *every* session, so a thick one spends its token cost per session, before your first prompt does any work. A thin router therefore compounds: more sessions, larger accumulated saving, later you hit usage limits. Straightforward arithmetic — it needs no claim about Claude 5 being smarter.
+
+Measure it: `wc -c CLAUDE.md` ÷ ~4 for a rough token count, × sessions per week. That is the standing tax on your operating contract.
+
+This is the same shape as two patterns already on the wiki, arrived at independently: Ryan Lopopolo's [AGENTS.md as table of contents, not encyclopedia](harness-engineering.md#harness-as-repo-artifacts-ryan-lopopolo-openai) (~100-line map into a structured `docs/` tree), and the L1/L2/L3 loading model of [Agent Skills](agent-skills.md#progressive-disclosure-three-levels). The router framing is the CLAUDE.md-specific case of a principle the wiki already holds in two other places. *(Source: Tariq via Jay E / RoboNuggets, 2026-08-03 — secondhand)*
+
 ## Sub-Agents as Context Buffers
 
 Cole Medin's framing (April 2026) diverges from the common "sub-agents = parallelism" pitch: for him, sub-agents exist primarily for **context budgeting**, not concurrency. A research task (codebase exploration, web search, dependency analysis) burns 30k–100k tokens; the parent agent only needs the 2k-token summary. Push the research into a sub-agent that burns those tokens in *its own* context window and returns a condensed result.
@@ -170,6 +205,42 @@ Patrick Debois (Tessl, ex-DevOps originator) sharpens the framing in *Context Is
 This complements the Anthropic-derived view above: context engineering is *what tokens occupy the window*; the CDLC is *the lifecycle of the artifacts that produce those tokens*. See [Context Development Life Cycle](context-development-life-cycle.md) for the five-phase breakdown and the eval-tax argument it implies.
 
 The hidden cost (from Debois's Q&A): the time you save by writing context instead of code gets spent writing the evals that make the context trustworthy — the meta-skill is "the process for building the right evals." This pulls eval discipline (see [Agent Evaluation](agent-evaluation.md)) into the context-engineering loop, not just the model-output loop.
+
+## Reference Artifacts Past Markdown
+
+A format claim that cuts against the wiki's own default of markdown-for-everything. Reported from the same Tariq article: **then**, plans, specs, and reference artifacts were written in markdown because markdown is simple and light and weaker models handled it most reliably; **now**, models handle "increasingly more complicated references," so the format constraint no longer binds [18:04-19:38].
+
+The reasoning underneath the rule is stronger than the rule itself, and it is Jay's, not the article's — three audiences, one format:
+
+1. **The agent parses it fine** — "under the hood, this is all still just code and still just text."
+2. **You can open it in a browser and see it.** A markdown file listing colour hexes does not convey a palette; an HTML page renders it.
+3. **Third parties can read it too** — reference artifacts double as communication artifacts.
+
+The conclusion: markdown's dominance was never about markdown being *good*, only about it being *safe* under a model-capability constraint. Remove the constraint and the format choice should be re-derived from the audience rather than inherited.
+
+**Where this does and doesn't apply.** It applies to artifacts that lose information in markdown — design systems, dashboards, anything with colour, layout, or spatial relationships. It does *not* apply to CLAUDE.md, skill files, or wiki pages: those are read by the agent as instructions, and markdown's plainness is the point (see [Give the Model What It Wants](harness-engineering.md#give-the-model-what-it-wants) — cater to what the model was pretrained on).
+
+Second-order use: an HTML explainer is also a comprehension tool for *you*. Asking for a long analytical output to be re-rendered as a single-file HTML explainer costs tokens and saves attention — a good trade when your token budget is loose and your attention is tight. *(Source: Tariq via Jay E / RoboNuggets, 2026-08-03 — secondhand)*
+
+## Unresolved Tensions
+
+### Has context rot materially receded in the Claude 5 generation? *(surfaced 2026-08-05)*
+
+**Existing position** — *(sources: Cole Medin, `summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md`; Matt Pocock via [Smart Zone vs Dumb Zone](smart-zone.md))*:
+
+> "A 1M-token window does **not** eliminate context overload — the dense-reasoning ceiling for coding stays roughly where it was."
+
+Held alongside this page's foundational claim: *"More context ≠ better answers."*
+
+**New position** — *(source: `summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md`, [15:16-15:49]; reported secondhand from Tariq, Anthropic)*:
+
+> models "were more likely to listen to instructions at the end of the context window, which are the most recent messages, than the ones at the start" — and this has "actually changed" with Fable 5 / Opus 5.
+
+**Why this is held open rather than merged.** The two claims may not be about the same mechanism: the existing position concerns a *dense-reasoning ceiling* as the window grows, the new one concerns *recency dominance* within a filled window. They are adjacent, and a reader could take the new claim as narrowing the old rather than contradicting it. But the new claim is asserted with no evidence, benchmark, or magnitude, and reaches this wiki secondhand — not enough to move a position held here from two independent practitioners.
+
+**Why it matters operationally.** This is not a bookkeeping disagreement. The recency-dominance claim is the load-bearing premise for the deduplication rule in [Tool Design for Agents § Deduplicate Between System Prompt and Tool Descriptions](tool-design-for-agents.md#deduplicate-between-system-prompt-and-tool-descriptions): repetition was a workaround for recency dominance, so deleting duplicate instructions is only safe to the extent that recency dominance has genuinely receded. If it has receded only partially, that rule is riskier than it reads.
+
+**What would resolve it:** ingesting Tariq's original article ("The new rules of context engineering for Claude 5 models"), or any first-party benchmark on instruction adherence by position-in-window for the Claude 5 generation.
 
 ## Related Pages
 
