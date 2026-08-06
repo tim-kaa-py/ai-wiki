@@ -72,6 +72,7 @@ okf_version: "0.1"
 * [HybridRAG: A Fusion of Graph and Vector Retrieval — Mitesh Patel, NVIDIA (AI Engineer)](summaries/2025-07-22_ai-engineer_hybridrag-fusion-graph-vector-retrieval-mitesh-patel-nvidia.md) - An NVIDIA practitioner's guide to building production graph + hybrid RAG — triplet extraction via ontology-guided prompting, multi-hop retrieval, Ragas/reward-model evaluation, and the 80/20 optimization reality
 * [Boris Cherny: We Cut 80% of Claude Code's Prompt (Y Combinator)](summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md) - Claude Code's creator on deleting 80% of the system prompt via ablations, hard-task-plus-verification as the core skill, and dynamic workflows as a new axis of test-time compute
 * [Claude Code Just Changed Forever (6 NEW Rules by Anthropic Engineers) (Jay E | RoboNuggets)](summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md) - Secondhand breakdown of an Anthropic engineer's 'new rules of context engineering for Claude 5 models' — six then→now shifts including judgment over rules, progressive disclosure via router CLAUDE.md, and richer-than-markdown references
+* [Opus 5 Is Exhausting. Anthropic Reveals The Fix. (Ray Amjad)](summaries/2026-08-05_ray-amjad_opus-5-is-exhausting-anthropic-reveals-the-fix.md) - Opus 5's default prose is jargon-dense and tiring to read; Claude Code output styles are the recommended fix, and they work best as a per-project, per-mood dial rather than a set-once preference
 
 ### Wiki Pages
 
@@ -136,6 +137,7 @@ okf_version: "0.1"
 * [Florian Buetow](wiki/people/florian-buetow.md) - Engineer arguing that engineered guardrail environments, not human review, must catch agent code errors
 * [Product Overhang](wiki/concepts/product-overhang.md) - Boris Cherny's paired concepts of product overhang (capabilities today's models have that no product elicits) and hobbling (products actively getting in the model's way)
 * [Dynamic Workflows](wiki/concepts/dynamic-workflows.md) - Claude Code's sandboxed agent-orchestration primitive — an "algebra for agents" Cherny frames as a new axis of test-time compute
+* [Claude Code Output Styles](wiki/how-tos/claude-code-output-styles.md) - Persistent, per-project modifiers on how Claude Code writes back to you — the config-level fix for output that's technically correct but exhausting to read
 
 ## Understanding AI
 

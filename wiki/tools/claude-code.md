@@ -40,7 +40,8 @@ sources:
   - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
-timestamp: "2026-08-05"
+  - "summaries/2026-08-05_ray-amjad_opus-5-is-exhausting-anthropic-reveals-the-fix.md"
+timestamp: "2026-08-06"
 ---
 
 # Claude Code
@@ -157,6 +158,7 @@ The features-overview doc gives Anthropic's canonical "which extension when" map
 |-----------------|------------------|
 | Convention wrong twice | CLAUDE.md entry |
 | Same prompt every time | Skill |
+| Same *voice or format* every turn | [Output style](../how-tos/claude-code-output-styles.md) |
 | Side task floods context | Subagent |
 | Subagents need to share findings | Agent team |
 | Missing external data | MCP server |
@@ -165,13 +167,14 @@ The features-overview doc gives Anthropic's canonical "which extension when" map
 
 **Build the extension layer incrementally — don't design it upfront.** Let friction accumulate and respond to each trigger.
 
-Five context-vs-determinism tradeoffs to internalize:
+Six context-vs-determinism tradeoffs to internalize:
 
 1. **CLAUDE.md vs Skills.** CLAUDE.md is paid every turn; skill bodies load only when invoked. Anything that's only sometimes needed belongs in a skill or path-scoped rule.
 2. **Skills vs Subagents.** Skills add content to your main window; subagents run their own context and only return a summary. 5+ file reads → subagent.
 3. **CLAUDE.md vs Hooks.** CLAUDE.md is **advisory**; hooks are **deterministic**. Critical rules ("don't modify .env", "always format before commit") are hooks, not instructions.
 4. **MCP vs Skills.** MCP gives Claude the *capability* to interact with external systems; skills give *knowledge of how to use them*. Pair them.
 5. **Subagents vs Agent Teams.** Subagents = hub-and-spoke (children → main only). Agent teams = peer-to-peer (teammates can message each other). See [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md).
+6. **Skills vs Output Styles.** Both answer "I keep repeating myself," but on different axes. A repeated **task or workflow** is a skill; a repeated **voice or format** is an [output style](../how-tos/claude-code-output-styles.md). Skills are *invoked*, so they're reactive — you pay for the unwanted output before fixing it. Styles are *always on*, so they're preventive. Note the trap: a custom output style strips the built-in software-engineering instructions unless you set `keep-coding-instructions: true`.
 
 Plugins bundle extensions for reuse: skills + agents + hooks + MCP — managed > user > project name overrides for skills/subagents; hooks always merge.
 
