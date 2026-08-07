@@ -7,7 +7,8 @@ tags: [rag, architecture, embeddings, vector-database, tutorial]
 sources:
   - "summaries/2025-08-31_krish-naik_introduction-to-understanding-rag.md"
   - "summaries/2026-07-07_genpulse_graph-rag-and-hybrid-search.md"
-timestamp: "2026-07-12"
+  - "summaries/2026-07-29_ai-engineer_persona-engineering-field-guide-synthetic-personas.md"
+timestamp: "2026-08-07"
 ---
 
 # Retrieval-Augmented Generation (RAG)
@@ -35,6 +36,10 @@ Fine-tuning — retraining the model's billions of parameters on your private da
 RAG sidesteps all three: update the knowledge base (re-embed only the changed documents) and the system is current immediately, with no retraining.
 
 **The cleaner interview framing** (standard industry distinction, tightening the creator's either/or): fine-tuning changes *how the model behaves* — its style, tone, and format; RAG changes *what knowledge the model can access*. For private and fast-changing factual data, RAG usually wins; for teaching a new skill, tone, or output format, fine-tuning still has a role. The two are **complementary, not strictly either/or**.
+
+**Independent empirical support from an unrelated domain.** The Subpop paper, cited in Ishan Anand's field guide to [synthetic personas](synthetic-personas.md), fine-tuned a model on survey responses from a set of population groups — and alignment improved on *unseen* groups by almost the same margin [12:20]. If the fine-tune had injected knowledge, the gains would have stayed with the groups it saw. That they generalised suggests the model already held the knowledge and lacked only the format: "the model itself has a latent understanding of these groups. It just didn't know how to express it in the format of surveys" [12:35].
+
+The practical test this yields: **before assuming a knowledge gap, check whether it is an expressive gap.** If the model produces the right content in prose but the wrong content in your required schema, that is a format problem a small fine-tune (or a better output contract) can fix — and reaching for retrieval will not help. *(Source: Ishan Anand, AI Engineer 2026-07-29)*
 
 ## The Two Pipelines
 

@@ -143,6 +143,7 @@ okf_version: "0.1"
 
 ### Sources
 
+* [Persona Engineering: A Field Guide to AI Synthetic Personas (AI Engineer)](summaries/2026-07-29_ai-engineer_persona-engineering-field-guide-synthetic-personas.md) - A field guide to synthetic personas — what they reliably predict, the three ways they fail, and why human self-consistency sets the accuracy ceiling
 * [We just figured out how AI actually works (J-Space)](summaries/2026-07-08_matthew-berman_we-just-figured-out-how-ai-actually-works-j-space.md) - Matthew Berman walks through Anthropic's J-space / global workspace paper — a small set of privileged internal representations Claude can report on, reason with, and be steered through
 * [Rethinking AI Agents: The Rise of Harness Engineering (PY)](summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md) - Argues agents equal model plus harness, citing papers showing orchestration code drives large performance swings
 * [The Future of MCP — David Soria Parra, Anthropic (AI Engineer)](summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md) - Anthropic's David Soria Parra on why 2026 agents need a connectivity stack of Skills, MCP, and CLI/computer-use plus progressive discovery and programmatic tool calling
@@ -172,6 +173,8 @@ okf_version: "0.1"
 * [Agent Evaluation](wiki/concepts/agent-evaluation.md) - Anthropic's vocabulary and grader taxonomy for evaluating LLM agents, plus non-determinism metrics and a practical roadmap
 * [Eval Awareness](wiki/concepts/eval-awareness.md) - When a model recognizes it is being evaluated and changes behavior to exploit that context, illustrated by the BrowseComp incident
 * [Infrastructure Noise in Evals](wiki/concepts/infrastructure-noise-in-evals.md) - Anthropic's finding that agentic benchmark scores depend on runtime resources, so small leaderboard gaps can be infrastructure artifacts
+* [Distribution Evaluation](wiki/concepts/distribution-evaluation.md) - How to evaluate a system whose honest output is a spread rather than an answer — forecast vs. measurement, two metric families, and measuring the noise floor of your own ground truth
+* [Synthetic Personas](wiki/concepts/synthetic-personas.md) - LLM-simulated respondents used as forecasts of human answers — what they reliably predict, the three ways they fail, and why human self-consistency caps their accuracy
 * [The 'think' Tool](wiki/concepts/think-tool.md) - A no-op tool that lets an agent record reasoning mid-chain before its next tool call, distinct from extended thinking
 * [Contextual Retrieval](wiki/concepts/contextual-retrieval.md) - Anthropic's RAG chunking technique that prepends an LLM-generated situating summary to each chunk before embedding or indexing
 
@@ -214,4 +217,4 @@ okf_version: "0.1"
 
 ---
 
-**87 sources** | **90 wiki pages** | [Ingest Log](log.md)
+**88 sources** | **92 wiki pages** | [Ingest Log](log.md)

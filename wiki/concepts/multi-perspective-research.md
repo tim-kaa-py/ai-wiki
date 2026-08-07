@@ -6,7 +6,8 @@ pillar: "building"
 tags: [research, agents, multi-agent, verification, claude-code, workflow, agent-skills, best-practices]
 sources:
   - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
-timestamp: "2026-07-25"
+  - "summaries/2026-07-29_ai-engineer_persona-engineering-field-guide-synthetic-personas.md"
+timestamp: "2026-08-07"
 ---
 
 # Multi-Perspective Research (STORM Pattern)
@@ -52,6 +53,17 @@ The default cast is **Practitioner, Academic, Skeptic, Economist, Historian**. E
 The cast is domain-specific and meant to be replaced. For a technical-problem research variant, the five general lenses are the wrong roster — candidates that map better: the person who maintains the library, the person who has to operate it at 3am, the person who benchmarked it, the person who migrated off it, and a skeptic who assumes the docs are lying.
 
 A **fixed lens count** is a cost and rate-limit feature, not just a design choice — bounded fan-out makes the run predictable. If you expand the roster, expand the verification budget with it.
+
+### What a Lens Actually Samples
+
+A caveat imported from an adjacent domain, where persona construction has been measured against ground truth rather than judged by output quality. Ishan Anand's field guide to [synthetic personas](synthetic-personas.md) reports that in voting-pattern research, persona construction "was actually amplifying bias within the model as they got more and more detailed... throwing it further and further astray from reality" [11:17] — because a persona is elicited from the model's latent representation of a group, and that representation carries training-data stereotype alongside real signal. Each added detail conditions harder on it.
+
+Scope this correctly before applying it. That research measures *fidelity to a specific real human*, which is not what a STORM lens is for — a lens is a coverage device, judged by whether it raises questions the others miss. The finding does not transfer as a verdict. Two things it does imply here:
+
+- **"The skeptic" may be the model's caricature of a skeptic** rather than a competent adversary. That degrades coverage in a way no citation check catches, because the verification fleet audits whether claims are true, not whether the right claims were raised. The [coverage self-critique](#coverage-self-critique-the-missing-lens) is the only stage positioned to notice.
+- **Elaborating a lens persona is not obviously an improvement.** Absent ground truth for "did this roster find more real issues," longer persona blurbs are an untested knob, not a tuning win. The cheap check is Anand's: run the fork against a topic you already know cold (fork step 3 above) and see whether a richer roster actually surfaces more of what you know is there.
+
+The distinct move worth stealing outright: he separates **grounding the world** (fixing free variables the model would otherwise invent) from **elaborating the person** (conditioning on identity). The first is safe to maximize; the second is not. For a lens roster, that means investing in shared task context — your stack, constraints, what "actionable" means — over richer character sketches.
 
 ## Verification Is the Load-Bearing Stage
 
@@ -132,3 +144,4 @@ Practical consequence: do not adopt this pattern *because* of the 25% figure. Ad
 - [Agent Skills](agent-skills.md) — the packaging format
 - [Claude Code Skills](../how-tos/claude-code-skills.md) — authoring, invocation, and the two-file layout
 - [Auto Research](auto-research.md) — the sibling loop that optimizes a *skill*, where this one executes a *research task*
+- [Synthetic Personas](synthetic-personas.md) — personas measured against ground truth, and why persona detail is non-monotonic

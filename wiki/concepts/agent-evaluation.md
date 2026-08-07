@@ -14,7 +14,8 @@ sources:
   - "summaries/2026-04-22_anthropic-docs_define-success-criteria-and-build-evaluations.md"
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
-timestamp: "2026-08-03"
+  - "summaries/2026-07-29_ai-engineer_persona-engineering-field-guide-synthetic-personas.md"
+timestamp: "2026-08-07"
 ---
 
 # Agent Evaluation
@@ -75,9 +76,25 @@ Treat these as distinct objects. A grader scores *outcomes* based on criteria in
 |--------|-----------|-----------|
 | **Code-based** | Fast, objective, cheap, reproducible | Brittle — rejects valid variations; doesn't generalize past string/exit-code checks |
 | **Model-based** | Flexible, handles free-form output, scales | Needs calibration against human labels; drifts; costs tokens |
-| **Human** | Gold standard for nuanced judgment | Slow, expensive, doesn't scale — use as the anchor, not the loop |
+| **Human** | Best available anchor for nuanced judgment | Slow, expensive, doesn't scale — and noisy: its self-agreement rate is the ceiling on every score calibrated against it |
 
-Rule of thumb: code where you can, model where you must, human to calibrate.
+Rule of thumb: code where you can, model where you must, human to calibrate — then measure how much the humans agree with themselves.
+
+### The Anchor Is Noisy, and Its Noise Is Your Ceiling
+
+Human judgment is the anchor because nothing better exists, not because it is error-free. Treating it as a gold standard invites a specific mistake: reading agreement-with-human-labels as a target approachable to 100%, when the labels themselves disagree.
+
+The datum that makes this concrete comes from outside agent evals. In a study that brought ~1,000 participants back two weeks later to redo the same battery, "the humans on average were only 80% consistent to themselves" [17:40] — "so that sets a noise floor as how accurate our models could ever get because the humans themselves are fundamentally noisy" [17:51]. A model cannot be more consistent with a human than that human is with themselves.
+
+**Scope the number before you borrow it.** That 80% is survey respondents re-answering questions about their *own attitudes* — a deliberately hard case, with two weeks of drift and no rubric. Expert graders scoring model output against a written rubric are a different population doing a different task, and their self-agreement is plausibly much higher. **Do not import 80% as your ceiling. Measure your own.** The point transfers; the figure does not.
+
+**How to apply.** Before trusting any score calibrated against human labels:
+
+1. **Measure grader self-agreement.** Re-label a sample with the same graders after a gap, or use the split-half recipe on labels you already have — see [Distribution Evaluation § The Noise Floor of Your Ground Truth](distribution-evaluation.md#the-noise-floor-of-your-ground-truth).
+2. **Report scores against that ceiling, not against 100%.** A judge at 85% against labels with 88% self-agreement is near-saturated, not mediocre.
+3. **Treat a low floor as a rubric bug.** Graders who disagree with themselves are usually reporting that the rubric is underspecified — which is fixable, and worth more than any grader tuning downstream of it.
+
+This composes with the two other ceilings on this page: [infrastructure noise](infrastructure-noise-in-evals.md) bounds resolution from the runtime side, label noise bounds it from the ground-truth side, and a score gap smaller than either is not a result. *(Sources: Anthropic, *Demystifying evals for AI agents*; Ishan Anand, AI Engineer 2026-07-29)*
 
 ### LLM-as-judge tips (Anthropic official guidance)
 
@@ -116,6 +133,14 @@ Agent runs vary even with temperature 0 (tool calls, retries, environment jitter
 
 The gap between pass@k and pass^k is your variance budget.
 
+### What resampling actually buys
+
+Both metrics measure *model variance* — and that is all they measure. Ishan Anand's forecast-vs-measurement distinction is the sharpest statement of the boundary: a rain gauge is a measurement instrument, so a thousand gauges reduce measurement error, but a forecast rerun "a thousand times without changing the input" leaves the model and the inputs untouched — "it improves my estimate of what the model is telling me but it doesn't make the forecast itself more accurate" [16:24].
+
+Consequence for eval design: trials characterise the spread; only held-out ground truth moves an accuracy claim. Any pipeline that samples a model N times and reads the spread as a confidence interval *about reality* has confused the two. See [Distribution Evaluation § Forecast vs. Measurement](distribution-evaluation.md#forecast-vs-measurement). *(Source: Ishan Anand, AI Engineer 2026-07-29)*
+
+**Repetition is not perturbation.** Trials re-run the *same* prompt. They cannot detect prompt artefacts — order bias, wording sensitivity — because the artefact is constant across every trial. In one persona study, swapping answer-option order flipped results so hard that averaging the two orderings "washed out into noise, into 50/50" [08:03]; no number of same-order trials would have surfaced that. Budget perturbation variants (reversed order, rewording, adversarial pushback) as a separate axis from k.
+
 ## Per-Agent-Class Patterns
 
 - **Coding agents** — test execution is a pass/fail signal. SWE-bench Verified is the canonical example; the 49% SWE-bench result with just Bash + Edit tools showed that "tool ergonomics > prompt fiddling" (*SWE-bench Sonnet*).
@@ -139,6 +164,8 @@ Evaluation itself has failure modes covered on sibling pages:
 - **Infrastructure noise** makes small score differences meaningless — see [infrastructure-noise-in-evals](./infrastructure-noise-in-evals.md).
 - **Eval awareness** means capable models can recognize and game benchmarks — see [eval-awareness](./eval-awareness.md).
 - **AI-resistant design** is an open problem for hiring/skill evaluations — see [ai-resistant-evaluation-design](../comparisons/ai-resistant-evaluation-design.md).
+- **Unmeasured ground-truth noise** caps every score calibrated against human labels — see [The Anchor Is Noisy, and Its Noise Is Your Ceiling](#the-anchor-is-noisy-and-its-noise-is-your-ceiling).
+- **Right/wrong scoring is the wrong shape** for systems whose honest output is a spread rather than an answer — see [Distribution Evaluation](distribution-evaluation.md).
 
 ## Three-Tier Eval Stack (Notion, April 2026)
 
@@ -207,6 +234,33 @@ Operational rule: in CI, fail the build only if a critical eval drops *below its
 
 **The reading that would dissolve it** (not adopted here): the two may be compatible at different timescales — a frontier tier that lasts three generations *is* "the only tier still giving signal" relative to tiers that saturate in one. If a future source pins down how long Notion's *Last Exam* actually held, this collapses to a quantitative question rather than a disagreement.
 
+### Should an LLM judge emit a score directly, or emit free text you project onto a scale afterwards?
+
+*Surfaced 2026-08-07.*
+
+**Position A — make the judge emit the number.** [Source: `summaries/2026-04-22_anthropic-docs_define-success-criteria-and-build-evaluations.md`, via [LLM-as-judge tips](#llm-as-judge-tips-anthropic-official-guidance)]
+
+> "**Empirical output only.** Ask the judge to output `correct/incorrect` or a `1-5` integer — not free-form prose. Prose grades don't aggregate."
+
+Reinforced structurally by the [Eval method × criteria mapping](#eval-method--criteria-mapping) table above, which routes tone/empathy to an "LLM Likert scale (1–5)" and context utilization to an "LLM ordinal scale (1–5)."
+
+**Position B — let the model answer in text, then project.** [Source: `summaries/2026-07-29_ai-engineer_persona-engineering-field-guide-synthetic-personas.md`, [13:08-15:35]]
+
+> "Replace forced-choice scales with free text plus a similarity mapping onto human-written anchors. Applies far beyond market research — any time you need structured scores out of an LLM."
+
+The mechanism: ask the question without a numeric scale, have *humans* write exemplar texts for each scale point, embed both, and normalize the similarities into a probability distribution over the scale. Anand claims the generalization explicitly — it "generalises immediately to structured extraction and LLM-judge scoring, where forcing a number up front discards exactly the nuance you then try to recover."
+
+**What each position is protecting.** This is the part that makes the tension usable rather than decorative.
+
+- Position A protects **aggregation**. A grader that returns prose cannot be averaged, thresholded, tracked across runs, or wired into a CI gate. Anthropic's rule is what makes an eval a *metric* instead of a reading exercise, and it is the precondition for everything on this page from pass@k to error budgets.
+- Position B protects **distribution shape**. Forcing the number up front is where the spread dies: "LLMs, even when they get the persona averages right, they very often lose the details. The variations get muddled together in the middle" [14:58]. Measured, naive prompting scored near the bottom of the shape-similarity range while the anchoring approach scored "up near the top" [15:21].
+
+Neither author addressed the other's concern, so the wiki holds both rather than inventing a reconciliation on their behalf.
+
+**Why it matters operationally.** The two rules select different graders for the same job. Position A is unambiguously right where the target is genuinely categorical — a correctness gate has no distribution to preserve, and a free-text detour there is cost with no payoff. Position B bites where the honest output is a spread: rubric dimensions like tone, helpfulness, or severity, where a collapsed Likert distribution can look healthy on every aggregate metric and still be useless for the decision it feeds. The unresolved part is the middle: most production rubric dimensions are spread-valued but are graded as if they were categorical, and no source here has measured what that costs.
+
+**What would resolve it:** a direct comparison on an LLM-judge task rather than a survey task — same rubric, forced integer vs. free-text-plus-anchoring, scored against human labels on both a correlation and a shape metric. Note also the possible dissolution (not adopted here): Anand's step 6 *does* end in an aggregatable numeric distribution, so "free text plus projection" may satisfy Position A by a longer route, making this a disagreement about elicitation rather than about output format. The full technique is on [Distribution Evaluation § Eliciting the Distribution](distribution-evaluation.md#eliciting-the-distribution-semantic-similarity-anchoring).
+
 ## Sources
 
 - *Demystifying evals for AI agents* — Anthropic, 2026-01-09
@@ -216,3 +270,4 @@ Operational rule: in CI, fail the build only if a critical eval drops *below its
 - *Eval awareness in Opus 4.6's BrowseComp performance* — Anthropic, 2026-03-06
 - *Notion's Token Town: 5 Rebuilds, 100+ Tools, MCP vs CLIs and the Software Factory Future* — Latent Space, 2026-04-15
 - *Context Is the New Code* — Patrick Debois, AI Engineer, 2026-05-03
+- *Persona Engineering: A Field Guide to AI Synthetic Personas* — Ishan Anand, AI Engineer, 2026-07-29

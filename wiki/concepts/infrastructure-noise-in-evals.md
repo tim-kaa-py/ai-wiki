@@ -6,7 +6,8 @@ pillar: "understanding"
 tags: [evaluation, agents, benchmarks, infrastructure, swe-bench, terminal-bench]
 sources:
   - "summaries/2026-04-18_anthropic_quantifying-infrastructure-noise.md"
-timestamp: "2026-04-20"
+  - "summaries/2026-07-29_ai-engineer_persona-engineering-field-guide-synthetic-personas.md"
+timestamp: "2026-08-07"
 ---
 
 # Infrastructure Noise in Agentic Evals
@@ -43,6 +44,18 @@ When comparing agent scores across papers, labs, or leaderboards:
 - Discount any difference smaller than the reported (or plausible) noise floor.
 - Be especially cautious with 1-3pp gaps claimed as SOTA.
 
+## The Other Noise Floor
+
+Runtime variance is one of two floors under any benchmark. The second is **label variance in the ground truth itself**: where the reference answers come from human judgment, the humans disagree with themselves. In a re-tested cohort measured by Ishan Anand's cited persona study, "the humans on average were only 80% consistent to themselves" two weeks later [17:40] — which caps how well any model can ever score against them.
+
+The two compose rather than compete. Usable benchmark resolution is bounded by *both* the infrastructure band measured here and the self-agreement rate of the labels, and a score gap smaller than either is not a result. The label floor is computable from a labelled set you already have — see [Distribution Evaluation § The Noise Floor of Your Ground Truth](distribution-evaluation.md#the-noise-floor-of-your-ground-truth) for the split-half recipe.
+
+## Related Pages
+
+- [Distribution Evaluation](distribution-evaluation.md) — the ground-truth label noise floor and how to measure it
+- [Agent Evaluation](agent-evaluation.md) — the eval vocabulary and grader taxonomy this failure mode sits under
+
 ## Sources
 
 - *Quantifying infrastructure noise in agentic coding evals* — Gian Segato, Anthropic, 2026-04-18
+- *Persona Engineering: A Field Guide to AI Synthetic Personas* — Ishan Anand, AI Engineer, 2026-07-29
