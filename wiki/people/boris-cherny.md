@@ -7,7 +7,8 @@ tags: [claude-code, agentic-engineering, prompt-engineering, verification, anthr
 sources:
   - "summaries/2026-01-02_bcherny_claude-code-tips-from-creator.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
-timestamp: "2026-08-03"
+  - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
+timestamp: "2026-08-13"
 ---
 
 # Boris Cherny
@@ -74,6 +75,7 @@ Runs 5-10 Claudes in parallel (`claude.ai/code` tabs alongside local terminal se
 
 - **Plan mode.** Ryan Lopopolo (OpenAI) argues the opposite default — unread approved plans encode unwanted instructions the rollout then faithfully follows. See [Agentic Coding Workflow § Plan-Mode Skepticism](../how-tos/agentic-coding-workflow.md#plan-mode-skepticism-ryan-lopopolo-openai). The two are not fully reconcilable; the reading is that Boris's context is interactive work where a human actually reads the plan.
 - **Spec detail.** His "stop over-specifying" stance sits uneasily against the spec-quality-is-the-bottleneck framing on [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md).
+- **Loop novelty.** Frank Coyle (AI Engineer, Aug 2026) quotes Cherny's "his job is to write loops" [06:16] alongside Steinberger's version and answers *"loops are the new big thing, right? Well, no, they're not"* [06:32], invoking Böhm–Jacopini (1966) to argue the loop is the third Turing-completeness primitive rather than an agentic-era invention. This contests the *framing* rather than the practice — Cherny never claims the construct is new — but it is the sharpest public pushback on the loop-engineering rhetoric to date. See [Agent Loops § The Loop as a Recovered Primitive](../concepts/agent-loops.md#the-loop-as-a-recovered-primitive-not-a-new-one-coyle).
 
 ## Related Pages
 

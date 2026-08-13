@@ -73,6 +73,7 @@ okf_version: "0.1"
 * [Boris Cherny: We Cut 80% of Claude Code's Prompt (Y Combinator)](summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md) - Claude Code's creator on deleting 80% of the system prompt via ablations, hard-task-plus-verification as the core skill, and dynamic workflows as a new axis of test-time compute
 * [Claude Code Just Changed Forever (6 NEW Rules by Anthropic Engineers) (Jay E | RoboNuggets)](summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md) - Secondhand breakdown of an Anthropic engineer's 'new rules of context engineering for Claude 5 models' — six then→now shifts including judgment over rules, progressive disclosure via router CLAUDE.md, and richer-than-markdown references
 * [Opus 5 Is Exhausting. Anthropic Reveals The Fix. (Ray Amjad)](summaries/2026-08-05_ray-amjad_opus-5-is-exhausting-anthropic-reveals-the-fix.md) - Opus 5's default prose is jargon-dense and tiring to read; Claude Code output styles are the recommended fix, and they work best as a per-project, per-mood dial rather than a set-once preference
+* [Anthropic's CCA Exam as a Field-Guide for Agentic Engineering (Frank Coyle, UC Berkeley — AI Engineer)](summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md) - Anthropic's certification blueprint read as a signal about production agent design — organised around anti-patterns, with a contrarian argument that the agentic loop is a rediscovered 1966 primitive
 
 ### Wiki Pages
 

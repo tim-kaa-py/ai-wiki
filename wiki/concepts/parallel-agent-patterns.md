@@ -14,7 +14,8 @@ sources:
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
   - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
-timestamp: "2026-08-03"
+  - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
+timestamp: "2026-08-13"
 ---
 
 # Parallel Agent Patterns
@@ -259,6 +260,34 @@ Cherny's larger claim — that this constitutes a genuinely **new axis of test-t
 - **Parallelism is expensive.** 15× tokens (research system) or 2,000 sessions (compiler). Only justified for high-value work.
 - **Keep coordination thin.** Lock files or lead-agent dispatch — not elaborate messaging protocols.
 - **Most effort is not in the agent.** It's in tests, tool descriptions, and the evaluation loop.
+- **Give each agent only its slice.** See [Group-Think as a Multi-Agent Failure Mode](#group-think-as-a-multi-agent-failure-mode) below — context isolation is a correctness requirement, not only a cost tactic.
+
+## Group-Think as a Multi-Agent Failure Mode
+
+Frank Coyle (UC Berkeley, Aug 2026) names a failure mode that the cost-based arguments for context isolation do not cover: agents that collaborate **converge**.
+
+> "When you get a bunch of agents together collaborating and talking to each other, there's a tendency to have group think. And all the agents seem to kind of devolve into one idea." [14:25]
+
+His analogy is social rather than technical — *"you're at a party, and everybody wants pizza except you, but then people talk you into — you don't want to spoil the party, so you'll go along. And it seems that agents kind of work in the same way"* [14:42].
+
+**Why this is a distinct argument.** The usual case for isolating context runs on two chains, both of which Coyle also states: *"context means tokens, tokens mean money, and the more context you have, the more confused the LLM is going to be in giving you an answer"* [13:16] — an economic chain and an accuracy chain. Group-think is a third, **epistemic** chain, and it licenses a stricter design response:
+
+| Chain | Claim | Satisfied by |
+|---|---|---|
+| Economic | More context → more tokens → more cost | Summarising what you pass downstream |
+| Accuracy | More context → more confusion → worse answers | Summarising what you pass downstream |
+| **Epistemic** | Shared reasoning → convergence pressure → the reviewer can no longer judge independently | **Withholding a whole category of information** |
+
+A faithful summary of the parent's reasoning still transmits the convergence pressure. Only *not passing it* removes it. This is why Coyle's prescription is categorical rather than proportional — **"every agent gets its own slice"** [15:05]. A critic sub-agent receives the *claim* and the *evidence*, but explicitly not *"the thought processes that went in to creating this claim"* [14:18]:
+
+```python
+critic(claim=claim, evidence=evidence)
+# NOT passed: the reasoning trace that produced the claim — that is the group-think vector
+```
+
+**How this lands against the patterns above.** It sharpens the hub-and-spoke case in [Agent Orchestration Patterns § Hub-and-Spoke vs Peer-to-Peer](agent-orchestration-patterns.md#hub-and-spoke-vs-peer-to-peer-subagents-vs-agent-teams): the "central contradiction pass over **sealed** subagent outputs" works precisely because the outputs are sealed. It also adds a cost to graduating to peer-to-peer agent teams that the maturity table does not price — direct teammate messaging is the channel group-think travels down. Graduating buys revision-in-response-to-challenge and pays for it in independence.
+
+Coyle offers no measurement of the effect, and the pizza-party analogy is an intuition rather than evidence. Treat it as a well-motivated design default, not a quantified finding. *(Source: Frank Coyle, AI Engineer 2026-08-08)*
 
 ## Shared Memory Across the Fleet
 

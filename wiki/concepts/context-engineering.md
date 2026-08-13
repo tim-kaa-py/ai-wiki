@@ -17,7 +17,8 @@ sources:
   - "summaries/2026-03-09_ibm-technology_is-rag-still-needed-rag-vs-long-context.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
-timestamp: "2026-08-05"
+  - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
+timestamp: "2026-08-13"
 ---
 
 # Context Engineering
@@ -73,7 +74,27 @@ For multi-turn or multi-window tasks, Anthropic names three techniques — used 
 
 Anthropic's long-running-apps work (March 2026) sharpens this: for cross-session coherence, **full context resets with structured handoff artifacts beat compaction.** Compaction carries context-rot forward; a fresh window reading a durable artifact does not.
 
+<!-- Earlier versions of this section stated the reset-over-compaction default without a trigger mechanism; Coyle (2026-08-08) added the threshold instrumentation, scoped to programmatic loops, on 2026-08-13. -->
+
 Pattern: commit-per-feature + progress file + `init.sh` (see [Harness Engineering](harness-engineering.md) for the initializer/coding-agent split).
+
+### Instrument the Threshold, Then Choose the Action
+
+Coyle (Aug 2026) contributes the *trigger* rather than the action: rather than letting a session drift until the window forces a decision, measure and act at a number you picked — *"you can check your token count, and you can determine how big the token count is. And if you can set some limit — if you have more than 150,000 tokens, then what you want to do is you can run a compact"* [16:46].
+
+Split that into two claims, because they carry different weight.
+
+**The instrumentation half is the durable part, and it is action-agnostic.** A token counter wired into the loop plus an explicit threshold is compatible with either resolution above — the same 150K trip-wire can fire a reset just as easily as a compaction. It converts an implicit, drifting failure into an explicit, scheduled decision point. Adopt this regardless of which action you choose.
+
+**The action half does not displace the default above.** Coyle recommends compaction without engaging the reset alternative, and is candid that the mechanism is opaque to him: *"Not quite sure how the implementation is of that, but there is compaction"* [17:12]. Against that sit two sources arguing from mechanism — Anthropic's long-running-apps work on context-rot carry-forward, and Pocock's determinism argument for `/clear` (see [Smart Zone § `/clear` Beats `/compact`](smart-zone.md)). So: **at the threshold, prefer a reset with a handoff artifact.** Reach for compaction when a reset is genuinely impractical.
+
+**When is it impractical?** Coyle's own setting is the honest answer, and it is narrower than his phrasing suggests: a single long *programmatic* agent loop with no natural checkpoint to hand off at — not an interactive Claude Code session, where `/clear` plus a progress file is available and cheap. That case already falls inside the slot the strategies table sanctions ("single long session, fresh restart acceptable"), which is why this reads as a scoping of the existing guidance rather than a reversal of it. *(Source: Frank Coyle, AI Engineer 2026-08-08)*
+
+### Compression Logic Is Pluggable
+
+Where you *do* compact, the retention policy need not be the framework's default. Frank Coyle (AI Engineer, Aug 2026) flags that a framework can expose compression as an extension point — the vendor *"provides custom logic for compression of context ... and you can write your own. He's got — you can extend his base class and have your own compression of your data, whatever you think is important"* [17:47-18:03]. The concrete instance is Mastra's `MemoryProcessor` base class, from Sam Bhagwat's *Principles of Building AI Agents*.
+
+This matters because the standard objection to compaction — that it discards unpredictably — is partly an artifact of using a *generic* summarizer on domain-specific state. Coyle is candid that the built-in path is opaque to him: *"Not quite sure how the implementation is of that, but there is compaction"* [17:12]. A domain-aware processor that pins the invariants you know matter is a different proposition from a general-purpose summarize-and-hope. It does not dissolve the [full-reset argument](#compaction-vs-full-reset) above — a custom processor still carries forward whatever it retains — but it does narrow the gap where a reset is impractical. *(Source: Frank Coyle, AI Engineer 2026-08-08)*
 
 ## Design Rules
 

@@ -12,7 +12,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_ultrareview.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
-timestamp: "2026-07-25"
+  - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
+timestamp: "2026-08-13"
 ---
 
 # Reviewer Agents
@@ -99,6 +100,14 @@ Matt Pocock's pipeline (AI Engineer 2026) makes the fresh-context principle conc
 > "If you let the implementer also review, the review happens in the dumb zone after the implementation burned the smart zone."
 
 The reviewer must be a **separate agent invocation with its own clean context**, not a continuation of the implementer's session. This keeps the review inside the [smart zone](smart-zone.md) (~100K tokens) instead of operating on whatever sediment the implementation left behind.
+
+#### A Second, Independent Reason: Group-Think
+
+Frank Coyle (UC Berkeley, Aug 2026) arrives at the same prescription from a different premise, which is worth separating because it makes the rule stricter. Pocock's argument is about *capability* — a reviewer working in the dumb zone reviews badly. Coyle's is about *independence* — a reviewer that has seen the reasoning behind a claim can no longer evaluate that claim freshly, because collaborating agents converge: *"all the agents seem to kind of devolve into one idea"* [14:32].
+
+The operational difference: the smart-zone argument is satisfied by giving the reviewer a *short* input. The group-think argument is not — it requires withholding a specific *category* of input. Coyle's critic receives the claim and the evidence but explicitly not *"the thought processes that went in to creating this claim"* [14:18]. A tidy summary of the implementer's reasoning would pass the smart-zone test and fail this one.
+
+Note this cuts the opposite way from [Push vs Pull](#push-vs-pull-for-coding-standards) below, and the two are compatible: **push the standard, withhold the reasoning.** What the reviewer needs pushed is the external rubric it cannot discover on its own; what must be withheld is the implementer's internal deliberation. See [Parallel Agent Patterns § Group-Think as a Multi-Agent Failure Mode](parallel-agent-patterns.md#group-think-as-a-multi-agent-failure-mode). *(Source: Frank Coyle, AI Engineer 2026-08-08)*
 
 ### Inverted Model Split
 

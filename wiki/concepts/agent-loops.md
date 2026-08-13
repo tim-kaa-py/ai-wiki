@@ -14,7 +14,8 @@ sources:
   - summaries/2026-06-19_nate-herk_agent-loops-clearly-explained.md
   - summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md
   - summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md
-timestamp: 2026-08-03
+  - summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md
+timestamp: 2026-08-13
 ---
 
 # Agent Loops (Loop Engineering)
@@ -40,6 +41,54 @@ How the agent knows it has hit the stop condition. Nate's core claim: **this is 
 Rule: **a loop is only as good as its done-check.** When a fully objective metric isn't possible, fall back to "until 100% confident," but push toward measurable wherever you can — and add a **hard cap on passes** so a subjective loop can't run forever. (Worked contrast: a thumbnail-scoring loop stalled on "until you're satisfied"; an Abbey-Road-recreation loop terminated cleanly on "stop if average score ≥ 9.")
 
 This is the beginner-facing statement of the same principle the production harnesses formalize — see [Generator-Evaluator Harness](generator-evaluator-harness.md) (separate evaluator agent + explicit rubric) and the evaluator-optimizer pattern in [Agent Orchestration Patterns](agent-orchestration-patterns.md).
+
+## The Loop as a Recovered Primitive, Not a New One (Coyle)
+
+Frank Coyle (UC Berkeley, Aug 2026) pushes back directly on the "loops are the new abstraction" framing, naming both practitioners this page cites as archetypes. His summary of the received view — Boris Cherny "says he doesn't write code, but his job is to write loops" [06:16], Peter Steinberger "I don't code anymore. I just design loops that prompt your agents" [06:24] — is followed by a flat rebuttal: *"So, loops are the new big thing, right? Well, no, they're not"* [06:32].
+
+The grounding is **Böhm–Jacopini (1966)**, which proved that Turing completeness requires exactly three constructs: sequential statements, if-then conditionals, and the loop [06:56-07:24]. Coyle's diagnosis of the agentic moment is that LLM usage had only the first two — *"up to now we've had sort of sequences. You have prompts, you have maybe if-then, but now we have a loop. And now this is what's giving us the power"* [07:37].
+
+**What this reframes, and what it doesn't.** It is not a contradiction of loop engineering as a practitioner skill — Coyle spends the rest of his talk on loop design. It relocates *where the significance sits*: not in the technique being novel, but in natural-language systems having become computationally general. The practical payoff is a sharper prior about what a loop can be asked to do. If the loop is the construct that confers Turing completeness, then "can this be expressed as a loop over an LLM call?" has the same answer as "is this computable?" — which is why the pattern generalises so far beyond coding.
+
+Caveat on the rebuttal itself: whether Cherny or Steinberger ever claimed *novelty* — as opposed to claiming the loop is where a practitioner's attention now goes — is not established in Coyle's talk. Read it as a reframing of the field's rhetoric rather than a refutation of either person's position. *(Source: Frank Coyle, AI Engineer 2026-08-08)*
+
+## `stop_reason` as the Loop's Control Surface
+
+Where the sections above treat the loop at design level, Coyle supplies the implementation-level control flow — and the field on which it turns is `stop_reason`: *"Every time something happens, there's a stop reason and you need to take a look at that because that can give you a lot of information about what's going on"* [04:56].
+
+The framing rests on a deliberately deflationary account of the model's role. *"The problem is the LLM can't do anything. It is just a probabilistic next word predictor. It can't execute tools"* [08:52] — what it emits is tool parameters, and *"all it can do is talk back to you, very intelligently sometimes"* [09:23]. The loop, not the model, is the executor.
+
+| Stop reason | Loop action |
+|---|---|
+| Tool use | Execute the tool yourself, append the result to `messages`, continue |
+| Normal stop | Exit the loop, then confidence-check the result |
+| **Token exhaustion** | **Act — do not consume the response** |
+
+```python
+while True:
+    response = call_model(messages=messages, tools=tools)
+
+    if response.stop_reason == "tool_use":
+        messages.append(run_tool(response))   # the LLM emits params; your code executes
+        continue
+
+    if response.stop_reason == "max_tokens":
+        handle_truncation()                   # partial answer — act, do not consume
+        break
+
+    break                                     # normal stop
+
+if confidence(response) < THRESHOLD:
+    escalate_to_human(response)               # loop exit is the natural HITL gate
+```
+
+**The anti-pattern** is fire-and-consume: *"just to let the agent go and do something and get the response back and use it"* [08:03].
+
+**The non-obvious failure mode** is the third row. *"One of the stop reasons may be you have run out of tokens, and this response is based on partial when the LLM had to stop. And it's going to give you a response, but if you have run out of tokens, then you need to take action"* [10:52]. A truncated completion still reads as an answer — that is precisely what makes it dangerous, since nothing downstream can distinguish it from a complete one. This is a *silent* failure that the verification pillar above will not catch unless the loop branches on the stop reason explicitly.
+
+The loop exit is also the natural place for the human-in-the-loop gate: *"You check the confidence. If it looks good, you keep it. If you don't, then you escalate to a human"* [10:43]. Structure the loop's return value as a `(result, confidence)` pair rather than a bare result.
+
+Coyle is describing the *shape* of the control flow rather than enumerating an exact API surface; treat the table as a pattern, not as a literal list of `stop_reason` values. *(Source: Frank Coyle, AI Engineer 2026-08-08)*
 
 ## Why Loops Work — The Quality-vs-Attempts Model
 

@@ -10,7 +10,8 @@ sources:
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
   - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
-timestamp: "2026-08-05"
+  - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
+timestamp: "2026-08-13"
 ---
 
 # Tool Design for Agents
@@ -40,6 +41,20 @@ Principles 1-4 stand as published. Principle 5 has since become generation-condi
    **The evidence asymmetry is the point, not a footnote.** The old half is first-party published guidance you can read; the new half is one person's summary of another person's article, with no eval names, no magnitudes, and no worked before/after for a tool description specifically. Do not treat the shift as settled first-party doctrine, and do not strip a working description on its authority alone.
 
    **What to actually do.** The one part of the 5-series direction that arrives with a concrete mechanism and an Anthropic-run example is deduplication between the system prompt and tool descriptions — apply that first, one description at a time, per [§ Deduplicate Between System Prompt and Tool Descriptions](#deduplicate-between-system-prompt-and-tool-descriptions). Beyond deduplication, shorten only where a real task confirms nothing regressed. The *example usage* element specifically is contested on a second front and should be treated as unsettled rather than deprecated: see the held tension on [Prompt Engineering for Claude § Unresolved Tensions](prompt-engineering-claude.md#unresolved-tensions), where the same few-shot question is open against Anthropic's own April 2026 prompting guidance.
+
+## Specialise the Agent, Not Just the Tool List
+
+Principle 1 above is stated at the level of the *system* — don't wrap every endpoint. Frank Coyle (UC Berkeley, Aug 2026) applies the same discipline one level down, at the level of the **individual agent**, where the anti-pattern is *"you have one agent and you load it up with tools"* [12:19].
+
+His analogy is the general contractor who cannot be trusted precisely because he claims he can do everything:
+
+> "You hire a carpenter to come to the house, and the guy shows up with plumbing tools, carpenter tools, electrical tools. He says, 'I can do anything.' Well, maybe you don't want this guy, maybe you want a professional carpenter." [12:24]
+
+The grounding is functional programming's single-responsibility rule: *"functions should do one thing. And if you can get your agents to do one thing, you with maybe one or two tools available to it, then that's going to be a win"* [12:47]. His summary — **"specialize, don't overload"** [13:02].
+
+**Why this is not a restatement of Principle 1.** A system can satisfy "fewer but better tools" globally and still hand every one of them to a single agent. The two rules constrain different things: Principle 1 bounds the *catalogue*, this one bounds each agent's *slice of it*. The practical audit is per-agent rather than per-tool — count the tools each agent can reach, and treat more than one or two as a signal to split the agent rather than to trim the catalogue.
+
+The "one or two" figure is Coyle's heuristic, offered without supporting evaluation; take the direction rather than the number. *(Source: Frank Coyle, AI Engineer 2026-08-08)*
 
 ## The Three-Phase Loop
 

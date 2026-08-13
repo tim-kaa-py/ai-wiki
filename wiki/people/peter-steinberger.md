@@ -7,7 +7,8 @@ tags: [agentic-engineering, openclaw, ios, engineering-leadership]
 sources:
   - "summaries/2026-02-12_lex-clips_how-to-code-with-ai-agents-advice-from-openclaw-creator.md"
   - "summaries/2026-06-19_nate-herk_agent-loops-clearly-explained.md"
-timestamp: "2026-06-23"
+  - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
+timestamp: "2026-08-13"
 ---
 
 # Peter Steinberger
@@ -52,6 +53,10 @@ Interviewed by Lex Fridman (2026-02-12, 31 min). The interview captures his conv
 ## As a Loop-Engineering Archetype
 
 Cited (by Nate Herk, 2026-06-19) as the high end of the "run everything as agent loops" spectrum — alongside Boris Cherny, an example of practitioners who no longer prompt their coding agents turn-by-turn. The framing comes with a caveat: this makes sense for an engineer doing large-codebase work, but the heuristic doesn't transfer 1:1 to knowledge-work roles. Steinberger is the codebase-work calibration point against which lighter-weight loop adoption is contrasted. See [Agent Loops § Loop Advice Doesn't Transfer 1:1 Across Roles](../concepts/agent-loops.md#loop-advice-doesnt-transfer-11-across-roles).
+
+### Contested: Is the Loop New?
+
+Frank Coyle (AI Engineer, Aug 2026) quotes him directly — *"I don't code anymore. I just design loops that prompt your agents"* [06:24] — pairs it with Cherny's version, and rebuts the framing: *"loops are the new big thing, right? Well, no, they're not"* [06:32]. His argument from Böhm–Jacopini (1966) is that the loop is the third construct required for Turing completeness, so its arrival in agentic systems is a *recovery* of a missing primitive rather than an invention. This targets the field's rhetoric rather than Steinberger's practice; whether Steinberger ever claimed novelty is not established. See [Agent Loops § The Loop as a Recovered Primitive](../concepts/agent-loops.md#the-loop-as-a-recovered-primitive-not-a-new-one-coyle).
 
 ## Related Pages
 
