@@ -46,7 +46,7 @@ Capability skills exist to cover a gap in current model ability, and that gap cl
 
 ### AI-generated skills are not free
 
-Skills Bench 1.1 evaluated open and closed models across harnesses on ~100 coding and productivity tasks: skills deliver roughly a **15% average performance lift**. But a follow-up analysis of self-generated skills found that **AI-generated skills can degrade performance**, and Schmid's conclusion was that human-written skills are the strongest option available. The failure loop is the casual one: tell the agent "create a skill," skim the output, accept it, start using it. Whether a *grounded* generation method escapes this finding is treated at [Agent Skills § Who Should Write the Skill?](agent-skills.md#who-should-write-the-skill) — the short answer being that an eval is what settles it either way.
+Skills Bench 1.1 evaluated open and closed models across harnesses on ~100 coding and productivity tasks: skills deliver roughly a **15% average performance lift**. But a follow-up analysis of AI-generated skills found that **they can degrade performance**, and Schmid's conclusion was that human-written skills are the strongest option available. The failure loop is the casual one: tell the agent "create a skill," skim the output, accept it, start using it. Whether a *grounded* generation method escapes this finding is treated at [Agent Skills § Who Should Write the Skill?](agent-skills.md#who-should-write-the-skill) — the short answer being that an eval is what settles it either way.
 
 ## The Minimal Harness
 

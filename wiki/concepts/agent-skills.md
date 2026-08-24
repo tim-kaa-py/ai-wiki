@@ -74,7 +74,7 @@ The practical consequence: capability skills should be under continuous ablation
 Skills Bench 1.1 evaluated open and closed models across multiple harnesses on roughly 100 coding and productivity tasks. Headline findings:
 
 - Skills deliver a **~15% average performance lift**.
-- **Human-written skills outperform AI-generated ones**, and self-generated skills can *degrade* performance. See [Skill Evaluation § Unresolved Tensions](skill-evaluation.md#unresolved-tensions), where this sits against the validate-before-codify method below.
+- **Human-written skills outperform AI-generated ones**, and AI-generated skills can *degrade* performance. See [§ Who Should Write the Skill?](#who-should-write-the-skill), where this is reconciled with the validate-before-codify method below.
 - `SKILL.md` files should stay **under ~500 lines** — the same threshold recorded in [Claude Code Skills](../how-tos/claude-code-skills.md#keep-skillmd-under-500-lines), here backed by benchmark data rather than context-budget reasoning.
 
 ### Model-Triggered vs User-Invoked
@@ -138,7 +138,7 @@ Pair this with **validate-before-codify**: do the task by hand once, confirm it 
 
 ### Who Should Write the Skill?
 
-Skills Bench 1.1 found that **human-written skills outperform AI-generated ones**, and that self-generated skills can actively degrade performance. Philipp Schmid's conclusion (AI Engineer, July 2026): human-written is the strongest option available. [Source: 2026-07-14_ai-engineer_dont-ship-skills-without-evals]
+Skills Bench 1.1 found that **human-written skills outperform AI-generated ones**, and that AI-generated skills can actively degrade performance. Philipp Schmid's conclusion (AI Engineer, July 2026): human-written is the strongest option available. [Source: 2026-07-14_ai-engineer_dont-ship-skills-without-evals]
 
 Read literally, that rules out the validate-before-codify method above. Read against what Schmid actually describes, it doesn't — his target is a specific loop:
 

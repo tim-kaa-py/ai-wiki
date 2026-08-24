@@ -73,7 +73,7 @@ Running the same eval set with the skill loaded and with it unloaded. The gap be
 
 5. **Set the right level of freedom — and know when the answer is "not a skill."** If the workflow is a fixed sequence of steps every time, write a script and tell the model to run it. Spending model tokens re-deriving a deterministic procedure is waste. Skills should state goals and constraints; the model already knows how to edit a config file.
 
-6. **Human-written skills beat AI-generated ones.** Skills Bench 1.1 found skills give ~15% average performance lift across ~100 coding and productivity tasks — but self-generated skills can *degrade* performance. The "tell the agent to write a skill, skim it, accept it" loop is the problem.
+6. **Human-written skills beat AI-generated ones.** Skills Bench 1.1 found skills give ~15% average performance lift across ~100 coding and productivity tasks — but AI-generated skills can *degrade* performance. The "tell the agent to write a skill, skim it, accept it" loop is the problem.
 
 7. **Never skip negative cases.** A skill scoped to "web development tasks" over-triggers across React, Angular, and everything else, polluting context and confusing the model. Half your test prompts should be cases where the skill must stay silent.
 
