@@ -15,7 +15,8 @@ sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-07-29_ai-engineer_persona-engineering-field-guide-synthetic-personas.md"
-timestamp: "2026-08-07"
+  - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
+timestamp: "2026-08-24"
 ---
 
 # Agent Evaluation
@@ -260,6 +261,14 @@ Neither author addressed the other's concern, so the wiki holds both rather than
 **Why it matters operationally.** The two rules select different graders for the same job. Position A is unambiguously right where the target is genuinely categorical — a correctness gate has no distribution to preserve, and a free-text detour there is cost with no payoff. Position B bites where the honest output is a spread: rubric dimensions like tone, helpfulness, or severity, where a collapsed Likert distribution can look healthy on every aggregate metric and still be useless for the decision it feeds. The unresolved part is the middle: most production rubric dimensions are spread-valued but are graded as if they were categorical, and no source here has measured what that costs.
 
 **What would resolve it:** a direct comparison on an LLM-judge task rather than a survey task — same rubric, forced integer vs. free-text-plus-anchoring, scored against human labels on both a correlation and a shape metric. Note also the possible dissolution (not adopted here): Anand's step 6 *does* end in an aggregatable numeric distribution, so "free text plus projection" may satisfy Position A by a longer route, making this a disagreement about elicitation rather than about output format. The full technique is on [Distribution Evaluation § Eliciting the Distribution](distribution-evaluation.md#eliciting-the-distribution-semantic-similarity-anchoring).
+
+## Specialization: Evaluating Skills
+
+Skills are a distinct eval target from agents, and cheaper than this page's machinery implies. The unit under test is not a task but an *artifact* — a `SKILL.md` whose failure modes are (in descending order of frequency) failing to trigger, over-triggering, and being redundant with the current model. Most asserts collapse to regex over generated output; the defining move is the **ablation** (run the eval with and without the skill loaded) which is what tells you a skill has expired.
+
+See [Skill Evaluation](skill-evaluation.md) for the harness, the design rules, and the retirement argument. [Source: 2026-07-14_ai-engineer_dont-ship-skills-without-evals]
+
+Note the difference in emphasis from *Eval design principles* above: Anthropic's "volume over quality — 1,000 noisy automated cases beat 100 hand-graded ones" describes a mature eval suite, while Schmid's "start small, 10–20 samples beat nothing" describes the on-ramp. They point the same direction (automate, then scale) from opposite ends of the maturity curve rather than contradicting each other.
 
 ## Sources
 

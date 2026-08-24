@@ -6,7 +6,8 @@ pillar: "ecosystem"
 tags: [agentic-engineering, claude-code, ai-hero, sandcastle, education, workflow]
 sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-timestamp: "2026-05-08"
+  - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
+timestamp: "2026-08-24"
 ---
 
 # Matt Pocock
@@ -21,6 +22,7 @@ AI-coding teacher and author of [AI Hero](https://aihero.dev). Previously known 
 - **Structured Ralph variant** — adds a PRD + Kanban + priority-ordered implementer prompt over vanilla Ralph (see [Harness Engineering](../concepts/harness-engineering.md)).
 - **Sandcastle** — TypeScript library for parallel AFK execution: planner → per-issue implementer in worktree+Docker → reviewer → merger. See [Parallel Agent Patterns](../concepts/parallel-agent-patterns.md).
 - **`/improve-code-base-architecture` skill** — surfaces shallow-module clusters to collapse into [Deep Modules](../concepts/deep-modules.md). His "if you take one thing away from today" line.
+- **The no-ops finding** — AI-generated skills are dense with instructions that change nothing about agent behaviour ("write clear, high-quality code"). Published as a tweet plus a skill for stripping them. Credited by Philipp Schmid (Google DeepMind, July 2026) as one of the eight rules for writing effective skills; the cost is pure token waste on every load, not degraded output. See [Skill Evaluation § No-ops](../concepts/skill-evaluation.md#no-ops). [Source: 2026-07-14_ai-engineer_dont-ship-skills-without-evals]
 - **Smart zone vs dumb zone discipline** — popularized Dex Hardy's framing as the operational target every coding stage must stay inside. See [Smart Zone](../concepts/smart-zone.md).
 
 ## Key Arguments

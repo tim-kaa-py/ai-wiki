@@ -3,7 +3,7 @@ title: "Agent Skills"
 description: "Anthropic's framework for packaging reusable Claude capabilities as SKILL.md directories with scripts and reference files"
 type: "concept"
 pillar: "building"
-tags: [agent-skills, claude, skills, progressive-disclosure, agents, mcp, claude-code, skills-as-packages, supply-chain, memory]
+tags: [agent-skills, claude, skills, progressive-disclosure, agents, mcp, claude-code, skills-as-packages, supply-chain, memory, evaluation]
 sources:
   - "summaries/2025-10-16_anthropic_agent-skills.md"
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
@@ -15,7 +15,8 @@ sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
   - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
-timestamp: "2026-06-29"
+  - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
+timestamp: "2026-08-24"
 ---
 
 # Agent Skills
@@ -55,6 +56,33 @@ Step-by-step instructions the agent follows...
 
 Because L1 is the only gate between an unused skill and a loaded one, the frontmatter `description` decides whether a skill ever triggers. A vague description (`"helps with PDFs"`) will be skipped; a specific, action-oriented description (`"Extract tables and structured data from PDF invoices using Python"`) maps task → skill reliably.
 
+## Capability Skills vs Preference Skills
+
+Philipp Schmid (Google DeepMind, AI Engineer July 2026) splits skills by **lifespan**, which turns "should I keep this skill?" into an answerable question:
+
+| | Capability skill | Preference skill |
+|--|------------------|------------------|
+| Teaches | Something the model cannot do consistently *yet* | Something the model can never know — your team's conventions |
+| Examples | Tracing a log format, scaffolding a React app, using a post-cutoff API | House style, review workflow, domain-specific language |
+| Lifespan | **Temporary** — expires as models improve | **Durable** |
+| Role of evals | Tell you when the skill can be retired | Regression protection against model/harness updates |
+
+The practical consequence: capability skills should be under continuous ablation (run the eval with and without the skill; when the gap closes, retire it), while preference skills need a standing eval so a model upgrade doesn't silently degrade them. See [Skill Evaluation](skill-evaluation.md). [Source: 2026-07-14_ai-engineer_dont-ship-skills-without-evals]
+
+### Do Skills Actually Help?
+
+Skills Bench 1.1 evaluated open and closed models across multiple harnesses on roughly 100 coding and productivity tasks. Headline findings:
+
+- Skills deliver a **~15% average performance lift**.
+- **Human-written skills outperform AI-generated ones**, and self-generated skills can *degrade* performance. See [Skill Evaluation § Unresolved Tensions](skill-evaluation.md#unresolved-tensions), where this sits against the validate-before-codify method below.
+- `SKILL.md` files should stay **under ~500 lines** — the same threshold recorded in [Claude Code Skills](../how-tos/claude-code-skills.md#keep-skillmd-under-500-lines), here backed by benchmark data rather than context-budget reasoning.
+
+### Model-Triggered vs User-Invoked
+
+Orthogonal to the capability/preference split, and to progressive disclosure: *who* pulls the skill in. Schmid's argument is that **user-invoked skills are underrated** for routine dev workflow — creating a pull request, staging documentation — because explicit invocation removes the trigger-reliability problem entirely.
+
+The corollary is the sharper half: **when you build an agent for customers, user-invoked skills do not exist as an option.** Your users don't know skills exist and will never type a slash command. Everything is model-triggered, which is exactly why customer-facing skills need eval discipline most. See [Skill Evaluation § The agents we use vs. the agents we build](skill-evaluation.md#the-agents-we-use-vs-the-agents-we-build). For the Claude Code flags that implement this, see [§ Invocation Control](#invocation-control-claude-code-specifics) below.
+
 ## Skills vs CLAUDE.md
 
 | | CLAUDE.md | Skills |
@@ -68,6 +96,8 @@ Use CLAUDE.md for rules that apply broadly; use skills for capabilities that onl
 ## Scripts as Deterministic Tools
 
 Skills can bundle executable scripts (Anthropic's PDF skill uses Python). The pattern: **don't burn tokens on work a script can do deterministically**. The skill teaches Claude when and how to invoke the script; the script handles the mechanical step.
+
+Schmid pushes this one step further: if the *entire* workflow is a fixed sequence — "step one, go there; step two, do this" — there is no skill here at all. Write the script and have the model call it. Skills should set goals and constraints and leave the model the freedom to reach them; a procedure with no context-dependent variation is paying for judgment you don't need. [Source: 2026-07-14_ai-engineer_dont-ship-skills-without-evals]
 
 ## Security: Audit Before Installing
 
@@ -104,7 +134,27 @@ Before authoring a skill, surface *which* repeated work is worth codifying. Chas
 2. **History mining** — have Claude Code read your last 10–20 sessions and extract repeated, not-yet-codified tasks into a chart of *task / desired output / proposed skill*. The agent's own session history is the audit corpus.
 3. **Brain-dump interview** — hand Claude a stream-of-consciousness dump and have it interview you to surface the repeated work.
 
-Pair this with **validate-before-codify**: do the task by hand once, confirm it works, then tell Claude "turn what we just did into a skill" — it can see the tool calls and back-and-forth from the session, so the skill is grounded in a working run rather than speculation. This operationalizes "start from real failures" above and complements Cole Medin's [3+ times rule](ai-layer.md). See [Agentic OS](agentic-os.md) for where the audit sits in the larger Level-1 build order. *(Source: Chase AI)*
+Pair this with **validate-before-codify**: do the task by hand once, confirm it works, then tell Claude "turn what we just did into a skill" — it can see the tool calls and back-and-forth from the session, so the skill is grounded in a working run rather than speculation — which is the condition the next section says generation has to meet. This operationalizes "start from real failures" above and complements Cole Medin's [3+ times rule](ai-layer.md). See [Agentic OS](agentic-os.md) for where the audit sits in the larger Level-1 build order. *(Source: Chase AI)*
+
+### Who Should Write the Skill?
+
+Skills Bench 1.1 found that **human-written skills outperform AI-generated ones**, and that self-generated skills can actively degrade performance. Philipp Schmid's conclusion (AI Engineer, July 2026): human-written is the strongest option available. [Source: 2026-07-14_ai-engineer_dont-ship-skills-without-evals]
+
+Read literally, that rules out the validate-before-codify method above. Read against what Schmid actually describes, it doesn't — his target is a specific loop:
+
+> "you work on something, tell the model create a skill, and then it writes a skill.md file. We maybe look at it very closely. It roughly covers what we want to do and then we just accept it and start using it."
+
+Three things are wrong with that loop, and none of them is *generation*: the skill is written from the model's reconstruction of the task rather than from an observed successful run; review is a skim; and nothing measures the result. Validate-before-codify fixes the first two by construction — the run happened, it worked, and the tool calls are in the session for the model to read off. It does not fix the third.
+
+So the operative distinction is not human-written vs. AI-generated. It is **grounded and measured vs. neither**:
+
+| | Grounded in a working run | Measured by an eval |
+|---|---|---|
+| "Create a skill for this" → skim → accept | ✗ | ✗ |
+| Validate-before-codify | ✓ | ✗ |
+| Either method + a skill eval | ✓ | ✓ |
+
+The honest caveat: Skills Bench did **not** segment its results by authoring method, so there is no measurement showing that grounding rescues generation. Its finding stands as evidence about generated skills in the wild, and the wild is overwhelmingly the casual loop. Treat AI authorship as a cost to be bought down by grounding and eval, not a neutral choice — and note that Schmid's own remedy is not "write it by hand" but "measure it," which is the one move that makes the question empirical for your skill rather than in aggregate. See [Skill Evaluation](skill-evaluation.md).
 
 ## Forward-Looking: Skills over MCP
 

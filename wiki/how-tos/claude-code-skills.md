@@ -11,7 +11,8 @@ sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
-timestamp: "2026-07-25"
+  - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
+timestamp: "2026-08-24"
 ---
 
 # Claude Code Skills
@@ -275,7 +276,11 @@ See [Agent Skills § Skill Kit as Owned Planning Stack](../concepts/agent-skills
 
 ## Common Pitfalls
 
-- **Vague descriptions.** "Helps with PRs" → never auto-invoked. Use "Summarize the diff and changed files for the current PR via `gh`."
+- **Vague descriptions.** "Helps with PRs" → never auto-invoked. Use "Summarize the diff and changed files for the current PR via `gh`." Philipp Schmid's data puts numbers on this: **~50% of observed skill failures were trigger failures**, not body failures. Cover the *why*, the *how*, and the *when*, and write directives rather than passive information — "use the Interactions API if you're building a chat application," not "the Interactions API is recommended for multi-chat because it handles session state." [Source: 2026-07-14_ai-engineer_dont-ship-skills-without-evals]
+- **No negative cases.** A description scoped to "web development tasks" over-triggers — it fires on Angular work when the skill only knows React. Scope the trigger narrowly ("React components", "Tailwind CSS") and test the cases where the skill must stay *silent*.
+- **No-ops in the body.** Instructions that change nothing: "make the implementation easy to read," "write clear, high-quality code." The model does this already. AI-generated skills are dense with them, and every one is tokens paid on every load for zero behaviour change. See [Matt Pocock](../people/matt-pocock.md).
+- **A step-by-step body that should have been a script.** If the skill reads "step one… step two… step three," the workflow is deterministic — write a script and have the model run it. See [Agent Skills § Scripts as Deterministic Tools](../concepts/agent-skills.md#scripts-as-deterministic-tools).
+- **Shipping without an eval.** Ten to twenty test prompts (half of them negative) plus regex asserts is enough to catch most of the above. See [Skill Evaluation](../concepts/skill-evaluation.md).
 - **Overstuffed `SKILL.md`.** Past ~500 lines, the body crowds out other context. Split into sibling files.
 - **Forgetting `disable-model-invocation` on side-effect skills.** Claude will eventually trigger `/deploy` on its own initiative. Lock it down.
 - **Mixing live data and inline text without `` !`command` ``.** Asking Claude to "first run X then..." costs a tool turn that preprocessing would have skipped.
@@ -291,3 +296,4 @@ See [Agent Skills § Skill Kit as Owned Planning Stack](../concepts/agent-skills
 - [Claude Code Auto Mode](claude-code-auto-mode.md) — classifier-gated permission mode
 - [Claude Code Plugins](claude-code-plugins.md) — packaging skills + agents + hooks + monitors for distribution
 - [Multi-Perspective Research (STORM Pattern)](../concepts/multi-perspective-research.md) — worked example of the two-file templated-output skill
+- [Skill Evaluation](../concepts/skill-evaluation.md) — testing that a skill triggers, helps, and still earns its tokens
