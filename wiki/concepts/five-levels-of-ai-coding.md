@@ -7,7 +7,8 @@ tags: [ai-coding, agentic-engineering, dark-factory, workflow, software-engineer
 sources:
   - "summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md"
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
-timestamp: "2026-05-26"
+  - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
+timestamp: "2026-08-28"
 ---
 
 # Five Levels of AI Coding
@@ -88,9 +89,22 @@ Legacy systems cannot be dark-factored because the specification doesn't exist �
 2. In parallel, use AI to generate specs from existing code
 3. Build scenario suites that capture real behavior
 4. Redesign CI/CD for AI-generated code at volume
-5. Shift new development to Level 4-5 while maintaining legacy in parallel
+5. Shift new development to Level 4-5 while maintaining legacy in parallel — but treat step 5 as producing *another* brownfield system on a months-scale clock, not a permanently greenfield track (see the scope note below)
 
 This is a multi-step, potentially multi-year process with no shortcuts.
+
+### Scope Note: "Brownfield" Is a State, Not a Legacy Category
+
+The migration path above implicitly divides the world in two: a legacy estate that needs spec reconstruction, and new development that can go straight to Levels 4–5 because it starts clean. At agentic shipping velocity that division has a short shelf life.
+
+Dex Horthy redefines the term by clock rather than by pedigree: agents "really start to struggle after maybe 3 to 6 months, especially with the pace at which we can ship now" [08:11-08:15]. On that reading, brownfield is not "some 10-year-old Java thing" — it is any codebase that has accumulated more history than a human currently holds in their head, and a system started this year reaches that state within two quarters. This is an anecdotal practitioner observation, not a measured figure, and Horthy concedes no benchmark exists for the maintainability erosion he is describing.
+
+Two consequences for the migration path, if the observation holds:
+
+- **Step 2 (generate specs from existing code) is recurring, not one-off.** Whatever spec-reconstruction discipline the legacy estate needs, the Level 4–5 track needs the same discipline on a rolling basis — otherwise the "new" system arrives at step 1 of its own migration a few months later.
+- **Step 5 is not a terminus.** "Shift new development to Level 4-5" describes a transition, not a steady state. The steady state is whatever practice keeps a months-old agent-authored codebase legible — which is the same question the [Software Factory](software-factory.md) page holds open under Unresolved Tensions.
+
+The counter-reading is worth keeping: Horthy's 3-6 month figure comes from running lights-off with no human reading the code, so it may be a property of that specific configuration rather than of agentic velocity as such. A Level 4–5 track that retains scenario holdout suites and spec regeneration may not decay on the same clock. *(Source: [Dex Horthy, AI Engineer 2026-07-23](../../summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md).)*
 
 ## Productivity as Output Volume, Not Speed (Anthropic 2026)
 
@@ -106,6 +120,18 @@ Customer evidence cited in the report:
 - **Augment Code customer** — a 4–8-month project finished in two weeks via collapsed onboarding into an unfamiliar codebase.
 
 Operational implication: **replace "minutes saved per task" with output-volume metrics** (features shipped, experiments run, previously-deprioritized work completed). Read these numbers as Anthropic's case for the higher levels, not as a neutral industry survey — but the *direction* (extensive over intensive) is consistent with the J-curve and Dark-Factory framings already on this page. *(Source: Anthropic 2026 Agentic Coding Trends Report.)*
+
+### The Counterweight: Volume Up, Review Quality Down (Faros AI, 2026)
+
+The output-volume numbers above measure throughput. A second dataset measures what happened to the *review* side over the same adoption window, and it points the other way. Dex Horthy (AI Engineer, July 2026) cites a **Faros AI** report covering the period since broad AI-coding-tool adoption in January/February 2026 [01:41-02:00]:
+
+- **PR review quality down** — more comments, longer comments, and many PRs merged with **no review at all**.
+- **Incidents up.**
+- **Bugs per developer up.**
+
+He pairs it with Mario's plea at AI Engineer Europe to slow down, because "companies that should not be having outages because of coding agents are having outages."
+
+These findings are not strictly incompatible with Anthropic's — more output can produce more incidents in absolute terms without any per-unit regression, and neither dataset normalises against the other. But read together they say the adoption story has two axes and the customer-evidence table above only reports one. **Operational implication: track review-comment volume, unreviewed-merge rate, and bugs-per-developer alongside output-volume metrics.** Rising throughput with rising comment volume is a symptom, not a success. *(Source: Dex Horthy, AI Engineer 2026-07-23, citing Faros AI.)*
 
 ## The Jevons Paradox for Software
 
@@ -140,11 +166,14 @@ Anthropic's 2026 trends report argues against this endpoint via the [Collaborati
 - **Different measurement windows.** Anthropic's numbers may reflect a transition state; Level 5 may remain the asymptote, with the 0–20% delegation figure climbing as models and tooling mature.
 - **Genuine disagreement.** Anthropic and Shapiro/Jones may simply disagree about whether the asymptote is full delegation or steady-state collaboration, and one side is wrong about the destination.
 
-The wiki holds both framings without choosing. Use Level 5 / Dark Factory as the model for work that specifies cleanly with verifiable holdout sets (StrongDM-shape work). Use the Collaboration Paradox as the model for work where human judgment, taste, or accountability is itself the value.
+**A third datapoint (added 2026-08-28).** Dex Horthy contributes a practitioner post-mortem rather than a survey: HumanLayer ran the lights-off configuration seriously on a real production system from July 2025, and it ended the day an agent hit an issue it could not solve — forcing a dig into a codebase nobody had read in three months, while the site was down [08:25-08:30]. His diagnosis is that Level 5 is blocked at the *training* layer, not the tooling layer: coding models are RL-trained on binary test-pass rewards with no channel for maintainability, because "the cost function of bad architecture is measured in months and years" [13:44-13:52]. This does not settle the tension — it is a single anecdote, and Horthy concedes he cannot prove the claim since no maintainability benchmark exists — but it is evidence against the "different measurement windows" reconciliation specifically: if the obstacle is the shape of the reward signal, waiting for better models does not close it. *(Source: [Dex Horthy, AI Engineer 2026-07-23](../../summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md).)*
+
+The wiki holds all three framings without choosing. Use Level 5 / Dark Factory as the model for work that specifies cleanly with verifiable holdout sets (StrongDM-shape work). Use the Collaboration Paradox as the model for work where human judgment, taste, or accountability is itself the value.
 
 ## Related Pages
 
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — practical workflow incorporating these maturity levels
 - [Empathize with the Agent](empathize-with-the-agent.md) — the mental shift required to progress past Level 2
 - [Claude Code](../tools/claude-code.md) — tool enabling Level 3-4 patterns
+- [Software Factory](software-factory.md) — the factory pipeline the Dark Factory is the lights-out variant of
 - [The Collaboration Paradox](collaboration-paradox.md) — Anthropic's competing framing that "% fully delegated is the wrong yardstick" — see [Unresolved Tensions](#unresolved-tensions) above

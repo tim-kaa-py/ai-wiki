@@ -7,7 +7,8 @@ tags: [agentic-coding-workflow, plan-and-review, workflow, planning, review, par
 sources:
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
-timestamp: "2026-05-26"
+  - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
+timestamp: "2026-08-28"
 ---
 
 # Plan and Review
@@ -135,6 +136,31 @@ Most current tooling addresses **code generation** well and the other four poorl
 
 Knight-Webb's position: AI-assisted review is fine; fully unread vibe-coded merges are not, for anyone with money on the line. Lean on AI for pre-review and PR-comment shepherding (job #4), but keep human read-through as a hard gate on production merges. This aligns with [Reviewer Agents](reviewer-agents.md) (fresh-context reviewer beats self-review) and Lopopolo's "minimal blocking gates" — the gate stays, it just moves to the right places.
 
+## Second Datapoint for the Heuristic, and Four Named Stages (Horthy)
+
+Dex Horthy (HumanLayer, AI Engineer July 2026) arrives at the same exchange rate from a different direction and at a different scale: **"30 minutes over here in pre-planning and alignment can save you hours in review. And so it's actually feasible to still read every line of code"** [16:50-17:00]. Knight-Webb's 5-min/30-min line and Horthy's 30-min/hours line are the same trade at different task sizes; neither author claims the ratio is fixed.
+
+The load-bearing addition is *why* the trade works — Horthy's mechanism is PR quality, not PR volume:
+
+> "You don't have too many PRs. If you're drowning in PRs, you actually have too many bad PRs." [17:04-17:11]
+
+A good PR "is a joy to review… Yep, this is great. This is what we discussed." Even a PR needing only 20% rework — "which is generous for a lot of AI vibe coded slop" — is "an emotional and intellectual burden on both the reviewer and the submitter" [17:26-17:31]. So the return on planning is not that review is skipped but that the diff arrives matching what was agreed.
+
+He also claims the three phases compound rather than trade off: "your alignment is shorter cuz you used AI to get all the information at once, your code review is faster because you aligned up front, and your coding is faster cuz AI did it… but you're still reading everything and you're still owning the code" [17:32-17:47]. This is a stronger claim than the displacement argument at the top of this page — displacement says the time moves, Horthy says AI-assisted planning shrinks the total. The two are compatible if you read displacement as describing the *shape* of the day and Horthy as describing its *length*.
+
+### The Stages the Plan Should Contain
+
+Where this page's plan-heavy mode says "write a markdown plan," Horthy names what goes in it, as four separate documents [14:48-16:49]:
+
+1. **Product review** — what problem are we solving, what's the desired behaviour, mock-ups.
+2. **System architecture** — component contracts, data models, constraints.
+3. **Program design** — types, method signatures, program layout, call stacks / call graphs.
+4. **Vertical slices** — order of implementation, multi-repo coordination, checkpoints.
+
+**Program design is the stage he singles out as missing** — "really under-emphasized in agentic coding these days" [15:52-15:58], because "people assume that once you get the architecture right, the model can just cook." If your plan-heavy artifact stops at architecture, this is the gap to close first. Same exception as this page's default: "small stuff still just go straight to the agent" [15:21-15:24].
+
+Note the vendor incentive — HumanLayer sells planning building blocks for exactly this pipeline. See [Software Factory § The Four-Stage Planning Pipeline](software-factory.md#the-four-stage-planning-pipeline-he-proposes-instead). *(Source: Dex Horthy, AI Engineer 2026-07-23.)*
+
 ## How to Apply
 
 1. **Treat your time as the scarce resource.** Default to plan-heavy. Write a markdown plan or run a spec-interrogation pass before any non-trivial agent run; only YOLO when the cost of a wrong first attempt is genuinely lower than the planning cost.
@@ -177,3 +203,4 @@ Knight-Webb's position: AI-assisted review is fine; fully unread vibe-coded merg
 - [Harness Engineering](harness-engineering.md) — where the latency-vs-accuracy trade is wired
 - [Louis Knight-Webb](../people/louis-knight-webb.md) — author of the framing
 - [The Collaboration Paradox](collaboration-paradox.md) — Anthropic's adjacent framing of where the displaced time goes; partial overlap with the time-displacement argument here
+- [Software Factory](software-factory.md) — Horthy's four-stage planning pipeline in its factory context

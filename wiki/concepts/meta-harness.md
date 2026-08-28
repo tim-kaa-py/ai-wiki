@@ -7,7 +7,8 @@ tags: [meta-harness, harness-engineering, dspy, optimization, self-improving-ai,
 sources:
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
   - "summaries/2024-12-19_anthropic_building-effective-agents.md"
-timestamp: "2026-04-20"
+  - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
+timestamp: "2026-08-28"
 ---
 
 # Meta Harness
@@ -67,6 +68,24 @@ Both are closed self-improving loops that propose → test → keep-or-discard w
 - **Before paying for a bigger model, optimize the harness around a cheaper one.** Meta Harness + Haiku beat Meta Harness + Opus.
 - **Treat the harness as long-lived IP.** If it transfers across five models, it's an asset you re-run against future model releases.
 - **Persist raw traces.** They are the training data for whatever optimizer you eventually run on your system.
+
+## Unresolved Tensions
+
+### Is a transferable harness an independent asset, or always second-best to owning the weights?
+
+*Surfaced: 2026-08-28 (ingest of 2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail).*
+
+This page treats the harness as the durable, model-independent asset:
+
+> "Harness optimized on one model transfers to five others and improves all of them. The harness is the reusable asset; weights are a swap-in component."
+> — [Omar Khattab, *Rethinking AI Agents: The Rise of Harness Engineering*](../../summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md)
+
+Dex Horthy, citing an OpenAI talk from November, argues the opposite ordering — that harness and weights are co-optimized, and the party holding only the harness is structurally behind:
+
+> "if you are a harness builder and you don't own the model weights and you can't RL the model in your harness, you will always be at a disadvantage compared to somebody who owns both the model and the harness"
+> — [Dex Horthy, *Harness Engineering Is Not Enough*](../../summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md) [10:47-11:03]
+
+Both are held without choosing. The claims are not flatly contradictory — transferability across five models can be real while still losing to a model RL-trained against its own harness — but they imply different investment strategies, and the wiki does not yet have evidence that settles which effect dominates.
 
 ## Related Pages
 

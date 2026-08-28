@@ -13,7 +13,8 @@ sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
   - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
-timestamp: "2026-08-13"
+  - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
+timestamp: "2026-08-28"
 ---
 
 # Reviewer Agents
@@ -155,6 +156,27 @@ The same machinery transfers to non-code artifacts, where the "diff" is a set of
 The versioning discipline that follows is the useful operational rule: **the unverified draft (V1) and the verified output (V2) are separate deliverables**, and only V2 is consumable. Nate is explicit that his own V1 contained claims that "just wasn't correct." If a pipeline has to be shortened for cost, cut a generating persona — not the verifier.
 
 The reason this works is the same self-evaluation-bias argument as [Fresh Context per Reviewer](#fresh-context-per-reviewer-pocock): the generating personas are optimizing for finding evidence *for* their angle, not for auditing it, so the check must be performed by agents that did not produce the claim. See [Multi-Perspective Research (STORM Pattern)](multi-perspective-research.md) for the full pipeline.
+
+## Unresolved Tensions
+
+### Is the review bottleneck a throughput problem or a PR-quality problem?
+
+*Surfaced: 2026-08-28 (ingest of 2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail).*
+
+This page frames review as a capacity constraint, and reviewer agents as the way to take humans off the critical path:
+
+> "On a team shipping 3-5 PRs per engineer per day, human code review is the merge bottleneck."
+> "...the mechanism that removes synchronous humans from the PR-merge critical path."
+> — [Ryan Lopopolo, *Harness Engineering: Humans Steer, Agents Execute*](../../summaries/2026-04-17_ai-engineer_harness-engineering-humans-steer-agents-execute.md)
+
+Dex Horthy rejects the framing at its root — the volume is a symptom of bad inputs, not a constraint to route around:
+
+> "You don't have too many PRs. If you're drowning in PRs, you actually have too many bad PRs."
+> — [Dex Horthy, *Harness Engineering Is Not Enough*](../../summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md) [17:04-17:11]
+
+His prescription inverts the remedy: fix the input with AI-assisted up-front alignment (product review → system architecture → program design → vertical slices), spending 30 minutes of planning to save hours of review, until *"it's actually feasible to still read every line of code"* [16:57-17:00]. Where this page automates the reviewer, Horthy keeps the human reviewer and reduces what they have to read.
+
+Both are held without choosing. They are not strictly incompatible — better inputs and automated persona review can compose — but they disagree about which side of the pipeline the investment belongs on, and about whether removing synchronous humans from the merge path is a goal or the failure mode.
 
 ## Related Pages
 

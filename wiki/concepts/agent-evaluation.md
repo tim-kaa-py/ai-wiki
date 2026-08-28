@@ -16,7 +16,8 @@ sources:
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-07-29_ai-engineer_persona-engineering-field-guide-synthetic-personas.md"
   - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
-timestamp: "2026-08-24"
+  - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
+timestamp: "2026-08-28"
 ---
 
 # Agent Evaluation
@@ -217,6 +218,34 @@ This is per-eval SLOs rather than aggregate metrics. It diverges from common fra
 
 Operational rule: in CI, fail the build only if a critical eval drops *below its budget*, not on any individual flake. Allow nice-to-have evals to be flaky without blocking merges; surface them as warnings.
 
+## The Unmeasured Dimension: Maintainability
+
+Everything above assumes the criterion can be scored at the end of a run. Dex Horthy (AI Engineer, July 2026) names a criterion where that assumption breaks, and it is the criterion that governs whether agent-written code survives.
+
+**Why the standard reward shape can't reach it.** Coding-agent RL generates many traces per problem, scores them, and reinforces the winners. The canonical benchmark shape — SWE-bench Multilingual, ~15-minute tasks drawn from Redis, JQ, Django — issues a **binary 1/0 reward** on "did you fix the problem and did you do it without breaking anything else" [11:47-12:47]. Horthy's consequence: *"There's no way in this system that we can penalize it for poor program design or for eroding the maintainability of our systems"* [12:49-12:57] — which is his explanation for gratuitous try/catch blocks and casts written purely to satisfy a type-checker.
+
+**Why you can't just add the channel.** *"Verifying code quality and maintainability is orders of magnitude harder than the code runs and the test pass. Because the cost function of bad architecture is measured in months and years"* [13:44-13:52]. A criterion whose ground truth only materialises months after the run cannot be scored inside the run — this is a structurally harder case than the noisy-anchor and infrastructure-noise ceilings above, because the signal is not merely noisy but absent at scoring time.
+
+**Horthy's own caveat, which is worth keeping:** because no good maintainability benchmark exists, he concedes he **cannot prove** models haven't improved here. The evidence is practitioner consensus that agents "generally make things worse over time" [09:50-09:57]. The eval-methodology reading of that admission: an absent benchmark means an absent detector, so the claim is unfalsified rather than confirmed.
+
+### Three Benchmarks Attempting It
+
+| Benchmark | Owner | Design move |
+|-----------|-------|-------------|
+| **Sweep Marathon** | Abundant AI | ~400-hour tasks (e.g. cloning every feature of Microsoft Excel), with deliberate reward-channel design |
+| **Deep Sweep** | Data Curve | Large tasks on OSS repos chosen because they were never built in the real world — deliberately outside the training set |
+| **Frontier Code** | Cognition | Multi-PR tasks; penalises the model for writing tests that don't fail on pre-patch code, plus a judge model checking code-quality rules |
+
+Two design ideas here generalise beyond code: **penalising a test that passes on the unpatched baseline** is a cheap guard against the eval measuring nothing, and **selecting tasks that were never built** is contamination control that doesn't depend on knowing the training set.
+
+### A Ceiling on LLM-as-Judge for Quality
+
+Horthy's argument against judging your way out of the problem: *"models judging quality can only go so far, cuz if the model knew what good code looks like, it would probably write it in the first place"* [14:31-14:39].
+
+**Scope this against the [LLM-as-judge tips](#llm-as-judge-tips-anthropic-official-guidance) above rather than reading it as a refutation of them.** Anthropic's guidance is grader hygiene for criteria the judge can actually assess — use a different model, write a specific rubric, emit a discrete verdict. Horthy's ceiling bites on one criterion class: *generative* quality judgments, where the judge's ability to recognise good output is bounded by its ability to produce it. Correctness, rubric adherence, and rule violations do not have that property — a judge can check "is there a try/catch that swallows the error" without being able to author good architecture. The practical rule that survives both: **decompose quality into checkable rules where you can, and treat what remains as floor-raising, not ceiling-raising** — an agentic review pass is not a substitute for a human read on architecture-shaped changes.
+
+Horthy pre-empts one objection himself: benchmarks and RL verifiers are different artifacts on separate datasets, "but they're shaped the same and the structure of these benchmarks is directionally correct." Note his commercial interest — HumanLayer advertises "soon to be better verifiers for software quality." *(Source: Dex Horthy, AI Engineer 2026-07-23.)*
+
 ## Unresolved Tensions
 
 ### Can a frontier eval tier survive capability cycles, or do all evals expire in 1-3 generations?
@@ -280,3 +309,4 @@ Note the difference in emphasis from *Eval design principles* above: Anthropic's
 - *Notion's Token Town: 5 Rebuilds, 100+ Tools, MCP vs CLIs and the Software Factory Future* — Latent Space, 2026-04-15
 - *Context Is the New Code* — Patrick Debois, AI Engineer, 2026-05-03
 - *Persona Engineering: A Field Guide to AI Synthetic Personas* — Ishan Anand, AI Engineer, 2026-07-29
+- *Harness Engineering is not Enough: Why Software Factories Fail* — Dex Horthy, AI Engineer, 2026-07-23

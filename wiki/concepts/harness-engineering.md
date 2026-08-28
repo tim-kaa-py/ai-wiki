@@ -23,7 +23,8 @@ sources:
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
-timestamp: "2026-08-05"
+  - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
+timestamp: "2026-08-28"
 ---
 
 # Harness Engineering
@@ -458,6 +459,25 @@ The architectural take-away: **whenever you find a harness asking one agent to d
 When upgrading the model inside your harness, re-audit prompts that encoded workarounds for the *prior* model. Anthropic's Opus 4.7 guidance (April 2026) gives a concrete case: review harnesses tuned for Opus 4.6 with prompts like "only report high-severity issues" or "be conservative" *still work* on 4.7 but now over-filter — Opus 4.7 follows the conservatism more literally, investigating just as thoroughly and then dropping real findings below the stated bar. Measured recall falls even though capability improved (+11pp on Anthropic's bug-finding eval). The fix is harness-side, not model-side: split coverage from filtering across two stages, and keep the conservatism only in the filter stage. See [Reviewer Agents](reviewer-agents.md) for the concrete split.
 
 Generalization: every prompt in the harness encodes an assumption about the prior model's behavior. Upgrades can invert those assumptions (4.6 over-spawned subagents and over-called tools; 4.7 under-spawns and under-calls). Dial-downs in one era become dial-ups in the next. This is the craft of subtraction in reverse — deletions and additions both need a re-audit cycle per model.
+
+## Unresolved Tensions
+
+### Is the harness the ceiling, or only the floor?
+
+*Surfaced: 2026-08-28 (ingest of 2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail).*
+
+This page treats the harness as the dominant, durable lever — transferable across models and worth investing in as IP:
+
+> "A harness optimized on one model transfers to five others and improves all of them."
+> "Unlike a prompt or a model weight, an optimized harness is long-lived IP"
+> — [Omar Khattab, *Rethinking AI Agents: The Rise of Harness Engineering*](../../summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md)
+
+Dex Horthy argues there is a class of failure the harness cannot reach at all — specifically the inability of RL-trained coding models to be rewarded for maintainability:
+
+> "no amount of harness engineering or loops maxing can solve what is fundamentally a model training issue"
+> — [Dex Horthy, *Harness Engineering Is Not Enough*](../../summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md) [02:53-02:59]
+
+Both are held without choosing. Horthy's position is that the harness raises the floor while the ceiling is set during RL; the benchmark evidence on this page measures gains well below that ceiling, so neither claim directly falsifies the other. Horthy also concedes he cannot prove the maintainability gap, since no benchmark for it exists. What is unsettled is whether harness investment keeps paying as models improve, or whether it saturates against a training-set limit.
 
 ## Related Pages
 

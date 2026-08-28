@@ -8,6 +8,7 @@ okf_version: "0.1"
 
 ### Sources
 
+* [Harness Engineering is not Enough: Why Software Factories Fail (Dex Horthy, HumanLayer)](summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md) - Dex Horthy argues RL-trained coding models can't be rewarded for maintainability, so lights-out software factories rot; the efficient path now is AI-assisted up-front planning while humans still read every line
 * [Stanford's Method Turns Claude Into a PHD Level Research Team (Nate Herk)](summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md) - Nate Herk packages Stanford's STORM multi-perspective research method into a Claude skill that runs five expert lenses in parallel, maps their contradictions, and verifies every citation before delivering
 * [The Agentic OS Setup That Will 10x Claude Code (Chase AI)](summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md) - Describes a four-level agentic OS where codified skills and a memory/file structure carry most of the value over custom UI layers
 * [Finally. Agent Loops Clearly Explained. (Nate Herk)](summaries/2026-06-19_nate-herk_agent-loops-clearly-explained.md) - Defines an agent loop as reason-act-observe-repeat and argues verification quality matters more than looping itself
