@@ -6,7 +6,8 @@ pillar: "building"
 tags: [agentic-engineering, claude-code, ai-layer, global-rules, commands, skills, source-control, agent-architecture]
 sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
-timestamp: "2026-05-09"
+  - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
+timestamp: "2026-09-03"
 ---
 
 # AI Layer (Rules + Commands + Skills)
@@ -128,6 +129,18 @@ The AI layer covers the top two rows; subagents, MCP, hooks, and plugins cover t
 ## Sources
 
 - [Cole Medin — Full Guide to Becoming a Principled Agentic Engineer](../../summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md) — defines the term, the triad, and the 3+ times rule
+
+## Rule Drift: The Maintenance Cost of Being Specific
+
+Medin (Sep 2026) names the failure this page already gestures at ("it **rots**", "a graveyard of stale rules") and gives it a mechanism, a measurement, and a remedy.
+
+**The mechanism is a trade-off, not an accident.** Agents need specificity: you write rules for the agent, not the human, which means naming concrete file paths, commands, and numbers rather than the interpretable high-level guidance a human colleague could work from — "all SQL has to live in the database folder" rather than "we generally keep our database code organised in a sensible way" [02:23]. That specificity is exactly what makes rules perishable. Architecture changes; paths move; the rules do not. So **the property that makes an AI layer effective is the property that makes it decay** — you either pay the upkeep or accept a confused agent.
+
+**Why stale is worse than absent.** A rule that contradicts the codebase does not merely fail to help; it makes the agent spend effort reconciling why its instructions disagree with the code in front of it [03:16].
+
+**The measurement.** Medin cites a study finding **one in four repositories with an AI rules layer has stale rules** [03:27] — references to deleted files and directories, databases that were replaced, folders renamed or moved without the rules following.
+
+**The remedy: a periodic drift audit.** Rather than trusting discipline, run a scheduled check that diffs the rules against the actual codebase and reports discrepancies. Medin ships this as a `rules-check-drift` skill in his skills repository; the pattern matters more than the implementation — it is the AI layer applied to its own maintenance, and it is the natural companion to the [System Evolution](system-evolution.md) loop. *(Source: Cole Medin, 2026-09-01)*
 
 ## Related Pages
 

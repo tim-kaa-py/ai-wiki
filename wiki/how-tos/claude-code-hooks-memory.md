@@ -11,7 +11,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_hooks-guide.md"
   - "summaries/2026-05-06_claude-code-docs_memory.md"
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
-timestamp: "2026-05-17"
+  - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
+timestamp: "2026-09-03"
 ---
 
 # Claude Code Hooks for Memory
@@ -319,6 +320,16 @@ Recall:     Tier 0 (injected memory.md) → memarch hybrid search → expand →
 ```
 
 The diagnostic principle when adding any memory plug-in: ask which hook surface it rides on. If the answer is "none, it's a separate process," it probably will not compose cleanly with Claude Code. *(Source: Simon Scrapes)*
+
+## Spotting a Load-Bearing Rule
+
+The deterministic-vs-advisory rule above tells you *which* mechanism to use once you know a step is critical. Cole Medin (Sep 2026) adds the detection heuristic for finding those steps in rules you have already written:
+
+> **Any time a rule names a specific event or an ordering of things, that should scream out to you that it should be a hook.** [06:51]
+
+The canonical example is the one almost every CLAUDE.md contains: *"when you're done writing the code, make sure you run all the tests."* It names an event ("when you're done") and it is load-bearing (you depend on it every time), so it belongs in a Stop hook. Medin's argument for why the rule form fails is not just forgetting — agents "will say they ran everything when the tests are still red" [06:27]. Advisory instruction cannot distinguish "did it" from "reported doing it"; a hook that runs the suite itself can.
+
+The hook version closes the loop rather than merely firing: run the tests on Stop, and either everything is green and the session ends, or the failures are routed back to the agent — *"you said you're done, but you shouldn't actually be. Go and fix these things"* [06:44]. See [Exit Codes Control Behavior](#exit-codes-control-behavior) for the mechanics. *(Source: Cole Medin, 2026-09-01)*
 
 ## Related Pages
 

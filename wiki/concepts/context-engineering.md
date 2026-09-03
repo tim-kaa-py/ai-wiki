@@ -18,7 +18,8 @@ sources:
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
   - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
-timestamp: "2026-08-13"
+  - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
+timestamp: "2026-09-03"
 ---
 
 # Context Engineering
@@ -262,6 +263,23 @@ Held alongside this page's foundational claim: *"More context ≠ better answers
 **Why it matters operationally.** This is not a bookkeeping disagreement. The recency-dominance claim is the load-bearing premise for the deduplication rule in [Tool Design for Agents § Deduplicate Between System Prompt and Tool Descriptions](tool-design-for-agents.md#deduplicate-between-system-prompt-and-tool-descriptions): repetition was a workaround for recency dominance, so deleting duplicate instructions is only safe to the extent that recency dominance has genuinely receded. If it has receded only partially, that rule is riskier than it reads.
 
 **What would resolve it:** ingesting Tariq's original article ("The new rules of context engineering for Claude 5 models"), or any first-party benchmark on instruction adherence by position-in-window for the Claude 5 generation.
+
+## The Instruction Budget: Less Is More, Increasingly
+
+A corollary of context rot that applies specifically to *always-on* instruction files. Cole Medin (Sep 2026): "for context, less is more, and this is becoming more and more true over time as large language models get more capable" [08:43]. The mechanism is the same dilution argument as everywhere else on this page — every line of standing rules is a line competing for attention with the task — but the *reason it is getting worse* is model capability. Instruction that was load-bearing in 2024 is now bloat:
+
+- **Generic engineering principles** — DRY, KISS, "here's how you write a pull request", "here's how you do a code review". The model knows. Medin: "those things, they hurt more than help now in your global rules" [09:19].
+- **The thousand-line CLAUDE.md** that people used to build. "It is not helping you" [09:35].
+
+**The budget:** Anthropic's stated recommendation is to keep rules under **200 lines**; Medin runs to ~300 and is explicit that no exact number is meaningful — the number is a forcing function, not a threshold.
+
+**The retention test:** global rules hold only the project-specific constraints and conventions that apply *no matter what the agent is working on*. Everything else is either scrapped or moved into a task-specific context file the agent is told to read when it hits that kind of work — the [progressive-disclosure](#progressive-disclosure) move applied to your own instructions. *(Source: Cole Medin, 2026-09-01)*
+
+### Compaction's Retention Rate, Quantified
+
+The [reset-over-compaction](#compaction-vs-full-reset) default gets a number. Medin cites a study finding that only **~10% of a conversation's specific details survive `/compact`** [04:38], which he treats as unsurprising rather than a defect — you cannot preserve everything when collapsing a window into a summary. His sharper framing is about control rather than loss: `/compact` *is* a handoff document, "but it's one that you have barely any visibility into and you can hardly control what goes into it" [05:27]. That reframes the choice on this page as authored-vs-delegated handoff rather than reset-vs-summary.
+
+Self-check he recommends: compact a real conversation, then ask the agent about small technical details from earlier in it. It will typically fail and admit the loss. *(Source: Cole Medin, 2026-09-01)*
 
 ## Related Pages
 

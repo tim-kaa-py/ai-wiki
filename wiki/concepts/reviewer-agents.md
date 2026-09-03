@@ -14,7 +14,8 @@ sources:
   - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
   - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
-timestamp: "2026-08-28"
+  - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
+timestamp: "2026-09-03"
 ---
 
 # Reviewer Agents
@@ -156,6 +157,26 @@ The same machinery transfers to non-code artifacts, where the "diff" is a set of
 The versioning discipline that follows is the useful operational rule: **the unverified draft (V1) and the verified output (V2) are separate deliverables**, and only V2 is consumable. Nate is explicit that his own V1 contained claims that "just wasn't correct." If a pipeline has to be shortened for cost, cut a generating persona — not the verifier.
 
 The reason this works is the same self-evaluation-bias argument as [Fresh Context per Reviewer](#fresh-context-per-reviewer-pocock): the generating personas are optimizing for finding evidence *for* their angle, not for auditing it, so the check must be performed by agents that did not produce the claim. See [Multi-Perspective Research (STORM Pattern)](multi-perspective-research.md) for the full pipeline.
+
+## A Third Reason: The Writer Cannot See Its Own Assumptions
+
+Pocock argues from *capability* (a reviewer in the dumb zone reviews badly); Coyle from *independence* (collaborating agents converge). Cole Medin (Sep 2026) supplies a third, and states it as a hard rule he applies to every workflow he builds: **never let the writer approve the work** [14:27].
+
+His premise is about self-blindness rather than degradation or group-think. The implementing agent accumulates assumptions while building, and those assumptions are invisible to it by construction — so when asked to reflect, "it's going to say things are great even if they're not ideal, because it's not going to be able to catch its own assumptions" [14:44]. This is stricter than the other two arguments: a fresh, capable, independent reviewer is required *even for a short session on a big model*, because token count and cross-contamination were never the binding constraint.
+
+What he does allow inside the implementation session: running the tests and iterating on its own work. The line is between *checking* and *approving* — self-testing is fine, self-signoff is not. The review then happens in a separate conversation pointed at a PR, the uncommitted diff, or a handoff document. *(Source: Cole Medin, 2026-09-01)*
+
+## Over-Revision: Iteration Has a Peak
+
+This page already resists perfectionism at the reviewer boundary — [Non-Blocking by Design](#non-blocking-by-design) biases toward "acceptance, not perfection" so reviewers cannot bully the implementer. Medin identifies the same pathology arising *without* a reviewer, from the human simply asking for another pass.
+
+**The claim:** quality is not monotonic in iteration count. The agent reaches its best answer at some point, and further revision produces changes made to appease you — LLM sycophancy expressed as churn rather than flattery. "It's going to find things to correct just to try to appease you ... but you actually get slop back in the end" [15:44].
+
+**The evidence:** a study in which agents were forced through 10–20 iterations found that **85% of the time, some iteration before the last one was substantially better** [16:11].
+
+**The trigger to watch for** is a resource one, not a quality one: leftover tokens before a rate-limit reset, and the impulse to spend them on "go iterate on this a ton and make it perfect" [15:59].
+
+**How to apply:** treat "one more pass" as a decision requiring a reason, keep intermediate versions so you can walk back to a better one, and note that this makes the [Non-Blocking by Design](#non-blocking-by-design) stance load-bearing rather than merely polite — an always-blocking reviewer is a machine for manufacturing exactly this over-revision. *(Source: Cole Medin, 2026-09-01)*
 
 ## Unresolved Tensions
 

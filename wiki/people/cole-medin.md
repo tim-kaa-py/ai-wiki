@@ -7,7 +7,8 @@ tags: [agentic-engineering, claude-code, workflow, education, system-evolution, 
 sources:
   - "summaries/2026-04-06_cole-medin_self-evolving-claude-code-memory-karpathy-llm-knowledge.md"
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
-timestamp: "2026-05-09"
+  - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
+timestamp: "2026-09-03"
 ---
 
 # Cole Medin
@@ -43,6 +44,20 @@ pick ticket → /prime → /plan → fresh session → /implement → outer loop
 ```
 
 Each `/`-prefixed step is a Markdown procedure file in `.claude/commands/`. The Atlassian MCP server pushes stories to Jira during `/create-stories`, pulls ticket context during `/prime`, and posts implementation summaries as ticket comments during `/implement`.
+
+## Reliability Tactics (Sep 2026)
+
+A later, deliberately unsystematic contribution: eleven small workflow adjustments framed as tweaks rather than a methodology — *"I'm not asking you to scrap anything"* [00:32]. The through-line is that reliability failures are context-quality failures, and that when context has gone bad the move is to **discard rather than repair**. Distributed across the wiki:
+
+- **Rule drift** — specificity makes rules effective and perishable; 1 in 4 repos with an AI layer has stale rules; run a periodic drift audit. See [AI Layer § Rule Drift](../concepts/ai-layer.md#rule-drift-the-maintenance-cost-of-being-specific).
+- **Load-bearing rules belong in hooks** — a rule naming an event or an ordering is the tell. See [Claude Code Hooks § Spotting a Load-Bearing Rule](../how-tos/claude-code-hooks-memory.md#spotting-a-load-bearing-rule).
+- **Instruction budget** — under ~200–300 lines; generic engineering principles now hurt. See [Context Engineering § The Instruction Budget](../concepts/context-engineering.md#the-instruction-budget-less-is-more-increasingly).
+- **The tainted conversation** — error rate is self-reinforcing within a session, so never escalate the model mid-task. A second degradation axis independent of token count. See [Smart Zone § A Second Degradation Axis](../concepts/smart-zone.md#a-second-degradation-axis-the-tainted-conversation).
+- **Sub-agent cost is invisible** — `/usage` → `W`; 39% of his weekly limit went to 4+ parallel sessions. See [Parallel Agent Patterns § Measuring What Parallelism Actually Costs You](../concepts/parallel-agent-patterns.md#measuring-what-parallelism-actually-costs-you).
+- **Never let the writer approve the work**, and **stop iterating before quality degrades** (85% of forced 10–20× runs peaked before the last step). See [Reviewer Agents](../concepts/reviewer-agents.md#a-third-reason-the-writer-cannot-see-its-own-assumptions).
+- **Validation is a system, not a step** — design the harness before writing code. See [PIV Loop § Validation Is a System](../concepts/piv-loop.md#validation-is-a-system-not-a-step).
+
+He also takes an explicit position against multi-agent coordinators — see the unresolved tension on [Parallel Agent Patterns](../concepts/parallel-agent-patterns.md). *(Source: 2026-09-01)*
 
 ## Notable Quotes
 

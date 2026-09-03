@@ -6,7 +6,8 @@ pillar: "building"
 tags: [context-engineering, dumb-zone, smart-zone, claude-code, workflow, best-practices, agentic-coding-workflow]
 sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
-timestamp: "2026-05-08"
+  - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
+timestamp: "2026-09-03"
 ---
 
 # Smart Zone vs Dumb Zone
@@ -62,6 +63,21 @@ Smart-zone discipline is the underlying constraint that shapes the rest of Matt 
 - **Fresh context for the reviewer** — if the implementer also reviews, the review happens in the dumb zone after the smart zone got burned on implementation. See [Reviewer Agents](reviewer-agents.md).
 - **Sandcastle's per-issue worktrees** isolate each task in its own fresh context so no single agent burns through ~100K. See [Parallel Agent Patterns](parallel-agent-patterns.md).
 - **"Closing PRDs after implementation" doctrine** keeps stale destination docs from re-entering future sessions and re-burning context on outdated state. See [PRD-as-Prompt Pattern § Doc Rot](prd-as-prompt.md).
+
+## A Second Degradation Axis: The Tainted Conversation
+
+Token count is not the only way a session goes bad. Cole Medin (Sep 2026) describes a failure mode that is independent of window position: a conversation in which the model has established a **pattern of errors**. His mechanism is the same prediction argument that underpins everything else here, applied to error rate rather than attention span — LLMs predict the most likely continuation, and in a conversation full of mistakes the most likely continuation is another mistake. Crucially, *your corrections are part of that conditioning*, not an escape from it: "even if you're trying to correct, the most likely thing to come in that conversation next is another mistake" [12:21].
+
+Two operational consequences:
+
+- **A session can be unusable well below 100K tokens.** The smart-zone ceiling is a *maximum*, not a guarantee. If the error rate spikes, the session is spent regardless of how much window is left.
+- **Trust the perception.** Medin's explicit note: when an agent seems to be failing unusually often, "that's not just you on a short fuse being more judgmental" [12:08] — it is real signal about the conversation's trajectory.
+
+### Do Not Escalate the Model Mid-Task
+
+The natural reflex when a session starts failing is `/model` — swap Sonnet for Opus and push on. Medin calls this "a big no-no" [11:41]: the accumulated bias and mistakes are in the conversation, so they carry over to the larger model unchanged. The defect is the context, not the capability. Same for the other reflex, putting yourself deeper into the loop and steering harder.
+
+The prescribed move is the one this page already argues for, applied at a different trigger: write a handoff document, discard the conversation entirely — "burn it to the ground" [12:52] — and have a fresh session read the handoff and continue. Where `/clear` at ~100K is scheduled maintenance, this is the same reset fired by an error-rate trip-wire instead of a token count. *(Source: Cole Medin, 2026-09-01)*
 
 ## Related Pages
 

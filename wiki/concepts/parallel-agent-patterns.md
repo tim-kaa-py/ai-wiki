@@ -15,7 +15,8 @@ sources:
   - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
-timestamp: "2026-08-13"
+  - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
+timestamp: "2026-09-03"
 ---
 
 # Parallel Agent Patterns
@@ -304,6 +305,40 @@ Anthropic's May 2026 memory work (Mahes, Platform team) gives this its own primi
 The architectural point: a working agent only sees its own session. Cross-agent patterns are **invisible from inside any one session** — they only exist when you look at a corpus of sessions together. Dreaming is the named instantiation of the out-of-band consolidator that owns that perspective; the same pattern is buildable without the product (cron job + single agent reading N transcripts → diff against memory store).
 
 **Practical implication for the patterns above:** Carlini's 16-agent lock-file C compiler, Anthropic's orchestrator-worker research system, Claude Code agent teams, and Sandcastle's worktree pipeline all benefit from a separate consolidation pass over recent transcripts — even when each individual agent's task is well-bounded. The consolidator is what keeps a shared memory store usable past the toy-deployment phase. See [Agent Memory Systems § The Platform View](agent-memory-systems.md#the-platform-view-memory-as-a-primitive-anthropic) and [Dreaming](dreaming.md).
+
+## Measuring What Parallelism Actually Costs You
+
+The [15× cost rule](#the-15-cost-rule) says parallelism is only worth it above a value threshold. Medin (Sep 2026) points out the practical problem with applying it: **you have no felt sense of the bill.** Fan-outs and sub-agents "cost you way more tokens than you think" [10:13], and the cost lands as a rate limit rather than an invoice, so the connection back to the decision is easy to miss.
+
+**The instrument.** In Claude Code, `/usage` then `W` shows the weekly limit broken down by concurrency. Most agents expose an equivalent. Medin's own reading: **39% of his weekly limit was consumed while running 4+ sessions in parallel** [10:31] — despite parallel work being the exception rather than his normal mode. That is the number worth reproducing on your own account before assuming a fan-out is cheap.
+
+**The specific trap in Claude Code** is unrequested fan-out: it is "way too prone to just spinning up even dozens of sub-agents without you asking" [10:51]. So the cost is not always a decision you made — it can be a default you failed to constrain, which makes the measurement more important, not less.
+
+**What Medin is *not* saying.** He is explicit that sub-agents are valuable and that context isolation is a real benefit: they are "really important for protecting the context of your main agent" [11:08]. His complaint is calibration — the ease of reaching for them versus their invisible cost, and the fact that everything loaded into a sub-agent session "just disappears forever" [11:16]. Read this as the enforcement mechanism for the 15× rule rather than an argument against the patterns on this page. *(Source: Cole Medin, 2026-09-01)*
+
+## Unresolved Tensions
+
+### Are coordinators a legitimate rung, or an attractive dead end?
+
+*Surfaced 2026-09-03.*
+
+This page treats peer-to-peer coordination as the top rung of a calibrated ladder — expensive, narrowly indicated, but real. Cole Medin (Sep 2026) rejects the rung outright. He flags it as the one hot take in his set, and it is the only claim in that video he argues by assertion rather than mechanism.
+
+**Existing position** *(Anthropic multi-agent research system; Claude Code docs May 2026; Nate Herk / STORM; Cherny — see [Pattern 3](#pattern-3-claude-code-agent-teams-productized-peer-to-peer))*:
+
+> "**Agent teams** — peer messaging. Pay the linear per-teammate cost when a worker must *revise* in response to being challenged, i.e. when the value is in the back-and-forth rather than in surfacing the disagreement once. […] The discriminating question is therefore not 'do I wish they could talk?' but **'does a worker need to change its answer after hearing the objection?'**"
+
+Backed on this page by [Pattern 1](#pattern-1-agent-teams-with-lock-file-coordination): 16 lock-file-coordinated agents producing a 100k-line Rust C compiler at a 99% test pass rate.
+
+**New position** *(Cole Medin, 2026-09-01, [13:10-14:25])*:
+
+> "There are a ton of super fancy elaborate frameworks out there for having some kind of team lead that is distributing work and having the agents communicate with each other. **This is not reliable. You don't need it.** In fact, Claude has their own version of this with agent teams that they have left as experimental for months and months. And they've done that for a reason. […] You don't need teammates, a shared task list, a mailbox that they port messages into. This all sounds really, really cool, but **it's not how you build production-grade software**."
+
+**His alternative** is not "no parallelism" — it is parallelism without coordination machinery: keep the main agent as a **pure delegator** that takes plain-English intent and dispatches background agents or workflows, with no inter-agent messaging and no monitoring layer. "There's a lot more reliability here when this is purely a delegator" [14:11]. That is architecturally close to [Pattern 2's](#pattern-2-orchestrator-worker-multi-agent-research-system) hub-and-spoke topology and to the "cheaper middle rung" this page already describes — the disagreement is narrower than the rhetoric suggests.
+
+**What each side rests on.** The existing position rests on published results with numbers. Medin's rests on practitioner experience plus one appeal to authority — Anthropic has kept agent teams experimental for a long time, therefore the approach is unreliable — with no failure mechanism offered, unlike the rest of his tips. Against that, he has an implicit cost argument that this page independently corroborates: coordination multiplies parallel sessions, and parallel sessions are what consumed 39% of his weekly limit (see [Measuring What Parallelism Actually Costs You](#measuring-what-parallelism-actually-costs-you)).
+
+**What would resolve it.** The two positions may not actually conflict: the wiki gates the rung on *"must a worker revise after being challenged?"*, and Medin may simply be claiming that gate almost never opens on real production work. Evidence that would settle it: a production coding workload where peer messaging measurably beat a pure delegator at equal token spend — or a documented count of how often that gate opens in practice.
 
 ## Related Pages
 

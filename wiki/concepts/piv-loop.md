@@ -6,7 +6,8 @@ pillar: "building"
 tags: [agentic-engineering, claude-code, workflow, planning, piv, inner-loop, two-layer-planning]
 sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
-timestamp: "2026-05-09"
+  - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
+timestamp: "2026-09-03"
 ---
 
 # PIV Loop (Plan-Implement-Validate)
@@ -98,6 +99,19 @@ Three structural moves distinguish PIV from "just prompt the agent to fix the bu
 ## Sources
 
 - [Cole Medin — Full Guide to Becoming a Principled Agentic Engineer](../../summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md) — origin of the PIV vocabulary, two-layer planning rule, and fresh-session-for-implement rule
+
+## Validation Is a System, Not a Step
+
+Medin's later framing (Sep 2026) sharpens what the **V** in PIV is supposed to be. The common failure is treating validation as something appended after the code exists — *"oh yeah, I guess you should probably add some unit tests here"*, or clicking around the app to see if it looks right [16:33]. That is validation as a step, and it makes the loop's third phase an afterthought rather than a phase.
+
+Validation as a *system* means the harness is designed **before any code is written**, as part of Plan:
+
+- Which tools the agent uses to check its own work.
+- The conventions for unit and integration tests in this codebase.
+- How the human will verify it afterwards.
+- How the agent should hunt for edge cases.
+
+He rates this "one of the best ways to make your coding workflows more reliable" [17:02]. Practically it moves work from V into P: the Plan output should already contain the validation harness, so Implement is bounded by a check that existed before it started. Compare [Generator-Evaluator Harness](generator-evaluator-harness.md), which is the same principle wired into a long-running loop. *(Source: Cole Medin, 2026-09-01)*
 
 ## Related Pages
 
