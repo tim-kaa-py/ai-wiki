@@ -15,7 +15,8 @@ sources:
   - summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md
   - summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md
   - summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md
-timestamp: 2026-08-13
+  - summaries/2026-08-19_ai-engineer_why-your-enterprise-tech-stack-isnt-ready-for-ai-agents.md
+timestamp: 2026-09-09
 ---
 
 # Agent Loops (Loop Engineering)
@@ -89,6 +90,20 @@ if confidence(response) < THRESHOLD:
 The loop exit is also the natural place for the human-in-the-loop gate: *"You check the confidence. If it looks good, you keep it. If you don't, then you escalate to a human"* [10:43]. Structure the loop's return value as a `(result, confidence)` pair rather than a bare result.
 
 Coyle is describing the *shape* of the control flow rather than enumerating an exact API surface; treat the table as a pattern, not as a literal list of `stop_reason` values. *(Source: Frank Coyle, AI Engineer 2026-08-08)*
+
+### Human/Agent Equivalency: Make the Escalation Target Interchangeable
+
+The confidence-threshold gate above assumes you know where the handoff happens. Saul Howard (VP Eng, Anterior) argues that in a real regulated deployment you do not: escalation triggers are *dynamic and unpredictable* — sometimes the model self-reports uncertainty, sometimes an external rule fires (a proposed treatment crossing a cost threshold), and new triggers appear after launch. Designing the loop around a fixed set of handoff points is therefore designing around a guess. [Source: 2026-08-19_ai-engineer_why-your-enterprise-tech-stack-isnt-ready-for-ai-agents]
+
+His platform-level answer is a deliberately wider definition of *agent*, one that covers humans and LLMs alike:
+
+- **Any action an LLM can take, a human can also take**, through the same interface — enforced at the platform layer, not per workflow.
+- **Downstream steps do not care which actor performed an upstream action.** The step reads the recorded action, not the actor type.
+- **Context is one shared definition** with two render methods: agent-friendly (a prompt) and human-friendly (a UI).
+
+The practical consequence for loop design: `escalate_to_human(response)` stops being a special exit that leaves the loop and becomes a *substitution of actor* inside the same loop. Where Coyle's gate answers "when do we stop and call a human?", this answers "what does the system have to look like so that calling a human is not a separate code path?" The two compose — keep the confidence gate as the trigger, and make the target interchangeable so new triggers can be added without new plumbing.
+
+There is a second payoff outside reliability: once humans and agents act through one interface, the human's action on the same task is directly comparable to the agent's, which is what turns everyday escalations into eval ground truth. See [Agent Evaluation § Evals as a Byproduct of the Architecture](agent-evaluation.md#evals-as-a-byproduct-of-the-architecture-anterior--anthropic-august-2026). *(Source: Christopher Lovejoy & Saul Howard, AI Engineer 2026-08-19)*
 
 ## Why Loops Work — The Quality-vs-Attempts Model
 

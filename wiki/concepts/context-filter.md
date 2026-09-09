@@ -6,7 +6,8 @@ pillar: "building"
 tags: [security, prompt-injection, agents, skills, context-engineering, waf, supply-chain]
 sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-timestamp: "2026-05-05"
+  - "summaries/2026-08-19_ai-engineer_why-your-enterprise-tech-stack-isnt-ready-for-ai-agents.md"
+timestamp: "2026-09-09"
 ---
 
 # Context Filter (WAF for Prompt Injection)
@@ -89,6 +90,26 @@ The first stage is cheap and catches the obvious. The second stage uses a small 
 ## Anti-Pattern: Sandbox-Only Defense
 
 Believing that running the agent in a sandbox is sufficient protection against malicious context. The sandbox is necessary but not sufficient — it protects you from the agent's *actions*, not from the agent's *plan being steered by injected instructions*. A plan-steering injection can cause the agent to take perfectly sandbox-legal actions (calling tools, writing files, posting messages) that nonetheless serve the attacker.
+
+## Unresolved Tensions
+
+### Is prompt injection defended by inspecting context upstream of the LLM, or made impossible by the deployment architecture?
+
+*Surfaced 2026-09-09.*
+
+**Position A — filter the context before it reaches the model.** [Source: `summaries/2026-05-03_ai-engineer_context-is-the-new-code.md`, this page's [The Load-Bearing Argument](#the-load-bearing-argument-sandboxes-dont-catch-this)]
+
+> "The defense has to live **upstream of the LLM** — a filter that scans context before it's loaded — not downstream around execution. This is the structural reason Debois reaches for the WAF analogy."
+
+**Position B — make the trifecta structurally impossible, and skip the classifier.** [Source: `summaries/2026-08-19_ai-engineer_why-your-enterprise-tech-stack-isnt-ready-for-ai-agents.md`, § Argument Structures, [08:46-12:57]]
+
+> "Detection-based mitigations attack the middle term probabilistically and therefore fail probabilistically. Instead: if agents carry tokens and fetch from object storage at point of use, and if the event stream carrying orchestration logic is segregated from that storage, then the question 'can the agent at point A also reach the data over there?' has an answer decidable from the architecture. Where the answer is no, the trifecta cannot close within the process — no classifier required."
+
+**Why this is held rather than merged.** The two positions attack different terms of the lethal trifecta and disagree about which term is tractable. Debois accepts that the agent will hold sensitive data and have an exfiltration channel, so he attacks the *untrusted content* term — inspect it, probabilistically, at the perimeter, layered as defense-in-depth (see [Implementation Sketch](#implementation-sketch), where every stage is explicitly bypass-able). Howard accepts that untrusted content will arrive and be believed, so he attacks the *access* term — if the agent process cannot reach the second dataset with the tokens it bears, injected instructions have nothing to steer it toward. Position A yields a probabilistic control that degrades gracefully and can be retrofitted onto any harness; Position B yields a decidable property but only if the storage and identity architecture were designed for it from the start, which is precisely the cost the enterprise talk argues you must pay up front.
+
+**What each position does not answer.** Debois's filter has no answer for a novel injection that the ruleset and the classifier both miss — the failure is silent and the agent's data access is unconstrained behind it. Howard's architecture has no answer for the case where the agent legitimately needs both the sensitive data and the untrusted content in the same process to do its job; the trifecta then closes by design, and something at the perimeter has to inspect the content after all.
+
+**What would resolve it:** a stated position on whether the two are layers or alternatives. Neither source addresses the other, and nothing here rules out running a context filter *inside* a token-bearing, segregated deployment — but Howard's framing is explicitly "solvable by construction, not by guardrails," which reads as a claim that the filter is redundant rather than complementary.
 
 ## See Also
 

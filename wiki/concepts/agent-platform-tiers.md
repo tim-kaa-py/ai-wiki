@@ -9,7 +9,8 @@ sources:
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
   - "summaries/2026-04-15_anthropic_scaling-managed-agents.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
-timestamp: "2026-05-17"
+  - "summaries/2026-08-19_ai-engineer_why-your-enterprise-tech-stack-isnt-ready-for-ai-agents.md"
+timestamp: "2026-09-09"
 ---
 
 # Agent Platform Tiers (Build-to-Buy Spectrum)
@@ -62,6 +63,17 @@ Run these four checks in order. The first hard constraint narrows the tier; only
 4. **Strict data residency / privacy?** → Self-hosted or a vendor with a strong DPA.
 
 Before comparing vendors, write down which of **memory / infra / harness** you are willing to cede. That eliminates ~80% of options immediately.
+
+### Heuristic 4 Is a Day-One Constraint, Not a Vendor Question
+
+Saul Howard (VP Eng, Anterior) reports regulated-healthcare deployments where the customer will not let data leave their VPC at all — the vendor "operates with only tangential access to customer data," running the agent against data it never receives. Christopher Lovejoy (Anthropic FDE) makes the same point from the enterprise-buyer side: the audit-trail, data-lifecycle and residency questions arrive at the productionization meeting, one day after the PoC is declared a success. [Source: 2026-08-19_ai-engineer_why-your-enterprise-tech-stack-isnt-ready-for-ai-agents]
+
+Two consequences for this page's decision framework:
+
+- **"The data never comes to us" rules out most SaaS-shaped designs after the fact.** It is not merely a preference for a lower tier — it constrains the *storage paradigm* (references and schemas in your orchestration, payloads in the customer's environment), which is close to impossible to retrofit. Treat it as an architectural assumption on day one of a regulated-sector build, above the tier choice rather than inside it.
+- **Data residency and full-control/compliance are the same check.** Heuristics 1 and 4 collapse into one question in practice, and it is the question that should be asked before any vendor shortlist exists.
+
+The primitives that make a "data stays in the customer's environment" deployment tractable — an immutable event log holding references, schema-driven object storage holding payloads — are architecture rather than tier selection. *(Source: Christopher Lovejoy & Saul Howard, AI Engineer 2026-08-19)*
 
 ## Products That ARE Agents (Off-Spectrum)
 

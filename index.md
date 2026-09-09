@@ -77,6 +77,7 @@ okf_version: "0.1"
 * [Opus 5 Is Exhausting. Anthropic Reveals The Fix. (Ray Amjad)](summaries/2026-08-05_ray-amjad_opus-5-is-exhausting-anthropic-reveals-the-fix.md) - Opus 5's default prose is jargon-dense and tiring to read; Claude Code output styles are the recommended fix, and they work best as a per-project, per-mood dial rather than a set-once preference
 * [Anthropic's CCA Exam as a Field-Guide for Agentic Engineering (Frank Coyle, UC Berkeley — AI Engineer)](summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md) - Anthropic's certification blueprint read as a signal about production agent design — organised around anti-patterns, with a contrarian argument that the agentic loop is a rediscovered 1966 primitive
 * [Don't Ship Skills Without Evals (Philipp Schmid, Google DeepMind — AI Engineer)](summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md) - Philipp Schmid of Google DeepMind on why agent skills need evals, eight rules for writing effective skills, and how to build a cheap regex-based skill eval harness
+* [Why Your Enterprise Tech Stack Isn't Ready for AI Agents (Christopher Lovejoy & Saul Howard — AI Engineer)](summaries/2026-08-19_ai-engineer_why-your-enterprise-tech-stack-isnt-ready-for-ai-agents.md) - Four architectural primitives — immutable event log, schema-driven object storage, human/agent equivalency, and the evals that fall out of them — that make regulated-enterprise agents auditable and compliant by construction rather than by bolt-on
 
 ### Wiki Pages
 
@@ -143,6 +144,7 @@ okf_version: "0.1"
 * [Dynamic Workflows](wiki/concepts/dynamic-workflows.md) - Claude Code's sandboxed agent-orchestration primitive — an "algebra for agents" Cherny frames as a new axis of test-time compute
 * [Claude Code Output Styles](wiki/how-tos/claude-code-output-styles.md) - Persistent, per-project modifiers on how Claude Code writes back to you — the config-level fix for output that's technically correct but exhausting to read
 * [Skill Evaluation](wiki/concepts/skill-evaluation.md) - Why agent skills need evals, and the minimal harness — test-case JSON plus regex asserts — that makes skill quality, trigger reliability, and retirement measurable
+* [Regulated-Enterprise Agent Architecture](wiki/concepts/regulated-enterprise-agent-architecture.md) - Four interlocking primitives — immutable event log, adjacent object storage, human/agent equivalency, and the evals that fall out of them — that make a regulated-domain agent auditable and compliant by construction rather than by bolt-on
 
 ## Understanding AI
 
