@@ -7,7 +7,8 @@ tags: [software-factory, agents, coding-agents, agi, harness-engineering, automa
 sources:
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
-timestamp: "2026-08-28"
+  - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
+timestamp: "2026-09-11"
 ---
 
 # Software Factory
@@ -78,6 +79,26 @@ Explicit exception: "small stuff still just go straight to the agent" [15:21-15:
 
 **Vendor caveat.** HumanLayer sells "building blocks for your software factory" and "soon to be better verifiers for software quality," so Horthy arrives with a commercial interest in the conclusion that planning tooling and human review are necessary. The mechanics of the argument stand on their own; the incentive is worth carrying alongside them. *(Source: Dex Horthy, AI Engineer 2026-07-23.)*
 
+## The Dim Factory: Autonomy as a Per-Feature Risk Decision (Debois)
+
+Patrick Debois (Tessl, AI Engineer August 2026) accepts the dark factory as the direction of travel — his talk opens by assuming it rather than arguing for it — but names the realistic landing point the **dim factory** [19:56]: "not all features will become autonomous."
+
+The move is to stop treating autonomy as a single organizational setting and treat it as a **per-feature risk decision**. The spectrum runs "from being a micromanager to being an autonomous approval" [20:19], and where a given feature sits on it is a choice about tolerable risk, not a maturity score you are failing to reach. Uniform full autonomy over-exposes the high-risk features; uniform supervision under-uses the low-risk ones. A partially-lit factory is the efficient position, not a transitional one.
+
+What makes the lit parts affordable is a shift in where supervision spend goes:
+
+| Investment | What it buys |
+|------------|--------------|
+| **Provenance** | Who (or what) changed this code, so a bad change is attributable after the fact |
+| **Verifiers** | Automated acceptance for the tiers you have chosen not to watch |
+| **Situational awareness** | The detection-and-recovery path for when a verifier fails |
+
+The common property: each converts supervision from a **continuous** cost into a **triggered** one. That is the mechanism by which a factory can run dim rather than either fully lit or fully dark.
+
+Debois also carries a lineage argument for why the resistance is organizational: in 2009, continuous delivery was called crazy, and "it will not work here" named the local environment rather than a technical blocker — so it was a readiness report, not a feasibility claim. He reads today's dark-factory objections the same way [00:12-01:02]. The analogy's weak point is that it assumes continuous delivery's eventual success transfers.
+
+His closing framing extends the pipeline metaphor past delivery: the durable asset is **captured knowledge** — skills, context, harness constraints, business context — and continuous delivery becomes **continuous learning**, where the diagnostic is "how fast can we swap in swap out something new" [20:48] and the goal is inverted from the usual reliability framing: "it's not about making the whole system more reliable but can I keep it reliable while changing more of the system" [20:58]. The organizational scaffolding a factory needs to reach that state is on [Agent Enablement](agent-enablement.md). *(Source: Patrick Debois, AI Engineer 2026-08-22.)*
+
 ## Unresolved Tensions
 
 ### Can the factory maintain its own codebase, or does maintenance require a human in the loop?
@@ -98,6 +119,8 @@ Dex Horthy argues maintenance is precisely the box that does not automate, and g
 
 His evidence is a post-mortem rather than a benchmark: HumanLayer ran lights-off on a real production system from July 2025, and it ended on the day an agent hit an issue it could not solve — forcing a dig into a codebase nobody had read in three months, while the site was down [08:25-08:30]. He concedes he **cannot prove** the claim, since no maintainability benchmark exists.
 
+**Does the dim factory settle this? No.** Debois's risk-tiered autonomy (above) sits between the two positions but does not adjudicate them: tiering says *which* features run unwatched, while the open question is whether an unwatched feature's codebase degrades over months regardless of which tier it was assigned to. His answer to erosion is provenance plus verifiers plus a recovery path — detection and repair — which is a bet that the degradation is catchable, not evidence that it does not occur. Read it as a third operating posture, not a resolution.
+
 Both are held without choosing. The two claims may be measuring different horizons — Simon Last's recursion (an agent writing itself a tool, patching a flaky script) is demonstrated at the scale of hours, while Horthy's failure is architectural erosion measured in months — but the page should not be read as asserting that the demonstrated short-horizon self-repair extends to long-horizon maintenance.
 
 ## Related Pages
@@ -108,3 +131,5 @@ Both are held without choosing. The two claims may be measuring different horizo
 - [Five Levels of AI Coding](five-levels-of-ai-coding.md) — Shapiro's maturity model; software factory sits at the frontier tier
 - [Plan and Review](plan-and-review.md) — the planning-versus-reviewing ledger Horthy's four-stage pipeline spends against
 - [Reviewer Agents](reviewer-agents.md) — the agentic-review box inside the factory loop
+- [Agent Enablement](agent-enablement.md) — the organizational layer Debois argues the factory actually runs on
+- [Patrick Debois](../people/patrick-debois.md) — author of the dim-factory framing

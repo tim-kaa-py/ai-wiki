@@ -24,7 +24,8 @@ sources:
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
-timestamp: "2026-08-28"
+  - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
+timestamp: "2026-09-11"
 ---
 
 # Harness Engineering
@@ -245,6 +246,21 @@ Unlike a prompt or a model weight, an optimized harness is long-lived IP:
 - Compounds across re-runs against future models
 
 Practical implication: treat a harness you expect to re-run as an asset you invest in, not a script you rewrite each quarter.
+
+### Which Half Is the Asset? (Debois's Commoditization Claim)
+
+*Surfaced: 2026-09-11 (ingest of 2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams).*
+
+Patrick Debois puts direct counter-pressure on the section above: loops and harnesses are *"not the rocket science"* [01:15], the capability will consolidate — possibly into a frontier lab offering it as a service — and *"that's not going to be the differentiator for your organization"* [01:34]. He does not claim the harness is worthless, though. His closing names the moat as *"the knowledge you're putting now into skills, your context and maybe in your harness"* [20:29] — note the hedge on the last item; he leaves the seam between the two statements open rather than drawing a line through it.
+
+**The line below is this wiki's framing, not Debois's.** He asserts both claims; the split is our reconciliation:
+
+- **Commoditizes — the plumbing.** Loop control flow, retry and verification wiring, sub-agent orchestration, tool-call dispatch, sandboxing. Everyone is solving the same problem, so it converges, and buying it will beat building it.
+- **Stays yours — the payload.** What the plumbing is loaded with: skills, context files, guardrail rules, error-message wording, structural tests, the paved-road catalog. Lopopolo's repo artifacts and Buetow's guardrail scripts are this half, and they transfer to no one else because they encode your codebase and your standards.
+
+The findings on this page that survive Debois's pressure are the payload ones — a harness that transfers across five models transfers because of what it encodes, not because its loop is special. So scope the investment advice accordingly: expect your plumbing to be replaced by a vendor's, and expect the knowledge you loaded into it to survive that swap. The organizational consequences are on [Agent Enablement](agent-enablement.md).
+
+This does not settle the [Horthy tension](#is-the-harness-the-ceiling-or-only-the-floor) below. Debois is arguing about where *competitive* value sits; Horthy about a ceiling set during RL training. A harness whose plumbing commoditizes could still be either the floor or the ceiling.
 
 ## Shared Harness Artifacts Are an Attack Surface
 
@@ -502,3 +518,4 @@ Both are held without choosing. Horthy's position is that the harness raises the
 - [Boris Cherny](../people/boris-cherny.md) — ablation discipline, the 80% prompt cut, product overhang
 - [Product Overhang and Hobbling](product-overhang.md) — why expired scaffolding stops being neutral and starts obstructing
 - [Dynamic Workflows](dynamic-workflows.md) — orchestration as an axis of test-time compute
+- [Agent Enablement](agent-enablement.md) — Debois's organizational layer; holds an unresolved claim that the generic harness commoditizes

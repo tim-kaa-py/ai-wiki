@@ -6,7 +6,8 @@ pillar: "building"
 tags: [cdlc, context-engineering, agents, evaluation, skills, workflow, devops]
 sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-timestamp: "2026-05-05"
+  - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
+timestamp: "2026-09-11"
 ---
 
 # Context Development Life Cycle (CDLC)
@@ -87,6 +88,16 @@ Operational rule: **when estimating a context-engineering task, double the estim
 
 Debois closes the talk with a scaling progression: an individual runs the CDLC for their own context; a team shares context and evals; an org-of-teams compounds when each team's missing-context fixes flow back to a shared registry. LLMs are the engine, context is the fuel — and the CDLC is the refinery.
 
+### What the Flywheel Needs to Actually Turn (August 2026 follow-on)
+
+Debois's next talk is the organizational half of this progression — the same solo → team → "multiplayer system" arc, but arguing that the missing pieces are not lifecycle phases at all. Three of them bear directly on the CDLC. [Source: 2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams]
+
+- **The Distribute phase has an owner problem before it has a tooling problem.** Skill registries, context eval systems and agent guardrails fall between platform (owns infrastructure, not development) and developer experience (owns neither). Unowned, shared context artifacts fork rather than converge. See [Agent Skills § Who Owns the Registry](agent-skills.md#who-owns-the-registry-and-the-fork-sprawl-failure-mode).
+- **Shared context needs a small catalog, not consensus.** Aiming for one org-wide way of working "requires a lot of communication and brokerage" [13:05]; three or four maintained paved roads, with off-road work self-funded, is the shape that converges.
+- **The Observe phase gets an org-level metric.** "How many human touches you still do to have the agent do the right thing" [09:38] is the number the whole loop is supposed to drive down, and it measures the system rather than a person — which is also what makes it defensible in a budget conversation.
+
+The full organizational argument is on [Agent Enablement](agent-enablement.md).
+
 ## See Also
 
 - [Context Engineering](context-engineering.md) — the prior-era framing this builds on
@@ -95,4 +106,5 @@ Debois closes the talk with a scaling progression: an individual runs the CDLC f
 - [Context Filter](context-filter.md) — perimeter scanner for the Distribute/Observe phases
 - [AI SBOM](ai-sbom.md) — supply-chain bill of materials for Distribute
 - [Harness Engineering](harness-engineering.md) — the wrapping discipline; CDLC is what runs *inside* the harness
+- [Agent Enablement](agent-enablement.md) — the organizational layer the flywheel runs on: rituals, platform ownership, mandate
 - [Patrick Debois](../people/patrick-debois.md) — DevOps originator, now framing context as code

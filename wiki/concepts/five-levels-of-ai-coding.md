@@ -8,7 +8,8 @@ sources:
   - "summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md"
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
-timestamp: "2026-08-28"
+  - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
+timestamp: "2026-09-11"
 ---
 
 # Five Levels of AI Coding
@@ -81,6 +82,8 @@ Evidence:
 
 **Partial mitigation:** "Medical residency" model where juniors learn by reviewing and directing AI output in simulated environments rather than writing code from scratch.
 
+**The headcount premise is worth checking separately.** Patrick Debois (AI Engineer, August 2026) argues the solo-builder end state that makes the pipeline collapse look inevitable does not survive contact with operations: the full-stack solo builder still needs complementary PM/design skills, a holiday backup, someone carrying production tickets, and a junior learning what good looks like — which reassembles into roughly three to five people [18:55-19:51]. On that reading the junior seat is not economically eliminated, it is under-resourced, and his prescription is the same as the residency model — keep investing in education, "particularly for juniors who otherwise never see what good looks like." This is a practitioner argument about team composition, not a counter-dataset to the employment figures above, which stand. *(Source: Patrick Debois, AI Engineer 2026-08-22.)*
+
 ## The Brownfield Reality
 
 Legacy systems cannot be dark-factored because the specification doesn't exist — the running system IS the only complete description of what the software does. The migration path:
@@ -143,6 +146,7 @@ Historical pattern: every time the cost of computing dropped (mainframes to PCs,
 2. **Spec quality is the new bottleneck.** Ambiguity produces software that fills gaps with machine guesses, not customer-centric guesses. The spec must anticipate the questions the agent doesn't know to ask.
 3. **Measure, don't trust feelings.** Self-assessment of AI productivity is unreliable. Use actual task completion time comparisons, not surveys.
 4. **Budget compute as headcount.** $1,000/engineer/day in compute is the benchmark for serious AI software factories. If your AI spend per engineer is trivial, you're not operating at the scale where dark factory patterns become viable.
+5. **When the spend is questioned, optimize it rather than cap it.** Debois's reflex for the finance conversation [18:23-18:53]: a cap rations a capability whose cost is a symptom of an unfixed system, because iteration count is the dominant driver and iterations fall with correct model choice, better context, and a better harness — the same changes that improve output quality. Make cost visible per team and per workflow first, so the optimization target becomes turns-to-correct rather than raw tokens. See [Agent Enablement § Cost as an Optimization Lever](agent-enablement.md#cost-as-an-optimization-lever-not-a-cap).
 
 ## Unresolved Tensions
 
@@ -168,6 +172,8 @@ Anthropic's 2026 trends report argues against this endpoint via the [Collaborati
 
 **A third datapoint (added 2026-08-28).** Dex Horthy contributes a practitioner post-mortem rather than a survey: HumanLayer ran the lights-off configuration seriously on a real production system from July 2025, and it ended the day an agent hit an issue it could not solve — forcing a dig into a codebase nobody had read in three months, while the site was down [08:25-08:30]. His diagnosis is that Level 5 is blocked at the *training* layer, not the tooling layer: coding models are RL-trained on binary test-pass rewards with no channel for maintainability, because "the cost function of bad architecture is measured in months and years" [13:44-13:52]. This does not settle the tension — it is a single anecdote, and Horthy concedes he cannot prove the claim since no maintainability benchmark exists — but it is evidence against the "different measurement windows" reconciliation specifically: if the obstacle is the shape of the reward signal, waiting for better models does not close it. *(Source: [Dex Horthy, AI Engineer 2026-07-23](../../summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md).)*
 
+**A fourth datapoint (added 2026-09-11).** Patrick Debois assumes the dark factory as the direction of travel and still lands short of Level 5: "not all features will become autonomous" [19:56]. His **dim factory** makes autonomy a per-feature risk decision on a spectrum "from being a micromanager to being an autonomous approval" [20:19] rather than an org-wide level. That is close to this page's own stated resolution — Level 5 for cleanly-specifiable work, collaboration where judgment is the value — but it reframes the model's axis: the maturity ladder reads position-on-the-ladder as progress, whereas Debois reads it as a risk posture chosen per feature, which a single org-level number cannot express. It does not resolve the tension so much as suggest the question "what level is this org at?" may be malformed. See [Software Factory § The Dim Factory](software-factory.md#the-dim-factory-autonomy-as-a-per-feature-risk-decision-debois). *(Source: [Patrick Debois, AI Engineer 2026-08-22](../../summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md).)*
+
 The wiki holds all three framings without choosing. Use Level 5 / Dark Factory as the model for work that specifies cleanly with verifiable holdout sets (StrongDM-shape work). Use the Collaboration Paradox as the model for work where human judgment, taste, or accountability is itself the value.
 
 ## Related Pages
@@ -176,4 +182,5 @@ The wiki holds all three framings without choosing. Use Level 5 / Dark Factory a
 - [Empathize with the Agent](empathize-with-the-agent.md) — the mental shift required to progress past Level 2
 - [Claude Code](../tools/claude-code.md) — tool enabling Level 3-4 patterns
 - [Software Factory](software-factory.md) — the factory pipeline the Dark Factory is the lights-out variant of
+- [Agent Enablement](agent-enablement.md) — the organizational scaffolding that moves a team up the ladder, and Debois's dim-factory landing point
 - [The Collaboration Paradox](collaboration-paradox.md) — Anthropic's competing framing that "% fully delegated is the wrong yardstick" — see [Unresolved Tensions](#unresolved-tensions) above

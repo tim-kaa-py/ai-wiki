@@ -18,7 +18,8 @@ sources:
   - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
   - "summaries/2026-08-19_ai-engineer_why-your-enterprise-tech-stack-isnt-ready-for-ai-agents.md"
-timestamp: "2026-09-09"
+  - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
+timestamp: "2026-09-11"
 ---
 
 # Agent Evaluation
@@ -237,6 +238,12 @@ This is per-eval SLOs rather than aggregate metrics. It diverges from common fra
 
 Operational rule: in CI, fail the build only if a critical eval drops *below its budget*, not on any individual flake. Allow nice-to-have evals to be flaky without blocking merges; surface them as warnings.
 
+### Who Owns the Eval System (Debois, August 2026)
+
+A follow-on organizational point, not a methodological one: once context evals exist beyond a single team, "an eval system for context" becomes a **platform object with no obvious owner**. Debois lists it alongside skill registries, coding-agent-specific guardrails and agent identities as capabilities that fall into the gap between a platform team (owns infrastructure, not development) and a developer-experience team (owns neither) [10:16-13:23]. Unowned, a shared eval system degrades the same way an unowned skill registry does — it forks, and consumers have no basis for choosing between two variants.
+
+Related: Debois also nominates **human touches per correct result** — how many human interventions a task still needs to come out right [09:38] — as the org-level companion to per-eval success rates. Per-eval budgets tell you whether an artifact is good; touches tell you whether the system around it is improving. See [Agent Enablement § Two Metrics That Are Not Productivity](agent-enablement.md#two-metrics-that-are-not-productivity). [Source: 2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams]
+
 ## The Unmeasured Dimension: Maintainability
 
 Everything above assumes the criterion can be scored at the end of a run. Dex Horthy (AI Engineer, July 2026) names a criterion where that assumption breaks, and it is the criterion that governs whether agent-written code survives.
@@ -330,3 +337,4 @@ Note the difference in emphasis from *Eval design principles* above: Anthropic's
 - *Persona Engineering: A Field Guide to AI Synthetic Personas* — Ishan Anand, AI Engineer, 2026-07-29
 - *Harness Engineering is not Enough: Why Software Factories Fail* — Dex Horthy, AI Engineer, 2026-07-23
 - *Why Your Enterprise Tech Stack Isn't Ready for AI Agents* — Christopher Lovejoy & Saul Howard, AI Engineer, 2026-08-19
+- *Coding Agents Don't Scale Themselves. Neither Do Your Teams.* — Patrick Debois, AI Engineer, 2026-08-22

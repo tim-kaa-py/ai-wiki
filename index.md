@@ -78,9 +78,11 @@ okf_version: "0.1"
 * [Anthropic's CCA Exam as a Field-Guide for Agentic Engineering (Frank Coyle, UC Berkeley — AI Engineer)](summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md) - Anthropic's certification blueprint read as a signal about production agent design — organised around anti-patterns, with a contrarian argument that the agentic loop is a rediscovered 1966 primitive
 * [Don't Ship Skills Without Evals (Philipp Schmid, Google DeepMind — AI Engineer)](summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md) - Philipp Schmid of Google DeepMind on why agent skills need evals, eight rules for writing effective skills, and how to build a cheap regex-based skill eval harness
 * [Why Your Enterprise Tech Stack Isn't Ready for AI Agents (Christopher Lovejoy & Saul Howard — AI Engineer)](summaries/2026-08-19_ai-engineer_why-your-enterprise-tech-stack-isnt-ready-for-ai-agents.md) - Four architectural primitives — immutable event log, schema-driven object storage, human/agent equivalency, and the evals that fall out of them — that make regulated-enterprise agents auditable and compliant by construction rather than by bolt-on
+* [Coding Agents Don't Scale Themselves. Neither Do Your Teams. (Patrick Debois, Tessl — AI Engineer)](summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md) - Patrick Debois argues that agent harnesses will commoditize and the real differentiator is organizational: team rituals, platform paved roads, and an explicit mandate up to VP Engineering, with the dark factory landing as a risk-tiered dim factory
 
 ### Wiki Pages
 
+* [Agent Enablement](wiki/concepts/agent-enablement.md) - Patrick Debois's organizational layer for scaling coding agents past the individual — team rituals, a platform layer with named ownership, and an explicit engineering mandate
 * [Agent Memory Systems: Storage / Injection / Recall](wiki/concepts/agent-memory-systems.md) - A three-question framework for evaluating any agent memory system, from Claude Code automemory to custom RAG
 * [Claude Code](wiki/tools/claude-code.md) - Anthropic's CLI-based agentic coding environment spanning mobile, web, desktop, and terminal
 * [Obsidian](wiki/tools/obsidian.md) - A markdown-based knowledge management tool used as the visualization frontend for the LLM wiki pattern

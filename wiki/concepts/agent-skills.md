@@ -16,7 +16,8 @@ sources:
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
   - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
   - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
-timestamp: "2026-08-24"
+  - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
+timestamp: "2026-09-11"
 ---
 
 # Agent Skills
@@ -118,6 +119,16 @@ Once skills are bundled context + scripts + docs + (optionally) MCP server defin
 - **Dependency hell ports across.** Skills that depend on other skills (or shared MCP servers) inherit the transitive-dependency problems of any package ecosystem.
 - **Supply-chain scanning is not optional.** Snyk-style scanners need to look for credential leakage, injection patterns, and third-party exposure inside skill bundles. See [AI SBOM](ai-sbom.md) for the bill-of-materials half of this.
 - **Run a private registry, not the public marketplace.** Even a Git repo with a manifest is enough to start. Treat each skill like an npm package: versioned, scanned, SBOM'd, eval'd before publish.
+
+### Who Owns the Registry, and the Fork-Sprawl Failure Mode
+
+Debois's August 2026 follow-on talk adds the organizational half of the package-format argument: standing up a private registry is the easy part, and it fails on ownership rather than on tooling. [Source: 2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams]
+
+- **Nobody clearly owns the new objects.** Skill registries, eval systems for context, coding-agent-specific guardrails and agent identities sit between two existing teams: the platform team owns infrastructure but not development, and developer experience owns neither. Name a single owner for the agent-enablement programme *before* building the registry — the gap between platform and devex is the actual failure mode, not the registry design [10:16-13:23].
+- **Unowned skills fork into sprawl.** Two similar skills with two maintainers leave a consumer with no basis for choosing: "which one do I pick?" [12:24]. The admission criteria that prevent this are ownership, testability, extensibility, and a security scan — an artifact that cannot clear them stays personal rather than shared.
+- **A catalog of three or four paved roads beats one consensus.** Cross-team agreement on a single way of working "requires a lot of communication and brokerage" [13:05] and rarely converges. Publish a small set of maintained roads and let teams go off-road on their own budget; the maintenance asymmetry, not a mandate, is the adoption incentive.
+
+See [Agent Enablement](agent-enablement.md) for the platform-layer and ownership argument in full, and [Skill Evaluation](skill-evaluation.md) for the testability half of the admission criteria.
 
 ## How to Design a Skill
 
@@ -267,6 +278,7 @@ Plugins also bundle agents, hooks, MCP server definitions, LSP definitions, and 
 - [Context Filter](context-filter.md) — perimeter scanner for prompt injection in `skill.md` / `agent.md`
 - [AI SBOM](ai-sbom.md) — bill of materials for context packages
 - [Patrick Debois](../people/patrick-debois.md) — DevOps originator framing context as code
+- [Agent Enablement](agent-enablement.md) — registry ownership, paved roads, and the platform/devex gap
 - [Deep Modules](deep-modules.md) — `/improve-code-base-architecture` skill content
 - [PRD-as-Prompt Pattern](prd-as-prompt.md) — destination-doc generation via `/write-a-PRD`
 - [Matt Pocock](../people/matt-pocock.md) — skill-kit-as-planning-stack thesis

@@ -1,12 +1,13 @@
 ---
 title: "Patrick Debois"
-description: "DevOps originator now applying SDLC discipline to context engineering via the Context Development Life Cycle"
+description: "DevOps originator now applying SDLC discipline to context engineering via the Context Development Life Cycle, and arguing the next lever is organizational rather than technical"
 type: "person"
 pillar: "ecosystem"
-tags: [devops, context-engineering, cdlc, tessl, agents]
+tags: [devops, context-engineering, cdlc, tessl, agents, organizational-design, software-factory]
 sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
-timestamp: "2026-05-05"
+  - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
+timestamp: "2026-09-11"
 ---
 
 # Patrick Debois
@@ -28,6 +29,11 @@ The reason to read him on context is the same reason DevOps caught on: he is not
 - **Context filter (WAF for prompt injection).** Perimeter scanner upstream of the LLM, because sandboxes can't catch injection in auto-loading `agent.md` / `skill.md` files. See [Context Filter](../concepts/context-filter.md).
 - **AI SBOM.** Software bill-of-materials ported to context packages — provenance, dependencies, eval lineage, permissions footprint. See [AI SBOM](../concepts/ai-sbom.md).
 - **The eval-tax argument.** Time saved by writing context instead of code gets spent on writing the evals that make context trustworthy. The savings shift; they don't disappear. The new business-critical skill is *the process for building the right evals* — meta-engineering.
+- **Agent enablement as an organizational discipline.** The August 2026 follow-on talk: team rituals, a platform layer with named ownership, and an explicit VP Engineering mandate are the levers, because Conway's law couples how you organize to what you can build. See [Agent Enablement](../concepts/agent-enablement.md).
+- **Dim factory.** The dark factory's realistic landing point — autonomy tiered per feature on a spectrum "from being a micromanager to being an autonomous approval," with supervision budget moved into provenance, verifiers and situational awareness. See [Software Factory § The Dim Factory](../concepts/software-factory.md#the-dim-factory-autonomy-as-a-per-feature-risk-decision-debois).
+- **Two org-level metrics.** *Human touches per correct result* (should fall as the system improves) and the *shared-system multiplier* (one fix benefits every team) — explicitly offered instead of token spend and instead of the 10x-individual frame.
+- **Continuous learning.** Successor concept to continuous delivery: the question is not how reliable the system is but how much of it you can swap while keeping it reliable.
+- **Three-part AI-era interview.** New job titles carry no signal, so score an AI-first exercise, a taste walkthrough, and a collaboration probe separately rather than collapsing them into junior/senior.
 
 ## Key Arguments
 
@@ -37,12 +43,18 @@ The reason to read him on context is the same reason DevOps caught on: he is not
 
 **The hidden cost (from the Q&A).** Writing context replaces writing code, which feels like time saved. But context only works rigorously if you have evals — and each context prompt now begets multiple eval prompts. Authoring good evals for your business case is itself a *process problem*, not a single skill — the more advanced practitioners build their own meta-process for "how we generate the right evals." The new core competency isn't writing context, it's the process for building the right evals.
 
+**Why the organization is the lever (August 2026).** Four premises: loops and harnesses are assembly work rather than rocket science; converging capabilities consolidate, plausibly into a frontier lab selling the harness as a service; a capability everyone can buy cannot differentiate; and Conway's law couples how you organize to the tools you build. Conclusion: the durable investment is team dynamics, the platform layer, and the mandate. The first two premises make a **commoditization claim about the generic harness** that stands against this wiki's [Harness Engineering § Harness as Reusable Asset](../concepts/harness-engineering.md#harness-as-reusable-asset) framing — and against Debois's own closing claim that the moat is captured knowledge. That tension is open and has not been merged into the harness page; see the CONNECT report for this ingest.
+
 ## Notable Framings
 
 - **"Context is the new code."** The talk's title and thesis.
 - **"Most public skills are crap" (99.9%).** Argument for private registries and SBOMs. Public registries are for pattern learning; production-quality skills live in private registries.
 - **"WAF for context."** The right organizational and structural analogy for a context filter — security-team-owned, sits in front of the LLM, inspects shapes of harm without needing domain logic.
 - **Solo loop → team loop → org-of-teams flywheel.** Scaling progression for the CDLC: individual runs it for their context; team shares context and evals; org-of-teams compounds when each team's missing-context fixes flow back to a shared registry.
+- **"It will not work here" means "we're not ready yet."** The 2009 continuous-delivery objection, re-aimed at the dark factory: it names the local environment, not a technical blocker, so read it as a readiness report.
+- **"Build the thing that builds the thing."** Borrowed from Swix for the mentality shift he would ask of any company: stop fixing the agent's code, improve the system that produced it.
+- **A catalog of three or four paved roads**, not one consensus — off-road allowed, on the team's own budget.
+- **Optimize the spend, don't cap it.** The reflex when finance pushes back on agent cost.
 
 ## Background
 
@@ -54,9 +66,12 @@ The reason to read him on context is the same reason DevOps caught on: he is not
 ## Source on This Wiki
 
 - [Context Is the New Code — AI Engineer 2026](../../summaries/2026-05-03_ai-engineer_context-is-the-new-code.md)
+- [Coding Agents Don't Scale Themselves. Neither Do Your Teams. — AI Engineer 2026](../../summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md)
 
 ## See Also
 
+- [Agent Enablement](../concepts/agent-enablement.md)
+- [Software Factory](../concepts/software-factory.md)
 - [Context Development Life Cycle](../concepts/context-development-life-cycle.md)
 - [Context Engineering](../concepts/context-engineering.md)
 - [Context Filter](../concepts/context-filter.md)
