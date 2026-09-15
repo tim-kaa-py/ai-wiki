@@ -41,7 +41,8 @@ sources:
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
   - "summaries/2026-08-05_ray-amjad_opus-5-is-exhausting-anthropic-reveals-the-fix.md"
-timestamp: "2026-08-06"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Claude Code
@@ -503,6 +504,18 @@ CLAUDE.md is *advisory*. Hooks are *deterministic*. Don't put things in CLAUDE.m
 
 If you've corrected Claude twice on the same task, don't fight a polluted context. **`/clear` and rewrite the prompt** with what you learned. Keep going in a polluted context and quality compounds downward.
 
+### CLAUDE.md as a Team Artifact (AI-Native SDLC Playbook)
+
+Anthropic's AI-Native SDLC playbook (August 2026) adds a *durable* twin to the rule above. The After-2-Corrections Rule is about the current session: clear and re-prompt. The playbook's rule is about the next session: **"When Claude makes a mistake twice, the correction goes into CLAUDE.md."** The two are compatible, applied at different horizons; do both. Its other rules of thumb for team CLAUDE.md files (vendor-prescriptive, not measured):
+
+- **Start with `/init`, then cut to what a new joiner needs on day one.**
+- **Keep it under a page**, "because Claude reads all of it at the start of a session and anything stale is taking up context for no benefit." A stricter heuristic than the 200-line rule above, pointing the same way.
+- **Check it into git with code-owner approval**, so the instructions the agent works to are reviewable and auditable and every change to them is in git history.
+- **Make CLAUDE.md edits a normal outcome of PR review.** A review finding flagged a second time goes into CLAUDE.md *as part of that review*, not as a later cleanup. A "Things Claude gets wrong" section gives those entries a home.
+- **Make verification part of done.** Add a "Verifying your work" block (build, test, lint, each with a pass criterion) and require the output to be pasted; the full block is on [Claude Code Hooks § Lock the Test During a Fix](../how-tos/claude-code-hooks-memory.md#lock-the-test-during-a-fix).
+
+Because CLAUDE.md now steers behaviour for a whole team, the playbook regression-tests it: an eval suite runs on any PR touching `CLAUDE.md` or `.claude/**`. See [Agent Evaluation § Evals on the Agent's Configuration](../concepts/agent-evaluation.md#evals-on-the-agents-configuration-anthropics-ai-native-sdlc-playbook). Its proposed indicators: repeated mistakes CLAUDE.md should have caught (leading), and time to first merged PR for new joiners (lagging). *(Source: Anthropic's AI-Native SDLC playbook, 2026-08-21)*
+
 ### Fan-Out for Large Changes
 
 Scripted parallel `claude -p` invocations across many files or repos:
@@ -652,3 +665,4 @@ Contrast with the hierarchical **orchestrator-worker** pattern of the multi-agen
 - [Boris Cherny](../people/boris-cherny.md) — creator; verification-first, ablation, product overhang
 - [Dynamic Workflows](../concepts/dynamic-workflows.md) — the "use a workflow" orchestration primitive
 - [Product Overhang and Hobbling](../concepts/product-overhang.md) — Claude Code as an un-hobbling of Sonnet 3.5
+- [AI-Native SDLC](../concepts/ai-native-sdlc.md) — Anthropic's playbook for running Claude Code across the whole lifecycle: artifact chain, stage-placed hooks, managed settings, evals on the configuration

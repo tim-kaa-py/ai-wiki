@@ -9,7 +9,8 @@ sources:
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
-timestamp: "2026-09-11"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Five Levels of AI Coding
@@ -47,6 +48,8 @@ A novel software engineering pattern that only became necessary when AI became t
 **The fix:** Behavioral specifications (scenarios) stored externally, invisible to the agent during development, functioning as a holdout set. This borrows the ML concept of preventing overfitting and applies it to software quality assurance.
 
 **How to apply:** Separate your behavioral test specifications from the codebase the agent can access. The agent should never see the evaluation criteria during development.
+
+A narrower, complementary control from Anthropic's AI-Native SDLC playbook targets tampering rather than overfitting. For bug fixes the agent writes the failing test, a human confirms it fails for the expected reason, the test is committed, and a hook blocks edits to test files while the fix task runs — "a test that existed before the fix, and that the agent couldn't rewrite, is proof the bug is gone." Here the test is deliberately visible to the agent; what is protected is the agent's ability to weaken it. The two controls stack: lock the regression tests the agent must see, hide the acceptance scenarios it must not. See [AI-Native SDLC § Test](ai-native-sdlc.md#test-feedback-loop-verifier-and-evals-on-the-configuration). [Source: 2026-08-21_anthropic_the-ai-native-sdlc-playbook]
 
 ## The J-Curve of AI Adoption
 
@@ -174,7 +177,9 @@ Anthropic's 2026 trends report argues against this endpoint via the [Collaborati
 
 **A fourth datapoint (added 2026-09-11).** Patrick Debois assumes the dark factory as the direction of travel and still lands short of Level 5: "not all features will become autonomous" [19:56]. His **dim factory** makes autonomy a per-feature risk decision on a spectrum "from being a micromanager to being an autonomous approval" [20:19] rather than an org-wide level. That is close to this page's own stated resolution — Level 5 for cleanly-specifiable work, collaboration where judgment is the value — but it reframes the model's axis: the maturity ladder reads position-on-the-ladder as progress, whereas Debois reads it as a risk posture chosen per feature, which a single org-level number cannot express. It does not resolve the tension so much as suggest the question "what level is this org at?" may be malformed. See [Software Factory § The Dim Factory](software-factory.md#the-dim-factory-autonomy-as-a-per-feature-risk-decision-debois). *(Source: [Patrick Debois, AI Engineer 2026-08-22](../../summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md).)*
 
-The wiki holds all three framings without choosing. Use Level 5 / Dark Factory as the model for work that specifies cleanly with verifiable holdout sets (StrongDM-shape work). Use the Collaboration Paradox as the model for work where human judgment, taste, or accountability is itself the value.
+**A fifth datapoint (added 2026-09-15).** Anthropic's own AI-Native SDLC playbook (August 2026) is the nearest thing to a worked design for the "different work regimes" reconciliation, and it stops short of Level 5 by construction: "the agent may act up to the production gate and cannot pass it," enforced by branch protection, a release-authorisation hook and per-environment permission tiers, and "humans remain accountable for every decision that requires judgment." At the same time it treats Build as fully delegable — auto-accept "becomes the default for routine work" once guardrails mature and "is fundamental to running the SDLC autonomously and closing the loop." Read against Anthropic's earlier figures (AI in ~60% of work, 0–20% fully delegated), this puts the delegation at the *episode* (an autonomous Build session) and the human at the *artifact gates* (intent, spec, plan, PR, release) — the episode-vs-arc reading on [Plan and Review](plan-and-review.md#episode-vs-arc-reconciling-with-the-collaboration-paradox). It is prescriptive with no outcome data, so it is a stance rather than evidence; but it does say Anthropic's stated destination is a gated loop, not a dark factory. *(Source: [Anthropic, *The AI-Native SDLC playbook*](../../summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md).)*
+
+The wiki holds all of these framings without choosing. Use Level 5 / Dark Factory as the model for work that specifies cleanly with verifiable holdout sets (StrongDM-shape work). Use the Collaboration Paradox as the model for work where human judgment, taste, or accountability is itself the value.
 
 ## Related Pages
 
@@ -183,4 +188,5 @@ The wiki holds all three framings without choosing. Use Level 5 / Dark Factory a
 - [Claude Code](../tools/claude-code.md) — tool enabling Level 3-4 patterns
 - [Software Factory](software-factory.md) — the factory pipeline the Dark Factory is the lights-out variant of
 - [Agent Enablement](agent-enablement.md) — the organizational scaffolding that moves a team up the ladder, and Debois's dim-factory landing point
+- [AI-Native SDLC](ai-native-sdlc.md) — Anthropic's lifecycle playbook: autonomous up to a human production gate
 - [The Collaboration Paradox](collaboration-paradox.md) — Anthropic's competing framing that "% fully delegated is the wrong yardstick" — see [Unresolved Tensions](#unresolved-tensions) above

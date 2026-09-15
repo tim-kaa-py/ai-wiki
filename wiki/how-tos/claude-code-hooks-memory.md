@@ -12,7 +12,8 @@ sources:
   - "summaries/2026-05-06_claude-code-docs_memory.md"
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
   - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
-timestamp: "2026-09-03"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Claude Code Hooks for Memory
@@ -331,6 +332,58 @@ The canonical example is the one almost every CLAUDE.md contains: *"when you're 
 
 The hook version closes the loop rather than merely firing: run the tests on Stop, and either everything is green and the session ends, or the failures are routed back to the agent — *"you said you're done, but you shouldn't actually be. Go and fix these things"* [06:44]. See [Exit Codes Control Behavior](#exit-codes-control-behavior) for the mechanics. *(Source: Cole Medin, 2026-09-01)*
 
+## Hooks as SDLC Gates (Anthropic's AI-Native SDLC Playbook)
+
+Anthropic's AI-Native SDLC playbook (August 2026) uses hooks as the deterministic layer behind advisory skills across the whole lifecycle, and adds a placement rule the reference above doesn't give: **which hook decision belongs at which stage.** These are vendor recommendations, not measured results.
+
+### Allow/Block at Build, Ask at Deploy
+
+| Stage | Hook decision | Typical checks |
+|-------|---------------|----------------|
+| Build | Fast allow/block, scoped to the changed file | Protected paths, formatter/linter, credential leaks |
+| Commit / PR | Heavier deterministic checks | Anything too slow to run on every edit |
+| Deploy | `ask` (pause for a named human) | Release, change tickets, migrations, infra |
+
+The argument for keeping `ask` out of Build: Build hooks fire on nearly every file edit and shell command, an approval hook pauses for a human, and with parallel sessions that pause blocks every session at once. So the human goes back on the critical path exactly where parallelism was supposed to remove them. Hooks as a mechanism are stage-agnostic; only the *approval* decision is placed at Deploy. This is the same failure the [Focus Maxing](../concepts/focus-maxing.md) anti-pattern names, reached from the governance side.
+
+Two placement rules alongside it: team hooks go in `.claude/settings.json`, non-negotiable ones in managed settings (with `allowManagedHooksOnly` so users can't add or override them); and **a block must explain itself and name the route to approval**, since stderr is what Claude and the engineer see.
+
+### Lock the Test During a Fix
+
+For bug fixes the playbook protects the feedback loop from the agent: Claude writes the failing test, confirms it fails for the expected reason, commits it, then fixes the code without touching the test. The hook is what makes the last step hold: a `PreToolUse` hook on `Edit` that denies writes under `tests/**` while a fix task is active. The review-side fallback is rejecting test-touching diffs on fix PRs. Pair it with a verification block in CLAUDE.md:
+
+```markdown
+## Verifying your work
+
+- Build: make build (must finish with "Build succeeded")
+- Test: make test (all green; never skip or delete a failing test)
+- Lint: make lint (zero warnings)
+
+Run all three before reporting any task complete, and paste the output.
+If a test fails, fix the code, not the test.
+```
+
+The CLAUDE.md block alone is advisory; per [Spotting a Load-Bearing Rule](#spotting-a-load-bearing-rule) above, "before reporting any task complete" names an event, so the run itself also belongs in a Stop hook.
+
+### A Production-Gate Hook, and Its Limit
+
+The playbook's example, wired as a `PreToolUse` hook with `"matcher": "Bash"`:
+
+```bash
+#!/bin/bash
+# Production deploys require a named release authorization
+cmd=$(jq -r '.tool_input.command' < /dev/stdin)
+if [[ "$cmd" == *"deploy"* && "$cmd" == *"production"* ]]; then
+  if [ -z "$RELEASE_APPROVAL" ]; then
+    echo "Production deploys need a release authorization." >&2
+    exit 2 # exit 2 blocks the action; the message goes to Claude
+  fi
+fi
+exit 0
+```
+
+Treat this as an illustration, not a control. A substring match on a Bash command is bypassed by an MCP deploy tool, a shell alias, or a wrapper script whose name contains neither word. The playbook's stronger recommendation is to expose deployment only through scoped MCP tools, and to back the hook with branch protection and per-environment permission tiers. See [AI-Native SDLC § The Production Gate](../concepts/ai-native-sdlc.md#the-production-gate). *(Source: Anthropic's AI-Native SDLC playbook, 2026-08-21)*
+
 ## Related Pages
 
 - [Agent Memory Systems](../concepts/agent-memory-systems.md) -- storage/injection/recall framework and the memarch + Hermes hybrid blueprint
@@ -341,3 +394,5 @@ The hook version closes the loop rather than merely firing: run the tests on Sto
 - [Obsidian](../tools/obsidian.md) -- visualization frontend for the vault
 - [PRD-as-Prompt Pattern](../concepts/prd-as-prompt.md) -- bootstrap the entire system from a single prompt
 - [Andrej Karpathy](../people/andrej-karpathy.md) -- originator of the underlying pattern
+- [AI-Native SDLC](../concepts/ai-native-sdlc.md) -- hooks as the deterministic layer behind skills, and where each hook decision belongs in the lifecycle
+- [Claude Code Sandboxing](claude-code-sandboxing.md) -- managed settings, including `allowManagedHooksOnly`

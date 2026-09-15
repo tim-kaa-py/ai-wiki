@@ -15,7 +15,8 @@ sources:
   - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
   - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
-timestamp: "2026-09-03"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Reviewer Agents
@@ -199,6 +200,10 @@ His prescription inverts the remedy: fix the input with AI-assisted up-front ali
 
 Both are held without choosing. They are not strictly incompatible — better inputs and automated persona review can compose — but they disagree about which side of the pipeline the investment belongs on, and about whether removing synchronous humans from the merge path is a goal or the failure mode.
 
+**A third position (added 2026-09-15).** Anthropic's AI-Native SDLC playbook lands between the two, and separates a question this entry has treated as one. It concedes Lopopolo's premise that per-line human reading does not scale — "Reviewing each line by hand made sense when a person had written it, but it can't keep up once agents write most of the diff" — and describes the Deploy end state as "layers of agentic review with human review reserved for regulated and critical code." But it keeps a human on the merge path for *every* PR, as approver rather than reader: "Findings do not approve or block a PR on their own, and branch protection still requires approval from a code owner," because "the agent that wrote the code has no way to approve it." The code owner "can concentrate on intent and risk because the mechanical evidence is already attached." *(Source: [Anthropic, *The AI-Native SDLC playbook*](../../summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md).)*
+
+So there are two separable questions: whether a human *approves* each merge (Lopopolo: no; Horthy and the playbook: yes) and whether a human *reads* each diff (Horthy: every line; the playbook: only regulated and critical code; Lopopolo: no). The playbook reports no outcome data, so it is a design stance rather than evidence for either pole. [Plan and Review § Code Review Stays Human](plan-and-review.md#code-review-stays-human) holds Knight-Webb's version of the Horthy position and points here.
+
 ## Related Pages
 
 - [Harness Engineering](harness-engineering.md) — the parent discipline
@@ -212,3 +217,4 @@ Both are held without choosing. They are not strictly incompatible — better in
 - [Smart Zone](smart-zone.md) — why fresh-context reviewer beats self-review
 - [Parallel Agent Patterns](parallel-agent-patterns.md) — Sandcastle wires the fresh-context reviewer into AFK loops
 - [Matt Pocock](../people/matt-pocock.md) — fresh-context-per-reviewer + inverted model split
+- [AI-Native SDLC](ai-native-sdlc.md) — Anthropic's lifecycle playbook, where AI PR review is the Deploy-stage gate

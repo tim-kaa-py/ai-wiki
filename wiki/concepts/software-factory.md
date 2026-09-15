@@ -8,7 +8,8 @@ sources:
   - "summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md"
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
-timestamp: "2026-09-11"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Software Factory
@@ -99,6 +100,18 @@ Debois also carries a lineage argument for why the resistance is organizational:
 
 His closing framing extends the pipeline metaphor past delivery: the durable asset is **captured knowledge** — skills, context, harness constraints, business context — and continuous delivery becomes **continuous learning**, where the diagnostic is "how fast can we swap in swap out something new" [20:48] and the goal is inverted from the usual reliability framing: "it's not about making the whole system more reliable but can I keep it reliable while changing more of the system" [20:58]. The organizational scaffolding a factory needs to reach that state is on [Agent Enablement](agent-enablement.md). *(Source: Patrick Debois, AI Engineer 2026-08-22.)*
 
+## A Vendor Blueprint for the Gated Loop (Anthropic)
+
+Anthropic's AI-Native SDLC playbook (August 2026) describes the same intent-to-production-to-feedback loop as Horthy's baseline factory, but as a set of committed artifacts with automated handover: `intent.md` → `spec.md` → `plan.md` → diff + tests → PR with review findings → incident record, where each accepted commit triggers the next stage and the commit history doubles as the audit trail. Horthy's **tracker** box becomes a folder of markdown files a product owner and an agent can both edit; his **feedback** box becomes deterministic control bands whose breaches are diagnosed by Claude and written back as a new `intent.md`. [Source: 2026-08-21_anthropic_the-ai-native-sdlc-playbook]
+
+What places it on this page's spectrum is where it stops the automation:
+
+- **"The agent may act up to the production gate and cannot pass it."** Branch protection, a release-authorisation hook, and per-environment permission tiers enforce it together.
+- **The model never decides when to start.** Detection is a unit-tested statistical script; Claude is invoked only after a breach, read-only at 2σ and limited to opening a PR or a pre-approved runbook (such as rollback) at 3σ.
+- **Gates before automation.** Merge-triggered agent jobs are only wired once PR review and the production hook exist, "because the gates must exist before automation accelerates anything through them."
+
+Read it as a concrete implementation of Debois's triggered-supervision idea above, from a vendor with an interest in the loop running on its products, and with no outcome data attached. It describes the maintenance loop's *mechanics* (detect, diagnose, propose into review); it makes no claim about whether the codebase stays maintainable over months, so it does not bear on the open question below. Full treatment on [AI-Native SDLC](ai-native-sdlc.md).
+
 ## Unresolved Tensions
 
 ### Can the factory maintain its own codebase, or does maintenance require a human in the loop?
@@ -133,3 +146,4 @@ Both are held without choosing. The two claims may be measuring different horizo
 - [Reviewer Agents](reviewer-agents.md) — the agentic-review box inside the factory loop
 - [Agent Enablement](agent-enablement.md) — the organizational layer Debois argues the factory actually runs on
 - [Patrick Debois](../people/patrick-debois.md) — author of the dim-factory framing
+- [AI-Native SDLC](ai-native-sdlc.md) — Anthropic's artifact-chain blueprint for the gated factory loop

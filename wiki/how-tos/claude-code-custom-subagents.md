@@ -6,7 +6,8 @@ pillar: "building"
 tags: [claude-code, subagents, agents, configuration, hooks, permissions, mcp, context-management, memory]
 sources:
   - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
-timestamp: "2026-04-25"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Claude Code Custom Subagents
@@ -182,6 +183,17 @@ Replaces the default system prompt — the entire session runs as that subagent.
 
 Boris Cherny's personal set: `build-validator.md`, `code-architect.md`, `code-simplifier.md`, `oncall-guide.md`, `verify-app.md`. Each fires at a consistent point in the workflow.
 
+### The Verifier Subagent: Final Check, Not Feedback Loop
+
+Anthropic's AI-Native SDLC playbook (August 2026) separates two things a verifier gets confused with:
+
+- **The feedback loop** (tests, build, screenshot diff) runs *throughout* the task, as many times as needed, inside the working session.
+- **The verifier subagent** is one way to package the *final* check. It runs once, when the session believes the work is done, in a fresh context window "so the verdict is not colored by the assumptions that produced the code," and it is instructed to **report only, never fix**.
+
+This wiki's reading of why report-only matters (not stated in the playbook): a verifier that edits becomes a second implementer whose own work nobody verified. The frontmatter way to enforce it rather than ask for it is a read-and-run tool list (for example `Read, Grep, Glob, Bash(make test)`) with no `Edit` or `Write`.
+
+The same playbook draws the line between subagents and **parallel sessions**: a parallel session is a full, independent Claude Code instance in its own worktree; a subagent is a scoped helper inside one session for recurring jobs (simplifier, verifier, researcher). Parallel sessions raise throughput, subagents keep a session focused. See [Parallel Agent Patterns § Review as the Ceiling](../concepts/parallel-agent-patterns.md#review-as-the-ceiling-anthropics-ai-native-sdlc-playbook). *(Source: Anthropic's AI-Native SDLC playbook, 2026-08-21)*
+
 ## Related Pages
 
 - [Claude Code](../tools/claude-code.md) — the tool
@@ -192,3 +204,4 @@ Boris Cherny's personal set: `build-validator.md`, `code-architect.md`, `code-si
 - [Claude Code Orchestration Layers](../comparisons/claude-code-orchestration-layers.md) — when subagent-driven orchestration helps and when it hurts
 - [Parallel Agent Patterns](../concepts/parallel-agent-patterns.md) — orchestrator-worker and lock-file teams
 - [Agent Orchestration Patterns](../concepts/agent-orchestration-patterns.md) — Anthropic's five canonical workflows
+- [AI-Native SDLC](../concepts/ai-native-sdlc.md) — the verifier subagent's place in Anthropic's lifecycle playbook

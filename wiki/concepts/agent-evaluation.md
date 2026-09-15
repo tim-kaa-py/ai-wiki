@@ -19,7 +19,8 @@ sources:
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
   - "summaries/2026-08-19_ai-engineer_why-your-enterprise-tech-stack-isnt-ready-for-ai-agents.md"
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
-timestamp: "2026-09-11"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Agent Evaluation
@@ -209,6 +210,36 @@ Everything above treats the eval suite as a subsystem you *build*. Christopher L
 
 Note the boundary. This is architecture-conditional advice — it presumes you own the storage paradigm and can choose it before the PoC. It says nothing about evaluating a system whose foundations are already poured, which is the situation most of this page addresses.
 
+## Evals on the Agent's Configuration (Anthropic's AI-Native SDLC Playbook)
+
+Most of this page evaluates an agent's *output*. Anthropic's AI-Native SDLC playbook (August 2026) aims a CI eval suite at a different unit: the **configuration that steers a coding agent** — CLAUDE.md, skills, hooks. The premise is that these files are behaviour, so a change to them is a change to behaviour and needs a regression test like any other code change. The playbook calls this "the AI-native equivalent of stage-gate QA."
+
+The mechanics (vendor-prescriptive, no outcome data reported):
+
+1. **Collect 20 to 50 real tasks** from recent work, each with its accepted outcome. This matches item 1 of the [Practical Roadmap](#practical-roadmap).
+2. **Trigger on the configuration paths plus a schedule.** Run non-interactively in CI on any PR touching `CLAUDE.md` or `.claude/**`, and nightly, so a model swap is caught even when no file changed.
+3. **Gate the merge on pass rate.** The threshold is a merge check; the team that owns the configuration change approves it.
+4. **Grow the suite from failures.** Every production incident gets a permanent eval written by the team that owned it, and every fixed vulnerability class adds one too.
+5. **Treat it as live.** As models improve, cases that once discriminated stop doing so and must be replaced from ongoing monitoring (the same saturation point as roadmap item 5 and the [frontier-tier tension](#can-a-frontier-eval-tier-survive-capability-cycles-or-do-all-evals-expire-in-1-3-generations) below).
+
+```yaml
+name: Agent evals
+on:
+  pull_request:
+    paths: ['CLAUDE.md', '.claude/**']
+  schedule:
+    - cron: '0 2 * * *'
+# ... per eval:
+#   claude -p "$(jq -r '.prompt' $eval)" \
+#     --allowedTools "Read,Edit,Bash(make test)" \
+#     --output-format json > result.json
+#   ./evals/check.sh "$eval" result.json
+```
+
+The load-bearing idea is the `paths` filter: it makes the agent's instructions a first-class, tested dependency rather than a file anyone can edit without consequence. It is the CI implementation of the Test phase on [Context Development Life Cycle](context-development-life-cycle.md#2-test), and a repo-wide version of [Skill Evaluation](skill-evaluation.md) rule 8, "no skill edit without a rerun." Pair it with [Error Budgets per Eval](#error-budgets-per-eval-debois) so a single flaky case doesn't block a configuration change. The playbook also allows running the suite offline on a cadence instead of on every change, depending on the use case.
+
+**Indicators it proposes.** Leading: pass rate over time, and how long a production incident takes to become a permanent eval. Lagging: regressions caught in CI versus in production. See [AI-Native SDLC](ai-native-sdlc.md) for where this sits in the lifecycle. *(Source: Anthropic's AI-Native SDLC playbook, 2026-08-21)*
+
 ## Model Behavior Engineer (MBE)
 
 Non-engineering career track Notion has formalized. Origin: "data specialists" (linguistics PhD dropout, recent-grad) who manually inspected outputs. Today MBEs author evals and LLM judges — increasingly driven through coding agents themselves. Role mix: data scientist + PM + prompt engineer. Notion's conviction: an engineering background is *not* required — it's taste and instinct about model behavior.
@@ -338,3 +369,4 @@ Note the difference in emphasis from *Eval design principles* above: Anthropic's
 - *Harness Engineering is not Enough: Why Software Factories Fail* — Dex Horthy, AI Engineer, 2026-07-23
 - *Why Your Enterprise Tech Stack Isn't Ready for AI Agents* — Christopher Lovejoy & Saul Howard, AI Engineer, 2026-08-19
 - *Coding Agents Don't Scale Themselves. Neither Do Your Teams.* — Patrick Debois, AI Engineer, 2026-08-22
+- *The AI-Native SDLC playbook* — Anthropic (Louis Claxton, Applied AI), 2026-08-21

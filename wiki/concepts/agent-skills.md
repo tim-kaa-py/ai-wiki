@@ -17,7 +17,8 @@ sources:
   - "summaries/2026-06-25_chase-ai_agentic-os-setup-10x-claude-code.md"
   - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
-timestamp: "2026-09-11"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Agent Skills
@@ -267,6 +268,18 @@ Skills travel through two channels in Claude Code:
 
 Plugins also bundle agents, hooks, MCP server definitions, LSP definitions, and a new **monitors** primitive (background commands streaming notifications to Claude). The conversion path standalone → plugin is mechanical: copy `skills/`, `agents/`, and the `hooks` block into a plugin root and add a `plugin.json`. Default to standalone until you actually need to share. See [Claude Code Plugins](../how-tos/claude-code-plugins.md).
 
+## Skills Are Advisory Controls
+
+When a skill encodes an organisational policy (security, compliance, brand), it is a control, but a weak one. Anthropic's AI-Native SDLC playbook states the limit plainly: a skill "is a control, though an advisory one. It makes Claude likely to apply the policy while the code is written, and nothing forces a session to comply with it." The deterministic layer behind it is a hook or a PR re-check: "The skill makes violations rare and the hook makes them close to impossible." This is the skills-side version of the CLAUDE.md-is-advisory, hooks-are-deterministic rule on [Claude Code Hooks § Why Hooks Exist](../how-tos/claude-code-hooks-memory.md#why-hooks-exist-deterministic-vs-advisory), and the practical consequence of [Skill Evaluation § Trigger failures dominate](skill-evaluation.md#trigger-failures-dominate): a policy that lives only in a skill fails silently whenever the skill does not fire.
+
+**How to apply** (vendor-prescriptive, not measured):
+
+- **Ask one question per policy skill:** *"what happens if this doesn't trigger?"* If the answer is unacceptable, add a `PreToolUse` hook or a REVIEW.md pass that re-checks the same policy.
+- **Write the skill from the policy owner's written source of truth**, with one named owner per policy.
+- **Track two indicators.** Leading: time from policy approval to the updated skill being merged. Lagging: policy-citing review findings, which should fall toward zero. If they don't, the skill isn't triggering or has drifted from the official policy.
+
+See [AI-Native SDLC § Governance as the Agent Acts](ai-native-sdlc.md#governance-as-the-agent-acts) for where this sits in the playbook. *(Source: Anthropic's AI-Native SDLC playbook, 2026-08-21)*
+
 ## Related Pages
 
 - [Claude Code](../tools/claude-code.md)
@@ -287,3 +300,4 @@ Plugins also bundle agents, hooks, MCP server definitions, LSP definitions, and 
 - [Agent Memory Systems](agent-memory-systems.md) — the next primitive after Skills; same progressive-disclosure design lineage
 - [Dreaming](dreaming.md) — companion to memory; out-of-band consolidation pattern
 - [Agentic OS](agentic-os.md) — skills as the Level-1 backbone; the workflow audit that decides which skills to build
+- [AI-Native SDLC](ai-native-sdlc.md) — skills as advisory policy controls, backed by hooks, inside Anthropic's lifecycle playbook

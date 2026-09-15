@@ -16,7 +16,8 @@ sources:
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
   - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
-timestamp: "2026-09-03"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Parallel Agent Patterns
@@ -316,6 +317,17 @@ The [15× cost rule](#the-15-cost-rule) says parallelism is only worth it above 
 
 **What Medin is *not* saying.** He is explicit that sub-agents are valuable and that context isolation is a real benefit: they are "really important for protecting the context of your main agent" [11:08]. His complaint is calibration — the ease of reaching for them versus their invisible cost, and the fact that everything loaded into a sub-agent session "just disappears forever" [11:16]. Read this as the enforcement mechanism for the 15× rule rather than an argument against the patterns on this page. *(Source: Cole Medin, 2026-09-01)*
 
+## Review as the Ceiling (Anthropic's AI-Native SDLC Playbook)
+
+Medin's ceiling above is the token bill. Anthropic's AI-Native SDLC playbook (August 2026) names a second one that binds even with an unlimited budget: **"The practical ceiling is how many streams one person can review properly."** Parallelism is capped by review, not by compute. Its operating rules for worktree-style parallel sessions (vendor-prescriptive, not measured): [Source: 2026-08-21_anthropic_the-ai-native-sdlc-playbook]
+
+- **Start with two or three sessions**, one `claude --worktree <task>` per independent task, and add a session only while review is keeping up.
+- **Split by files touched.** Read independence off the plan's "files that change" list; tasks that share files run sequentially in one session.
+- **Pre-approve safe commands**, so sessions don't stall on permission prompts for commands the organisation already considers safe. See [Claude Code Permissions](../how-tos/claude-code-permissions.md).
+- **Measure concurrency against quality**, not concurrency alone: its leading indicator is concurrent sessions per engineer *while review quality holds* (from the OpenTelemetry export), and the lagging one is changes merged per engineer per week against rework rate.
+
+It also draws a distinction this page's patterns tend to blur. A **parallel session** is a full, independent instance in its own worktree that knows nothing about the others — "the engineer steering them is the only thing they share." A **subagent** is a scoped helper *inside* one session with its own context window and tool limits, for recurring jobs (simplifier, verifier, researcher). Parallel sessions raise throughput; subagents keep each session focused. Medin's unrequested fan-out problem above is about the second kind, the review ceiling about the first. See [AI-Native SDLC § Parallel Sessions vs. Subagents](ai-native-sdlc.md#parallel-sessions-vs-subagents).
+
 ## Unresolved Tensions
 
 ### Are coordinators a legitimate rung, or an attractive dead end?
@@ -342,6 +354,7 @@ Backed on this page by [Pattern 1](#pattern-1-agent-teams-with-lock-file-coordin
 
 ## Related Pages
 
+- [AI-Native SDLC](ai-native-sdlc.md) — parallel sessions vs. subagents, and review as the parallelism ceiling, in Anthropic's lifecycle playbook
 - [Agent Orchestration Patterns](agent-orchestration-patterns.md) — the five canonical patterns these instantiate
 - [Claude Code](../tools/claude-code.md)
 - [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md) — how-to for the productized peer-to-peer pattern

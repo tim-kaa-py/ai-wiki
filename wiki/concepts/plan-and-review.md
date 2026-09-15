@@ -8,7 +8,8 @@ sources:
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
-timestamp: "2026-08-28"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Plan and Review
@@ -134,7 +135,9 @@ Most current tooling addresses **code generation** well and the other four poorl
 
 ## Code Review Stays Human
 
-Knight-Webb's position: AI-assisted review is fine; fully unread vibe-coded merges are not, for anyone with money on the line. Lean on AI for pre-review and PR-comment shepherding (job #4), but keep human read-through as a hard gate on production merges. This aligns with [Reviewer Agents](reviewer-agents.md) (fresh-context reviewer beats self-review) and Lopopolo's "minimal blocking gates" — the gate stays, it just moves to the right places.
+Knight-Webb's position: AI-assisted review is fine; fully unread vibe-coded merges are not, for anyone with money on the line. Lean on AI for pre-review and PR-comment shepherding (job #4), but keep human read-through as a hard gate on production merges. It shares [Reviewer Agents](reviewer-agents.md)' point that a fresh-context reviewer beats self-review, but not Lopopolo's goal of taking synchronous humans off the merge path: Knight-Webb's position is close to Horthy's, and the wiki holds Lopopolo vs. Horthy as an open question in [Reviewer Agents § Unresolved Tensions](reviewer-agents.md#is-the-review-bottleneck-a-throughput-problem-or-a-pr-quality-problem).
+
+Anthropic's AI-native SDLC playbook keeps the hard gate but relaxes the read-through: branch protection still requires a code owner's approval on every PR and "the agent that wrote the code has no way to approve it", while per-line reading "can't keep up once agents write most of the diff" and human review is "reserved for regulated and critical code." Whether an approval informed by agentic findings is the read-through Knight-Webb means is open; the wiki holds that question in one place, [Reviewer Agents § Unresolved Tensions](reviewer-agents.md#is-the-review-bottleneck-a-throughput-problem-or-a-pr-quality-problem). [Source: 2026-08-21_anthropic_the-ai-native-sdlc-playbook]
 
 ## Second Datapoint for the Heuristic, and Four Named Stages (Horthy)
 
@@ -160,6 +163,18 @@ Where this page's plan-heavy mode says "write a markdown plan," Horthy names wha
 **Program design is the stage he singles out as missing** — "really under-emphasized in agentic coding these days" [15:52-15:58], because "people assume that once you get the architecture right, the model can just cook." If your plan-heavy artifact stops at architecture, this is the gap to close first. Same exception as this page's default: "small stuff still just go straight to the agent" [15:21-15:24].
 
 Note the vendor incentive — HumanLayer sells planning building blocks for exactly this pipeline. See [Software Factory § The Four-Stage Planning Pipeline](software-factory.md#the-four-stage-planning-pipeline-he-proposes-instead). *(Source: Dex Horthy, AI Engineer 2026-07-23.)*
+
+## A Third Datapoint on the Bottleneck: Anthropic's Playbook
+
+Anthropic's AI-Native SDLC playbook (August 2026) opens on the same premise as this page, stated at org scale: agents collapse Build to hours while plan, review and deploy keep their human-speed length, so "the process around the code needs the same transformation the implementation phase had." Its first recommended move is a measurement rather than a tactic: before adding agent capacity, read the elapsed time in plan, review and deploy off git timestamps and PR metadata, and target the longest. [Source: 2026-08-21_anthropic_the-ai-native-sdlc-playbook]
+
+Three additions to this page's toolkit, all vendor-prescriptive rather than measured:
+
+- **The plan as a committed artifact.** The playbook's `plan.md` is short (Files that change / Order of work / Risks / Proof), is accepted before implementation starts, and is later checked against the merged diff ("merged diff still matches plan.md" is its lagging indicator). "Files that change" doubles as the independence test for parallel sessions: tasks sharing files run sequentially in one session. Committing the plan is also Lopopolo's remedy for unread plans — see [Plan-Mode Skepticism](../how-tos/agentic-coding-workflow.md#plan-mode-skepticism-ryan-lopopolo-openai).
+- **Review is the parallelism ceiling.** "Two or three sessions is a sensible starting point. The practical ceiling is how many streams one person can review properly." This bounds the [Parallelism as the Coping Mechanism](#parallelism-as-the-coping-mechanism) section above from the review side: add a stream only while review keeps up.
+- **No approval prompts during Build.** An approval hook fires on nearly every edit, and with parallel sessions one human pause blocks all of them. So Build-phase hooks only allow or block; human approval is reserved for Deploy. This is the governance-side version of the [Focus Maxing](#focus-maxing-the-anti-pattern) argument. See [Claude Code Hooks § Hooks as SDLC Gates](../how-tos/claude-code-hooks-memory.md#hooks-as-sdlc-gates-anthropics-ai-native-sdlc-playbook).
+
+The playbook's planning pipeline itself (`intent.md` → `spec.md` → `plan.md`, each committed and each acceptance triggering the next stage) is on [AI-Native SDLC § The Artifact Chain](ai-native-sdlc.md#the-artifact-chain).
 
 ## How to Apply
 
@@ -199,8 +214,9 @@ Note the vendor incentive — HumanLayer sells planning building blocks for exac
 - [Smart Zone vs Dumb Zone](smart-zone.md) — context-axis counterpart to the time-axis 5-minute threshold
 - [PIV Loop](piv-loop.md) — Cole Medin's per-ticket Plan-Implement-Validate, a worked instance of plan-heavy
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — full how-to threading these tactics together
-- [Reviewer Agents](reviewer-agents.md) — why human code review remains the production gate
+- [Reviewer Agents](reviewer-agents.md) — Lopopolo's case for taking synchronous humans off the merge path, and the open tension with Horthy on it
 - [Harness Engineering](harness-engineering.md) — where the latency-vs-accuracy trade is wired
 - [Louis Knight-Webb](../people/louis-knight-webb.md) — author of the framing
 - [The Collaboration Paradox](collaboration-paradox.md) — Anthropic's adjacent framing of where the displaced time goes; partial overlap with the time-displacement argument here
 - [Software Factory](software-factory.md) — Horthy's four-stage planning pipeline in its factory context
+- [AI-Native SDLC](ai-native-sdlc.md) — Anthropic's committed-artifact pipeline (intent.md → spec.md → plan.md) and stage-placed hooks

@@ -6,7 +6,8 @@ pillar: "building"
 tags: [claude-code, code-review, github, multi-agent, pr-automation, review-md, claude-md, workflow, managed-service]
 sources:
   - "summaries/2026-05-06_claude-code-docs_code-review.md"
-timestamp: "2026-05-06"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Code Review (Claude Code Managed Service)
@@ -101,6 +102,18 @@ Practical implication: keep CLAUDE.md current — stale entries generate noisy n
 
 The GitHub Checks "Re-run" button does **NOT** work for Code Review — use the comment.
 
+## Operating It in an SDLC (Anthropic's AI-Native SDLC Playbook)
+
+Anthropic's AI-Native SDLC playbook (August 2026) places AI PR review in its Deploy stage and adds operating rules around the service. They are vendor recommendations, not measured results, and they apply equally to the claude-code-action running in your own CI.
+
+- **Separation of duties is the design principle.** "The agent that wrote the code has no way to approve it." Findings never approve or block a PR on their own (consistent with the `neutral` check conclusion above), and the playbook recommends branch protection requiring a code owner's approval. A platform engineer who wants a findings gate reads the severity tally from [CI Integration](#ci-integration-severity-counts).
+- **`@claude` means different things in the two products.** With claude-code-action, a reviewer or the author tagging `@claude` on a review comment makes Claude address the comment and push the fix, so the PR thread records both request and change. In the managed service, `@claude review` requests a fresh review instead (see [Trigger Modes](#trigger-modes-per-repo)).
+- **Let Claude babysit its own PRs to green.** For PRs Claude opened, wrap a loop in a custom slash command that sweeps unresolved review comments and failing checks, fixes them and pushes, until the PR waits only on human approval.
+- **Tune monthly.** The tech lead rates findings so the reviewer improves, caps nit volume in REVIEW.md, and excludes generated paths and anything CI already enforces.
+- **Feed repeats into CLAUDE.md.** A finding flagged a second time goes into CLAUDE.md as part of that review. Code Review then reads that rule on later PRs (see [CLAUDE.md Interaction](#claudemd-interaction)).
+
+Proposed indicators: time to first review and comments resolved without a human touching the branch (leading); defects and vulnerabilities caught pre-merge versus escaped (lagging). See [AI-Native SDLC § Review and Separation of Duties](../concepts/ai-native-sdlc.md#review-and-separation-of-duties). *(Source: Anthropic's AI-Native SDLC playbook, 2026-08-21)*
+
 ## Code Review vs Ultrareview vs `/review`
 
 | | `/review` | `/ultrareview` (CLI) | Code Review (managed) |
@@ -121,3 +134,4 @@ See [Ultrareview](claude-code-ultrareview.md) for the CLI-initiated multi-agent 
 - [Claude Routines](../tools/claude-routines.md) — the routines runtime that powers GitHub-event-triggered review
 - [Claude Code](../tools/claude-code.md) — the platform
 - [Agentic Coding Workflow](agentic-coding-workflow.md) — where reviewer agents fit in daily practice
+- [AI-Native SDLC](../concepts/ai-native-sdlc.md) — AI PR review as the Deploy-stage gate in Anthropic's lifecycle playbook

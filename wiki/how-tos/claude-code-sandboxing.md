@@ -7,7 +7,8 @@ tags: [claude-code, sandbox, security, permissions, bubblewrap, seatbelt, claude
 sources:
   - "summaries/2025-10-20_anthropic_claude-code-sandboxing.md"
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
-timestamp: "2026-04-20"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Claude Code Sandboxing
@@ -61,8 +62,44 @@ The three permission strategies compose:
 - `--permission-mode auto` for the classifier layer (see [Auto Mode](claude-code-auto-mode.md))
 - `/sandbox` for OS-level isolation as the outermost ring
 
+## Managed Settings: Closing the Gaps Permissions Leave
+
+For an organisation, the layers above need to be non-overridable. Anthropic's AI-Native SDLC playbook (August 2026) puts them in **managed settings**, the org-deployed layer users cannot loosen, and explains each block by the gap it closes:
+
+- **Tool-level `deny` on `WebFetch` does not stop `curl` in a shell.** Hence the OS-level sandbox with a domain allowlist, plus explicit `Bash(curl *)` / `Bash(wget *)` denies.
+- **`permissions.deny` does not stop a sandboxed shell reading `~/.ssh`.** Hence the sandbox `credentials` block.
+- **A user can otherwise add their own hooks, MCP servers or rules.** Hence the managed-only switches.
+
+Regulated-enterprise excerpt (trimmed):
+
+```json
+{
+  "permissions": {
+    "deny": ["Read(.env*)", "Read(./secrets/**)", "WebFetch", "Bash(curl *)", "Bash(wget *)"],
+    "allow": ["Bash(git *)", "Bash(make build)", "Bash(make test)", "Bash(make lint)"],
+    "disableBypassPermissionsMode": "disable"
+  },
+  "allowManagedPermissionRulesOnly": true,
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "allowUnsandboxedCommands": false,
+    "credentials": { "files": [{ "path": "~/.ssh", "mode": "deny" }] }
+  },
+  "allowManagedHooksOnly": true,
+  "allowManagedMcpServersOnly": true,
+  "requiredMinimumVersion": "2.1.193"
+}
+```
+
+`failIfUnavailable` and `allowUnsandboxedCommands: false` "make the sandbox a gate": Claude Code refuses to start when the sandbox cannot initialise, and a command that fails inside the sandbox cannot be retried outside it. The `credentials` block also strips the named secrets from the environment of every sandboxed command.
+
+The playbook is explicit that this is "a starting point to tailor, rather than a recommendation to copy. Every deny trades against capability." **How to apply:** derive the deny/allow balance from the repository's data classification, not from the example. Pair it with the pre-allow guidance on [Claude Code Permissions](claude-code-permissions.md#what-to-pre-allow) so parallel sessions don't stall on prompts for commands the organisation already considers safe. *(Source: Anthropic's AI-Native SDLC playbook, 2026-08-21)*
+
 ## Related Pages
 
 - [Claude Code Permissions](claude-code-permissions.md)
 - [Claude Code Auto Mode](claude-code-auto-mode.md)
 - [Claude Code](../tools/claude-code.md)
+- [Claude Code Hooks for Memory](claude-code-hooks-memory.md) — hooks as the deterministic gate layer managed settings lock down
+- [AI-Native SDLC](../concepts/ai-native-sdlc.md) — where managed settings sit in Anthropic's lifecycle governance model

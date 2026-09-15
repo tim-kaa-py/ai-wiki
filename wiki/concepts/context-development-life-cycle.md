@@ -7,7 +7,8 @@ tags: [cdlc, context-engineering, agents, evaluation, skills, workflow, devops]
 sources:
   - "summaries/2026-05-03_ai-engineer_context-is-the-new-code.md"
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
-timestamp: "2026-09-11"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Context Development Life Cycle (CDLC)
@@ -98,6 +99,18 @@ Debois's next talk is the organizational half of this progression — the same s
 
 The full organizational argument is on [Agent Enablement](agent-enablement.md).
 
+## The Code-Side Counterpart: Anthropic's AI-Native SDLC Playbook
+
+The CDLC is a lifecycle for *context*. Anthropic's AI-Native SDLC playbook (August 2026) is a lifecycle for the *software* that context steers, and it independently builds three of the five CDLC phases into its stages, which makes it a concrete reference for wiring them. [Source: 2026-08-21_anthropic_the-ai-native-sdlc-playbook]
+
+| CDLC phase | Where the playbook implements it |
+|------------|----------------------------------|
+| **Generate** | CLAUDE.md and skills as versioned, code-owner-approved files; "when Claude makes a mistake twice, the correction goes into CLAUDE.md" |
+| **Test** | A 20–50 task eval suite that runs in CI on any change to `CLAUDE.md` or `.claude/**`, plus nightly, gating merges on pass rate. See [Agent Evaluation § Evals on the Agent's Configuration](agent-evaluation.md#evals-on-the-agents-configuration-anthropics-ai-native-sdlc-playbook) |
+| **Observe → Adapt** | Every production incident and every fixed vulnerability class adds a permanent eval; policy-citing review findings are the signal that a skill isn't triggering or has drifted |
+
+Two differences are worth keeping in view. The playbook has no Distribute phase: beyond managed settings restricting which plugins and MCP servers are allowed, it does not address skill registries, version pinning or supply-chain scanning. And its Observe loop is wider than context: control-band breaches in production are diagnosed and written back as a new `intent.md`, so the loop re-enters at *product* planning rather than at a context file. The CDLC is the lifecycle for the configuration layer inside that larger loop. See [AI-Native SDLC](ai-native-sdlc.md).
+
 ## See Also
 
 - [Context Engineering](context-engineering.md) — the prior-era framing this builds on
@@ -108,3 +121,4 @@ The full organizational argument is on [Agent Enablement](agent-enablement.md).
 - [Harness Engineering](harness-engineering.md) — the wrapping discipline; CDLC is what runs *inside* the harness
 - [Agent Enablement](agent-enablement.md) — the organizational layer the flywheel runs on: rituals, platform ownership, mandate
 - [Patrick Debois](../people/patrick-debois.md) — DevOps originator, now framing context as code
+- [AI-Native SDLC](ai-native-sdlc.md) — Anthropic's lifecycle for the software itself; implements Generate, Test and Observe→Adapt for CLAUDE.md and skills

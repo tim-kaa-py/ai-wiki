@@ -19,7 +19,8 @@ sources:
   - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
   - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
   - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
-timestamp: "2026-09-03"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Context Engineering
@@ -271,7 +272,7 @@ A corollary of context rot that applies specifically to *always-on* instruction 
 - **Generic engineering principles** — DRY, KISS, "here's how you write a pull request", "here's how you do a code review". The model knows. Medin: "those things, they hurt more than help now in your global rules" [09:19].
 - **The thousand-line CLAUDE.md** that people used to build. "It is not helping you" [09:35].
 
-**The budget:** Anthropic's stated recommendation is to keep rules under **200 lines**; Medin runs to ~300 and is explicit that no exact number is meaningful — the number is a forcing function, not a threshold.
+**The budget:** Anthropic's stated recommendation is to keep rules under **200 lines**; Medin runs to ~300 and is explicit that no exact number is meaningful — the number is a forcing function, not a threshold. Anthropic's AI-Native SDLC playbook (August 2026) sets the tightest bar in this wiki for a team's project CLAUDE.md, "under a page," cut to "what a new joiner needs on day one," on the same reasoning: all of it loads every session, so "anything stale is taking up context for no benefit." See [Claude Code § CLAUDE.md as a Team Artifact](../tools/claude-code.md#claudemd-as-a-team-artifact-ai-native-sdlc-playbook).
 
 **The retention test:** global rules hold only the project-specific constraints and conventions that apply *no matter what the agent is working on*. Everything else is either scrapped or moved into a task-specific context file the agent is told to read when it hits that kind of work — the [progressive-disclosure](#progressive-disclosure) move applied to your own instructions. *(Source: Cole Medin, 2026-09-01)*
 

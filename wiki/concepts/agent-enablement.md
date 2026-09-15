@@ -6,7 +6,8 @@ pillar: "building"
 tags: [agents, organizational-design, workflow, strategy, devops, best-practices, platform-engineering, metrics, hiring]
 sources:
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
-timestamp: "2026-09-11"
+  - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
+timestamp: "2026-09-15"
 ---
 
 # Agent Enablement
@@ -128,6 +129,12 @@ Score the three separately rather than collapsing them into junior/senior; gaps 
 
 The solo-builder end state does not survive operations. The full-stack solo builder needs complementary PM and design skills, a holiday backup, someone carrying production tickets, and a junior learning what good looks like — which reassembles into roughly three to five people [18:55-19:51]. Resist headcount plans premised on solo builders, and keep investing in education, particularly for juniors who otherwise never see what good looks like. See [Five Levels of AI Coding § The Talent Pipeline Collapse](five-levels-of-ai-coding.md#the-talent-pipeline-collapse).
 
+### Sequencing the Rollout: Gates Before Automation
+
+Debois says *who* must mandate and own the work; Anthropic's AI-Native SDLC playbook (August 2026) supplies an *order* for it, and the order is not the lifecycle order. Plays with no prerequisites (`intent.md` capture, CLAUDE.md, skills, the test feedback loop, hooks as approval gates) can start in any team at any time. CI/CD automation requires PR review and hooks-as-gates first, "because the gates must exist before automation accelerates anything through them"; closing the loop from production back into planning additionally requires a rollback path rehearsed in staging. [Source: 2026-08-21_anthropic_the-ai-native-sdlc-playbook]
+
+**How to apply** (vendor-prescriptive, not measured): start a team with CLAUDE.md, the feedback loop and one skill; do not wire merge-triggered agent jobs until the review gate and the production hook exist. The playbook pairs each play with a leading and a lagging indicator, most of them readable from git timestamps, PR metadata and the OpenTelemetry export without new instrumentation — a per-play complement to the two system-level metrics above. See [AI-Native SDLC § Adoption Order Is Not Stage Order](ai-native-sdlc.md#adoption-order-is-not-stage-order).
+
 ## Where This Lands: Dim Factory and Continuous Learning
 
 Debois's endpoint is not on this page but it is what the three levels are building toward: a **dim factory** — autonomy tiered per feature rather than switched on org-wide — and **continuous learning** as the successor to continuous delivery, where the diagnostic is how fast you can swap a component in and out while keeping the system reliable. Both are on [Software Factory § The Dim Factory](software-factory.md#the-dim-factory-autonomy-as-a-per-feature-risk-decision-debois).
@@ -150,3 +157,4 @@ The talk's motivating premise is that loops and harnesses will *"kind of become 
 - [System Evolution](system-evolution.md) — "improve the system, not the output" run as an explicit outer loop
 - [Cognitive Debt](cognitive-debt.md) — the individual-level risk the education investment is meant to contain
 - [AI-Resistant Evaluation Design](../comparisons/ai-resistant-evaluation-design.md) — designing the hiring exercise the three-signal interview needs
+- [AI-Native SDLC](ai-native-sdlc.md) — Anthropic's play-by-play adoption order and per-play indicators

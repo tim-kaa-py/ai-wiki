@@ -99,3 +99,4 @@ None of the underlying patterns are new. Transaction logs come from finance, zer
 - [Agent Loops](agent-loops.md) — the loop primitive that the event log records and replays
 - [Agent Platform Tiers](agent-platform-tiers.md) — where a compliance-heavy deployment lands on the build-to-buy spectrum, and why the VPC constraint is a day-one tier decision
 - [Context Filter](context-filter.md) — the upstream-filtering answer to prompt injection, held here in open tension with the architectural answer (see its Unresolved Tensions section)
+- [AI-Native SDLC](ai-native-sdlc.md) — the development-side audit trail (the commit chain of who asked, what the agent produced, who approved), distinct from the runtime audit trail on this page
