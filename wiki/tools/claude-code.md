@@ -42,7 +42,8 @@ sources:
   - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
   - "summaries/2026-08-05_ray-amjad_opus-5-is-exhausting-anthropic-reveals-the-fix.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
+timestamp: "2026-10-05"
 ---
 
 # Claude Code
@@ -247,7 +248,8 @@ Say **"use a workflow"** — no syntax. Claude starts a VM inside a Bun sandbox 
 | Command | What it does |
 |---------|-------------|
 | `/loop 5m <prompt>` | Recurring tasks: babysitting PRs, watching deploys, sweeping review comments |
-| Hooks (settings.json) | Deterministic lifecycle logic: auto-format (PostToolUse), block edits, log commands, re-inject context |
+| Hooks (settings.json) | Deterministic lifecycle logic: auto-format (PostToolUse), block edits, log commands, re-inject context. Now called **settings hooks** |
+| Mods (v2.1.287+) | JS/TS middleware: rewrite or answer events, draw panes and bands, ask, call models — see [Claude Code Mods](claude-code-mods.md) |
 | `--bare` | Minimal mode for CI/CD and scripted usage — skips auto-discovery |
 | **Routines** | Scheduled/triggered autonomous sessions in cloud containers — see [Claude Routines](claude-routines.md) |
 
@@ -620,6 +622,14 @@ Plugins are the distribution channel for everything below the project: skills, a
 
 See [Claude Code Plugins](../how-tos/claude-code-plugins.md) for the full how-to. *(Source: Claude Code Docs — Create plugins)*
 
+## Mods: The Programmable Harness (v2.1.287+)
+
+On 2026-10-01 Claude Code shipped **mods** (early access: "function hooks"): plugins made of JavaScript/TypeScript handlers that act as middleware on every harness event. A handler can **Observe** (pass through), **Rewrite** (change and call `next`), or **Answer** (return a result without running the tool), and through the mods API it can draw panes and bands, add `/commands`, `ask` the user, call models (`$model`) and endpoints (`$http`), and share state. The older `settings.json` kind is now called a **settings hook**.
+
+Extension choice per the docs: a mod is the only type that draws UI or rewrites events; use a settings hook for simple gates, a skill for instructions, MCP for external tools. Mods run everywhere (including `claude -p`, the Agent SDK and cloud sessions), but drawing works only in the terminal and the Desktop Code tab.
+
+The caveat: mods run with your permissions, unsandboxed, and can approve tool calls an `ask` rule or a PreToolUse hook would have stopped. Install only from trusted marketplaces and `claude plugin validate` first. Full page: [Claude Code Mods](claude-code-mods.md). *(Source: Ray Amjad, 2026-09-04, read against the official mods docs)*
+
 ## Parallel Claudes: Lock-File Agent Teams
 
 Nicholas Carlini's C compiler project ran **16 parallel Claude Code agents** in a shared Docker + Git repo, coordinated only by lock files on work items. No human in the loop, no lead agent. ~2,000 sessions over two weeks produced a 100k-line Rust C compiler that compiles Linux 6.9 across x86/ARM/RISC-V with a **99% test pass rate**.
@@ -636,6 +646,7 @@ Contrast with the hierarchical **orchestrator-worker** pattern of the multi-agen
 - [Agent Skills](../concepts/agent-skills.md)
 - [Claude Code Skills](../how-tos/claude-code-skills.md) — authoring how-to
 - [Claude Code Plugins](../how-tos/claude-code-plugins.md) — packaging skills + agents + hooks + monitors for distribution
+- [Claude Code Mods](claude-code-mods.md) — JS/TS middleware plugins: rewrite, answer, draw UI, ask, keep state
 - [Claude Code Custom Subagents](../how-tos/claude-code-custom-subagents.md) — full subagent configuration reference
 - [Claude Code Agent Teams](../how-tos/claude-code-agent-teams.md) — peer-to-peer multi-session coordination (experimental)
 - [Claude Agent SDK](claude-agent-sdk.md) — programmatic library version of the same harness

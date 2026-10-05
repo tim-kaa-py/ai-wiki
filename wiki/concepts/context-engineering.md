@@ -20,7 +20,8 @@ sources:
   - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
   - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
+timestamp: "2026-10-05"
 ---
 
 # Context Engineering
@@ -199,6 +200,18 @@ Measure it: `wc -c CLAUDE.md` ÷ ~4 for a rough token count, × sessions per wee
 
 This is the same shape as two patterns already on the wiki, arrived at independently: Ryan Lopopolo's [AGENTS.md as table of contents, not encyclopedia](harness-engineering.md#harness-as-repo-artifacts-ryan-lopopolo-openai) (~100-line map into a structured `docs/` tree), and the L1/L2/L3 loading model of [Agent Skills](agent-skills.md#progressive-disclosure-three-levels). The router framing is the CLAUDE.md-specific case of a principle the wiki already holds in two other places. *(Source: Tariq via Jay E / RoboNuggets, 2026-08-03 — secondhand)*
 
+### Enforcement Leaves CLAUDE.md: Mods Shape What Claude Sees
+
+The router framing trims CLAUDE.md for token cost. Ray Amjad's argument trims it for reliability: rules near the top of the context fade as the session grows, so any rule that must hold every time should move into a [mod](../tools/claude-code-mods.md) (or a settings hook), and CLAUDE.md shrinks to guidance. His recipe: run `/plugin-authoring`, point it at CLAUDE.md, ask which rules can become deterministic hooks, then delete those rules.
+
+Mods also make the context window itself programmable at the harness level:
+
+- **Keep tokens out.** A redaction mod swaps secrets, emails and IPs for placeholder IDs before the prompt enters the transcript and swaps them back only in the outgoing tool call, so the value never occupies context (transcript hygiene, not a security boundary).
+- **Put tokens in on demand.** `$model` generates keywords from the prompt and `$http` queries a knowledge base, adding the results to the session: a lightweight just-in-time retrieval layer.
+- **Spend fewer tool-description tokens.** Overriding a built-in tool's implementation (WebSearch → Exa) removes a competing MCP server and its tool definitions from context.
+
+*(Source: Ray Amjad, 2026-09-04, read against the official mods docs)*
+
 ## Sub-Agents as Context Buffers
 
 Cole Medin's framing (April 2026) diverges from the common "sub-agents = parallelism" pitch: for him, sub-agents exist primarily for **context budgeting**, not concurrency. A research task (codebase exploration, web search, dependency analysis) burns 30k–100k tokens; the parent agent only needs the 2k-token summary. Push the research into a sub-agent that burns those tokens in *its own* context window and returns a condensed result.
@@ -297,3 +310,4 @@ Self-check he recommends: compact a real conversation, then ask the agent about 
 - [RAG vs Long Context](../comparisons/rag-vs-long-context.md) — the same context-rot / attention-dilution effect, applied to the document-QA architecture choice
 - [Retrieval-Augmented Generation (RAG)](rag.md) — foundational reference for the retrieve-on-demand mechanism that just-in-time retrieval generalizes
 - [Boris Cherny](../people/boris-cherny.md) — the 80% cut and the ablation discipline behind rule 5
+- [Claude Code Mods](../tools/claude-code-mods.md) — moving enforced rules out of CLAUDE.md; redaction and injection at the harness level

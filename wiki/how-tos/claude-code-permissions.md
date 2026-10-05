@@ -10,7 +10,8 @@ sources:
   - "summaries/2026-03-25_anthropic_claude-code-auto-mode.md"
   - "summaries/2025-10-20_anthropic_claude-code-sandboxing.md"
   - "summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
-timestamp: "2026-04-25"
+  - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
+timestamp: "2026-10-05"
 ---
 
 # Claude Code Permissions
@@ -91,6 +92,8 @@ Anthropic's canonical guidance is that Claude Code offers **three complementary 
 
 These compose. Power-user setup: `/permissions` allowlist for routine commands, `--permission-mode auto` for long autonomous runs, `/sandbox` as the outer ring when running unknown scripts.
 
+**Installed mods sit outside all three.** Claude Code [mods](../tools/claude-code-mods.md) (v2.1.287+) run with your permissions, are not sandboxed, and per the official docs can approve tool calls before you are asked, including ones an `ask` rule would have stopped. Permission rules constrain Claude's tool calls, not a mod's own code. Install mods only from trusted marketplaces, check them with `claude plugin validate`, and use `--safe-mode`, `"disableAllHooks": true` or (for organisations) `allowManagedModsOnly` to switch them off. *(Source: Ray Amjad, 2026-09-04, read against the official mods docs)*
+
 ### Auto Mode (`--permission-mode auto`)
 
 A two-stage classifier replaces permission fatigue: server-side prompt-injection detector on inputs, transcript classifier on outputs. Three approval tiers (safe-tool allowlist, in-project file ops, high-risk → classifier review).
@@ -132,3 +135,4 @@ Skills can also pre-approve their own tools via `allowed-tools` in frontmatter (
 - [Claude Code Hooks for Memory](claude-code-hooks-memory.md) -- other `.claude/settings.json` configuration
 - [Agentic Coding Workflow](agentic-coding-workflow.md) -- workflow incorporating these practices
 - [Claude Code Skills](claude-code-skills.md) -- frontmatter-level invocation control and tool allowlists
+- [Claude Code Mods](../tools/claude-code-mods.md) -- extensions that run outside the permission layers and can pre-approve `ask`-gated calls

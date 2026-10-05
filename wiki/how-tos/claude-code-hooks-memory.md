@@ -13,7 +13,8 @@ sources:
   - "summaries/2026-05-16_simon-scrapes_3-claude-memory-systems-to-get-you-ahead-of-99pct-of-people.md"
   - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
+timestamp: "2026-10-05"
 ---
 
 # Claude Code Hooks for Memory
@@ -180,6 +181,8 @@ See [Claude Code Custom Subagents](claude-code-custom-subagents.md) for the full
 
 The Cole Medin pattern above is one application of Claude Code hooks. The full reference below covers everything else hooks can do — formatting, permission enforcement, context re-injection, deterministic guardrails.
 
+**Terminology note (October 2026).** Since Claude Code v2.1.287 the hooks described on this page are officially called **settings hooks**. "Hook" now also names one JavaScript/TypeScript handler inside a **mod**, a different extension type that can rewrite, answer, draw UI and keep state. Everything in this reference describes settings hooks. See [Settings Hooks vs Mods](#settings-hooks-vs-mods-october-2026) below and [Claude Code Mods](../tools/claude-code-mods.md). *(Source: Ray Amjad, 2026-09-04, read against the official mods launch)*
+
 ### Why Hooks Exist: Deterministic vs Advisory
 
 **CLAUDE.md instructions are advisory** — Claude may or may not follow them. **Hooks are deterministic** — they fire regardless of what Claude decides. This is the fundamental rule for choosing between them: if something *must* happen (format after edit, block .env edits, re-inject context after compaction), it needs to be a hook, not an instruction. Anthropic's blunt phrasing: **"Put guardrails in hooks."**
@@ -228,9 +231,11 @@ The `if` field (v2.1.85+) adds **argument-level filtering** — e.g. `"Bash(git 
 
 ### Hooks vs `bypassPermissions`
 
-Hooks fire **before** permission checks even in `bypassPermissions` mode. A `PreToolUse` hook returning `deny` blocks the tool even when bypass is active. Conversely, a hook returning `"allow"` cannot bypass deny rules from settings. **Hooks tighten but cannot loosen restrictions past policy.**
+Hooks fire **before** permission checks even in `bypassPermissions` mode. A `PreToolUse` hook returning `deny` blocks the tool even when bypass is active. Conversely, a hook returning `"allow"` cannot bypass deny rules from settings. **Settings hooks tighten but cannot loosen restrictions past policy.**
 
 This makes `PreToolUse` hooks the right tool for org-level policy enforcement that users cannot bypass by changing their permission mode.
+
+**Exception since v2.1.287: mods.** Changing the permission mode does not get past a `PreToolUse` block, but an installed [mod](../tools/claude-code-mods.md) can. The official docs state that "a mod that approves tool calls can approve one that an `ask` rule would prompt for, or that one of your own `PreToolUse` hooks blocked," and in some cases even one a `deny` rule refuses. So a settings hook is only a non-bypassable layer if mods are controlled too: use managed settings with `allowManagedModsOnly` for org policy, or `disableAllHooks` / `--safe-mode` locally. A mod cannot restyle the permission prompt.
 
 ### Six Scope Levels for Hook Placement
 
@@ -384,6 +389,24 @@ exit 0
 
 Treat this as an illustration, not a control. A substring match on a Bash command is bypassed by an MCP deploy tool, a shell alias, or a wrapper script whose name contains neither word. The playbook's stronger recommendation is to expose deployment only through scoped MCP tools, and to back the hook with branch protection and per-environment permission tiers. See [AI-Native SDLC § The Production Gate](../concepts/ai-native-sdlc.md#the-production-gate). *(Source: Anthropic's AI-Native SDLC playbook, 2026-08-21)*
 
+## Settings Hooks vs Mods (October 2026)
+
+Ray Amjad's list of what settings hooks cannot do is the reason Claude Code added **mods** (early access as "function hooks", launched 2026-10-01 in v2.1.287): a settings hook cannot rewrite a prompt or tool call, answer a call without running the tool, draw UI, ask the user mid-call, add or edit tools, or remember anything between calls. A mod handler can do all of these.
+
+| Need | Settings hook | Mod |
+|------|:-------------:|:---:|
+| Allow / block a tool call | ✓ | ✓ (Answer) |
+| Add context to Claude | ✓ (fixed `additionalContext` / stdout) | ✓ |
+| Rewrite the call (e.g. `npm` → `pnpm`) | — | ✓ (Rewrite) |
+| Return a result without running the tool | — | ✓ (Answer) |
+| Draw panes, bands, buttons | — | ✓ (terminal + Desktop Code tab only) |
+| Hold a call and ask the user | — | ✓ (`ask`) |
+| State shared across calls | — | ✓ (module variables) |
+
+**When to stay with a settings hook:** simple gates like the formatter, protected-path and Stop-hook patterns above. They are lighter, and the official docs still recommend them for simple gates. **When to reach for a mod:** anything that needs to change what Claude sees or does rather than just allow or stop it, or anything with UI.
+
+The deterministic-vs-advisory rule applies unchanged. Ray's version: rules near the top of the context fade as a session grows and lazy prompts get misread, so run `/plugin-authoring`, point it at CLAUDE.md, ask which rules can become hooks, and delete the rules that did. This is the mod-era equivalent of [Spotting a Load-Bearing Rule](#spotting-a-load-bearing-rule). *(Source: Ray Amjad, 2026-09-04)*
+
 ## Related Pages
 
 - [Agent Memory Systems](../concepts/agent-memory-systems.md) -- storage/injection/recall framework and the memarch + Hermes hybrid blueprint
@@ -396,3 +419,4 @@ Treat this as an illustration, not a control. A substring match on a Bash comman
 - [Andrej Karpathy](../people/andrej-karpathy.md) -- originator of the underlying pattern
 - [AI-Native SDLC](../concepts/ai-native-sdlc.md) -- hooks as the deterministic layer behind skills, and where each hook decision belongs in the lifecycle
 - [Claude Code Sandboxing](claude-code-sandboxing.md) -- managed settings, including `allowManagedHooksOnly`
+- [Claude Code Mods](../tools/claude-code-mods.md) -- JS/TS middleware hooks (Observe / Rewrite / Answer, UI, `ask`, state); the successor extension type beside settings hooks

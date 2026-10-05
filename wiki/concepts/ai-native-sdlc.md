@@ -6,7 +6,8 @@ pillar: "building"
 tags: [sdlc, workflow, governance, hooks, agent-skills, evaluation, enterprise, claude-code, best-practices]
 sources:
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
+timestamp: "2026-10-05"
 ---
 
 # AI-Native SDLC
@@ -99,6 +100,8 @@ The chain is the third named artifact pipeline here, alongside Dex Horthy's four
 ### Advisory vs. Deterministic Controls
 
 The playbook's cleanest distinction. A **skill** "is a control, though an advisory one. It makes Claude likely to apply the policy while the code is written, and nothing forces a session to comply with it." A **hook** is "the deterministic layer behind it": "The skill makes violations rare and the hook makes them close to impossible." **Managed settings** are the org-level, non-overridable layer above both.
+
+Since mods launched (v2.1.287, after this playbook), "close to impossible" holds only while mods are governed: an installed [mod](../tools/claude-code-mods.md) can approve a tool call that a `PreToolUse` hook blocked. Managed settings are where that is closed, via `allowManagedModsOnly`. See [Claude Code Hooks § Hooks vs `bypassPermissions`](../how-tos/claude-code-hooks-memory.md#hooks-vs-bypasspermissions).
 
 The operating rule: for each skill, ask *"what happens if this doesn't trigger?"* If the answer is unacceptable, put a hook or a PR re-check behind it. Details on [Agent Skills § Skills Are Advisory Controls](agent-skills.md#skills-are-advisory-controls) and [Claude Code Hooks § Hooks as SDLC Gates](../how-tos/claude-code-hooks-memory.md#hooks-as-sdlc-gates-anthropics-ai-native-sdlc-playbook).
 

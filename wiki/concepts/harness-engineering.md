@@ -25,7 +25,8 @@ sources:
   - "summaries/2026-08-03_robonuggets_claude-code-just-changed-forever-6-new-rules-by-anthropic.md"
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
-timestamp: "2026-09-11"
+  - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
+timestamp: "2026-10-05"
 ---
 
 # Harness Engineering
@@ -127,6 +128,8 @@ The May 2026 features-overview doc gives Anthropic's canonical decision map for 
 | Missing external data | MCP server |
 | Must-happen automatically | Hook |
 | Second repo needs same setup | Plugin |
+
+**Mods (October 2026) add a row to this map:** when the friction is *"Claude keeps doing X slightly wrong"* or *"Claude keeps choosing tool Y over the one I want"*, a [mod](../tools/claude-code-mods.md) can **Rewrite** the call or **Answer** it with a different implementation, instead of adding another instruction or a competing MCP tool. Ray Amjad's example: a mod that answers WebSearch through the Exa API (with fallback) made the Exa MCP server unnecessary. This moves harness work from *what the model is told* to *what the harness does with the model's actions*, deterministically. *(Source: Ray Amjad, 2026-09-04, read against the official mods docs)*
 
 **Don't design the extension layer upfront — let friction accumulate and respond.** This is the practical operationalization of the "craft of subtraction" above: every extension encodes an assumption, which means every extension is something to potentially prune later.
 
@@ -518,4 +521,5 @@ Both are held without choosing. Horthy's position is that the harness raises the
 - [Boris Cherny](../people/boris-cherny.md) — ablation discipline, the 80% prompt cut, product overhang
 - [Product Overhang and Hobbling](product-overhang.md) — why expired scaffolding stops being neutral and starts obstructing
 - [Dynamic Workflows](dynamic-workflows.md) — orchestration as an axis of test-time compute
+- [Claude Code Mods](../tools/claude-code-mods.md) — Claude Code's harness made programmable: Observe / Rewrite / Answer middleware on every event
 - [Agent Enablement](agent-enablement.md) — Debois's organizational layer; holds an unresolved claim that the generic harness commoditizes

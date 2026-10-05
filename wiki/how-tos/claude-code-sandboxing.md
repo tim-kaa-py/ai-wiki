@@ -8,7 +8,8 @@ sources:
   - "summaries/2025-10-20_anthropic_claude-code-sandboxing.md"
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
+timestamp: "2026-10-05"
 ---
 
 # Claude Code Sandboxing
@@ -31,6 +32,8 @@ Two boundaries, both enforced outside the agent process:
 | Network (approved hosts only) | bubblewrap | seatbelt |
 
 Because the sandbox is OS-level, **subprocesses spawned by Claude's bash tool inherit the same restrictions**. This is the key advantage over application-layer permissioning: a Python script Claude runs cannot escape by calling another binary.
+
+**Scope limit: mods sit outside it.** Claude Code [mods](../tools/claude-code-mods.md) (v2.1.287+) run with your permissions and are not sandboxed; per the official docs, the Bash sandbox does not cover processes a mod starts. The sandbox constrains what Claude's tool calls can do, not what installed mods can do, so treat mods as code you trust, not as code the sandbox contains. *(Source: Ray Amjad, 2026-09-04, read against the official mods docs)*
 
 ## Starting a Sandbox
 
@@ -69,6 +72,7 @@ For an organisation, the layers above need to be non-overridable. Anthropic's AI
 - **Tool-level `deny` on `WebFetch` does not stop `curl` in a shell.** Hence the OS-level sandbox with a domain allowlist, plus explicit `Bash(curl *)` / `Bash(wget *)` denies.
 - **`permissions.deny` does not stop a sandboxed shell reading `~/.ssh`.** Hence the sandbox `credentials` block.
 - **A user can otherwise add their own hooks, MCP servers or rules.** Hence the managed-only switches.
+- **A user can otherwise install mods**, which run unsandboxed and can approve tool calls before the user is asked. The mods equivalent is `allowManagedModsOnly` (v2.1.287+); built-in mods ignore it and the other mod off-switches. *(Source: Ray Amjad, 2026-09-04, read against the official mods docs)*
 
 Regulated-enterprise excerpt (trimmed):
 
@@ -103,3 +107,4 @@ The playbook is explicit that this is "a starting point to tailor, rather than a
 - [Claude Code](../tools/claude-code.md)
 - [Claude Code Hooks for Memory](claude-code-hooks-memory.md) — hooks as the deterministic gate layer managed settings lock down
 - [AI-Native SDLC](../concepts/ai-native-sdlc.md) — where managed settings sit in Anthropic's lifecycle governance model
+- [Claude Code Mods](../tools/claude-code-mods.md) — unsandboxed JS/TS extensions; `allowManagedModsOnly` and the other off-switches

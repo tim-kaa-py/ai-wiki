@@ -7,7 +7,8 @@ tags: [claude-code, terminal, configuration, workflow, status-line, how-to, refe
 sources:
   - "summaries/2026-04-16_self_claude-code-statusline-setup.md"
   - "summaries/2026-04-15_claude-docs_optimize-your-terminal-setup.md"
-timestamp: "2026-04-30"
+  - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
+timestamp: "2026-10-05"
 ---
 
 # Claude Code Status Line Setup
@@ -111,8 +112,13 @@ Claude Code's statusbar renderer passes the script's stdout directly to the UI w
 
 Practical implication: if you need a new display element, add a new `echo` line rather than trying to interleave content across existing lines via cursor tricks.
 
+## Beyond the Status Line: Mod-Drawn Bands and Panes
+
+The `statusLine` script is text-only stdout. Since v2.1.287, [Claude Code mods](../tools/claude-code-mods.md) can draw **bands above the prompt and panes beside the transcript**, with tabs, buttons and text fields, and can redraw Claude Code's own spinner and tool rows. Use a mod when the display needs to be event-scoped or interactive: Ray Amjad's example is a Vercel deploy row that appears only while a deploy runs, stays for an hour, and has a hide/show button; Anthropic's sample **token-weather** mod forecasts context usage in a band. Mod drawing works only in the terminal and the Desktop Code tab. The status-line script stays the simpler choice for always-on numbers like the three lines above. *(Source: Ray Amjad, 2026-09-04, read against the official mods docs)*
+
 ## Related Pages
 
 - [Claude Code](../tools/claude-code.md)
 - [Agentic Coding Workflow](agentic-coding-workflow.md)
 - [Claude Code Hooks for Memory](claude-code-hooks-memory.md)
+- [Claude Code Mods](../tools/claude-code-mods.md) — event-scoped, interactive bands and panes beyond the status-line script

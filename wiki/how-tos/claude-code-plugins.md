@@ -6,7 +6,8 @@ pillar: "building"
 tags: [claude-code, plugins, skills, agents, hooks, mcp, monitors, lsp, packaging, workflow, how-to]
 sources:
   - "summaries/2026-04-25_claude-code-docs_create-plugins.md"
-timestamp: "2026-04-25"
+  - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
+timestamp: "2026-10-05"
 ---
 
 # Claude Code Plugins
@@ -140,6 +141,17 @@ The format mirrors the `hooks` object from `settings.json`. The difference: hook
 
 When migrating local hooks into a plugin, lift the `hooks` object out of `settings.json` into `hooks/hooks.json`. The matchers and command syntax don't change.
 
+## Mods: Plugins Made of Function Hooks (v2.1.287+)
+
+Since 2026-10-01 a plugin can also be a **mod**: "a plugin that changes how Claude Code looks and behaves… made of JavaScript or TypeScript event handlers." The canonical layout per the official docs is `.claude-plugin/plugin.json`, `hooks/hooks.json`, and a hooks module that exports `register(on)`. Its handlers can observe, rewrite or answer events, draw panes and bands, add `/commands`, ask the user and call models through the mods API.
+
+The dev loop is the same as for any plugin (`claude --plugin-dir`, `/reload-plugins`), plus two additions:
+
+- **`/plugin-authoring`** — a built-in skill that writes a mod from a plain-language request.
+- **`claude plugin validate ./mod`** — lists a mod's `hooks:` and `calls:` before you install it. Run it on every third-party mod: mods run with your permissions and outside the Bash sandbox.
+
+Mods are distributed like any plugin (shared repo or marketplace), which is how team guards and UI travel. See [Claude Code Mods](../tools/claude-code-mods.md). *(Source: Ray Amjad, 2026-09-04, read against the official mods docs)*
+
 ## LSP Servers
 
 Plugins can ship `.lsp.json` to add language server support for code intelligence. Primarily useful for niche languages not covered by official LSP plugins. Users must have the language server **binary** installed separately — the plugin only wires the protocol, not the implementation.
@@ -188,3 +200,4 @@ Namespacing means two plugins can each ship a `/deploy` skill without colliding.
 - [Claude Code Permissions](claude-code-permissions.md) — `/permissions` and skill rules
 - [Superpowers](../tools/superpowers.md) — example of a plugin shipping ~15 skills
 - [MCP](../concepts/mcp.md) — `.mcp.json` lives at the plugin root
+- [Claude Code Mods](../tools/claude-code-mods.md) — plugins made of JS/TS function hooks

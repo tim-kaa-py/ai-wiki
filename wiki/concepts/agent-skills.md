@@ -18,7 +18,8 @@ sources:
   - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
+timestamp: "2026-10-05"
 ---
 
 # Agent Skills
@@ -270,7 +271,7 @@ Plugins also bundle agents, hooks, MCP server definitions, LSP definitions, and 
 
 ## Skills Are Advisory Controls
 
-When a skill encodes an organisational policy (security, compliance, brand), it is a control, but a weak one. Anthropic's AI-Native SDLC playbook states the limit plainly: a skill "is a control, though an advisory one. It makes Claude likely to apply the policy while the code is written, and nothing forces a session to comply with it." The deterministic layer behind it is a hook or a PR re-check: "The skill makes violations rare and the hook makes them close to impossible." This is the skills-side version of the CLAUDE.md-is-advisory, hooks-are-deterministic rule on [Claude Code Hooks § Why Hooks Exist](../how-tos/claude-code-hooks-memory.md#why-hooks-exist-deterministic-vs-advisory), and the practical consequence of [Skill Evaluation § Trigger failures dominate](skill-evaluation.md#trigger-failures-dominate): a policy that lives only in a skill fails silently whenever the skill does not fire.
+When a skill encodes an organisational policy (security, compliance, brand), it is a control, but a weak one. Anthropic's AI-Native SDLC playbook states the limit plainly: a skill "is a control, though an advisory one. It makes Claude likely to apply the policy while the code is written, and nothing forces a session to comply with it." The deterministic layer behind it is a hook or a PR re-check: "The skill makes violations rare and the hook makes them close to impossible." (Since v2.1.287, an installed [mod](../tools/claude-code-mods.md) can override a hook's block; see [Claude Code Hooks § Hooks vs `bypassPermissions`](../how-tos/claude-code-hooks-memory.md#hooks-vs-bypasspermissions).) This is the skills-side version of the CLAUDE.md-is-advisory, hooks-are-deterministic rule on [Claude Code Hooks § Why Hooks Exist](../how-tos/claude-code-hooks-memory.md#why-hooks-exist-deterministic-vs-advisory), and the practical consequence of [Skill Evaluation § Trigger failures dominate](skill-evaluation.md#trigger-failures-dominate): a policy that lives only in a skill fails silently whenever the skill does not fire.
 
 **How to apply** (vendor-prescriptive, not measured):
 

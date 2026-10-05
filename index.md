@@ -8,6 +8,7 @@ okf_version: "0.1"
 
 ### Sources
 
+* [Anthropic Just Released Claude Code Mods (Ray Amjad)](summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md) - Ray Amjad's early-access tour of Claude Code function hooks (launched on 2026-10-01 as Claude Code mods): middleware-style JS/TS handlers that can observe, rewrite or answer any harness event, draw UI, ask the user, call models and keep state, with secret redaction by ID substitution as the main worked example
 * [11 Tiny Coding Agent Fixes With A Stupid Amount Of Payoff (Cole Medin)](summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md) - Eleven small, agent-agnostic workflow adjustments that raise coding-agent reliability, from rule rot and hook-enforced invariants to why compaction, mid-task model escalation, and multi-agent coordinators all backfire
 * [Harness Engineering is not Enough: Why Software Factories Fail (Dex Horthy, HumanLayer)](summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md) - Dex Horthy argues RL-trained coding models can't be rewarded for maintainability, so lights-out software factories rot; the efficient path now is AI-assisted up-front planning while humans still read every line
 * [Stanford's Method Turns Claude Into a PHD Level Research Team (Nate Herk)](summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md) - Nate Herk packages Stanford's STORM multi-perspective research method into a Claude skill that runs five expert lenses in parallel, maps their contradictions, and verifies every citation before delivering
@@ -88,6 +89,7 @@ okf_version: "0.1"
 * [Agent Enablement](wiki/concepts/agent-enablement.md) - Patrick Debois's organizational layer for scaling coding agents past the individual — team rituals, a platform layer with named ownership, and an explicit engineering mandate
 * [Agent Memory Systems: Storage / Injection / Recall](wiki/concepts/agent-memory-systems.md) - A three-question framework for evaluating any agent memory system, from Claude Code automemory to custom RAG
 * [Claude Code](wiki/tools/claude-code.md) - Anthropic's CLI-based agentic coding environment spanning mobile, web, desktop, and terminal
+* [Claude Code Mods](wiki/tools/claude-code-mods.md) - Claude Code mods (formerly function hooks): plugins made of JavaScript/TypeScript event handlers that can observe, rewrite or answer any harness event, draw UI, ask the user, call models and keep state
 * [Obsidian](wiki/tools/obsidian.md) - A markdown-based knowledge management tool used as the visualization frontend for the LLM wiki pattern
 * [Agentic Coding Workflow](wiki/how-tos/agentic-coding-workflow.md) - Step-by-step guide to productive agentic coding, synthesized from Peter Steinberger and Claude Code power-user practices
 * [Empathize with the Agent](wiki/concepts/empathize-with-the-agent.md) - The mental shift of thinking from the agent's zero-context perspective before prompting it, as the key to effective agentic coding
