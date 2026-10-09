@@ -62,7 +62,20 @@ Create the following directory structure in the working directory:
 
 ```
 <repo-root>/
-├── CLAUDE.md
+├── CLAUDE.md                   # short standing contract (~100 lines)
+├── .claude/
+│   ├── settings.json           # hooks registration
+│   ├── hooks/
+│   │   ├── okf-precommit.sh
+│   │   └── docs-sync-reminder.sh
+│   ├── rules/
+│   │   └── frontmatter.md      # path-scoped file schemas
+│   └── skills/
+│       ├── ingest/             # SKILL.md, step0-scan.md, summary-template.md
+│       ├── connect/            # SKILL.md, tension-handling.md
+│       ├── gist/
+│       ├── lint/
+│       └── query/
 ├── README.md
 ├── LICENSE
 ├── .gitignore
@@ -114,20 +127,30 @@ gists/
 
 Generate the following files. `<TOKENS>` are placeholders to fill from the bootstrap interview.
 
-### 4.1 `CLAUDE.md` (the operating contract)
+### 4.1 `CLAUDE.md` + `.claude/` (the operating contract)
 
-This is the **most important file** — it's what tells you (and every future Claude Code session) how the system works.
+The contract is split across four surfaces, following Claude Code's guidance on what goes where. Copy all of them from this repo, then edit as noted.
 
-Use the reference implementation in this repo as your template: [`CLAUDE.md`](../CLAUDE.md). Copy it verbatim, then edit:
+**`CLAUDE.md`** — standing facts and rules loaded in every session; keep it around 100 lines (the docs' ceiling is 200). Template: [`CLAUDE.md`](../CLAUDE.md). Edit:
 
 - Replace the "AI Knowledge Wiki" heading/intro with the user's topic statement.
-- Replace the **Three Pillars** table with the pillars from bootstrap Q2 (the section heading should match the user's pillar count).
-- Replace **Source Types & Auto-Detection** rows if the user's source mix differs.
-- Replace **Tag Taxonomy** categories with the user's starter tags from Q4.
-- If the user has a single model only (Q6), replace the **Model Routing** section with: *"Single-model mode: all steps run on the user's available model. No sub-agent delegation."*
-- **Confidentiality Scan (Step 0)** — keep as-is for public repos (Q7 = public). For private repos, the scan is optional; either drop the Step 0 section and its references in the workflows, or keep it as a lighter-weight sanity check (e.g., credentials only). Document the choice in the new repo's `CLAUDE.md` Guardrails so future sessions understand the threat model.
-- Keep **Frontmatter Schemas**, **Tier 1/Tier 2 Workflows** (minus or including Step 0 per above), **CONNECT Step Detail**, **Contradiction Handling at Ingest**, **Query Workflow**, **Lint Workflow**, and **Guardrails** unchanged — these are the mechanics.
-- **Contradiction Handling at Ingest** is the wiki's defence against silent merges that read as confident knowledge but quietly drop prior claims. Keep it default-on for both public and private repos. The companion file `meta/contradictions.md` is the append-only ledger drained by the Lint Workflow.
+- Replace the **Three pillars** table with the pillars from bootstrap Q2.
+- Replace **Source types** rows if the user's source mix differs.
+- Replace **Tag taxonomy** categories with the starter tags from Q4.
+- If the user has a single model only (Q6), replace the **Model routing** table with: *"Single-model mode: all steps run in the main session. Sub-agents are used only for context isolation (confidentiality scan, connect)."*
+- Keep **Guardrails** and the **Self-documentation rule**; they are the mechanics.
+
+**`.claude/skills/`** — procedures, loaded only when invoked. Copy verbatim: `ingest/` (Tier 1 + Tier 2 pipeline, `step0-scan.md`, `summary-template.md`), `connect/` (merge with tension detection, `tension-handling.md` with the menu, resolution table and ledger schema), `gist/`, `lint/`, `query/`. Each `SKILL.md` has a `description` that drives auto-invocation; `gist` and `lint` carry `disable-model-invocation: true` so only the user triggers them. Edit:
+
+- **Confidentiality Scan (Step 0, in `ingest/step0-scan.md`)** — keep as-is for public repos (Q7 = public). For private repos it is optional: either delete the file and the scan steps in `ingest/SKILL.md` and `gist/SKILL.md`, or narrow it to credentials only. Record the choice in the new repo's `CLAUDE.md` Guardrails so future sessions understand the threat model.
+- **Contradiction handling (`connect/tension-handling.md`)** is the wiki's defence against silent merges that read as confident knowledge but quietly drop prior claims. Keep it default-on for public and private repos alike. `meta/contradictions.md` is its append-only ledger, drained by the `lint` skill.
+- Drop `gist/` if Q8 = no.
+
+**`.claude/rules/frontmatter.md`** — the four file schemas, with `paths:` frontmatter so it loads only when a file under `sources/`, `summaries/`, `wiki/` or `gists/` is touched. Copy verbatim; adjust `type` enums if the source mix differs.
+
+**`.claude/settings.json` + `.claude/hooks/`** — deterministic enforcement, independent of what the agent remembers. Two hooks: `okf-precommit.sh` (PreToolUse on Bash; runs `scripts/okf-check.py` before any `git commit` and blocks with exit 2 on failure) and `docs-sync-reminder.sh` (PostToolUse on Edit/Write; when `CLAUDE.md` or anything under `.claude/` changes, injects a reminder of the Self-documentation rule). Copy verbatim and `chmod +x` the scripts. Claude Code asks the user to approve project hooks on first launch.
+
+Design point: anything the agent must do *every time* (validation, reminders) is a hook; anything it must *know every session* (pillars, guardrails) is in `CLAUDE.md`; anything it must *do when asked* (a pipeline) is a skill. Do not move procedures back into `CLAUDE.md` as the system grows; a 700-line contract was the state this reference repo recovered from.
 
 ### 4.2 `index.md`
 
@@ -277,11 +300,11 @@ Design points worth preserving on recreation:
 - **Never auto-install.** If `whisper-cli`, `ffmpeg`, or the model is missing, it returns `status: "error"` with a manual-install hint and stops — it does not pip-install faster-whisper/openai-whisper. This is deliberate: an earlier version reached for `pip install faster-whisper` and stood up a duplicate stack that was never needed.
 - **`--prompt` priming** biases proper-noun spelling — without it, Whisper transcribes "Claude" as "Cloud". Default primes AI-domain terms. `--model` overrides the model (ggml name or absolute path).
 
-`CLAUDE.md` Step 3 chains these: captions → local transcription → ask user to paste. The `no_captions` path tries `transcribe-audio.py` before falling back to a manual paste.
+The `ingest` skill's Step 3 (and the `podcast-ingest` skill's Step 3c) chain these: captions → local transcription → ask user to paste. The `no_captions` path tries `transcribe-audio.py` before falling back to a manual paste.
 
 ### 5.3 OKF conformance checker
 
-Copy [`scripts/okf-check.py`](../scripts/okf-check.py) into the new repo at the same path. It validates that `sources/`, `summaries/`, `wiki/`, `index.md`, and `log.md` conform to [OKF v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) (correct frontmatter field names — `type`, `resource`, `timestamp`, `description` — plus the `index.md`/`log.md` shapes above). Run it with `python3 scripts/okf-check.py`; it exits 0 and prints `OKF CHECK: PASS` when the bundle conforms. Wire it into the Lint Workflow (`CLAUDE.md` → "Lint Workflow" → OKF CONFORMANCE step) so drift gets caught on every lint pass, not just at scaffold time.
+Copy [`scripts/okf-check.py`](../scripts/okf-check.py) into the new repo at the same path. It validates that `sources/`, `summaries/`, `wiki/`, `index.md`, and `log.md` conform to [OKF v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) (correct frontmatter field names — `type`, `resource`, `timestamp`, `description` — plus the `index.md`/`log.md` shapes above). Run it with `python3 scripts/okf-check.py`; it exits 0 and prints `OKF CHECK: PASS` when the bundle conforms. It is wired in three places: the `lint` skill (OKF CONFORMANCE step), the pre-commit hook in `.claude/settings.json` (blocks non-conforming commits made from Claude Code), and CI on push.
 
 Also copy [`scripts/tests/`](../scripts/tests/) — unit tests for the checker (stdlib `unittest`, no dependencies). Run with `python3 -m unittest discover -s scripts/tests`. They are the checker's safety net when you adapt it to a different frontmatter mix.
 
@@ -321,7 +344,7 @@ After scaffolding, offer the user a smoke test:
 
 > "Scaffold complete. Want me to run the first ingest? Paste a URL or drop a file in `inbox/`."
 
-On the first ingest, walk through the Tier 1 or Tier 2 workflow as defined in `CLAUDE.md`. This validates that:
+On the first ingest, walk through the Tier 1 or Tier 2 workflow in `.claude/skills/ingest/SKILL.md`. This validates that:
 
 - `scripts/extract-transcript.py` runs (if a YouTube URL is given).
 - The frontmatter schemas work for the chosen topic.
@@ -346,6 +369,6 @@ Once `git push` succeeds:
 
 1. Tell the user the repo URL.
 2. Point them at `user-documentation.md` for daily usage.
-3. Remind them that `CLAUDE.md` is the contract — if they want the agent to behave differently, edit `CLAUDE.md`.
+3. Remind them that `CLAUDE.md` plus `.claude/` is the contract — standing rules in `CLAUDE.md`, procedures in the skills, schemas in the rule, enforcement in the hooks.
 
 That's the entire system. Everything else emerges from use.

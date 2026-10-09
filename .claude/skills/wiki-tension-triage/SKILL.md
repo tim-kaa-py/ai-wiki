@@ -5,7 +5,7 @@ description: Use when the user asks to "triage tensions", "scan the wiki for con
 
 # Wiki Tension Triage
 
-Retroactive within-page contradiction scanner for `wiki/`. Complements the ingest-time Contradiction Handling in CLAUDE.md: CONNECT catches tensions as they enter; this skill finds ones already on a page (silent merges, manual edits, pre-system history). Lint category 5 drains what this skill queues.
+Retroactive within-page contradiction scanner for `wiki/`. Complements the ingest-time contradiction handling in the `connect` skill (`.claude/skills/connect/tension-handling.md`): CONNECT catches tensions as they enter; this skill finds ones already on a page (silent merges, manual edits, pre-system history). Lint category 5 drains what this skill queues.
 
 **Design spec:** `docs/superpowers/specs/2026-07-06-tension-triage-design.md`
 **Prompt templates:** `meta/triage/prompts/` (detector, conflict-advocate, harmonizer, judge, challenger)
@@ -23,8 +23,8 @@ Retroactive within-page contradiction scanner for `wiki/`. Complements the inges
 1. **DETECT** — one Sonnet sub-agent per batch, prompt = `meta/triage/prompts/detector.md` with `{page_paths}` filled. Returns CANDIDATES (verbatim quotes + lines), NEAR-MISSES, CLEAN PAGES. Pages with an existing `## Unresolved Tensions` section: those documented claims are excluded.
 2. **VERIFY** (orchestrator, mechanical) — `grep -nF` both quotes on the page. Not verbatim → dismiss with reason. Correct off-by-a-few line numbers silently.
 3. **ADVERSARIAL** — per candidate, Conflict-Advocate + Harmonizer (Sonnet, parallel), prompts from templates. **Short-circuit:** if the advocate invokes its honesty clause, dismiss immediately — skip the judge.
-4. **SYNTHESIZE** — Opus judge, template prompt, both briefs included. Verdict: DISMISS / QUEUE / AUTO-RESOLVE (+ AGENT'S READ in the CLAUDE.md format).
-5. **CHALLENGE** — only for AUTO-RESOLVE: fresh Opus agent (challenger template) tries to overturn. Overturned → QUEUE. Confirmed → apply the (b)/(c) resolution per CLAUDE.md's resolution-actions table.
+4. **SYNTHESIZE** — Opus judge, template prompt, both briefs included. Verdict: DISMISS / QUEUE / AUTO-RESOLVE (+ AGENT'S READ in the format from `.claude/skills/connect/tension-handling.md`).
+5. **CHALLENGE** — only for AUTO-RESOLVE: fresh Opus agent (challenger template) tries to overturn. Overturned → QUEUE. Confirmed → apply the (b)/(c) resolution per the resolution-actions table in `.claude/skills/connect/tension-handling.md`.
 6. **REPORT** — write `meta/triage-runs/` report (candidates, dismissals with reasons, near-misses, clean pages, autonomous actions, editorial defects), append a `**Update** TRIAGE:` entry to `log.md`, run `python3 scripts/okf-check.py`, commit per batch.
 
 ## Orchestrator judgment calls (learned in pilots)

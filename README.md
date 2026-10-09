@@ -19,13 +19,13 @@ flowchart LR
     F --> D
 ```
 
-Every ingest runs a pipeline defined in [`CLAUDE.md`](CLAUDE.md): metadata extraction → transcript/content capture → focused summarization → **CONNECT** (merge into wiki pages, detecting contradictions before merging) → index + log. Analytical steps are routed to Opus sub-agents; mechanical steps stay on Sonnet.
+Every ingest runs a pipeline defined in the [`ingest`](.claude/skills/ingest/SKILL.md) and [`connect`](.claude/skills/connect/SKILL.md) skills: metadata extraction → transcript/content capture → focused summarization → **CONNECT** (merge into wiki pages, detecting contradictions before merging) → index + log. Analytical steps are routed to Opus sub-agents; mechanical steps stay in the main session. [`CLAUDE.md`](CLAUDE.md) holds the standing rules; `.claude/rules/` the schemas; `.claude/settings.json` the hooks that gate commits on OKF conformance.
 
 ## What's worth a look
 
 - **Contradictions are never silently merged.** When a new source conflicts with an existing wiki claim, the agent must quote both claims verbatim and let the human decide (accept / keep / hold both / synthesize / defer). Deferred tensions live in an append-only ledger, [`meta/contradictions.md`](meta/contradictions.md). This is the wiki's defence against its main failure mode: confidently-written pages that quietly dropped a prior claim.
 - **A multi-agent adversarial triage pipeline** (detector → verify → advocate/harmonizer → judge → challenger) retroactively scans wiki pages for contradictions, calibrated by [`meta/tension-policy.md`](meta/tension-policy.md) and rolled out pilot → shadow → autonomous with run reports in [`meta/triage-runs/`](meta/triage-runs/).
-- **A confidentiality scan gates every non-public source and every generated summary** before it lands in this public repo (see "Step 0" in [`CLAUDE.md`](CLAUDE.md)).
+- **A confidentiality scan gates every non-public source and every generated summary** before it lands in this public repo (see [`step0-scan.md`](.claude/skills/ingest/step0-scan.md)).
 - **The system documents itself.** A Self-Documentation Rule in the operating contract forces every functional change to sync [`docs/user-documentation.md`](docs/user-documentation.md) (for the human) and [`docs/concept.md`](docs/concept.md) (a self-contained guide for another agent to recreate the whole system on any topic).
 - **Design process is in the open:** specs and implementation plans for the OKF migration and the tension-triage pipeline are under [`docs/superpowers/`](docs/superpowers/), and [`scripts/`](scripts/) ships with unit tests and a CI-run conformance checker.
 
@@ -35,7 +35,7 @@ Every ingest runs a pipeline defined in [`CLAUDE.md`](CLAUDE.md): metadata extra
 |-------------|------------|
 | [`index.md`](index.md) | Master index of all sources and wiki pages, grouped by pillar |
 | [`wiki/`](wiki/) | The synthesized knowledge — concepts, tools, how-tos, people, comparisons |
-| [`CLAUDE.md`](CLAUDE.md) | The agent's operating contract (workflows, schemas, guardrails) |
+| [`CLAUDE.md`](CLAUDE.md) + [`.claude/`](.claude/) | The agent's operating contract: standing rules, skills (workflows), rules (schemas), hooks (enforcement) |
 | [`docs/user-documentation.md`](docs/user-documentation.md) | How a human uses the system day-to-day |
 | [`docs/concept.md`](docs/concept.md) | How to recreate this system from scratch, on any topic |
 | [`log.md`](log.md) | Chronological record of every ingest, lint, and structural change |

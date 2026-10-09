@@ -37,6 +37,7 @@ Plus:
 - `notes/` — your focus notes from each deep-dive ingest (what *you* wanted captured). The agent writes them; they're yours to reread.
 - `meta/` — the contradiction ledger (`contradictions.md`), the tension-triage calibration policy, and triage-run reports. See [What Happens at a Contradiction](#what-happens-at-a-contradiction).
 - `ai-research/` — dated discovery reports from the optional daily briefing (see [Daily AI briefing](#8-daily-ai-briefing-optional)). Not part of the wiki; nothing here is ingested.
+- `.claude/` — the agent's procedures. `skills/` holds one skill per workflow (`ingest`, `connect`, `gist`, `lint`, `query`, `podcast-ingest`, `wiki-tension-triage`, `daily-ai-briefing`, the `linkedin-*` proxies), `rules/frontmatter.md` holds the file schemas, `hooks/` and `settings.json` hold two enforcement hooks. `CLAUDE.md` at the root is the short standing contract that points at all of this.
 
 ---
 
@@ -125,7 +126,7 @@ The agent will:
 2. Run a confidentiality scan (gists often inline project paths or tool names — these get caught here).
 3. Save to `gists/<slug>.md` and append to `gists/index.md`.
 
-Gists are *yours* — they're not summarized, not cross-linked into the wiki, and they don't count as knowledge ingests. They live in their own track so the wiki stays clean. See `CLAUDE.md` → "Gists Workflow" for the full contract.
+Gists are *yours* — they're not summarized, not cross-linked into the wiki, and they don't count as knowledge ingests. They live in their own track so the wiki stays clean. See `.claude/skills/gist/SKILL.md` for the full contract.
 
 ### 6. Lint the wiki
 
@@ -192,7 +193,7 @@ Ingest-time detection only catches tensions as they enter. To find contradiction
 
 ### Why this exists
 
-Without this step, every ingest implicitly *resolves* tensions by merging — usually by smoothing them into bland prose that reads fine and drops the disagreement. After a hundred ingests, the wiki reads as confident knowledge but is quietly misinformed. The contradiction menu is the only thing standing between you and that failure mode. See `CLAUDE.md` → [Contradiction Handling at Ingest](../CLAUDE.md#contradiction-handling-at-ingest) for the full contract.
+Without this step, every ingest implicitly *resolves* tensions by merging — usually by smoothing them into bland prose that reads fine and drops the disagreement. After a hundred ingests, the wiki reads as confident knowledge but is quietly misinformed. The contradiction menu is the only thing standing between you and that failure mode. See [`.claude/skills/connect/tension-handling.md`](../.claude/skills/connect/tension-handling.md) for the full contract.
 
 ---
 
@@ -296,21 +297,28 @@ git push
 
 If the repo is new and not yet on GitHub, ask the agent to run the setup (see `concept.md` §6) — it uses `gh repo create`.
 
+**A hook blocks bad commits locally.** `.claude/settings.json` registers a pre-commit hook (`.claude/hooks/okf-precommit.sh`): whenever the agent runs `git commit`, it first runs `scripts/okf-check.py` and refuses the commit if the bundle doesn't conform, showing the violations so the agent fixes them. It only fires on commits the agent makes from inside Claude Code; commits you make in a plain terminal are not gated (CI still catches them). Claude Code asks you once to approve the project's hooks the first time it sees them.
+
 **CI runs on every push.** A GitHub Actions workflow (`.github/workflows/checks.yml`) re-validates OKF conformance and runs the script tests each time you (or the agent) push. If a push breaks conformance, GitHub emails you within a minute and the README badge turns red — you don't have to wait for the next lint pass to find out. Free for public repos.
 
 ---
 
 ## Customizing the System
 
-Everything about the agent's behavior is in **`CLAUDE.md`**. Edit it directly to change:
+The agent's behavior is split by how often it's needed, following Claude Code's own guidance (standing facts in `CLAUDE.md`, procedures in skills, path-specific schemas in rules, enforcement in hooks):
 
-- Pillars (top-level categories).
-- Tag taxonomy.
-- Source types and their default tiers.
-- Summary section templates.
-- Model routing (Sonnet for mechanics, Opus for analysis, or a single-model fallback).
+| Want to change… | Edit |
+|-----------------|------|
+| Pillars, tag taxonomy, source types and default tiers, slug format, guardrails, which sub-agent model runs which step | `CLAUDE.md` (kept around 100 lines; it loads in every session) |
+| How an ingest runs, the interview, the summary template, the confidentiality scan | `.claude/skills/ingest/` (`SKILL.md`, `summary-template.md`, `step0-scan.md`) |
+| How merging and contradictions work, the tension menu, the ledger format | `.claude/skills/connect/` (`SKILL.md`, `tension-handling.md`) |
+| Gist, lint, query procedures | `.claude/skills/gist/`, `lint/`, `query/` |
+| Frontmatter fields | `.claude/rules/frontmatter.md` (loads only when a file under `sources/`, `summaries/`, `wiki/` or `gists/` is touched) |
+| What is enforced regardless of what the agent "remembers" | `.claude/settings.json` + `.claude/hooks/` |
 
-Changes take effect the next time you start a Claude Code session in the repo.
+Skills are also slash commands: `/ingest <url>`, `/query …`, `/gist`, `/lint`, `/connect summaries/<slug>.md`. `gist` and `lint` only run when you call them; the others the agent picks on its own from what you type.
+
+Changes take effect the next time you start a Claude Code session in the repo (skills and rules are picked up at launch). Run `/doctor prompt-audit` now and then to catch stale or contradictory instructions across these files.
 
 ---
 
@@ -319,7 +327,8 @@ Changes take effect the next time you start a Claude Code session in the repo.
 - **Duplicate ingests.** The agent checks `index.md` for URL/video-ID matches before processing. If you want to re-ingest anyway, say so explicitly.
 - **Wrong pillar on first ingests.** Pillars often feel wrong until 2–3 real sources land. Rename them in `CLAUDE.md` and `index.md` early — it gets harder once the wiki compounds.
 - **Over-editing summaries.** If a summary feels off, ask the agent to regenerate with a different bias. Don't hand-edit — the next ingest's CONNECT step expects the template shape.
-- **Manual wiki edits that fight the agent.** If you want a change to stick, either (a) tell the agent to make it, or (b) update `CLAUDE.md` to encode the new rule.
+- **Manual wiki edits that fight the agent.** If you want a change to stick, either (a) tell the agent to make it, or (b) encode the new rule in `CLAUDE.md` (standing rule) or the relevant skill (procedure).
+- **Editing `CLAUDE.md` or a skill and forgetting the docs.** A post-edit hook reminds the agent of the Self-Documentation Rule whenever those files change; if you edit them by hand outside a session, ask the agent to "sync the docs with CLAUDE.md".
 
 ---
 
@@ -351,13 +360,14 @@ $ claude
 
 ## Reference Files
 
-- [`CLAUDE.md`](../CLAUDE.md) — the operating contract. The agent reads this every session.
+- [`CLAUDE.md`](../CLAUDE.md) — the standing operating contract. The agent reads this every session.
+- [`.claude/skills/`](../.claude/skills/) — one skill per workflow; [`.claude/rules/frontmatter.md`](../.claude/rules/frontmatter.md) — file schemas; [`.claude/settings.json`](../.claude/settings.json) + [`.claude/hooks/`](../.claude/hooks/) — the pre-commit OKF gate and the docs-sync reminder.
 - [`concept.md`](concept.md) — architecture + recreation guide for a different topic.
 - [`index.md`](../index.md) — browse everything.
 - [`log.md`](../log.md) — chronological ingest history.
 - [`scripts/extract-transcript.py`](../scripts/extract-transcript.py) — YouTube/podcast caption extractor.
 - [`scripts/transcribe-audio.py`](../scripts/transcribe-audio.py) — local audio→text fallback (whisper.cpp) for sources with no captions.
-- [`scripts/okf-check.py`](../scripts/okf-check.py) — OKF v0.1 conformance checker; run by the Lint Workflow and by CI on every push.
+- [`scripts/okf-check.py`](../scripts/okf-check.py) — OKF v0.1 conformance checker; run by the `lint` skill, by the pre-commit hook, and by CI on every push.
 - [`docs/private-modules.md`](private-modules.md) — pattern for author-private extensions mounted inside this repo (some skills may not be available in a public clone).
 
 ---
@@ -390,4 +400,4 @@ New to the wiki? These are the questions worth asking first. Open the repo in Cl
 
 ## When In Doubt
 
-Ask. The agent can answer "how do I X in this system?" by reading `CLAUDE.md` and this file. If its answer contradicts what you want, update `CLAUDE.md` — that's how you teach the system.
+Ask. The agent can answer "how do I X in this system?" by reading `CLAUDE.md`, the skills and this file. If its answer contradicts what you want, update `CLAUDE.md` or the relevant skill — that's how you teach the system.

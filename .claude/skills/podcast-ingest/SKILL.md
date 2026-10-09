@@ -72,9 +72,19 @@ python scripts/extract-transcript.py "<youtube-url>"
 
 Use `extraction_method` from the script output for the source frontmatter.
 
-### 3c — Manual fallback
+### 3c — Local transcription fallback
 
-If both 3a and 3b fail, tell the user:
+If both 3a and 3b fail, transcribe locally before asking the user (same contract as the `ingest` skill):
+
+```bash
+python scripts/transcribe-audio.py "<episode-or-youtube-url>"
+```
+
+The script downloads the audio to a temp file, transcribes it with whisper.cpp, deletes the audio immediately, and returns `extraction_method: "whisper-local"`. It never installs anything; on `status: "error"` continue to 3d.
+
+### 3d — Manual fallback
+
+If 3c also fails, tell the user:
 
 > "I couldn't find a transcript for this episode automatically. Please paste the transcript text (or a portion you'd like to capture), and I'll continue from there."
 
@@ -119,7 +129,7 @@ B. [Mid] Title of section
    ...
 ```
 
-The Sonnet orchestrator presents this list to the user:
+The orchestrator presents this list to the user:
 
 > "Here's what I found in this episode. Which sections do you want in the summary? Press Enter to capture all, or type letters (e.g. A, C, E):"
 
@@ -195,12 +205,7 @@ Focus on the **selected sections only**, not the full episode.
 
 **Model: Opus sub-agent.** Spawn via Agent tool with `model: "opus"`.
 
-Same as the standard CONNECT step in CLAUDE.md:
-- Read the new summary
-- Search `wiki/` for overlapping tags and topics
-- Merge new information into relevant wiki pages
-- Create new wiki pages if a substantial new topic is introduced
-- Report all changes
+Invoke the `connect` skill unchanged: the sub-agent detects tensions on each relevant page before merging, merges only orthogonal additions, returns conflicts with an AGENT'S READ for the user's decision, creates new pages for substantial new topics, and reports every page touched.
 
 ## Step 9 — Index & Log
 
@@ -212,9 +217,9 @@ Add a `* [Title](path) - description` bullet to `index.md` under the correct pil
 
 ## Guardrails
 
-- Never download audio files — if no transcript is available, ask for a paste
+- Never store audio files — the only download is the temp file `scripts/transcribe-audio.py` deletes after transcribing; if that fails too, ask for a paste
 - Always confirm metadata with the user before proceeding
 - Check `index.md` for duplicates before fetching anything
 - Sources are verbatim — never modify after saving
 - Always report which wiki pages were created or modified (Step 8 output)
-- If transcript extraction fails at all three methods, stop and ask rather than guessing
+- If transcript extraction fails at all four methods, stop and ask rather than guessing
