@@ -1,6 +1,6 @@
 ---
 name: linkedin-profile-extract
-description: Proxy to the `linkedin-profile-extract` skill in the author-private `linkedin-workspace` module. When invoked, this skill checks whether the private module is mounted at `linkedin/` inside the ai-wiki repo. If present, it dispatches to the real skill there. If absent, it prints a short notice explaining that the LinkedIn module is an author-private extension and stops. Use this skill whenever the user asks to extract, snapshot, or pull a section (About, Experience, Education, Skills, etc.) of their own LinkedIn profile to a local file — e.g. "extract my LinkedIn About", "grab my LinkedIn bio", "snapshot my experience section", or "/linkedin-profile-extract".
+description: Proxy to the author-private LinkedIn module (see docs/private-modules.md). Snapshot a section of the user's own LinkedIn profile (About, Experience, Skills, …) to a local file. Use on "/linkedin-profile-extract", "extract my LinkedIn About", "snapshot my experience section".
 ---
 
 # linkedin-profile-extract (proxy)

@@ -1,6 +1,6 @@
 ---
 name: linkedin-url-post
-description: Proxy to the `linkedin-url-post` skill in the author-private `linkedin-workspace` module. Turns any URL (YouTube video, podcast, article, website) directly into a LinkedIn post — without wiki ingest. Use when the user provides a URL (not a wiki summary path) alongside a posting intent: "share this on LinkedIn", "make a LinkedIn post from this link", "post this video/article", "LI post for [URL]", or similar. Distinct from `linkedin-post` which requires an existing `summaries/<slug>.md`. When the input is a raw URL — not a summary path — this skill is the right one. Trigger even when the user just pastes a URL and says "post this" or "share this".
+description: Proxy to the author-private LinkedIn module (see docs/private-modules.md). Turn a raw URL (video, podcast, article) straight into a LinkedIn post without wiki ingest. Use when a URL comes with a posting intent: "share this on LinkedIn", "post this", "LI post for <url>". Not for summaries/ paths (that is linkedin-post).
 ---
 
 # linkedin-url-post (proxy)

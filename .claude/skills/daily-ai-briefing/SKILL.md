@@ -1,6 +1,7 @@
 ---
 name: daily-ai-briefing
-description: Generates a daily AI briefing report covering Claude Code updates (with transcripts from @claudelog), new videos from watched YouTube channels (Chase-H-AI, NateBJones, nateherk), top 10 trending Claude Code videos via YouTube Data API, Andrej Karpathy gist and YouTube updates, and AI headlines from The Batch, Simon Willison, and HuggingFace Blog. Writes a dated markdown file to ai-research/, commits, and pushes. Use this skill whenever the user types /daily-ai-briefing or asks for an AI briefing, news update, or wants to know what's new in AI today.
+description: Generates a daily AI briefing report covering Claude Code updates (with transcripts from @claudelog), new videos from watched YouTube channels (Chase-H-AI, NateBJones, nateherk), top 10 trending Claude Code videos via YouTube Data API, Andrej Karpathy gist and YouTube updates, and AI headlines from The Batch, Simon Willison, and HuggingFace Blog. Writes a dated markdown file to ai-research/, commits, and pushes. Run with /daily-ai-briefing.
+disable-model-invocation: true
 ---
 
 You are running the daily AI briefing routine for this repo. Execute every step

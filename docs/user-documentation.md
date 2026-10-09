@@ -150,7 +150,7 @@ You are in charge. Useful overrides:
 
 > /daily-ai-briefing
 
-A discovery tool, separate from the wiki: it checks watched YouTube channels, trending Claude Code videos, Karpathy's gists, and a few AI blogs for anything new since the last run, then writes a dated report to `ai-research/` and commits it. **Nothing from a briefing is ingested** — if a report surfaces something worth keeping, paste its URL back in as a normal ingest. Requires `yt-dlp`; the trending section additionally wants a `YOUTUBE_API_KEY` env var and degrades gracefully without it.
+A discovery tool, separate from the wiki, and only ever started by you typing the command (the agent never triggers it on its own): it checks watched YouTube channels, trending Claude Code videos, Karpathy's gists, and a few AI blogs for anything new since the last run, then writes a dated report to `ai-research/` and commits it. **Nothing from a briefing is ingested** — if a report surfaces something worth keeping, paste its URL back in as a normal ingest. Requires `yt-dlp`; the trending section additionally wants a `YOUTUBE_API_KEY` env var and degrades gracefully without it.
 
 ---
 

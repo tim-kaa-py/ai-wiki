@@ -1,6 +1,6 @@
 ---
 name: linkedin-gist-post
-description: Proxy to the `linkedin-gist-post` skill in the author-private `linkedin-workspace` module. When invoked, this skill checks whether the private module is mounted at `linkedin/` inside the ai-wiki repo. If present, it dispatches to the real skill there. If absent, it prints a short notice explaining that the LinkedIn module is an author-private extension and stops. Use this skill whenever the user asks to draft, create, or generate a LinkedIn post from a gist, says "/linkedin-gist-post", "post my gist", "make a LinkedIn post from gist <slug>", "share this gist on LinkedIn", or provides a path under `gists/` and mentions sharing publicly. See `docs/private-modules.md` for the pattern.
+description: Proxy to the author-private LinkedIn module (see docs/private-modules.md). Draft a LinkedIn post from a gist. Use on "/linkedin-gist-post", "post my gist", "share this gist on LinkedIn", or a gists/ path plus a sharing intent.
 ---
 
 # linkedin-gist-post (proxy)
