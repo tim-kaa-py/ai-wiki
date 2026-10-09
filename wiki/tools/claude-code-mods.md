@@ -6,14 +6,15 @@ pillar: "building"
 tags: [claude-code, hooks, function-hooks, claude-mods, plugins, workflow, safety, middleware, deterministic-control]
 sources:
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
-timestamp: "2026-10-05"
+  - "summaries/2026-10-02_chase-ai_claude-mods-biggest-claude-code-upgrade.md"
+timestamp: "2026-10-09"
 ---
 
 # Claude Code Mods
 
 A **mod** is "a plugin that changes how Claude Code looks and behaves… made of JavaScript or TypeScript event handlers" ([official overview](https://code.claude.com/docs/en/plugins/mods/overview)). It turns Claude Code's hooks from shell scripts that can only allow or block into **middleware**: a handler can rewrite a prompt or tool call, answer it without running the tool, replace built-in tools, draw panes and status rows, ask the user, call a model or an HTTP endpoint, and share state with other handlers.
 
-The feature ran in early access as **function hooks** (enabled with `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1`) and launched as mods on **2026-10-01 in Claude Code v2.1.287**, on by default. Most of what this page knows comes from Ray Amjad's early-access tour (2026-09-04), read against the official launch docs. *(Source: Ray Amjad, 2026-09-04)*
+The feature ran in early access as **function hooks** (enabled with `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1`) and launched as mods on **2026-10-01 in Claude Code v2.1.287**, on by default. Most of what this page knows comes from two videos read against the official launch docs: Ray Amjad's early-access tour (2026-09-04), which covers the API and worked examples, and Chase AI's post-launch explainer (2026-10-02), which stays at the level of behaviour and adds a way to decide which mods to build. *(Sources: Ray Amjad, 2026-09-04; Chase AI, 2026-10-02)*
 
 ## Terminology After the Launch
 
@@ -37,6 +38,8 @@ Pages on this wiki written before October 2026 say "hook" and mean what is now a
 
 A mod is the only extension type that can draw UI or rewrite events. Ray's list of what settings hooks cannot do is the reason mods exist: no rewriting, no added context beyond fixed hook outputs, no UI, no asking, no tool changes, no memory. *(Source: Ray Amjad, 2026-09-04, with official docs)*
 
+**A mod is never invoked.** "This isn't a skill that you have to invoke. It acts similar to a hook… it's just going to keep working until you uninstall the mod." Once installed, a mod fires on every matching event until you disable or remove it. That gives a quick test for which extension to reach for: something you want *every* time (next-step suggestions, a cache warning) is a mod; something you want only sometimes is a skill or a slash command. *(Source: Chase AI, 2026-10-02, 08:19-08:32)*
+
 ## The Middleware Model: Observe, Rewrite, Answer
 
 Ray frames mods as Express.js-style middleware: a handler gets an event, then passes it on with `next`, passes on a modified version, or stops it. The docs name the three moves:
@@ -48,6 +51,19 @@ Ray frames mods as Express.js-style middleware: a handler gets an event, then pa
 | **Answer** | Return a result without running the tool | Serve WebFetch from a cache; answer WebSearch through the Exa API |
 
 Blocking is a special case of Answer ("short-circuiting").
+
+### The Same Model by Timing: Before, Replace, After, Wrap
+
+Chase AI describes the same middleware from the other side: not what a handler *does* with the event, but *when* it acts relative to it. His example puts four different mods on one "delete the build folder" action:
+
+| Intercept point | What the mod does | Delete example | Docs move |
+|-----------------|-------------------|----------------|-----------|
+| **Before** | Acts before the event runs | Pause and list the 41 files about to go | Observe (or `ask`), then `next` |
+| **Replace** | Changes or substitutes the event | Move the files to the recycle bin instead | Rewrite or Answer |
+| **After** | Acts on the result | Show a receipt of what was deleted and from where | Observe, work after `next` returns |
+| **Wrap** | Acts on both sides | Back up first, so the delete can be undone | Work before and after `next` |
+
+Before, after and wrap are a handler doing work around its call to `next`; replace is the Rewrite and Answer moves. The timing view is the easier one for choosing what to build: *before* buys visibility, *replace* makes an action safer, *after* leaves a record, *wrap* makes it reversible. *(Source: Chase AI, 2026-10-02, 01:57-03:09)*
 
 **Override the tool, don't add a competing one.** Claude keeps preferring WebSearch even when told to use an Exa MCP server. A mod that answers WebSearch calls through Exa, falling back to the normal tool when there is no key or the call fails, removes the need for the MCP server and its tool-description tokens. It works because the mod returns results in the shape the built-in tool returns, so Claude never notices the swap. *(Source: Ray Amjad, 2026-09-04, 03:35-04:23)*
 
@@ -143,19 +159,35 @@ The last point cuts against using mods (or settings hooks) as a safety layer whi
 
 ## Use-Case Patterns
 
-| Pattern | Move | Examples from the source |
+| Pattern | Move | Examples from the sources |
 |---------|------|--------------------------|
 | Turn a CLAUDE.md rule into code | Rewrite / Answer | Run `/plugin-authoring`, point it at CLAUDE.md, ask which rules can become deterministic hooks, then delete those rules |
 | Fix a repeated small mistake | Rewrite | `npm` → `pnpm` |
 | Replace a built-in tool's implementation | Answer + fallback to `next` | WebSearch via Exa, WebFetch via a cache or proxy |
 | Human checkpoint before an irreversible action | `ask` | Dry run before a real run; "refactor this?" once a file passes 1,000 lines; newsletter send gate with minimum reading time; a quiz on the changes before a PR opens |
-| Make background state visible | UI | Vercel deploy row that appears while a deploy runs and stays for an hour; prod/dry banner |
+| Make background state visible | UI | Vercel deploy row that appears while a deploy runs and stays for an hour; prod/dry banner; a **cache clock** counting down to when the prompt cache goes cold, with a button to compact before you step away (Chase AI) |
+| Replace a built-in UI element | UI | A **next-steps pane** of three clickable follow-up prompts (commit, polish the design…) in place of the single suggested prompt in the input bar (Chase AI) |
 | Enrich context automatically | `$model` + `$http` | Small model generates keywords from the prompt, knowledge base is queried, results added to the session |
 | Audit | Observe | Compliance log of every tool call |
 | Ambient feedback | `$model` + clock | Haiku-summarised text-to-speech at turn end; clock-based saves in long turns |
 | Share team standards | Plugin distribution | Shared guards and UI in a team plugin repo or marketplace |
 
 The argument for moving rules into mods is the same one behind settings hooks: CLAUDE.md rules fade as context grows and lazy prompts get misread, so anything that must hold every time belongs in code. The cost Ray does not mention: every rule moved into a mod is code to maintain, running with the full permissions of a mod.
+
+Chase's cache clock rests on his own figures: a one-hour cache on a subscription and roughly a 95% discount on cached tokens. These are unverified here; Anthropic's API pricing lists cache reads at 0.1× the base input price. Check the current numbers before building a timer around them. *(Source: Chase AI, 2026-10-02, 05:48-07:04)*
+
+### Finding Which Mods to Build: The Session Audit
+
+The useful question is less *how* to write a mod (`/plugin-authoring` handles that) than *which* ones are worth having. Chase's answer is to let Claude read your history and propose them:
+
+```text
+Audit how I use Claude Code. Read my last 30 sessions. See what I ask for
+over and over, and then suggest five Claude Code mods that would fix these issues.
+```
+
+Pick one ("I like the idea for mod number 1. Let's go ahead and implement that."), let Claude build and install it, then `/reload-plugins`. His audit returned ideas such as demo rehearsals, project tracking, a mod doctor, a cache clock, an undo module and a dictation fixer. Start small: a countdown or a pane of buttons is "essentially a custom status line adjacent thing". *(Source: Chase AI, 2026-10-02, 07:19-08:15)*
+
+Two checks the video skips. Read the generated module and run `claude plugin validate` before relying on it, since it runs unsandboxed with your permissions. And Chase's prediction of a mods ecosystem on GitHub, like the one around skills, means installing other people's unsandboxed code: the [Security Model](#security-model-and-off-switches) applies to every mod you didn't write.
 
 ## Worked Example: Secret Redaction by ID Substitution
 
