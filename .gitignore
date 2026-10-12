@@ -18,3 +18,7 @@ linkedin/
 
 # Local secrets — never commit
 .env
+
+# Reports written by the global tech-brief / storm-research skills: keep them out of the public repo
+tech-briefs/
+storm-reports/
