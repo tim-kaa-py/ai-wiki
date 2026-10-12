@@ -12,7 +12,8 @@ sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-06-29_nate-herk_stanford-storm-method-claude-research-skill.md"
   - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
-timestamp: "2026-08-24"
+  - "summaries/2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills.md"
+timestamp: "2026-10-12"
 ---
 
 # Claude Code Skills
@@ -114,6 +115,15 @@ When invoked, `SKILL.md` content enters the conversation as a single message and
 ### Keep `SKILL.md` Under 500 Lines
 
 Past ~500 lines, move detailed reference material to sibling files (`reference.md`, `examples.md`, `runbook.md`) and reference them from `SKILL.md`. The agent reads the sibling on demand — Level 3 of progressive disclosure. See [Agent Skills § Progressive Disclosure](../concepts/agent-skills.md#progressive-disclosure-three-levels).
+
+### Keep References One Level Deep, and Give Long Files a Contents List
+
+Two layout rules from Jay E's (RoboNuggets, October 2026) reading of Anthropic's updated skill-authoring guide. Both rest on one claim attributed to Anthropic: when references are **nested** (SKILL.md → file B → file C), Claude may only *preview* the deeper file, reading roughly its first 100 lines. This is secondhand and not yet checked against the primary guide; the video's intro states it more broadly ("if you have a long skill file, Claude may only read the first 100 lines") before narrowing it to nested references. [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
+
+- **Link every reference file directly from `SKILL.md`.** A file reached only through another reference file risks a partial read.
+  **How to apply:** list which files link to which; anything two links deep gets a direct link from `SKILL.md` or is merged into its parent.
+- **Put a short contents list at the top of any file over 100 lines.** Even a partial read then knows what sits further down and can jump to it.
+  **How to apply:** run `wc -l` across `.claude/skills/**`; each file over 100 lines gets a one-line or bulleted contents list in its first lines, e.g. `Contents: standard rates · rush surcharges · retainers · discounts (bottom)`.
 
 ## Dynamic Context Injection — `` !`command` ``
 
@@ -232,6 +242,53 @@ Installation is equally deflationary: hand both files to Claude and say "this is
 
 See [Multi-Perspective Research (STORM Pattern)](../concepts/multi-perspective-research.md) for the pipeline the skill body encodes.
 
+### Degrees of Freedom: Choose Rigidity per Step
+
+Anthropic's guide (per Jay E's reading) names how tightly a step is specified its **degree of freedom**, and the level is chosen **per step, not per skill**: [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
+
+| Freedom | Form | Example (Jay's invoicing skill) |
+|---------|------|-------------------------------|
+| **High** | Plain instructions | Drafting the invoice email; brainstorming ways to automate a process |
+| **Medium** | A template with a few settings | A weekly report with a fixed shape but room for variation |
+| **Low** | An exact script | Creating the invoice or tax documents |
+
+Match rigidity to how costly a mistake is. Jay's argument is that skills written for older models over-specify and that this now holds the 5.5 models back, the same over-specification point made on [Product Overhang](../concepts/product-overhang.md) and [Empathize with the Agent](../concepts/empathize-with-the-agent.md).
+
+**How to apply:** label each step of a skill high, medium or low. Loosen the high-freedom steps; harden the low-freedom ones, ideally into a script (see [Agent Skills § Scripts as Deterministic Tools](../concepts/agent-skills.md#scripts-as-deterministic-tools)).
+
+### Three Output Patterns for Well-Defined Output
+
+When a skill's output must have a defined shape, Jay's reading of the guide offers three patterns: [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
+
+- **A template**, either strict or a sensible default (the Templated-output skill above is the strict case);
+- **Input→output example pairs**, which show style and level of detail better than a description does;
+- **A conditional workflow** that forks on the task's conditions.
+
+**How to apply:** for a skill whose output keeps drifting, pick the one of the three that fits and add it.
+
+### Checklists with a Go-Back Line
+
+For multi-step jobs, Jay's reading of the guide recommends an explicit checklist that Claude copies into its reply and ticks off as it goes; per Anthropic, clear steps stop the 5.5 models skipping critical steps. The addition worth copying is the **go-back line** under each check step, which stops a box being ticked over wrong work. [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
+
+```markdown
+Invoice progress:
+- [ ] Step 1: Collect the job list
+- [ ] Step 2: Calculate line totals from pricing.md
+- [ ] Step 3: Check: every total matches the job list
+      If any total doesn't match, go back to Step 2.
+- [ ] Step 4: Generate the invoice (scripts/)
+```
+
+This is compatible with the "step-by-step body that should have been a script" pitfall below: a checklist orders and gates steps that involve judgment or verification; any step that is fully deterministic (like the total calculation above) should still be a script the checklist calls.
+
+**How to apply:** for any skill with more than about five steps, add a copyable checklist block and one go-back line per verification step.
+
+### Build a Feedback Loop into the Skill
+
+Run, check against explicit criteria, fix each failure, repeat until every check passes. Per Jay's reading, Anthropic says this "greatly improves" output and its first example is non-code: checking a draft against a style guide. For prose, the checks are a short yes/no list (consistent terminology, examples in the standard format, all required sections present), Claude cites which check each failure breaks, and the skill finishes only when all pass. [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
+
+**How to apply:** turn a skill's style or format rules into three to five yes/no checks and add a "review against these checks, revise, re-check" step before the final output. For the eval that tests the skill itself from outside, see [Skill Evaluation](../concepts/skill-evaluation.md).
+
 ## Migration: Custom Commands → Skills
 
 1. Move `.claude/commands/foo.md` → `.claude/skills/foo/SKILL.md`.
@@ -279,9 +336,11 @@ See [Agent Skills § Skill Kit as Owned Planning Stack](../concepts/agent-skills
 - **Vague descriptions.** "Helps with PRs" → never auto-invoked. Use "Summarize the diff and changed files for the current PR via `gh`." Philipp Schmid's data puts numbers on this: **~50% of observed skill failures were trigger failures**, not body failures. Cover the *why*, the *how*, and the *when*, and write directives rather than passive information — "use the Interactions API if you're building a chat application," not "the Interactions API is recommended for multi-chat because it handles session state." [Source: 2026-07-14_ai-engineer_dont-ship-skills-without-evals]
 - **No negative cases.** A description scoped to "web development tasks" over-triggers — it fires on Angular work when the skill only knows React. Scope the trigger narrowly ("React components", "Tailwind CSS") and test the cases where the skill must stay *silent*.
 - **No-ops in the body.** Instructions that change nothing: "make the implementation easy to read," "write clear, high-quality code." The model does this already. AI-generated skills are dense with them, and every one is tokens paid on every load for zero behaviour change. See [Matt Pocock](../people/matt-pocock.md).
-- **A step-by-step body that should have been a script.** If the skill reads "step one… step two… step three," the workflow is deterministic — write a script and have the model run it. See [Agent Skills § Scripts as Deterministic Tools](../concepts/agent-skills.md#scripts-as-deterministic-tools).
+- **A step-by-step body that should have been a script.** If the skill reads "step one… step two… step three," the workflow is deterministic — write a script and have the model run it. See [Agent Skills § Scripts as Deterministic Tools](../concepts/agent-skills.md#scripts-as-deterministic-tools). A checklist that orders judgment and verification steps is a different thing; see [Checklists with a Go-Back Line](#checklists-with-a-go-back-line).
 - **Shipping without an eval.** Ten to twenty test prompts (half of them negative) plus regex asserts is enough to catch most of the above. See [Skill Evaluation](../concepts/skill-evaluation.md).
 - **Overstuffed `SKILL.md`.** Past ~500 lines, the body crowds out other context. Split into sibling files.
+- **First-person descriptions.** "I can help you with invoices" instead of "Creates client invoices and sends payment reminders." The description is what Claude reads when choosing a skill, and per Jay E's reading of Anthropic's guide, first person can confuse that choice, especially on smaller models. Grep descriptions for "I can", "I will", "I'll", "Use me" and rewrite in the third person. [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
+- **Assuming tools are installed.** "Use the PDF library" works on your machine and fails on a teammate's. Name the exact packages and include install steps to follow if they are missing, e.g. a "Dependencies" section in any skill that calls external tools. [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
 - **Forgetting `disable-model-invocation` on side-effect skills.** Claude will eventually trigger `/deploy` on its own initiative. Lock it down.
 - **Mixing live data and inline text without `` !`command` ``.** Asking Claude to "first run X then..." costs a tool turn that preprocessing would have skipped.
 - **Plan mode skills with `context: fork`.** The fork has no conversation history — if you depend on the main thread's plan, do not fork.

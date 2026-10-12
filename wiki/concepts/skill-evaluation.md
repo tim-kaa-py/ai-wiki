@@ -6,7 +6,8 @@ pillar: "building"
 tags: [agent-skills, evaluation, agents, best-practices, anti-patterns, workflow, claude-code]
 sources:
   - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
-timestamp: "2026-08-24"
+  - "summaries/2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills.md"
+timestamp: "2026-10-12"
 ---
 
 # Skill Evaluation
@@ -117,6 +118,20 @@ This is the practical instrument behind the capability/preference split in [Agen
 6. **Test across harnesses.** Agent harnesses behave differently and models behave differently. A skill tuned against Claude Code may fail in Codex or Cursor. If your team or your customers span harnesses, so must the eval.
 7. **Use real traces where you have them.** Production failure reports beat synthetic prompts. Nothing substitutes for real-world data.
 8. **Gate changes on the eval.** No skill edit without a rerun; no merge without an improvement or a new case.
+
+### Test across models, too
+
+Rule 6 varies the harness; Jay E's (RoboNuggets, October 2026) reading of Anthropic's updated skill-authoring guide adds varying the **model**, with a different question for each: [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
+
+| Model | Question to ask of the skill |
+|-------|------------------------------|
+| Haiku | Is there enough guidance? |
+| Sonnet | Is the skill clear and efficient? |
+| Opus / Fable | Does it avoid over-explaining? |
+
+The reasoning: older skills are often too prescriptive for the newest models, while a skill tuned on a top model may be too thin for Haiku. This is a qualitative review, not a measured eval; it pairs naturally with the harness above by running the same cases per model. Jay's caveat is cost: do it only for the skills you rely on most and those where a mistake is consequential.
+
+**How to apply:** pick your two or three most-used or highest-stakes skills, run each on the cheapest model you would accept and on your default model, and compare the outputs.
 
 ## Anti-Patterns This Surfaces
 

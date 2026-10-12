@@ -19,7 +19,8 @@ sources:
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
-timestamp: "2026-10-05"
+  - "summaries/2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills.md"
+timestamp: "2026-10-12"
 ---
 
 # Agent Skills
@@ -42,6 +43,8 @@ The skill system's central design choice is keeping context small until needed:
 
 This lets a Claude instance know *about* hundreds of skills while only paying the full context cost for the handful actually in use.
 
+**A caveat on depth (secondhand).** Jay E's (RoboNuggets, October 2026) reading of Anthropic's updated skill-authoring guide says L3 is not uniformly deep: when references are nested (SKILL.md → file B → file C), Claude may only *preview* the deeper file, roughly its first 100 lines. Hence two layout rules: keep every reference one level deep from SKILL.md, and give any file over 100 lines a contents list at the top. Not yet checked against the primary guide. See [Claude Code Skills § Keep References One Level Deep](../how-tos/claude-code-skills.md#keep-references-one-level-deep-and-give-long-files-a-contents-list). [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
+
 ## SKILL.md Format
 
 ```yaml
@@ -58,6 +61,10 @@ Step-by-step instructions the agent follows...
 ### The Description Is the Discovery Signal
 
 Because L1 is the only gate between an unused skill and a loaded one, the frontmatter `description` decides whether a skill ever triggers. A vague description (`"helps with PDFs"`) will be skipped; a specific, action-oriented description (`"Extract tables and structured data from PDF invoices using Python"`) maps task → skill reliably.
+
+Write it in the **third person** ("Creates client invoices and sends payment reminders", not "I can help you with invoices"). Per Jay E's reading of Anthropic's guide, first person can confuse skill selection, especially on smaller models. [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
+
+The body follows the same economy: write only what Claude cannot work out itself. Anthropic calls the context window a "public good" (per Jay's reading), so a skill keeps company-specific facts (prices, terms, internal rules) and drops explanations of what an invoice is. This is the same point as the no-ops pitfall in [Skill Evaluation § No-ops](skill-evaluation.md#no-ops). [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
 
 ## Capability Skills vs Preference Skills
 
@@ -101,6 +108,8 @@ Use CLAUDE.md for rules that apply broadly; use skills for capabilities that onl
 Skills can bundle executable scripts (Anthropic's PDF skill uses Python). The pattern: **don't burn tokens on work a script can do deterministically**. The skill teaches Claude when and how to invoke the script; the script handles the mechanical step.
 
 Schmid pushes this one step further: if the *entire* workflow is a fixed sequence — "step one, go there; step two, do this" — there is no skill here at all. Write the script and have the model call it. Skills should set goals and constraints and leave the model the freedom to reach them; a procedure with no context-dependent variation is paying for judgment you don't need. [Source: 2026-07-14_ai-engineer_dont-ship-skills-without-evals]
+
+Anthropic's guide (per Jay E's reading) frames the same choice at step level as **degrees of freedom**: high (plain instructions), medium (a template with a few settings), low (an exact script). The level is picked per step by how costly a mistake is, and the levels mix inside one skill: an open-ended invoice email next to scripted invoice creation. Jay's argument is that skills written for older models are over-prescriptive and that this "can actually make the output worse" on the 5.5 models. See [Claude Code Skills § Degrees of Freedom](../how-tos/claude-code-skills.md#degrees-of-freedom-choose-rigidity-per-step). [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
 
 ## Security: Audit Before Installing
 
@@ -280,6 +289,8 @@ When a skill encodes an organisational policy (security, compliance, brand), it 
 - **Track two indicators.** Leading: time from policy approval to the updated skill being merged. Lagging: policy-citing review findings, which should fall toward zero. If they don't, the skill isn't triggering or has drifted from the official policy.
 
 See [AI-Native SDLC § Governance as the Agent Acts](ai-native-sdlc.md#governance-as-the-agent-acts) for where this sits in the playbook. *(Source: Anthropic's AI-Native SDLC playbook, 2026-08-21)*
+
+Jay E (RoboNuggets, October 2026) makes the same move for a skill's internal invariants. His example: "never send an invoice above $10,000 without a person's sign-off." Writing it in capitals works "most of the time"; he calls hooks underused and among the most important rules. The captured transcript ends there, so the conclusion that a hook enforces the rule every time is inferred from his setup, not quoted. **How to apply:** find any "NEVER"/"ALWAYS" in a skill whose violation would be costly and decide whether a `PreToolUse` hook (or a mod) can block the action instead. [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
 
 ## Related Pages
 
