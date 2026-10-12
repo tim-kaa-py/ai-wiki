@@ -1,0 +1,6 @@
+{
+  "name": "mod-posted",
+  "version": "0.1.0",
+  "description": "/posted marks the open LinkedIn draft as posted: status posted, paste-ready .txt deleted, committed and pushed in the private linkedin module.",
+  "author": { "name": "tim-kaa-py" }
+}

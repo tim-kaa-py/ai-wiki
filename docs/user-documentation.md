@@ -303,6 +303,25 @@ If the repo is new and not yet on GitHub, ask the agent to run the setup (see `c
 
 ---
 
+## Claude Code Mods
+
+Five project mods in `.claude/skills/mod-*/` change Claude Code itself, for this repo only. They are Claude Code plugins of function hooks; Claude Code loads them from the project's skills folder at session start as `mod-…@skills-dir`, so nothing is installed in your global config and your other projects don't get them.
+
+| Mod | What you see | When it acts |
+|-----|--------------|--------------|
+| `mod-commit-scope` | Fewer commit-guard interruptions. A toast says *left N path(s) to the other live ai-wiki session* or *ingest paused at a decision* | Your global commit guard blocks a stop. The mod drops the block when every dirty file belongs to another ai-wiki session that is still live (its transcript changed in the last 15 minutes), or while this session's ingest waits on your menu choice or a background sub-agent. When both kinds of files are dirty, it narrows the block to this session's files and tells the agent not to `git add -A`. Unpushed commits, and files no live session owns, still block as before. |
+| `mod-transcript-guard` | A toast at session start when `yt-dlp` is more than 60 days old. A notification *YouTube blocked the transcript of …* | YouTube answers the caption download with HTTP 429: the agent is told not to retry and falls back once to the audio route, and an identical caption retry within 10 minutes is refused. If the audio download fails too (403), you hear about it at once: paste the transcript from YouTube's *Show transcript* panel, or approve `pip install -U yt-dlp` when yt-dlp is old. |
+| `mod-decision-ping` | A notification *Your call: …* or *Done after N min: …* | A turn ran at least 90 seconds and ends on a question or menu, or ran at least 5 minutes. It uses your Claude Code notification channel and falls back to a toast when notifications are off. |
+| `mod-ingest-band` | One line above the prompt, e.g. `Ingest · <title> · ✓ meta source summary · ▶ connect (opus 4m) · next: index, log, commit`, then `⏸ your turn` when the ingest waits on you and `✓ Ingest committed` after the commit | From the `ingest` or `podcast-ingest` skill call until the ingest's commit. LinkedIn URL posts draw no band. |
+| `mod-posted` | The `/posted [slug] [--no-commit]` command | After you publish a LinkedIn post. It sets the open draft's `status` to `posted`, deletes its `.txt`, commits only that file in `linkedin/` and pushes (never forced). With several drafts open it asks for a slug; without the private module it says so and changes nothing. |
+
+- **Turn one off:** `claude plugin disable mod-decision-ping@skills-dir`, or use `/plugin`.
+- **After editing a mod:** run `claude plugin validate .claude/skills/<mod>` and `claude plugin test .claude/skills/<mod>`; `/reload-plugins` picks up the change mid-session.
+- **If a mod seems to do nothing:** start with `claude --debug`; the log names any module that failed to load, and why. The mod API is early access and can change between Claude Code releases.
+- **Public clones load them too.** They act only on this repo's own files; the LinkedIn parts do nothing without the private module.
+
+---
+
 ## Customizing the System
 
 The agent's behavior is split by how often it's needed, following Claude Code's own guidance (standing facts in `CLAUDE.md`, procedures in skills, path-specific schemas in rules, enforcement in hooks):
@@ -315,6 +334,7 @@ The agent's behavior is split by how often it's needed, following Claude Code's 
 | Gist, lint, query procedures | `.claude/skills/gist/`, `lint/`, `query/` |
 | Frontmatter fields | `.claude/rules/frontmatter.md` (loads only when a file under `sources/`, `summaries/`, `wiki/` or `gists/` is touched) |
 | What is enforced regardless of what the agent "remembers" | `.claude/settings.json` + `.claude/hooks/` |
+| How Claude Code itself behaves here: commit-guard scope, transcript guard, notifications, the ingest band, `/posted` | `.claude/skills/mod-*/` (see [Claude Code Mods](#claude-code-mods)) |
 
 Skills are also slash commands: `/ingest <url>`, `/query …`, `/gist`, `/lint`, `/connect summaries/<slug>.md`. `gist` and `lint` only run when you call them; the others the agent picks on its own from what you type.
 

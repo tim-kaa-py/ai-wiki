@@ -2,7 +2,7 @@
 
 An LLM-maintained knowledge wiki about AI. The agent handles all bookkeeping: summarization, cross-referencing, index maintenance, consistency. The human curates sources, directs analysis, and thinks critically.
 
-This file is the operating contract: facts and standing rules that apply in every session. Procedures live in skills under `.claude/skills/`, schemas in `.claude/rules/`, enforcement in `.claude/settings.json` hooks.
+This file is the operating contract: facts and standing rules that apply in every session. Procedures live in skills under `.claude/skills/`, schemas in `.claude/rules/`, enforcement in `.claude/settings.json` hooks, and changes to Claude Code's own behaviour in project mods under `.claude/skills/mod-*/`.
 
 ## Architecture
 
@@ -30,6 +30,7 @@ Other files: `index.md` (master index; frontmatter `okf_version: "0.1"` only; bo
 | Says "triage tensions" / "scan for contradictions" | `wiki-tension-triage` |
 | Asks for the daily briefing | `daily-ai-briefing` |
 | Asks for a LinkedIn post | `linkedin-*` proxies (private module, see `docs/private-modules.md`) |
+| Says a LinkedIn post is published | Point to `/posted` (the `mod-posted` command); if asked in words, follow `linkedin/CLAUDE.md`'s commit flow |
 
 Every ingest ends with the `connect` skill (merge into wiki pages with tension detection), then index and log. Frontmatter schemas are in `.claude/rules/frontmatter.md`, loaded automatically when files under `sources/`, `summaries/`, `wiki/` or `gists/` are touched.
 

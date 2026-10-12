@@ -1,0 +1,7 @@
+{
+  "name": "mod-transcript-guard",
+  "version": "0.1.0",
+  "description": "Warns when yt-dlp is too old for YouTube, stops blind retries after a caption 429, and tells the user at once when a transcript must be pasted by hand.",
+  "author": { "name": "tim-kaa-py" },
+  "types": "./types/index.d.ts"
+}

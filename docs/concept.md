@@ -75,7 +75,8 @@ Create the following directory structure in the working directory:
 │       ├── connect/            # SKILL.md, tension-handling.md
 │       ├── gist/
 │       ├── lint/
-│       └── query/
+│       ├── query/
+│       └── mod-*/              # optional project mods (Claude Code function hooks), see §4.1
 ├── README.md
 ├── LICENSE
 ├── .gitignore
@@ -150,7 +151,14 @@ The contract is split across four surfaces, following Claude Code's guidance on 
 
 **`.claude/settings.json` + `.claude/hooks/`** — deterministic enforcement, independent of what the agent remembers. Two hooks: `okf-precommit.sh` (PreToolUse on Bash; runs `scripts/okf-check.py` before any `git commit` and blocks with exit 2 on failure) and `docs-sync-reminder.sh` (PostToolUse on Edit/Write; when `CLAUDE.md` or anything under `.claude/` changes, injects a reminder of the Self-documentation rule). Copy verbatim and `chmod +x` the scripts. Claude Code asks the user to approve project hooks on first launch.
 
-Design point: anything the agent must do *every time* (validation, reminders) is a hook; anything it must *know every session* (pillars, guardrails) is in `CLAUDE.md`; anything it must *do when asked* (a pipeline) is a skill. Do not move procedures back into `CLAUDE.md` as the system grows; a 700-line contract was the state this reference repo recovered from.
+**`.claude/skills/mod-*/`** (optional) — project mods: Claude Code plugins of function hooks (Claude Code 2.1.287 or later; the API is early access and moves between releases). Claude Code auto-loads a plugin folder in the project's skills folder as `<name>@skills-dir` with project scope, so nothing lands in the user's global config, and a public clone loads them too. Each mod is `.claude-plugin/plugin.json`, `hooks/hooks.json` naming one module, `hooks/register.ts` (or `.tsx` when it draws), a `types/index.d.ts` contract declaring every `$.state` key it keeps, and a `*.test.ts` that `claude plugin test <folder>` runs against the engine with git, files and the clock answered by the test's own hooks; `claude plugin validate <folder>` checks the manifest, the contract and every hook before a session loads it. This repo ships five, each from a pattern found in its own session history:
+
+- `mod-ingest-band` and `mod-decision-ping`: copy for any wiki that runs the ingest pipeline. The band derives the pipeline step from the session's tool calls (skill invocations, sub-agent descriptions, writes under `sources/`, `summaries/`, `index.md`, `log.md`, the commit); keep sub-agent descriptions containing *scan*, *connect*, *focus* or *summar* so it can tell the steps apart.
+- `mod-transcript-guard`: copy when YouTube is a source type. It keys on `scripts/extract-transcript.py` and `scripts/transcribe-audio.py` by name.
+- `mod-commit-scope`: only when the user runs a global Stop hook that blocks uncommitted work (here `~/.claude/hooks/commit-guard.sh`). It wraps `classic.Stop` above the settings hooks and edits only a block containing `Commit guard:`; adapt that marker to the user's guard.
+- `mod-posted`: only with the private LinkedIn module.
+
+Design point: anything the agent must do *every time* (validation, reminders) is a hook; anything it must *know every session* (pillars, guardrails) is in `CLAUDE.md`; anything it must *do when asked* (a pipeline) is a skill; anything that changes how Claude Code itself behaves (a notification, a band above the prompt, another hook's verdict, a slash command that needs no model turn) is a mod. Do not move procedures back into `CLAUDE.md` as the system grows; a 700-line contract was the state this reference repo recovered from.
 
 ### 4.2 `index.md`
 

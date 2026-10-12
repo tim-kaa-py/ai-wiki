@@ -1,0 +1,7 @@
+{
+  "name": "mod-ingest-band",
+  "version": "0.1.0",
+  "description": "A one-line band above the prompt while an ingest runs: which pipeline steps are done, which sub-agent is working and for how long, and when it is your turn.",
+  "author": { "name": "tim-kaa-py" },
+  "types": "./types/index.d.ts"
+}

@@ -22,3 +22,6 @@ linkedin/
 # Reports written by the global tech-brief / storm-research skills: keep them out of the public repo
 tech-briefs/
 storm-reports/
+
+# Type declarations Claude Code writes into a mod it hot-reloads
+.claude/skills/mod-*/.claude-plugin/types/

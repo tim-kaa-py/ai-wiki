@@ -1,0 +1,9 @@
+{
+  "name": "mod-commit-scope",
+  "version": "0.1.0",
+  "description": "Scopes the global commit guard to this session's own files: leaves a parallel ai-wiki session's uncommitted ingest alone and stays quiet while this session's ingest waits on a decision.",
+  "author": {
+    "name": "tim-kaa-py"
+  },
+  "types": "./types/index.d.ts"
+}

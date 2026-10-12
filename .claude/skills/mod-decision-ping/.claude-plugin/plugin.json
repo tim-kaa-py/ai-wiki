@@ -1,0 +1,6 @@
+{
+  "name": "mod-decision-ping",
+  "version": "0.1.0",
+  "description": "Sends a native notification naming the decision when a long turn ends on a menu (focus letters, tension choices, post variants), and a done ping after very long turns.",
+  "author": { "name": "tim-kaa-py" }
+}
