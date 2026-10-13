@@ -1,6 +1,6 @@
 ---
 name: lint
-description: Runs the wiki health check. Use when the user says "lint", "lint the wiki", "check wiki health", "find orphans", or asks whether index, log and sources are in sync. Drains the contradiction ledger, then finds orphans, stale pages, index and log drift, stray tension markers and tag gaps, runs the OKF conformance script, and presents fixes for approval. Not for linting code (ruff, eslint and the like on scripts/).
+description: Runs the wiki health check. Use when the user says "lint", "lint the wiki", "check wiki health", "find orphans", or asks whether index, log and sources are in sync. Drains the contradiction ledger, then finds orphans, stale pages, index and log drift, stray tension markers and tag gaps, runs the OKF conformance script, and presents fixes for approval. Not for linting code (ruff, eslint and the like on scripts/), and not for scanning pages for new contradictions (that is /wiki-tension-triage).
 ---
 
 # Lint

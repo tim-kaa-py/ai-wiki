@@ -11,7 +11,7 @@ This is a **proxy skill**. The real `linkedin-post` skill lives in the author-pr
 
 Check whether `${CLAUDE_SKILL_DIR}/../../../linkedin/.claude/skills/linkedin-post/SKILL.md` exists. The path is anchored to this skill's folder (three levels up is the ai-wiki repo root) so the check holds whatever the working directory is; a check relative to the working directory would report the module missing whenever the session started elsewhere.
 
-**If the file does NOT exist:** print exactly the message below and **stop**. Do not attempt to do any of the work yourself. Do not fall back to a generic LinkedIn draft. Do not improvise. The real workflow carries the author's voice and rules, so a substitute would pass for output it is not.
+**If the file does NOT exist:** print exactly the message below and **stop**. Do not attempt to do any of the work yourself. Do not fall back to a generic LinkedIn draft. Do not improvise, and do not offer workarounds: no editing this proxy or the module, no unofficial or draft fallback, no alternative tool, even if the user asks for one. The real workflow carries the author's voice and rules, so a substitute would pass for output it is not.
 
 ```
 The `linkedin-post` skill is an author-private extension of this wiki, provided by the
