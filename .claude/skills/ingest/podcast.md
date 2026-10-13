@@ -12,14 +12,8 @@ WebFetch the directory page for episode title, show name, guests, publication da
 
 Try in order and stop at the first success. The order runs from most to least faithful: an author transcript is verbatim and speaker-labelled, captions come next, local speech recognition makes proper-noun errors.
 
-1. **Author-published transcript.** Find the show's website or Substack (WebSearch `"<show name>" "<episode title>" transcript`) and WebFetch the episode page. Many shows publish full transcripts (Latent Space on latent.space, for example). Extract it verbatim; `extraction_method: web-fetch`.
-2. **YouTube mirror.** Check `which yt-dlp` (suggest install if missing), then find the episode:
-
-   ```bash
-   yt-dlp "ytsearch1:<show name> <episode title>" --skip-download --print "%(webpage_url)s|||%(title)s|||%(upload_date)s|||%(id)s|||%(duration_string)s"
-   ```
-
-   If it is the same episode, run `python scripts/extract-transcript.py "<youtube-url>"` and take `extraction_method` from its output.
+1. **Author-published transcript.** Find the author-published transcript on the show's website or Substack and extract it verbatim; `extraction_method: web-fetch`.
+2. **YouTube mirror.** Find the episode's YouTube mirror with yt-dlp; check `which yt-dlp` first (suggest install if missing). If it is the same episode, run `python scripts/extract-transcript.py "<youtube-url>"` and take `extraction_method` from its output.
 3. **Local transcription.** `python scripts/transcribe-audio.py "<episode-or-youtube-url>"`, same contract as SKILL.md Step 3: it deletes the temp audio, never installs anything, and returns `status: "error"` when it cannot run.
 4. **Manual paste.** Only when local transcription returns `status: "error"`, ask the user to paste the transcript (or the part to capture); `extraction_method: user-pasted`. Pasted content is not obviously public, so run Step 0 on it before saving.
 

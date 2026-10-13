@@ -116,7 +116,7 @@ If `status` is `"no_captions"`, fall back to local transcription **before** aski
 python scripts/transcribe-audio.py "<URL>"
 ```
 
-This downloads audio to a temp file, normalizes it with `ffmpeg`, transcribes with whisper.cpp (`whisper-cli`), deletes the audio, and returns the same JSON with `extraction_method: "whisper-local"`. `--prompt` primes proper-noun spelling (defaults to AI terms); `--model` overrides the model (ggml name or absolute path; default from `~/.claude-video-vision/config.json`, else `large-v3-turbo`, under `~/whisper-models/`). The script **never installs anything**; if `whisper-cli`, `ffmpeg` or the model is missing it returns `status: "error"` with an install hint. Do **not** fall back to `pip install faster-whisper`. Only on `status: "error"` ask the user to paste the transcript.
+This transcribes locally (`--prompt` primes proper-noun spelling) and returns the same JSON with `extraction_method: "whisper-local"`; if it reports a missing dependency, tell the user and fall back to asking for a pasted transcript.
 
 Set the source frontmatter `extraction_method` from the output.
 

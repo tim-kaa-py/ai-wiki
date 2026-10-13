@@ -4,10 +4,6 @@ description: Generates a daily AI briefing report covering Claude Code updates (
 disable-model-invocation: true
 ---
 
-You are running the daily AI briefing routine for this repo. Execute every step
-below in sequence without stopping for confirmation. Operate autonomously — every
-decision is covered by the instructions.
-
 **Failure rule (the only one):** if a step fails (yt-dlp error, missing captions,
 API or network failure), retry it once, then write the section's failure marker
 under that section's heading and continue. Never abort the full run; always write
@@ -67,8 +63,10 @@ Goal: surface new Claude Code features with a practical "so what" for each.
       python scripts/extract-transcript.py "VIDEO_URL"
       ```
       Returns JSON: {"status", "extraction_method", "transcript"}.
-      If status is "no_captions": note title + URL + "[Transcript unavailable]",
-      move on.
+      If status is "no_captions" or the download fails (rate limit included):
+      note title + URL + "[Transcript unavailable]", move on. Do not fall back
+      to scripts/transcribe-audio.py or ask for a paste: a briefing is
+      discovery only, and local transcription would add minutes per video.
    b. Identify every feature, change, or update in the transcript. Skip pure
       promotion or recap.
    c. For each item write:
@@ -115,22 +113,20 @@ already seen.
    ```
    Failure marker: "[YouTube API unavailable — skipping section]", then move
    to Step 4.
-2. Extract per result: videoId, title, channelId, channelTitle, publishedAt,
-   description.
-3. Filter out: already-seen IDs and videos whose `channelId` is one of the
+2. Filter out: already-seen IDs and videos whose `channelId` is one of the
    three watched channel IDs in Step 2 (they are covered there). Match on
    channel ID, not `channelTitle`: the API returns display names, which do
    not reliably match the handles.
-4. Fetch view counts for the remaining IDs in one call:
+3. Fetch view counts for the remaining IDs in one call:
    ```
    curl "https://www.googleapis.com/youtube/v3/videos?part=statistics&id=ID1,ID2,...&key=$YOUTUBE_API_KEY"
    ```
-5. Sort by viewCount, descending, and take the first 10.
-6. For each write:
+4. Sort by viewCount, descending, and take the first 10.
+5. For each write:
    - **[Title]** — [Channel] — [URL]
    - Views: [viewCount] | Published: [date]
    - One sentence on what the video covers.
-7. Fewer than 10 → list what's available and note "Only N results found."
+6. Fewer than 10 → list what's available and note "Only N results found."
 
 ---
 
