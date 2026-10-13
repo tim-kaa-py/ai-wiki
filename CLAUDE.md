@@ -23,12 +23,12 @@ Other files: `index.md` (master index; frontmatter `okf_version: "0.1"` only; bo
 | User does | Skill |
 |-----------|-------|
 | Pastes a URL, drops a file in `inbox/`, says "ingest" / "process inbox" | `ingest` |
-| Pastes a podcast episode URL | `podcast-ingest` |
+| Pastes a podcast episode URL | `ingest` (loads its `podcast.md` reference) |
 | Asks a question (no URL) | `query` |
 | Says "save as gist" / `/gist` | `gist` |
 | Says "lint" / "check wiki health" | `lint` |
-| Says "triage tensions" / "scan for contradictions" | `wiki-tension-triage` |
-| Asks for the daily briefing | `daily-ai-briefing` |
+| Types `/wiki-tension-triage` (user-only: a run spends many sub-agents and commits to this public repo) | `wiki-tension-triage`; after bulk or manual wiki edits, suggest it rather than run it |
+| Types `/daily-ai-briefing` (user-only; if asked in words, point to the command) | `daily-ai-briefing` |
 | Asks for a LinkedIn post | `linkedin-*` proxies (private module, see `docs/private-modules.md`) |
 | Says a LinkedIn post is published | Point to `/posted` (the `mod-posted` command); if asked in words, follow `linkedin/CLAUDE.md`'s commit flow |
 
@@ -41,10 +41,12 @@ The main session runs on the model Claude Code is configured with (Opus 5.5 by d
 | Step | Sub-agent |
 |------|-----------|
 | Confidentiality scan (Step 0) | Sonnet — isolated compliance check with a structured verdict |
-| Tier 2 Focus & Discovery, Summarize, Connect | Opus — deep reading, synthesis, tension detection |
+| Tier 2 Focus & Discovery, Summarize | Opus — deep reading, synthesis |
+| Connect (every tier, quick clips included) | Opus — tension detection; started from the main session, which presents the menu |
+| Lint's ledger drain, query's FILE tension check | Opus — a fresh AGENT'S READ per tension |
 | Everything else (metadata, extract, save, index, log, Tier 1 quick clips, query, lint, gist) | main session |
 
-Purely instructional sources (feature walkthroughs, tutorials) may skip the Opus sub-agents. The user can override in either direction.
+Purely instructional sources (feature walkthroughs, tutorials) may skip the Focus and Summarize sub-agents, never Connect: a tutorial can still contradict an older how-to (a deprecated flag, a changed default), and a fresh adversarial agent catches what the context that wrote the summary would smooth over. The user can override in either direction.
 
 ## Three pillars
 
@@ -87,7 +89,7 @@ Tags emerge organically within these categories. Reuse existing tags; create new
 - **Never silently merge contradicting claims.** Tensions go to the user via the `connect` skill's menu or are queued to `meta/contradictions.md`. A confidently written page that quietly dropped a prior claim reads like knowledge but is misinformation.
 - **Never download video/audio for storage.** Metadata and captions use `--skip-download`. The only exception is `scripts/transcribe-audio.py`, which transcribes a temp file locally and deletes it.
 - **Check tooling before use:** `which yt-dlp`, `python --version`. Suggest installation if missing; never install anything yourself. ffmpeg is needed only by the transcription fallback, which reports it as a missing dependency itself.
-- **Check `index.md` for duplicates** (URL or video ID) before processing any source.
+- **Check for duplicates** before processing any source: `grep -rl '<video-id or URL>' sources/ summaries/` (the URL lives in each file's `resource:` frontmatter; `index.md` holds no URLs).
 - **Sources are verbatim, summaries are opinionated, wiki pages are synthesized.**
 - **Confirm metadata with the user** before proceeding on Tier 2 ingests.
 - **Log every ingest, lint, gist and wiki-changing query** to `log.md`.

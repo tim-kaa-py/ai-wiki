@@ -35,7 +35,7 @@ An LLM-maintained personal knowledge wiki. The human curates sources (URLs, file
 - Raw sources stay immutable (auditable, reproducible).
 - Summaries are small enough to be regenerated if taste changes.
 - Wiki pages compound: each new source enriches existing pages, or seeds a new one.
-- The human never has to remember "did I already save this?" — the agent checks `index.md`.
+- The human never has to remember "did I already save this?" — the agent greps `sources/` and `summaries/` for the URL or video ID (it sits in each file's `resource:` frontmatter; `index.md` holds no URLs).
 
 ---
 
@@ -50,7 +50,7 @@ Before writing any files, interview the user to define the topic-specific shape 
 5. **Primary interest lens.** "When I summarize a source, what should I bias toward capturing? (e.g., actionable how-tos, argument structures, tool comparisons, historical context.)"
 6. **Model routing preference.** "Do you have access to more than one Claude model (e.g., Sonnet + Opus)? If yes I'll route mechanical steps to the faster/cheaper model and deep analysis to the stronger one. If no, I'll use your single model for everything."
 7. **Repo visibility.** "Public or private GitHub repo? What account/org?" If public, flag the **Confidentiality Scan (Step 0)** from the reference `CLAUDE.md` — it gates non-public content before it lands in `sources/` or `summaries/` and scans every generated summary before CONNECT. If private, the scan is optional (see §4.1).
-8. **Reusable prompts (optional).** "Will you author and share reusable Claude Code prompts ('gists')?" If yes, scaffold `gists/` and `gists/index.md`. Gists are a separate artifact track — not summarized, not cross-linked into the wiki. See the reference `CLAUDE.md` → "Gists Workflow".
+8. **Reusable prompts (optional).** "Will you author and share reusable Claude Code prompts ('gists')?" If yes, scaffold `gists/` and `gists/index.md`. Gists are a separate artifact track — not summarized, not cross-linked into the wiki. See the reference [`.claude/skills/gist/SKILL.md`](../.claude/skills/gist/SKILL.md).
 
 Record the answers. You will inject them into the `CLAUDE.md` template in Step 4.
 
@@ -71,7 +71,7 @@ Create the following directory structure in the working directory:
 │   ├── rules/
 │   │   └── frontmatter.md      # path-scoped file schemas
 │   └── skills/
-│       ├── ingest/             # SKILL.md, step0-scan.md, summary-template.md
+│       ├── ingest/             # SKILL.md, step0-scan.md, summary-template.md, podcast.md
 │       ├── connect/            # SKILL.md, tension-handling.md
 │       ├── gist/
 │       ├── lint/
@@ -138,13 +138,25 @@ The contract is split across four surfaces, following Claude Code's guidance on 
 - Replace the **Three pillars** table with the pillars from bootstrap Q2.
 - Replace **Source types** rows if the user's source mix differs.
 - Replace **Tag taxonomy** categories with the starter tags from Q4.
+- Keep the **Model routing** table if the user has more than one model. The reference routing is:
+
+  | Step | Sub-agent |
+  |------|-----------|
+  | Confidentiality scan (Step 0) | Sonnet — isolated compliance check with a structured verdict |
+  | Tier 2 Focus & Discovery, Summarize | Opus — deep reading, synthesis |
+  | Connect (every tier, quick clips included) | Opus — tension detection; started from the main session, which presents the menu |
+  | Lint's ledger drain, query's FILE tension check | Opus — a fresh AGENT'S READ per tension |
+  | Everything else (metadata, extract, save, index, log, Tier 1 quick clips, query, lint, gist) | main session |
+
+  Purely instructional sources may skip the Focus and Summarize sub-agents, never Connect.
 - If the user has a single model only (Q6), replace the **Model routing** table with: *"Single-model mode: all steps run in the main session. Sub-agents are used only for context isolation (confidentiality scan, connect)."*
 - Keep **Guardrails** and the **Self-documentation rule**; they are the mechanics.
 
-**`.claude/skills/`** — procedures, loaded only when invoked. Copy verbatim: `ingest/` (Tier 1 + Tier 2 pipeline, `step0-scan.md`, `summary-template.md`), `connect/` (merge with tension detection, `tension-handling.md` with the menu, resolution table and ledger schema), `gist/`, `lint/`, `query/`. Each `SKILL.md` has a `description` that drives auto-invocation; `gist` and `lint` carry `disable-model-invocation: true` so only the user triggers them. Edit:
+**`.claude/skills/`** — procedures, loaded only when invoked. Copy verbatim: `ingest/` (Tier 1 + Tier 2 pipeline with per-tier checklists, `step0-scan.md`, `summary-template.md`, and `podcast.md` for podcast episodes: transcript discovery from the author's website, a YouTube mirror, local whisper, then manual paste, plus a section menu in place of the focus interview), `connect/` (merge with tension detection, `tension-handling.md` with the menu, resolution table and the authoritative ledger schema), `gist/`, `lint/`, `query/`. Each `SKILL.md` has a third-person `description` that drives auto-invocation, so all of these also load from plain words. Skills the user should start deliberately carry `disable-model-invocation: true` (here `wiki-tension-triage`, §4.9, and `daily-ai-briefing`), so only the user's slash command starts them. Edit:
 
 - **Confidentiality Scan (Step 0, in `ingest/step0-scan.md`)** — keep as-is for public repos (Q7 = public). For private repos it is optional: either delete the file and the scan steps in `ingest/SKILL.md` and `gist/SKILL.md`, or narrow it to credentials only. Record the choice in the new repo's `CLAUDE.md` Guardrails so future sessions understand the threat model.
-- **Contradiction handling (`connect/tension-handling.md`)** is the wiki's defence against silent merges that read as confident knowledge but quietly drop prior claims. Keep it default-on for public and private repos alike. `meta/contradictions.md` is its append-only ledger, drained by the `lint` skill.
+- **Contradiction handling (`connect/tension-handling.md`)** is the wiki's defence against silent merges that read as confident knowledge but quietly drop prior claims. Keep it default-on for public and private repos alike. Connect runs on every ingest tier, quick clips included, on Opus sub-agents started from the main session (a sub-agent cannot put a menu to the user); the orchestrator greps every reported quote and addition before showing the menu. `meta/contradictions.md` is its append-only ledger, drained first by the `lint` skill, whose order is ledger, structural checks, report, approved fixes with re-checks, OKF last, then a log entry for every run.
+- **`daily-ai-briefing/`** (optional) — a user-only discovery report written to `ai-research/`. Keep that folder gitignored in a public repo (see §4.4) so reports never get committed; nothing from a briefing is ingested.
 - Drop `gist/` if Q8 = no.
 
 **`.claude/rules/frontmatter.md`** — the four file schemas, with `paths:` frontmatter so it loads only when a file under `sources/`, `summaries/`, `wiki/` or `gists/` is touched. Copy verbatim; adjust `type` enums if the source mix differs.
@@ -223,6 +235,9 @@ __pycache__/
 # Local secrets — never commit
 .env
 
+# Skill reports (e.g. daily-ai-briefing): keep them out of a public repo
+ai-research/
+
 # OS
 .DS_Store
 Thumbs.db
@@ -256,7 +271,7 @@ Once the wiki has real content (a few dozen sources), upgrade it to a proper lan
 
 Reusable Claude Code prompts. Each gist is self-contained — copy the file (or just the prompt block), paste into a fresh Claude Code session, run.
 
-These are author-authored *artifacts*, not ingested knowledge. They are not summarized or cross-linked into the wiki. See `CLAUDE.md` → "Gists Workflow" for the contract.
+These are author-authored *artifacts*, not ingested knowledge. They are not summarized or cross-linked into the wiki. The `gist` skill (`.claude/skills/gist/SKILL.md`) holds the contract.
 
 | Date | Title | Intent | Model | Tags |
 |------|-------|--------|-------|------|
@@ -268,20 +283,20 @@ These are author-authored *artifacts*, not ingested knowledge. They are not summ
 
 ### 4.8 `meta/contradictions.md`
 
-Append-only ledger of tensions deferred at ingest via option `(q)`. The Lint Workflow drains this file. See `CLAUDE.md` → "Contradiction Handling at Ingest" for the surrounding contract.
+Append-only ledger of tensions deferred via option `(q)` from the tension menu, and of tensions queued by the triage pipeline (§4.9). The `lint` skill drains this file. The surrounding contract (menu, resolution actions, ledger schema) is in [`.claude/skills/connect/tension-handling.md`](../.claude/skills/connect/tension-handling.md).
 
-Copy this reference repo's [`meta/contradictions.md`](../meta/contradictions.md) verbatim into the new repo. Its header explains the schema (anchor format, required fields, append-only rule) and ends with `_No open contradictions._` as the empty state. No tokens need substitution — the file is topic-agnostic.
+Copy only the header of this reference repo's [`meta/contradictions.md`](../meta/contradictions.md) into the new repo (everything above the first `## ` entry), then add `_No open contradictions._` as the empty state. The header states the append-only rule and points to the "Ledger schema" section of `tension-handling.md`, which is authoritative for the entry format (anchor rule, the two `Queued by:` forms, the optional `Agent's read` field, line numbers) and the resolve procedure; do not copy the schema into the ledger. No tokens need substitution — the header is topic-agnostic.
 
 ### 4.9 Tension-triage pipeline (optional, retroactive)
 
 Ingest-time contradiction handling only covers new material. If the new repo accumulates pages before the handling exists (or after bulk manual edits), scaffold the retroactive scanner from this reference repo:
 
-- `.claude/skills/wiki-tension-triage/SKILL.md` — the orchestration contract (pipeline stages, tiered autonomy, supervised mode). Copy and adapt paths.
+- `.claude/skills/wiki-tension-triage/SKILL.md` — the orchestration contract (scope step, pipeline stages, tiered autonomy, supervised mode). User-only (`disable-model-invocation: true`): a run spends many sub-agents and commits, so the agent suggests it after bulk or manual edits instead of running it. Copy and adapt paths.
 - `meta/triage/prompts/` — five agent briefing templates (detector, conflict-advocate, harmonizer, judge, challenger). Topic-agnostic; copy verbatim.
 - `meta/tension-policy.md` — starts as a stub; populated by supervised pilot runs in the new domain (the calibration rules are domain-specific, do NOT copy this repo's rules).
 - `meta/triage-runs/` — empty dir for run reports.
 
-Design rationale and phasing (supervised pilots → shadow mode → autonomous sweep) are in `docs/superpowers/specs/2026-07-06-tension-triage-design.md`. Key invariants: detection is within-page only; the pipeline may autonomously apply only non-destructive resolutions ((b)/(c)) at strong confidence after a challenger pass; everything else goes to the `meta/contradictions.md` ledger.
+Design rationale and phasing (supervised pilots → shadow mode → autonomous sweep) are in `docs/superpowers/specs/2026-07-06-tension-triage-design.md`. Key invariants: scope defaults to the pages the user names, or else to wiki pages changed since the newest `meta/triage-runs/` report; detection is within-page only; tensions already handled (under `## Unresolved Tensions`, beside a marker, or in the ledger) are skipped, because the ledger is append-only; the pipeline may autonomously apply only (c) hold both, at strong confidence after a challenger pass; everything else, (b) included, goes to the `meta/contradictions.md` ledger.
 
 ---
 
@@ -308,7 +323,7 @@ Design points worth preserving on recreation:
 - **Never auto-install.** If `whisper-cli`, `ffmpeg`, or the model is missing, it returns `status: "error"` with a manual-install hint and stops — it does not pip-install faster-whisper/openai-whisper. This is deliberate: an earlier version reached for `pip install faster-whisper` and stood up a duplicate stack that was never needed.
 - **`--prompt` priming** biases proper-noun spelling — without it, Whisper transcribes "Claude" as "Cloud". Default primes AI-domain terms. `--model` overrides the model (ggml name or absolute path).
 
-The `ingest` skill's Step 3 (and the `podcast-ingest` skill's Step 3c) chain these: captions → local transcription → ask user to paste. The `no_captions` path tries `transcribe-audio.py` before falling back to a manual paste.
+The `ingest` skill's Step 3 chains these: captions → local transcription → ask user to paste. The `no_captions` path tries `transcribe-audio.py` before falling back to a manual paste. For podcast episodes, `ingest/podcast.md` puts an author-published transcript and a YouTube mirror ahead of the same two fallbacks.
 
 ### 5.3 OKF conformance checker
 

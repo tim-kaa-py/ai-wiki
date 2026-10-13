@@ -36,8 +36,8 @@ Plus:
 - `inbox/` — drop unprocessed files here.
 - `notes/` — your focus notes from each deep-dive ingest (what *you* wanted captured). The agent writes them; they're yours to reread.
 - `meta/` — the contradiction ledger (`contradictions.md`), the tension-triage calibration policy, and triage-run reports. See [What Happens at a Contradiction](#what-happens-at-a-contradiction).
-- `ai-research/` — dated discovery reports from the optional daily briefing (see [Daily AI briefing](#8-daily-ai-briefing-optional)). Not part of the wiki; nothing here is ingested.
-- `.claude/` — the agent's procedures. `skills/` holds one skill per workflow (`ingest`, `connect`, `gist`, `lint`, `query`, `podcast-ingest`, `wiki-tension-triage`, `daily-ai-briefing`, the `linkedin-*` proxies), `rules/frontmatter.md` holds the file schemas, `hooks/` and `settings.json` hold two enforcement hooks. `CLAUDE.md` at the root is the short standing contract that points at all of this.
+- `ai-research/` — dated discovery reports from the optional daily briefing (see [Daily AI briefing](#8-daily-ai-briefing-optional)). Local only: the folder is gitignored, so reports never reach the public repo. Not part of the wiki; nothing here is ingested.
+- `.claude/` — the agent's procedures. `skills/` holds one skill per workflow (`ingest`, which also handles podcast episodes through its `podcast.md` reference, `connect`, `gist`, `lint`, `query`, `wiki-tension-triage`, `daily-ai-briefing`, the `linkedin-*` proxies), `rules/frontmatter.md` holds the file schemas, `hooks/` and `settings.json` hold two enforcement hooks. `CLAUDE.md` at the root is the short standing contract that points at all of this.
 
 ---
 
@@ -71,7 +71,9 @@ Example prompts:
 >
 > Quick clip: https://example.com/longread *(force Tier 1 on a source the agent would normally deep-dive)*
 
-For podcast episodes there's a dedicated skill: say **"/podcast-ingest \<episode URL\>"** (Apple Podcasts, Spotify, RSS, or any episode link). It handles the messier transcript acquisition (author website → YouTube mirror → manual paste) and lets you pick which discovered sections to keep before summarizing.
+Podcast episodes go through the same `ingest` skill: just paste the episode URL (Apple Podcasts, Spotify, RSS, or any episode link). They always run as a deep dive, with two differences. Transcript acquisition tries, in order, a transcript on the show's own website, a YouTube mirror of the episode, local whisper transcription (`scripts/transcribe-audio.py`), and only then asks you to paste one. Instead of the focus interview you get a lettered list of the episode's main sections; reply `all` or the letters you want (e.g. `A C E`), and the summary covers only those. A transcript you paste gets the confidentiality scan before it is saved, and the podcast summary gets it like every other summary.
+
+Every ingest, quick clip or deep dive, shows a progress checklist that the agent ticks off as it goes.
 
 ### 2. Ingest with notes
 
@@ -92,11 +94,11 @@ Drop files (PDFs, saved HTML, `.md` notes) into `inbox/`. Then:
 
 > Process inbox.
 
-The agent scans, classifies, ingests each item, and deletes them when done.
+For each file the agent extracts the text, runs the confidentiality scan on it, saves it as a Markdown source with frontmatter, summarizes, scans the summary, cross-links, and then deletes the original. `inbox/` is empty afterwards, except for any original you chose to keep by aborting its scan.
 
 ### 4. Ask a question
 
-Just ask. The agent searches `wiki/` and `summaries/`, synthesizes an answer with citations.
+Just ask. The agent searches `index.md`, `wiki/` and `summaries/`, then answers with citations in the form `[Source: <slug>]`. Where sources disagree, it says so rather than averaging them. If the wiki has nothing on the topic, it tells you, offers to ingest a source, and labels anything from general knowledge as not from the wiki.
 
 Examples:
 
@@ -106,7 +108,7 @@ Examples:
 >
 > Summarize what I know about \<person\>.
 
-If the answer reveals a new insight worth keeping, the agent offers to create or update a wiki page.
+If the answer reveals a new insight worth keeping, the agent offers to create or update a wiki page, and writes nothing until you agree. Filing a page runs a tension check against overlapping pages (a fresh Opus sub-agent, same menu as at ingest), a confidentiality scan when the page carries anything from the conversation that is not in the cited summaries, an `index.md` update including the footer count, and a log entry.
 
 ### 5. Save a gist
 
@@ -122,7 +124,7 @@ Or describe an idea and ask the agent to draft and save it:
 
 The agent will:
 
-1. Confirm title, intent, target model, tags.
+1. Confirm title, intent, target model (`sonnet`, `opus`, `haiku` or `fable`), prerequisites (optional), and tags.
 2. Run a confidentiality scan (gists often inline project paths or tool names — these get caught here).
 3. Save to `gists/<slug>.md` and append to `gists/index.md`.
 
@@ -130,7 +132,7 @@ Gists are *yours* — they're not summarized, not cross-linked into the wiki, an
 
 ### 6. Lint the wiki
 
-Monthly-ish hygiene. The agent drains the contradiction queue at `meta/contradictions.md` first (re-presenting each open tension with a fresh recommendation), then checks for orphan sources, stale pages, index drift, log drift, additional contradictions, tag gaps, and OKF conformance (`scripts/okf-check.py` — the same check CI runs on every push). You approve fixes before they execute. See also [What Happens at a Contradiction](#what-happens-at-a-contradiction).
+Monthly-ish hygiene. Say it in plain words or type `/lint`. The agent opens with the count of open entries in `meta/contradictions.md` and drains that queue first, re-presenting each open tension with a fresh recommendation (answer `all q` to defer them all again). Then it runs the structural checks: orphan sources, summaries and gists; stale pages; index drift (summaries and wiki pages only, plus the footer counts); log drift (matched by URL or title); a non-empty `inbox/`; stray `<!-- TENSION -->` markers with no open ledger entry; and tag gaps. It reports everything, you approve the fixes, it applies them and re-runs the affected checks. OKF conformance (`scripts/okf-check.py` — the same check CI runs on every push) runs last, on the final state. Every run is logged, clean ones included. Lint does not hunt for new contradictions inside pages; that is the [tension-triage skill](#retroactive-scanning-the-tension-triage-skill). See also [What Happens at a Contradiction](#what-happens-at-a-contradiction).
 
 > Lint the wiki.
 
@@ -150,7 +152,7 @@ You are in charge. Useful overrides:
 
 > /daily-ai-briefing
 
-A discovery tool, separate from the wiki, and only ever started by you typing the command (the agent never triggers it on its own): it checks watched YouTube channels, trending Claude Code videos, Karpathy's gists, and a few AI blogs for anything new since the last run, then writes a dated report to `ai-research/` and commits it. **Nothing from a briefing is ingested** — if a report surfaces something worth keeping, paste its URL back in as a normal ingest. Requires `yt-dlp`; the trending section additionally wants a `YOUTUBE_API_KEY` env var and degrades gracefully without it.
+A discovery tool, separate from the wiki, and only ever started by you typing the command (the agent never triggers it on its own): it checks watched YouTube channels, trending Claude Code videos, Karpathy's gists, and a few AI blogs for anything new since the last run, then writes a dated report to `ai-research/`. That folder is gitignored, so the report stays on your machine and is never committed or pushed; this repo is public. "Trending" means the most-viewed Claude Code videos published since the last report, and anything listed in any earlier report is skipped. The run ends by checking its own report (every section present, no repeats) before telling you the path. If you ask for a briefing in words, the agent points you to the command. **Nothing from a briefing is ingested** — if a report surfaces something worth keeping, paste its URL back in as a normal ingest. Requires `yt-dlp`; the trending section additionally wants a `YOUTUBE_API_KEY` env var and degrades gracefully without it.
 
 ---
 
@@ -160,7 +162,7 @@ Most ingests merge silently into the wiki. Some don't — when a new source disa
 
 ### What you see
 
-At the end of CONNECT, if the agent detected one or more conflicts, you get a batched menu. Per tension:
+CONNECT runs on every ingest, quick clips and tutorials included, on fresh Opus sub-agents started from the main session. Before showing you anything, the agent greps every quoted claim and every addition the sub-agent reports against the actual files, so a misquote or a contradiction slipped in as an "addition" gets caught. If one or more tensions remain, you get a batched menu. Per tension:
 
 - The existing claim (verbatim, with file path + line number + which sources back it).
 - The new claim (verbatim, with the new source + timestamp/section).
@@ -169,9 +171,11 @@ At the end of CONNECT, if the agent detected one or more conflicts, you get a ba
 
 You reply with one line per tension, e.g. `1c 2a 3q` or `all q`.
 
+`(d)` and `(e)` take one more round. For `(d)` you see the drafted rewrite and answer `approve` (written as shown), `amend` (with your change; you see a new draft) or `revert` (falls back to `(c)`). For `(e)` you see the proposed split; approve it and the new page is created and indexed, or decline it and pick another letter.
+
 ### Honest deferral with `(q)`
 
-`(q)` queues the tension to `meta/contradictions.md` and adds a small HTML comment on the affected page near the relevant claim. The wiki page body is **not** modified. This is the right answer when:
+`(q)` queues the tension to `meta/contradictions.md` and adds a small HTML comment (`<!-- TENSION … -->`) on the affected page near the relevant claim. The wiki page body is **not** modified otherwise. Resolving the tension later, by lint or by hand, removes that marker, so a marker on a page always means an open ledger entry. This is the right answer when:
 
 - You don't have time to read both positions carefully.
 - You suspect a third source will clarify things.
@@ -189,7 +193,7 @@ The next `lint the wiki` pass drains the queue and re-presents each open tension
 
 ### Retroactive scanning: the tension-triage skill
 
-Ingest-time detection only catches tensions as they enter. To find contradictions already sitting inside pages (manual edits, ingests that pre-date the system), say **"run tension triage"** or "scan the wiki for contradictions". A multi-agent pipeline scans pages batch-wise: a detector finds candidates, quotes are mechanically verified, an advocate and a harmonizer argue opposite sides, and an Opus judge rules. It may apply only non-destructive resolutions on its own ((b) keep old, (c) hold both — and only after a second Opus challenger confirms); anything needing your judgment lands in `meta/contradictions.md` for the next lint. Every run leaves a report in `meta/triage-runs/`. The agents follow the calibration rules in `meta/tension-policy.md`, which grow from your past decisions — if you want to supervise a run (see every verdict yourself), just say so. The full 80-page retroactive sweep was completed on 2026-07-08.
+Ingest-time detection only catches tensions as they enter. To find contradictions already sitting inside pages (manual edits, ingests that pre-date the system), type **`/wiki-tension-triage`**. Only you start it: a run spends many sub-agents and commits to this public repo, so after bulk or manual wiki edits the agent suggests it rather than running it. By default it covers the pages you name, or else every wiki page changed since the newest report in `meta/triage-runs/`, and shows you that list first. A multi-agent pipeline scans pages batch-wise: a detector finds candidates, quotes are mechanically verified, tensions already handled (under `## Unresolved Tensions`, next to a marker, or in the ledger) are skipped, an advocate and a harmonizer argue opposite sides, and an Opus judge rules. The only resolution it applies on its own is (c) hold both, at strong confidence and only after a second Opus challenger confirms; everything else, (b) keep old included, lands in `meta/contradictions.md` for the next lint. Every run leaves a report in `meta/triage-runs/`. The agents follow the calibration rules in `meta/tension-policy.md`, which grow from your past decisions — if you want to supervise a run (see every verdict yourself), just say so. The full 80-page retroactive sweep was completed on 2026-07-08.
 
 ### Why this exists
 
@@ -236,12 +240,15 @@ Because this wiki is a **public repo**, the agent runs a confidentiality scan on
 ### When it runs
 
 **Scanned:**
+
 - Files you drop into `inbox/` (unknown provenance).
 - Content you paste directly into the session (transcripts, docs, notes).
 - Sources you explicitly mark as your own (concepts, internal docs, personal notes you ingest as sources).
 - **Every generated summary** — summaries fold in your focus notes, which can introduce context the original source did not have.
+- **Every gist**, and any wiki page a query files that carries content from the conversation.
 
 **Not scanned:**
+
 - Public URLs the agent fetches itself (YouTube, podcast hosts, arxiv, GitHub, public articles/docs). The content is already published; scanning it adds no protection.
 
 When in doubt, the agent runs the scan. False positives cost you one prompt; a leak costs a lot more.
@@ -268,7 +275,7 @@ The agent pauses the workflow and shows a structured verdict:
 - **Concern** — one sentence on why this might be confidential.
 - **3–4 remediation options** with pros/cons and a compliance risk assessment. One option is always *abort the ingest*.
 
-You pick an option by letter, or write your own instruction. The agent applies the fix, re-scans, and repeats until the content is CLEAR or you abort. On abort, nothing gets written to `sources/` or `summaries/`.
+You pick an option by letter, or write your own instruction. The agent applies the fix, re-scans, and repeats until the content is CLEAR or you abort. On abort, the agent deletes every file the run already wrote (under `sources/`, `summaries/`, `notes/` or `gists/`) and tells you what it removed; what you supplied stays where it was, so an original in `inbox/` is kept.
 
 ### Known gaps
 
@@ -312,7 +319,7 @@ Five project mods in `.claude/skills/mod-*/` change Claude Code itself, for this
 | `mod-commit-scope` | Fewer commit-guard interruptions. A toast says *left N path(s) to the other live ai-wiki session* or *ingest paused at a decision* | Your global commit guard blocks a stop. The mod drops the block when every dirty file belongs to another ai-wiki session that is still live (its transcript changed in the last 15 minutes), or while this session's ingest waits on your menu choice or a background sub-agent. When both kinds of files are dirty, it narrows the block to this session's files and tells the agent not to `git add -A`. Unpushed commits, and files no live session owns, still block as before. |
 | `mod-transcript-guard` | A toast at session start when `yt-dlp` is more than 60 days old. A notification *YouTube blocked the transcript of …* | YouTube answers the caption download with HTTP 429: the agent is told not to retry and falls back once to the audio route, and an identical caption retry within 10 minutes is refused. If the audio download fails too (403), you hear about it at once: paste the transcript from YouTube's *Show transcript* panel, or approve `pip install -U yt-dlp` when yt-dlp is old. |
 | `mod-decision-ping` | A notification *Your call: …* or *Done after N min: …* | A turn ran at least 90 seconds and ends on a question or menu, or ran at least 5 minutes. It uses your Claude Code notification channel and falls back to a toast when notifications are off. |
-| `mod-ingest-band` | One line above the prompt, e.g. `Ingest · <title> · ✓ meta source summary · ▶ connect (opus 4m) · next: index, log, commit`, then `⏸ your turn` when the ingest waits on you and `✓ Ingest committed` after the commit | From the `ingest` or `podcast-ingest` skill call until the ingest's commit. LinkedIn URL posts draw no band. |
+| `mod-ingest-band` | One line above the prompt, e.g. `Ingest · <title> · ✓ meta source summary · ▶ connect (opus 4m) · next: index, log, commit`, then `⏸ your turn` when the ingest waits on you and `✓ Ingest committed` after the commit | From the `ingest` skill call until the ingest's commit. LinkedIn URL posts draw no band. |
 | `mod-posted` | The `/posted [slug] [--no-commit]` command | After you publish a LinkedIn post. It sets the open draft's `status` to `posted`, deletes its `.txt`, commits only that file in `linkedin/` and pushes (never forced). With several drafts open it asks for a slug; without the private module it says so and changes nothing. |
 
 - **Turn one off:** `claude plugin disable mod-decision-ping@skills-dir`, or use `/plugin`.
@@ -329,14 +336,14 @@ The agent's behavior is split by how often it's needed, following Claude Code's 
 | Want to change… | Edit |
 |-----------------|------|
 | Pillars, tag taxonomy, source types and default tiers, slug format, guardrails, which sub-agent model runs which step | `CLAUDE.md` (kept around 100 lines; it loads in every session) |
-| How an ingest runs, the interview, the summary template, the confidentiality scan | `.claude/skills/ingest/` (`SKILL.md`, `summary-template.md`, `step0-scan.md`) |
+| How an ingest runs, the interview, the summary template, the confidentiality scan, podcast episodes | `.claude/skills/ingest/` (`SKILL.md`, `summary-template.md`, `step0-scan.md`, `podcast.md`) |
 | How merging and contradictions work, the tension menu, the ledger format | `.claude/skills/connect/` (`SKILL.md`, `tension-handling.md`) |
 | Gist, lint, query procedures | `.claude/skills/gist/`, `lint/`, `query/` |
 | Frontmatter fields | `.claude/rules/frontmatter.md` (loads only when a file under `sources/`, `summaries/`, `wiki/` or `gists/` is touched) |
 | What is enforced regardless of what the agent "remembers" | `.claude/settings.json` + `.claude/hooks/` |
 | How Claude Code itself behaves here: commit-guard scope, transcript guard, notifications, the ingest band, `/posted` | `.claude/skills/mod-*/` (see [Claude Code Mods](#claude-code-mods)) |
 
-Skills are also slash commands: `/ingest <url>`, `/query …`, `/gist`, `/lint`, `/connect summaries/<slug>.md`. `gist` and `lint` only run when you call them; the others the agent picks on its own from what you type.
+Skills are also slash commands: `/ingest <url>`, `/query …`, `/gist`, `/lint`, `/connect summaries/<slug>.md`. The agent also picks these on its own from what you type ("lint the wiki", "save this as a gist"). Two run only when you type the command: `/wiki-tension-triage` and `/daily-ai-briefing`.
 
 Changes take effect the next time you start a Claude Code session in the repo (skills and rules are picked up at launch). Run `/doctor prompt-audit` now and then to catch stale or contradictory instructions across these files.
 
@@ -344,7 +351,7 @@ Changes take effect the next time you start a Claude Code session in the repo (s
 
 ## Common Pitfalls
 
-- **Duplicate ingests.** The agent checks `index.md` for URL/video-ID matches before processing. If you want to re-ingest anyway, say so explicitly.
+- **Duplicate ingests.** Before fetching anything, the agent greps `sources/` and `summaries/` for the URL or video ID (`index.md` holds no URLs; for a podcast it also greps the episode title). If you want to re-ingest anyway, say so explicitly.
 - **Wrong pillar on first ingests.** Pillars often feel wrong until 2–3 real sources land. Rename them in `CLAUDE.md` and `index.md` early — it gets harder once the wiki compounds.
 - **Over-editing summaries.** If a summary feels off, ask the agent to regenerate with a different bias. Don't hand-edit — the next ingest's CONNECT step expects the template shape.
 - **Manual wiki edits that fight the agent.** If you want a change to stick, either (a) tell the agent to make it, or (b) encode the new rule in `CLAUDE.md` (standing rule) or the relevant skill (procedure).

@@ -54,7 +54,7 @@ wiki/        synthesized pages, maintained over time
 notes/       per-source ingest notes (user focus + confirmed discoveries)
 meta/        contradiction ledger, tension policy, triage-run reports
 gists/       user-authored, reusable Claude Code prompts
-ai-research/ dated discovery reports from the optional daily briefing (never ingested)
+ai-research/ local, gitignored reports from the optional daily briefing (never committed or ingested)
 scripts/     transcript extraction, local Whisper fallback, OKF conformance check (+ tests)
 docs/        user documentation, recreation guide, design specs & plans
 ```

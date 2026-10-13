@@ -38,7 +38,13 @@ The pattern is simple and worth copying:
 1. Put your private content in a separate git repo.
 2. Clone it into `<parent-repo>/<module-name>/`.
 3. Add `<module-name>/` to the parent repo's `.gitignore`.
-4. At the canonical skill path in the parent, write a proxy `SKILL.md` that: (a) hard-guards on the private module path, (b) on success says "Read `<module>/.claude/skills/<name>/SKILL.md` and follow it verbatim. All paths resolve relative to the parent repo CWD."
+4. At the canonical skill path in the parent, write a proxy `SKILL.md` (see `.claude/skills/linkedin-post/SKILL.md` for a complete one) with:
+
+   - **A quoted, third-person `description`** that leads with the job ("Drafts a LinkedIn post from …"), lists the trigger phrases, names the sibling skills it is *not* for ("Not for raw URLs (linkedin-url-post) or gists (linkedin-gist-post)"), and ends with `Proxy: needs the author-private <module>/ module.` The sibling exclusions keep related proxies from stealing each other's requests.
+   - **A guard that runs first**, checking `${CLAUDE_SKILL_DIR}/../../../<module>/.claude/skills/<name>/SKILL.md`. Anchoring the path to the skill's own folder (three levels up is the parent repo root) keeps the check correct whatever the working directory is; a path relative to the working directory reports the module missing whenever the session started elsewhere.
+   - **On a miss**, the same short "author-private extension … not available on this machine … see `docs/private-modules.md` … contact the author" message in every proxy, then stop. Say why the proxy must not improvise: the real workflow carries the author's voice and rules, so a generic substitute would pass for output it is not.
+   - **On a hit**, a dispatch: "Read `${CLAUDE_SKILL_DIR}/../../../<module>/.claude/skills/<name>/SKILL.md` and follow it verbatim." Resolve every path in the real skill from the parent repo root and do not `cd` into the module, because the real skill's paths are written relative to the parent root.
+
 5. Document the pattern (like this page) so future readers know what to expect.
 
 This keeps public repos genuinely public, keeps private content genuinely private, and preserves invocation UX — the user invokes the skill the same way whether the private module is mounted or not.
