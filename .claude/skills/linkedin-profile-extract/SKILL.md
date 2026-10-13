@@ -1,6 +1,6 @@
 ---
 name: linkedin-profile-extract
-description: "Snapshots a section of the user's own LinkedIn profile (About, Experience, Skills) to a local file. Use on '/linkedin-profile-extract', 'extract my LinkedIn About', 'snapshot my experience section'. Not for drafting posts (linkedin-post, linkedin-url-post, linkedin-gist-post). Proxy: needs the author-private linkedin/ module."
+description: "Extracts or refreshes the user's own LinkedIn profile: the full profile by default (per-section snapshots plus a structured YAML), or one section such as About, Experience or Skills. Use on '/linkedin-profile-extract', 'extract my LinkedIn', 'update my LinkedIn profile', 'refresh my profile data', 're-extract my profile', 'snapshot my experience section'. Not for other people's profiles, job listings or company pages, and not for drafting posts (linkedin-post, linkedin-url-post, linkedin-gist-post). Proxy: needs the author-private linkedin/ module."
 ---
 
 # linkedin-profile-extract (proxy)
