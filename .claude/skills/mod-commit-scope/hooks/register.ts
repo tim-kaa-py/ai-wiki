@@ -21,7 +21,7 @@ const isIngestActive = atom({ plugin: 'mod-commit-scope', key: 'isIngestActive' 
 
 const GUARD = 'Commit guard'
 const LIVE_WINDOW_MS = 15 * 60 * 1000
-const INGEST_SKILLS = new Set(['ingest', 'podcast-ingest', 'connect'])
+const INGEST_SKILLS = new Set(['ingest', 'connect'])
 const INGEST_PATH = /^(sources|summaries|notes)\//
 const INGEST_SCRIPT = /scripts\/(extract-transcript|transcribe-audio)\.py/
 const COMMIT = /\bgit\b[^\n|;&]*\bcommit\b/

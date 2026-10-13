@@ -26,7 +26,7 @@ const LABEL: Record<IngestStep, string> = {
   log: 'log',
   commit: 'commit',
 }
-const START_SKILLS = new Set(['ingest', 'podcast-ingest'])
+const START_SKILLS = new Set(['ingest'])
 const URL = /https?:\/\/\S+/
 const METADATA = /yt-dlp\s+--skip-download\s+--print/
 const TRANSCRIPT = /scripts\/(extract-transcript|transcribe-audio)\.py/
