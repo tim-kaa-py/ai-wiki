@@ -11,6 +11,8 @@ declare module 'claude-code' {
       limited: TranscriptGuardLimit | null
       // Video ids the user was already told about.
       notified: string[]
+      // True while the current prompt is /daily-ai-briefing, which handles a missing transcript itself.
+      briefing: boolean
     }
   }
 }

@@ -12,6 +12,7 @@ function world(on: On, w: World) {
   const clock = mock.clock(on, { now: NOW })
   const seen = { toasts: [] as string[], notes: [] as string[], ran: 0 }
   on('session.start', ($, e) => ({ cwd: e.cwd }))
+  on('prompt.submit', ($, e) => ({ text: e.text }))
   on('process.run', () => ({
     value: { exitCode: 0, stdout: `${w.version ?? '2026.08.19'}\n`, stderr: '', isStdoutTruncated: false, isStderrTruncated: false },
   }))
@@ -81,4 +82,18 @@ test('other commands pass through untouched', async ($, on) => {
   const ran = await $.tool.call({ tool: 'Bash', command: 'grep -n "VQyYzLJ6xos" index.md' })
   expect(ran.context).toBeUndefined()
   expect(seen.ran).toBe(1)
+})
+
+test('stays silent during /daily-ai-briefing and resumes on the next prompt', async ($, on) => {
+  const { seen } = world(on, { bashText: 'HTTP Error 429: Too Many Requests' })
+  await $.prompt.submit({ text: '/daily-ai-briefing' } as never)
+  const first = await $.tool.call({ tool: 'Bash', command: CAPTIONS })
+  expect(first.context).toBeUndefined()
+  const retry = await $.tool.call({ tool: 'Bash', command: CAPTIONS })
+  expect(retry.deny).toBeUndefined()
+  expect(seen.ran).toBe(2)
+
+  await $.prompt.submit({ text: 'ingest this video' } as never)
+  const ingest = await $.tool.call({ tool: 'Bash', command: CAPTIONS })
+  expect(ingest.context?.[0]).toContain('Do not re-run the caption script')
 })

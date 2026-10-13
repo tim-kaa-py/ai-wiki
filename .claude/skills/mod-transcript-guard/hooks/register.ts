@@ -7,12 +7,17 @@ import type { EngineInterface, Register, ToolCallResult } from 'claude-code'
 // the 403 likely. This mod checks yt-dlp's age at session start, refuses an
 // identical caption retry inside the cooldown, tells the model the fallback
 // order, and notifies the user the moment a paste or an upgrade is needed.
+// It stays silent during /daily-ai-briefing: a briefing is discovery only and
+// its skill marks a missing transcript and moves on, so steering it toward
+// local transcription or a paste would cost time for nothing.
 
 const ytdlp = atom({ plugin: 'mod-transcript-guard', key: 'ytdlp' } as const, null)
 const limited = atom({ plugin: 'mod-transcript-guard', key: 'limited' } as const, null)
 const notified = atom({ plugin: 'mod-transcript-guard', key: 'notified' } as const, [])
+const briefing = atom({ plugin: 'mod-transcript-guard', key: 'briefing' } as const, false)
 
 const PLUGIN = 'mod-transcript-guard'
+const BRIEFING = /^\s*\/daily-ai-briefing\b/
 const CAPTIONS = /scripts\/extract-transcript\.py/
 const AUDIO = /scripts\/transcribe-audio\.py|transcribe\/scripts\/transcribe\.sh/
 const VIDEO_ID = /(?:[?&]v=|youtu\.be\/|\/shorts\/|\/live\/)([\w-]{11})/
@@ -33,10 +38,16 @@ export const register: Register = on => {
     return started
   })
 
+  on('prompt.submit', async ($, e, next) => {
+    await update($, briefing, () => BRIEFING.test(e.text ?? ''))
+
+    return next(e)
+  }).catch(($, e, next) => next(e))
+
   on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
     const isCaptions = CAPTIONS.test(e.command)
     const isAudio = AUDIO.test(e.command)
-    if (!isCaptions && !isAudio) {
+    if ((!isCaptions && !isAudio) || (await read($, briefing))) {
       return next(e)
     }
 
