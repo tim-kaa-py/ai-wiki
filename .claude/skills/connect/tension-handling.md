@@ -1,21 +1,19 @@
-# Contradiction Handling
+# Tension handling
 
-When CONNECT detects that a new claim conflicts with an existing claim on a wiki page, **do not silently merge.** Surface the tension to the user as a batched decision at the end of CONNECT. The user decides per tension; the agent then writes.
+A tension is a new claim that contradicts an existing claim on a wiki page, or two claims on one page that contradict each other. Never merge one silently: the user decides per tension, then the agent writes. Silent merges read as confident prose but quietly drop or distort prior claims, so the wiki deliberately favours visible deferral over invisible synthesis. The ledger keeps its file name, `meta/contradictions.md`; every entry in it is a tension.
 
-This is the wiki's primary defence against the "active misinformation" failure mode: silent merges that read as confident prose but quietly drop or distort prior claims. The architecture deliberately favours visible deferral over invisible synthesis.
+## AGENT'S READ contract
 
-## AGENT'S READ contract (detection sub-agent)
-
-For each conflict, draft an `AGENT'S READ` block with four required fields:
+Every tension shown to the user carries an `AGENT'S READ` block with four required fields:
 
 - **Confidence:** one of `strong recommendation`, `lean toward`, or `no strong recommendation — your call`. No in-between values.
-- **Recommended option:** one letter from `(a)`, `(b)`, `(c)`, `(d)`, or `(q)`. **Never recommend `(e)` split page** — splits are too consequential to propose as a default; the reasoning may *mention* that a split might be warranted, but (e) cannot be the primary recommendation.
+- **Recommended option:** one letter from `(a)`, `(b)`, `(c)`, `(d)`, or `(q)`. **Never recommend `(e)` split page**: splits are too consequential to propose as a default. The reasoning may *mention* that a split might be warranted.
 - **Why:** 1–2 sentences grounded in the specific claims.
-- **Strongest argument against:** 1 sentence — the most credible reason the recommendation could be wrong. Mandatory. This is what prevents recommendation-driven rubber-stamping.
+- **Strongest argument against:** 1 sentence, the most credible reason the recommendation could be wrong. Mandatory, because it is what prevents recommendation-driven rubber-stamping.
 
 ## User-facing menu
 
-For each conflict, the orchestrator presents:
+Use this exact format, one block per tension; lint and wiki-tension-triage reuse it.
 
 ```
 TENSION <N> of <total> — <wiki page path>
@@ -36,42 +34,47 @@ Options:
   (q) Queue for lint — defer; logged to meta/contradictions.md
 
 AGENT'S READ — <confidence> (<recommended option>)
-  Why: <reasoning>
+  Why: <one-or-two-sentence justification>
   Strongest argument against: <counter>
 ```
 
-The user responds with one line per tension, e.g. `1c 2a 3q` or `all q`. There is no implicit "press Enter to accept".
+The user answers one line per tension, e.g. `1c 2a 3q` or `all q`. The recommendation is a hint, not a default: there is no implicit "press Enter to accept", and nothing is applied without an answer.
 
 ## Resolution actions
 
 | Letter | Effect |
 |--------|--------|
-| (a) Accept new | Replace the existing claim. Add a footnote near it: *"Earlier versions of this page stated [old claim], per [source]; superseded by [new source] on [date]."* Update `sources:` and `timestamp`. |
+| (a) Accept new | Replace the existing claim. Add a footnote near it: *"Earlier versions of this page stated [old claim], per [source]; superseded by [new source] on [date]."* |
 | (b) Keep old | Do not modify the page body. Add the new summary to `sources:` only if it contributes other non-conflicting content; otherwise leave the page untouched. |
-| (c) Hold both | Add an `## Unresolved Tensions` section (or append to it) with both quotes, both citations, and the date surfaced. Update `sources:` and `timestamp`. |
-| (d) Synthesize | Sub-agent drafts a resolving rewrite and presents it for `approve / amend / revert`. After approval, write it, update `sources:` and `timestamp`. |
-| (e) Split page | Sub-agent proposes a split (new title, claim distribution, cross-link plan). The user must explicitly approve before any write. Add the new page to `index.md`. |
-| (q) Queue for lint | Append an entry to `meta/contradictions.md` (schema below). Insert one HTML-comment marker on the page near the claim: `<!-- TENSION YYYY-MM-DD: see meta/contradictions.md#<anchor> -->`. Do not modify the page otherwise. |
+| (c) Hold both | Add an `## Unresolved Tensions` section (or append to it) with both quotes, both citations, and the date surfaced. |
+| (d) Synthesize | A sub-agent drafts a resolving rewrite; nothing is written until the user answers `approve`, `amend` or `revert` (flow in connect SKILL.md step 4). |
+| (e) Split page | A sub-agent proposes a split (new title, claim distribution, cross-link plan); nothing is written until the user explicitly approves. The new page goes into `index.md`. |
+| (q) Queue for lint | Append a ledger entry (schema below). Insert one marker on the page near the claim: `<!-- TENSION YYYY-MM-DD: see meta/contradictions.md#<anchor> -->`. Change nothing else. |
 
-For (a)–(d), update `timestamp` and `sources:`. For (q), leave body and frontmatter untouched apart from the marker — the queue *is* the deferral mechanism; a silent merge into frontmatter would defeat it.
+For (a), (c), (d) and (e), update `sources:` and `timestamp`; (b) follows its row. For (q), leave body and frontmatter untouched apart from the marker: the queue *is* the deferral, and a merge into frontmatter would defeat it.
 
-## `meta/contradictions.md` schema
+Resolving a tension later, by lint or by hand, removes its `<!-- TENSION -->` marker from the page, so a marker always means an open ledger entry.
 
-Append-only ledger. Each tension is an H2 with a date-stamped anchor:
+## Ledger schema (`meta/contradictions.md`)
+
+Use this exact format; lint parses `Status:` to find open entries. Append-only: resolved entries stay as the audit trail of what was contested and how it was settled.
 
 ```markdown
 ## YYYY-MM-DD-<page-slug>-<topic-slug>
 - **Page:** wiki/<type>/<slug>.md
 - **Topic:** <one-line>
-- **Existing:** "<verbatim quote>" — <source citations>
-- **New:** "<verbatim quote>" — <new source citation>
+- **Existing:** "<verbatim quote>" (line <N>) — <source citations>
+- **New:** "<verbatim quote>" (line <N> if already on the page) — <new source citation>
 - **Status:** open | resolved
-- **Queued by:** ingest of <new-slug> on YYYY-MM-DD
+- **Queued by:** ingest of <new-slug> on YYYY-MM-DD | retroactive triage on YYYY-MM-DD
 - **Resolution:** <empty until resolved; then: letter chosen + one-line note + date>
+- **Agent's read (at queue time):** <confidence (letter) — why. Strongest argument against: ...>
 ```
 
-Resolved entries stay as an audit trail. `Status:` flips from `open` to `resolved` when the lint pass closes them. Never delete entries.
+Anchor: the H2 text, `<date>-<page slug without dir>-<topic slug>`, e.g. `2026-05-20-llm-wiki-pattern-synthesis`. Topic slug at most 4 words, lowercase, hyphenated, so anchors stay short enough to paste into the page marker.
 
-## Lint integration
+Resolving an entry: flip `Status:` to `resolved`, fill `Resolution:`, and remove the page's marker. Never delete entries.
 
-The `lint` skill drains `meta/contradictions.md` before scanning for new tensions: for each `open` entry it re-presents this same menu with a fresh AGENT'S READ that considers sources accumulated since the tension was queued. Most deferred decisions get resolved there, once more evidence exists. The `wiki-tension-triage` skill is the retroactive scanner for tensions already on a page; it queues into this same ledger.
+## Who drains the ledger
+
+`lint` drains this ledger first, then runs its structural checks: each `open` entry gets this menu again with a fresh AGENT'S READ that weighs sources added since it was queued. `wiki-tension-triage` finds tensions already on pages and queues into the same ledger.

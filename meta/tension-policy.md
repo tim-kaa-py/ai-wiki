@@ -28,6 +28,6 @@ require a note in the run report.
 
 ## Pipeline rules (orchestrator flow, not tension classification)
 
-- **Advocate-concession short-circuit:** if the Conflict-Advocate invokes its honesty clause (cannot construct a conflict case), dismiss the candidate immediately — do not dispatch the judge. (Pilot 1: saved verdicts on CC1/CC2 matched the owner.)
+- **Advocate-concession short-circuit:** if the Conflict-Advocate invokes its honesty clause (cannot construct a conflict case), dismiss the candidate immediately — do not dispatch the judge, because an advocate that cannot argue a conflict leaves the judge nothing to weigh. (Pilot 1: saved verdicts on CC1/CC2 matched the owner.)
 - **Dual-detector cross-check:** when a batch comes back all-clean on high-risk pages, a second detector pass on a different model with identical framing is a cheap recall check. Two clean convergent passes = trustworthy clean verdict. (Pilot 1: Sonnet + Opus converged.)
 - **Editorial findings are a valid side-channel:** adversaries that agree a pair is compatible but flag a skim-hazard should have that surfaced to the owner as an optional editorial fix, distinct from tension resolution. (Pilot 1: compaction table-row pointer, applied 2026-07-08.)

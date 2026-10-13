@@ -42,8 +42,10 @@ RESOLUTION DETAIL: <for (c): the exact Unresolved-Tensions entry text
 ```
 
 Verdict rules:
-- AUTO-RESOLVE is legal ONLY for option (b) keep old or (c) hold both, AND
-  ONLY at confidence "strong recommendation". Anything else is QUEUE.
+- AUTO-RESOLVE is legal ONLY for option (c) hold both, AND ONLY at
+  confidence "strong recommendation". Anything else, (b) keep old included,
+  is QUEUE: both claims are already on the page, so (b) would either leave
+  a confirmed tension unmarked or delete a claim without the owner.
 - Never recommend (e) split page as the primary option.
 - DISMISS only when the claims do not genuinely conflict — not because the
   conflict seems minor. Minor real conflicts are QUEUE or AUTO-RESOLVE.

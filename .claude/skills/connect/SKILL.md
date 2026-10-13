@@ -1,37 +1,54 @@
 ---
 name: connect
-description: The CONNECT step that makes the wiki compound — merge a new summary into wiki pages with tension detection before every merge. Invoked by the ingest and podcast-ingest skills after a summary is written, or directly when the user says "connect <summary>", "merge this summary into the wiki", or "re-run connect". Never silently merges contradicting claims; conflicts are surfaced to the user as a batched menu.
+description: Merges a new summary into wiki pages, detecting tensions with existing claims before every merge and surfacing them to the user as a batched menu instead of merging silently. Invoked by the ingest skill after a summary is written, or directly when the user says "connect" plus a summary path, "merge this summary into the wiki", or "re-run connect".
 argument-hint: "summaries/<slug>.md"
 ---
 
 # Connect
 
-Run after every ingest, both tiers. Input: the path of the new summary.
+Input: the path of a new summary. Runs after every ingest, every tier, quick clips and instructional sources included, because a quick clip can contradict a page as easily as a deep dive and this check is the wiki's defence against silent merges.
 
-**Model: Opus sub-agent** (`model: "opus"`), spawned twice: once to detect and merge, once (if there were conflicts) to apply the user's resolutions. The orchestrator in the main session presents the menu between the two.
+Run it from the main session, never inside a sub-agent: the orchestrator shows the user a menu and waits for the answer, which a sub-agent cannot do. The orchestrator spawns Opus sub-agents (`model: "opus"`) for Pass 1 (detect and merge) and Pass 2 (apply answers, only if there are tensions), and does the verification and the menu itself.
 
-The contradiction menu, the resolution-action table, the AGENT'S READ contract and the `meta/contradictions.md` schema are in `tension-handling.md` in this directory. Include that file's path in every sub-agent prompt.
+The AGENT'S READ contract, the menu, the resolution-action table and the ledger schema are in [tension-handling.md](tension-handling.md). Include its path in every sub-agent prompt.
 
-## Pass 1 — detect and merge (sub-agent)
+```text
+Connect progress:
+- [ ] 1 Pass 1 report back
+- [ ] 2 Every quote and addition verified against the files
+- [ ] 3 Every tension has a letter (skip if none)
+- [ ] 4 Every letter applied; every (d) and (e) closed
+- [ ] 5 Report given; new pages indexed or handed to INDEX
+```
+
+If the Pass 1 report leaves out added text, quotes or new pages, return to step 1 for what is missing.
+
+## 1. Pass 1: detect and merge (sub-agent)
 
 Prompt the sub-agent with the summary path, the path to `tension-handling.md`, and:
 
-> Read the summary. Search `wiki/` for pages with overlapping tags and topics. For each relevant page, **first detect tensions** before merging: for each new claim from the summary, find the existing claim on the page that most closely addresses the same question. Quote both verbatim (existing claim with line number; new claim with timestamp or section). Classify as *agree* (skip — already represented), *orthogonal* (merge normally), or *conflict* (do NOT merge, do NOT synthesize — return as-is for the user's decision). For each conflict, draft an AGENT'S READ block per `tension-handling.md`. For non-conflicting additions, merge normally: add new information without replacing existing content, add the summary to the page's `sources:` frontmatter, update `timestamp`. Create new wiki pages if the source introduces a substantial topic not yet covered (concepts → `wiki/concepts/`, tools → `wiki/tools/`, how-tos → `wiki/how-tos/`, people → `wiki/people/`, comparisons → `wiki/comparisons/`; frontmatter per `.claude/rules/frontmatter.md`). Return a structured report: pages touched, merges performed, tensions detected (with AGENT'S READ), pages proposed.
+> Read the summary. Search `wiki/` for pages with overlapping tags and topics. For each relevant page, **first detect tensions** before merging: for each new claim from the summary, find the existing claim on the page that most closely addresses the same question. Quote both verbatim (existing claim with line number; new claim with timestamp or section). Classify as *agree* (skip, already represented), *orthogonal* (merge normally), or *tension* (do NOT merge, do NOT synthesize; return it as-is for the user's decision). For each tension, draft an AGENT'S READ block per `tension-handling.md`. For orthogonal additions, merge normally: add new information without replacing existing content, add the summary to the page's `sources:` frontmatter, update `timestamp`. Put actionable practices, workflows and anti-patterns inside the relevant page, never in a central principles file: the wiki is the living playbook. Create new wiki pages if the source introduces a substantial topic not yet covered (concepts → `wiki/concepts/`, tools → `wiki/tools/`, how-tos → `wiki/how-tos/`, people → `wiki/people/`, comparisons → `wiki/comparisons/`; frontmatter per `.claude/rules/frontmatter.md`). Return a structured report: for each page touched, the exact text you added and the existing claim nearest to it; each tension with both verbatim quotes and its AGENT'S READ; each new page as an `index.md` bullet `* [Title](path) - description` with its pillar.
 
-Phrase the detection adversarially as above. LLMs default to synthesis and will smooth tensions away unless told to surface them.
+Keep the adversarial phrasing. LLMs default to synthesis and will smooth tensions away unless told to surface them.
 
-Actionable practices, workflows and anti-patterns belong inside the relevant wiki page, not in a central principles file. The wiki is the living playbook.
+## 2. Verify (orchestrator)
 
-## Orchestrator — surface tensions
+Pass 1 both classifies and merges, so until this step its own word is the only check against a silent merge.
 
-If the report contains conflicts, present them to the user as the batched menu in `tension-handling.md`, one block per tension, each with its AGENT'S READ. The user answers one line per tension (`1c 2a 3q`) or `all q`. The recommendation is a hint, not a default; never apply without an answer.
+- `grep -nF` each tension's existing quote on its page and its new quote in the summary. A quote that is not verbatim gets corrected from the file, or the tension is dropped; fix line numbers.
+- `grep -nF` a distinctive line of each reported addition on its page, so the report matches what was written. Read each addition beside its nearest existing claim: one that contradicts it is a tension Pass 1 missed. Remove the addition and add it to the menu with your own AGENT'S READ.
 
-If there are no conflicts, skip to the report.
+## 3. Menu (orchestrator)
 
-## Pass 2 — apply resolutions (sub-agent)
+No tensions: go to step 5. Otherwise present the menu from `tension-handling.md`, one block per tension, and wait for an answer to each.
 
-Spawn the sub-agent again with the resolution choices and the path to `tension-handling.md`. It applies each letter per the resolution-action table: (a) replace with footnote, (b) leave page body, (c) append to `## Unresolved Tensions`, (d) draft a synthesis and return it for `approve / amend / revert` before writing, (e) propose a split and wait for explicit approval, (q) append to `meta/contradictions.md` and insert the HTML-comment marker only.
+## 4. Pass 2: apply (sub-agent)
 
-## Report
+Spawn the sub-agent with the answers and the path to `tension-handling.md`. It applies each letter per the resolution-action table, and returns (d) drafts and (e) proposals unwritten. Close each one:
 
-Tell the user which wiki pages were created or modified, and which tensions were resolved, queued, or held. This report is mandatory.
+- **(d)** Show the draft. `approve`: write it verbatim yourself, updating `sources:` and `timestamp`. `amend`: spawn Pass 2 again for that tension only, with the user's amendment, and show the new draft. `revert`: apply (c).
+- **(e)** Show the proposal. Approved: spawn Pass 2 to carry it out (new page with frontmatter, claims moved, cross-links) and add the new page to the new-pages list. Declined: ask for another letter for that tension.
+
+## 5. Report
+
+Tell the user which wiki pages were created or modified, and which tensions were resolved, queued or held. Hand the new-page bullets to the ingest INDEX step; when connect runs on its own, add them to `index.md` under their pillar headings yourself, so no new page waits for lint to find it.
