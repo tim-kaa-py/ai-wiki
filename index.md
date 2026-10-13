@@ -198,6 +198,7 @@ okf_version: "0.1"
 
 ### Sources
 
+* [The State of AI in Software Development: Data from 400+ Orgs — Justin Reock, DX (AI Engineer)](summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md) - DX's platform data shows modest AI productivity gains (median ~7.7% PR throughput, nobody near 2x) alongside quality and trust side effects, which Justin Reock attributes to code generation never having been the bottleneck
 * [Anthropic Built It. OpenAI and LangChain Just Responded (The AI Automators)](summaries/2026-04-18_the-ai-automators_anthropic-built-it-openai-langchain-responded.md) - Compares Anthropic Managed Agents, LangChain Deep Agents Deploy, and OpenAI Agents SDK and frames the real choice as where you sit on a build-to-buy spectrum
 * [2026 Agentic Coding Trends Report (Anthropic)](summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md) - Anthropic's 2026 report framing agentic coding around the collaboration paradox and net-new work volume rather than speed
 * [Notion's Token Town: 5 Rebuilds, 100+ Tools, MCP vs CLIs, Software Factory (Latent Space)](summaries/2026-04-15_latent-space_notion-token-town-mcp-clis-software-factory.md) - Notion engineers recount 3.5 years of rebuilding coding agent harnesses and their views on MCP versus CLI tradeoffs
@@ -223,6 +224,7 @@ okf_version: "0.1"
 * [MCP vs CLI](wiki/comparisons/mcp-vs-cli.md) - How to choose between MCP tools and a shell/CLI for agent tool access, across four decision axes
 * [Software Factory](wiki/concepts/software-factory.md) - Simon Last's framing of coding agents as the kernel of AGI, forming an automated loop for building and maintaining software
 * [Model Behavior Engineer (MBE)](wiki/concepts/model-behavior-engineer.md) - Notion's non-engineering career track for people who own and shape how an organization's AI behaves
+* [Measuring AI's Impact on Developer Productivity](wiki/concepts/ai-developer-productivity.md) - What org-level data shows about AI coding gains (median ~7.7% PR throughput), why they stay modest (code generation was never the bottleneck), how individual metrics move, and how to measure it
 * [The Collaboration Paradox](wiki/concepts/collaboration-paradox.md) - Anthropic's finding that developers use AI in most work yet fully delegate very few tasks, reframing the right success metric
 * [Open Knowledge Format (OKF)](wiki/concepts/open-knowledge-format.md) - Google's vendor-neutral v0.1 spec for representing knowledge as a git-shippable directory of markdown-plus-frontmatter bundles, standardizing only a required type field and a permissive consumption model
 

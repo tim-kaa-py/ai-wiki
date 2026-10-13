@@ -10,7 +10,8 @@ sources:
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md"
+timestamp: "2026-10-13"
 ---
 
 # Five Levels of AI Coding
@@ -58,6 +59,18 @@ When AI coding tools are bolted onto existing workflows, productivity dips befor
 Most organizations are sitting at the bottom of this curve and misinterpreting the dip as evidence that AI tools don't work, rather than evidence that their workflows haven't adapted.
 
 **The METR study** is the clearest evidence: experienced developers using AI completed tasks 19% slower (randomized control trial), yet believed AI made them 24% faster. Wrong about both direction and magnitude. This is the symptom of an industry at the bottom of a J-curve it hasn't yet recognized.
+
+### What the Org-Level Data Shows: Modest Gains, Not a Dip (DX)
+
+The J-curve is a claim about *individual task speed early in adoption*. The largest org-level dataset on this wiki measures something different — PR throughput across 400+ organisations about a year in — and does not show a dip: **median +7.7%, mean +13%, top performers around +70%**, and "nobody hit 2x, nobody hit 5x, nobody hit 10x" [15:22-15:44]. Justin Reock (DX) explains the shortfall with a different mechanism from the one above. It is not that the workflow hasn't adapted around the tool. It is that code generation was never the bottleneck: an estimated 14-16% of the value stream (unsourced), with the time saved "outweighed by other non-AI factors" such as meetings, context switching and slow build pipelines, per Goldratt's theory of constraints [15:00-16:18].
+
+The two readings can be placed on one timeline, though no source here measures it end to end:
+
+- **Early, per task (METR, J-curve):** bolting a tool onto an unchanged workflow can make individual tasks slower.
+- **Later, per organisation (DX):** once the dip is past, gains are positive but capped by whatever non-code stage is now the constraint.
+- **What both prescribe:** redesign the work around the tool. The J-curve framing aims that at the developer's workflow; theory of constraints aims it at the slowest stage of the value stream (review, CI, meetings, onboarding).
+
+Treat this as a framing, not a finding. DX's data is vendor-collected, its study window is garbled in the talk, and neither source measures an organisation going through a dip and out of it. If "most organizations are sitting at the bottom of this curve" were true at the time of DX's sample, the median would be negative, and it is not. That cuts against the claim as a statement about the present, while leaving it intact as a description of early adoption. *(Source: [Justin Reock, DX, AI Engineer 2026-09-30](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md); see [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md).)*
 
 ## The Agentic Loop (Self-Referential)
 
@@ -139,6 +152,16 @@ He pairs it with Mario's plea at AI Engineer Europe to slow down, because "compa
 
 These findings are not strictly incompatible with Anthropic's — more output can produce more incidents in absolute terms without any per-unit regression, and neither dataset normalises against the other. But read together they say the adoption story has two axes and the customer-evidence table above only reports one. **Operational implication: track review-comment volume, unreviewed-merge rate, and bugs-per-developer alongside output-volume metrics.** Rising throughput with rising comment volume is a symptom, not a success. *(Source: Dex Horthy, AI Engineer 2026-07-23, citing Faros AI.)*
 
+### A Second Quality-Side Dataset: DX (2026)
+
+DX's platform data (Justin Reock, AI Engineer, published 2026-09-30) measures the same side of the ledger and moves the same way, with different instruments [04:46-08:28]:
+
+- **PR size up from ~44 to ~72 lines on average** — measured, and called "one of the most important metrics" of the year.
+- **Change failure rate much more volatile** — the swings existed before AI, but "the amplitude has changed"; some organisations up to +2 against a ~4% benchmark (unstated whether percentage points).
+- **Change confidence ~−6% and perceived incremental delivery ~−10%** (survey; relative or absolute not stated), while perceived maintainability rose ~4%.
+
+Reock attributes the PR-size growth to verbose model output plus slow pipelines that push developers to batch changes into one PR; that causal chain is his interpretation, not shown in the data. The figures are vendor-collected with the sample per figure often unstated. **Operational implication, consistent with the Faros reading above:** add PR size and change-failure-rate volatility to the review-side dashboard. *(Source: [Justin Reock, DX, AI Engineer 2026-09-30](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md); full metric table on [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md).)*
+
 ## The Jevons Paradox for Software
 
 Historical pattern: every time the cost of computing dropped (mainframes to PCs, PCs to cloud, cloud to serverless), total software production exploded rather than staying flat. AI is dropping the cost of software production by an order of magnitude or more. Massive unmet demand exists (regional hospitals, mid-market manufacturers, family logistics companies). The constraint moves from "can we build it" to "should we build it" — and "should we build it" has always been the harder question.
@@ -181,6 +204,41 @@ Anthropic's 2026 trends report argues against this endpoint via the [Collaborati
 
 The wiki holds all of these framings without choosing. Use Level 5 / Dark Factory as the model for work that specifies cleanly with verifiable holdout sets (StrongDM-shape work). Use the Collaboration Paradox as the model for work where human judgment, taste, or accountability is itself the value.
 
+### How much weight can the METR study carry?
+
+*Surfaced 2026-10-13 during ingest of DX's State of AI in Software Development (Justin Reock).*
+
+This page cites the METR study as the anchor evidence for the J-curve:
+
+> "**The METR study** is the clearest evidence: experienced developers using AI completed tasks 19% slower (randomized control trial), yet believed AI made them 24% faster. Wrong about both direction and magnitude. This is the symptom of an industry at the bottom of a J-curve it hasn't yet recognized."
+> — [Nate B Jones, *5 Levels of AI Coding*](../../summaries/2026-02-18_nate-b-jones_5-levels-of-ai-coding.md)
+
+Justin Reock (DX) cites the same study with a different perceived figure, disputes its weight, and sets a much larger aggregate dataset against it:
+
+> "METR's study of 16 developers: actual productivity ~19% lower, perceived ~20% higher, a ~40-point gap" / "Reock calls the study small and flawed, and notes METR published a follow-up in February saying some signals were imperfect." / "DX's aggregate perception data, by contrast, stays nearly flat (+4.5%)."
+> — [Justin Reock, DX, AI Engineer 2026-09-30](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md) [04:00-04:30], [03:34-03:49]
+
+**On the 24% vs 20% mismatch (unverified):** METR may have reported both: a ~24% speed-up developers *forecast* before the study, and a ~20% speed-up they *estimated* afterwards. If so, both figures are correct for different moments. Neither the forecast/estimate split nor the February follow-up has been checked against METR's primary publications in this wiki.
+
+Neither side is adopted. The 19%-slower result is not disputed; what is disputed is whether a 16-developer study is "the clearest evidence" for an industry-wide J-curve. DX's counter-evidence is vendor-collected survey data (relative or absolute deltas unstated), and Reock's critique of METR is relayed without specifics. What would resolve it: METR's own follow-up, or a second controlled study at larger n.
+
+### How large are the gains from AI coding?
+
+*Surfaced 2026-10-13 during ingest of DX's State of AI in Software Development (Justin Reock).*
+
+The output-volume section above, drawing on Anthropic's report, argues that minutes-saved metrics under-count the gain, and lists a customer at 2x:
+
+> "ROI dashboards that measure minutes saved per task systematically under-count the gain at higher levels."
+> "**CRED** — doubled execution speed by shifting devs to higher-value work, not by removing humans."
+> — [Anthropic, *2026 Agentic Coding Trends Report*](../../summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md)
+
+DX measured an output-side metric (PR throughput) across its customer base and found no organisation at 2x:
+
+> "Median +7.7% PR throughput, mean +13%, top performers around +70% ... 'Nobody hit 2x, nobody hit 5x, nobody hit 10x.'"
+> — [Justin Reock, DX, AI Engineer 2026-09-30](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md) [15:22-15:44]
+
+Both are vendor sources: Anthropic sells the tools whose gains it reports, and DX sells the measurement it recommends. The metrics and populations also differ. CRED's "execution speed" is undefined, the Anthropic examples are selected customer stories rather than a distribution, and DX's study window is garbled in the talk ("November to 2024 to February this year"). The gap between DX's median and mean shows a minority of organisations pulling the average up, so large individual cases and a single-digit median can coexist. Whether they actually do here is not settled. See [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md) for DX's full metric table and caveats.
+
 ## Related Pages
 
 - [Agentic Coding Workflow](../how-tos/agentic-coding-workflow.md) — practical workflow incorporating these maturity levels
@@ -190,3 +248,4 @@ The wiki holds all of these framings without choosing. Use Level 5 / Dark Factor
 - [Agent Enablement](agent-enablement.md) — the organizational scaffolding that moves a team up the ladder, and Debois's dim-factory landing point
 - [AI-Native SDLC](ai-native-sdlc.md) — Anthropic's lifecycle playbook: autonomous up to a human production gate
 - [The Collaboration Paradox](collaboration-paradox.md) — Anthropic's competing framing that "% fully delegated is the wrong yardstick" — see [Unresolved Tensions](#unresolved-tensions) above
+- [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md) — DX's org-level measurement data on throughput, quality and trust

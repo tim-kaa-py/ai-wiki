@@ -6,7 +6,8 @@ pillar: "building"
 tags: [anti-patterns, agents, best-practices, architecture, workflow, cognitive-debt]
 sources:
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
-timestamp: "2026-07-02"
+  - "summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md"
+timestamp: "2026-10-13"
 ---
 
 # Cognitive Debt & Cognitive Surrender
@@ -31,6 +32,12 @@ Buetow's positive claim is that front-loading architecture and "what to build" i
 
 This connects to the psychological difficulty named elsewhere in the wiki. The [Five Levels of AI Coding](five-levels-of-ai-coding.md) framework marks Level 3 ("Developer as Manager") — letting go of reading every line — as the hardest transition. Cognitive debt is what that transition costs if you let go of *understanding* at the same time as you let go of *authorship*; cognitive surrender is letting go of *accountability* too. The healthy version of Level 3+ keeps authorship delegated but understanding and accountability retained.
 
+## A Survey Signal: The Trust Gap (DX)
+
+DX's developer surveys (Justin Reock, AI Engineer 2026-09-30) show a split that bears on this page in both directions. **Change confidence fell ~6%** [06:21-06:37] — developers trust AI output less and fear breaking things — which is consistent with engineers losing their grip on how the system is wired. But **perceived maintainability rose ~4%** [06:07-06:13] across a cited ~200,000 engineers: code feels easier to understand and modify. Reock's summary is that code feels easier to change but less safe to ship.
+
+Two cautions before reading either number as evidence for or against cognitive debt. Both are self-reports, and cognitive debt is precisely the condition in which an engineer's sense of understanding outruns the real thing; and the survey does not say whether the deltas are relative or absolute. Reock links falling confidence to growing PR size (~44 → ~72 lines), which is his interpretation rather than shown. *(Source: [Justin Reock, DX](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md); see [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md).)*
+
 ## How to Apply
 
 1. **Keep the architecture in your head.** Have the AI draw the system diagram periodically; if you can't follow it, that's cognitive debt accruing. Encode illegal edges as [architectural unit tests](code-as-text-structural-tests.md).
@@ -45,3 +52,4 @@ This connects to the psychological difficulty named elsewhere in the wiki. The [
 - [Five Levels of AI Coding](five-levels-of-ai-coding.md) — the maturity ladder whose Level 3 transition cognitive debt taxes
 - [Empathize with the Agent](empathize-with-the-agent.md) — the complementary stance (understand the agent's context, not just delegate to it)
 - [Florian Buetow](../people/florian-buetow.md) — origin of the cognitive-debt / cognitive-surrender framing
+- [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md) — DX's change-confidence and maintainability survey data

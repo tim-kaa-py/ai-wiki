@@ -7,7 +7,8 @@ tags: [sdlc, workflow, governance, hooks, agent-skills, evaluation, enterprise, 
 sources:
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
-timestamp: "2026-10-05"
+  - "summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md"
+timestamp: "2026-10-13"
 ---
 
 # AI-Native SDLC
@@ -28,6 +29,8 @@ The argument for why this is necessary:
 4. Therefore the process around the code needs the same transformation Build already had.
 
 The playbook itself notes that "most organizations sit somewhere between" the traditional and AI-native columns. The first practical move follows from premise 3: measure elapsed time in plan, review and deploy (git timestamps, PR metadata) before adding agent capacity, and target the longest stage.
+
+**An independent, measured datapoint on premise 3** (added 2026-10-13, and the one exception to this page's single-source status). DX's platform data from 400+ organisations (Justin Reock, AI Engineer 2026-09-30) reaches the same conclusion from the outcome side: code generation is an estimated 14-16% of the value stream (figure unsourced), and AI time savings are "outweighed by other non-AI factors" — meetings, context switching, slow build pipelines [15:00-16:08]. It also reports what happens when Build accelerates without the surrounding stages changing: average PR size up from ~44 to ~72 lines, change failure rate more volatile, change confidence down [04:46-08:28]. The data is vendor-collected and the causal explanations are the speaker's interpretation. See [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md). *(Source: [Justin Reock, DX](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md).)*
 
 ## The Artifact Chain
 
@@ -229,3 +232,4 @@ The full 13-row table is in the [summary](../../summaries/2026-08-21_anthropic_t
 - [Five Levels of AI Coding](five-levels-of-ai-coding.md) — the maturity ladder and the dark-factory endpoint this playbook stops short of
 - [Regulated-Enterprise Agent Architecture](regulated-enterprise-agent-architecture.md) — the runtime audit trail, as distinct from the commit-chain one
 - [Claude Code](../tools/claude-code.md) — CLAUDE.md rules of thumb from the Build stage
+- [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md) — measured org-level data on where the constraint sits once Build speeds up

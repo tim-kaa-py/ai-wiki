@@ -87,7 +87,7 @@ Dan Shapiro's five-level framework for AI coding maturity identifies the Level 2
 
 The core blocker: developers cannot let go of reading every line of code. This is the empathy failure at scale — instead of trusting the agent with well-scoped work and evaluating outcomes, they insist on reviewing implementation details. The expert programmers who struggle most (per Steinberger's observation above) are the same population most likely stuck at Level 2.
 
-**The METR study confirms the cost:** developers using AI completed tasks 19% slower but believed they were 24% faster. The gap between perception and reality is a direct consequence of failing to redesign the workflow around agent capabilities — treating the agent as a junior to be supervised line-by-line rather than a team member to be directed and evaluated at a higher level. *(Source: Nate B Jones / Dan Shapiro)*
+**The METR study confirms the cost:** developers using AI completed tasks 19% slower but believed they were 24% faster. The gap between perception and reality is a direct consequence of failing to redesign the workflow around agent capabilities — treating the agent as a junior to be supervised line-by-line rather than a team member to be directed and evaluated at a higher level. *(Source: Nate B Jones / Dan Shapiro)* *(The weight and exact figures of the METR study are contested; see [Five Levels of AI Coding § Unresolved Tensions](five-levels-of-ai-coding.md#how-much-weight-can-the-metr-study-carry).)*
 
 ## Cherny's Independent Convergence: Over-Specification as the Senior-Engineer Failure Mode
 

@@ -7,7 +7,8 @@ tags: [agents, organizational-design, workflow, strategy, devops, best-practices
 sources:
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md"
+timestamp: "2026-10-13"
 ---
 
 # Agent Enablement
@@ -56,6 +57,8 @@ Two ritual changes distinguish the teams Debois considers advanced:
 Prompting → specs → context → harness → loops is a progression, and it does not happen by telling people to go figure it out. The lead supplies the constraint and the directive: *"stop prompting, make the context reusable"* [08:24]. Name the team's current rung and the next one, with a date, as a directive rather than an invitation.
 
 A consequence most teams meet quickly: **the harness has to extend past coding.** If engineering ships faster, go-to-market, users and requirements-gathering become the constraint. Audit which upstream or downstream function is now the bottleneck before adding more throughput to engineering.
+
+DX's platform data (Justin Reock, AI Engineer 2026-09-30) puts a rough number on why: code generation is an estimated **14-16% of the value stream** (unsourced), so time saved there is absorbed by meetings, context switching, slow pipelines and other non-AI friction — Goldratt's theory of constraints [15:00-16:18]. The case studies Reock relays are all of this shape: Morgan Stanley turning legacy code into PRDs, Zapier cutting stand-ups and onboarding time with agents, Spotify feeding runbook context into incident channels (company self-reports, relayed secondhand) [16:21-18:31]. *(Source: [Justin Reock, DX](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md); see [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md).)*
 
 ### Two Metrics That Are Not Productivity
 
@@ -115,6 +118,17 @@ What Debois asks for instead is narrow and specific: the **VP Engineering issues
 
 Faster delivery and better quality are *"hard to prove"* [17:51]. Improvement in agent effectiveness and degree of reuse are showable. Bring turn-reduction curves and reuse counts to the budget conversation instead of attempting a with/without-agent productivity comparison — this is what the two metrics above are *for*. Compare [Five Levels of AI Coding § Productivity as Output Volume](five-levels-of-ai-coding.md#productivity-as-output-volume-not-speed-anthropic-2026), which argues the same measurement point from the output side.
 
+**A competing measurement stance (DX).** Justin Reock (DX, AI Engineer 2026-09-30) recommends the comparison Debois advises against, run in a specific way: "do not invent new AI metrics. Split users into cohorts (for example by AI usage from API telemetry) and compare those cohorts on **foundational metrics you already trust**, such as PR cycle time, PR size and review pushback" [11:14-13:27]. He expects leadership to ask "we spent $10M on tokens, where's our 10x?" and argues that AI-specific numbers do not answer that question.
+
+The two stances answer different questions, and an organisation probably needs both:
+
+| Question | Who asks | Debois's answer | DX's answer |
+|----------|----------|-----------------|-------------|
+| Is our agent system getting better? | Platform / enablement owner | Human touches per correct result; shared-system multiplier | — |
+| Is the AI spend paying off in delivery? | Finance / leadership | Hard to prove; show effectiveness and reuse instead | Cohort comparison on PR cycle time, PR size, review pushback |
+
+They do still disagree on the second row. Debois says a with/without comparison is not worth attempting; DX says it is the right answer if you use existing metrics and cohorts rather than a controlled before/after. Neither reports outcome data on which approach survives a budget review better. DX sells this measurement tooling, which aligns with its recommendation. **How to apply:** report Debois's system metrics to the people improving the harness, and a cohort comparison on existing delivery metrics to the people funding it. Do not substitute one for the other. *(Source: [Justin Reock, DX](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md); see [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md#how-to-measure-cohorts-on-metrics-you-already-trust).)*
+
 ### Hiring: Three Signals, Scored Separately
 
 New job titles carry no signal — *"AI product engineer… agentic engineer, AI engineer — it doesn't mean anything"* [15:22] — because nobody is mature yet, so a posting communicates intent rather than a validated skill bar. Debois's replacement is a three-part interview:
@@ -158,3 +172,4 @@ The talk's motivating premise is that loops and harnesses will *"kind of become 
 - [Cognitive Debt](cognitive-debt.md) — the individual-level risk the education investment is meant to contain
 - [AI-Resistant Evaluation Design](../comparisons/ai-resistant-evaluation-design.md) — designing the hiring exercise the three-signal interview needs
 - [AI-Native SDLC](ai-native-sdlc.md) — Anthropic's play-by-play adoption order and per-play indicators
+- [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md) — DX's org-level data and its cohort-on-trusted-metrics measurement method

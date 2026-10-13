@@ -6,7 +6,8 @@ pillar: "ecosystem"
 tags: [agentic-coding, productivity, collaboration, autonomy, opinion, metrics, anthropic]
 sources:
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
-timestamp: "2026-05-26"
+  - "summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md"
+timestamp: "2026-10-13"
 ---
 
 # The Collaboration Paradox
@@ -58,6 +59,10 @@ This is a real philosophical disagreement with the [Five Levels of AI Coding](fi
 3. **Classify tasks by sniff-checkability.** Tasks where the human can verify output cheaply (compiles, tests pass, visually correct) are candidates for higher delegation. Tasks where verification cost approaches implementation cost stay in tight collaboration.
 4. **Don't conflate "use AI more" with "delegate more."** Heavy use with low delegation is the predicted steady state, not a failure mode.
 
+### A Measurement Method That Fits (DX)
+
+Point 2 above says what to stop measuring; DX's AI Measurement Framework (Justin Reock, AI Engineer 2026-09-30) supplies a concrete way to measure the loop instead. Rather than inventing AI-specific numbers such as usage or acceptance rates, split engineers into cohorts by AI usage and compare the cohorts on foundational metrics you already trust — PR cycle time, PR size, **review pushback** [11:14-13:27]. Review pushback and PR size are loop-quality signals of the kind this page asks for. DX's seniority data also fits the "collaboration, not delegation" reading: staff+ engineers save about the same time as juniors with fewer tokens, which Reock attributes to better judgment about what the model produced [08:50-10:18] (his interpretation). DX sells this measurement tooling. *(Source: [Justin Reock, DX](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md); see [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md).)*
+
 ## Anti-Patterns
 
 - **Treating 0–20% as a number to grow.** The report's argument is that the right ratio depends on the task mix, not on a universal target. Growing it for its own sake means accepting more hand-off depth on work where verification isn't cheap.
@@ -96,6 +101,7 @@ Possible reconciliation: Plan-heavy work is a high-delegation *episode* within a
 ## Sources
 
 - [2026 Agentic Coding Trends Report — Anthropic](../../summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md) — origin of the 60% / 0–20% framing
+- [The State of AI in Software Development — Justin Reock, DX](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md) — cohort-based measurement method and seniority data
 
 ## Related Pages
 
@@ -104,3 +110,4 @@ Possible reconciliation: Plan-heavy work is a high-delegation *episode* within a
 - [Parallel Agent Patterns](parallel-agent-patterns.md) — the 5-minute / long-run framing the collaboration paradox pushes back against
 - [Empathize with the Agent](empathize-with-the-agent.md) — the Level 2→3 barrier Shapiro names is the same population the collaboration paradox describes
 - [Reviewer Agents](reviewer-agents.md) — the operational answer to "how do you scale review quality if review is the new bottleneck"
+- [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md) — DX's cohort method for measuring AI impact on trusted delivery metrics

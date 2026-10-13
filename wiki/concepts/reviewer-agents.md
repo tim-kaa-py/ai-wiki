@@ -16,7 +16,8 @@ sources:
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
   - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md"
+timestamp: "2026-10-13"
 ---
 
 # Reviewer Agents
@@ -148,6 +149,12 @@ Both run **independent verification fleets** — every finding is reproduced by 
 
 The `gh api` JSON severity counts (Code Review) and `claude ultrareview --json` output let you wire either into a CI gate that fails the build on Important findings — Code Review itself completes with `neutral` conclusion and never blocks merge by itself.
 
+## A Lighter Variant: Superficial First-Pass Review (Zapier)
+
+Not every deployment aims to replace the human gate. Zapier, as relayed by Justin Reock (DX, AI Engineer 2026-09-30), runs about **3,000 PR-triggered superficial code reviews per week**, and keeps the results in the PR comments so the human reviewer can see what was already checked before starting [16:21-18:31]. The design goal is to shorten the human's pass, not remove it — closer to the AI-Native SDLC playbook's "mechanical evidence is already attached" stance (see [Unresolved Tensions](#unresolved-tensions) below) than to Lopopolo's merge-path removal. The figure is a company self-report relayed secondhand. *(Source: [Justin Reock, DX](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md).)*
+
+**How to apply:** if a full persona fleet is out of reach, start with a single PR-triggered first-pass reviewer whose output lands in the PR thread, so the human reviewer's attention starts where the agent's stopped.
+
 ## Beyond Code: Reviewer Personas Over Research Output
 
 The same machinery transfers to non-code artifacts, where the "diff" is a set of factual claims rather than a patch. Nate Herk's `storm-research` skill (June 2026) is the clearest worked example: five persona lenses generate research independently, then a separate fleet of roughly six verification agents re-checks the output. Two conventions from it are worth importing into any reviewer-agent harness:
@@ -204,6 +211,8 @@ Both are held without choosing. They are not strictly incompatible — better in
 
 So there are two separable questions: whether a human *approves* each merge (Lopopolo: no; Horthy and the playbook: yes) and whether a human *reads* each diff (Horthy: every line; the playbook: only regulated and critical code; Lopopolo: no). The playbook reports no outcome data, so it is a design stance rather than evidence for either pole. [Plan and Review § Code Review Stays Human](plan-and-review.md#code-review-stays-human) holds Knight-Webb's version of the Horthy position and points here.
 
+**A fourth datapoint (added 2026-10-13).** DX's platform data adds a measured input to the "too many PRs vs too many bad PRs" question without settling it. Across its customer base average **PR size grew from ~44 to ~72 lines** [07:09-07:16] and perceived incremental delivery fell ~10% [08:12-08:28], while median PR throughput rose only ~7.7% [15:22-15:44]. Read one way, this supports Horthy's diagnosis — the review load is growing per PR more than in PR count, so the problem is the shape of the input. Read the other way, larger PRs are exactly what makes synchronous human review the bottleneck Lopopolo routes around. Reock's own causal account (verbose model output plus slow pipelines that push developers to batch changes) is interpretation rather than shown, and the data is vendor-collected. *(Source: [Justin Reock, DX, AI Engineer 2026-09-30](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md).)*
+
 ## Related Pages
 
 - [Harness Engineering](harness-engineering.md) — the parent discipline
@@ -218,3 +227,4 @@ So there are two separable questions: whether a human *approves* each merge (Lop
 - [Parallel Agent Patterns](parallel-agent-patterns.md) — Sandcastle wires the fresh-context reviewer into AFK loops
 - [Matt Pocock](../people/matt-pocock.md) — fresh-context-per-reviewer + inverted model split
 - [AI-Native SDLC](ai-native-sdlc.md) — Anthropic's lifecycle playbook, where AI PR review is the Deploy-stage gate
+- [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md) — DX's PR-size, change-confidence and change-failure-rate data

@@ -257,7 +257,7 @@ Dan Shapiro's 5-level framework provides a concrete vocabulary for assessing whe
 | 4 — Developer as PM | Human writes spec, checks test results; code is a black box | Spec quality becomes everything |
 | 5 — Dark Factory | Specs in, working software out, zero human code involvement | Organizational redesign required |
 
-**The gap between levels is not a tool problem — it's a people and organizational design problem.** The METR study showed developers are 19% slower with AI but believe they're 24% faster. The workflow itself must be redesigned around AI, not patched with AI tools bolted onto existing processes. *(Source: Nate B Jones / Dan Shapiro)*
+**The gap between levels is not a tool problem — it's a people and organizational design problem.** The METR study showed developers are 19% slower with AI but believe they're 24% faster. The workflow itself must be redesigned around AI, not patched with AI tools bolted onto existing processes. *(Source: Nate B Jones / Dan Shapiro)* *(The weight and exact figures of the METR study are contested; see [Five Levels of AI Coding § Unresolved Tensions](../concepts/five-levels-of-ai-coding.md#how-much-weight-can-the-metr-study-carry).)*
 
 See [Five Levels of AI Coding](../concepts/five-levels-of-ai-coding.md) for the full framework analysis.
 

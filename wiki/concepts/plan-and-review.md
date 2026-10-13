@@ -9,7 +9,8 @@ sources:
   - "summaries/2026-01-21_anthropic_agentic-coding-trends-2026.md"
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md"
+timestamp: "2026-10-13"
 ---
 
 # Plan and Review
@@ -23,6 +24,15 @@ This is the conceptual umbrella for several already-named patterns in this wiki 
 > *Coding time per task is shrinking with each model/tooling generation (Copilot → ChatGPT → Cursor → Claude Code). The naive expectation is that the freed time returns as slack. The reality is that the time is displaced, not freed — most of it migrates into planning and reviewing.*
 
 AI is an accelerant — Knight-Webb's rough number is ~20 min returned per 30 min coded. The remaining ~10 min stays in your day; it just shows up as plan + review instead of code. So workflow design is no longer "how do I write code faster" — it is **"which side of plan/review do I spend my time on, per task."**
+
+**A second destination for the freed time (DX).** Org-level data gives a different answer to where the time goes. Justin Reock (DX, AI Engineer 2026-09-30) reports that AI time savings are "outweighed by other non-AI factors": meeting-heavy days, context switching, interruptions, slow build pipelines and friction around the code [15:44-16:08]. Median PR throughput is up only ~7.7% [15:22-15:44].
+
+The two accounts agree that the time does not come back as slack. They differ on where it goes:
+
+- **Knight-Webb:** into *productive* work the job now requires — planning and reviewing.
+- **DX:** largely into *friction* that was already there and now dominates — meetings, interruptions, CI waits — with review listed among the delays.
+
+These can hold at the same time: an individual developer's freed minutes go to plan and review, while the organisation's throughput stays capped by non-code stages no individual controls. The practical difference is that Knight-Webb's account calls for individual workflow design (this page's matrix), and DX's calls for organisational work on the slowest stage (see [Agent Enablement](agent-enablement.md) and [AI-Native SDLC](ai-native-sdlc.md)). Knight-Webb's "most of it" is a personal estimate and DX's figures are vendor-collected, so neither settles the proportion. *(Source: [Justin Reock, DX](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md); see [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md).)*
 
 ## Two Modes
 
@@ -206,6 +216,7 @@ The playbook's planning pipeline itself (`intent.md` → `spec.md` → `plan.md`
 ## Sources
 
 - [Software Engineering Is Becoming Plan and Review — Louis Knight-Webb, Vibe Kanban](../../summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md) — origin of the 5-min/30-min heuristic, the work-type matrix, the time-horizon argument, and the focus-maxing anti-pattern
+- [The State of AI in Software Development — Justin Reock, DX](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md) — org-level data on where freed coding time goes
 
 ## Related Pages
 
@@ -220,3 +231,4 @@ The playbook's planning pipeline itself (`intent.md` → `spec.md` → `plan.md`
 - [The Collaboration Paradox](collaboration-paradox.md) — Anthropic's adjacent framing of where the displaced time goes; partial overlap with the time-displacement argument here
 - [Software Factory](software-factory.md) — Horthy's four-stage planning pipeline in its factory context
 - [AI-Native SDLC](ai-native-sdlc.md) — Anthropic's committed-artifact pipeline (intent.md → spec.md → plan.md) and stage-placed hooks
+- [Measuring AI's Impact on Developer Productivity](ai-developer-productivity.md) — DX's org-level data on where saved coding time goes
