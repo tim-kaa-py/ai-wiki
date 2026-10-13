@@ -78,7 +78,7 @@ When a page absorbs a new summary, add it to `sources:` and update `timestamp`. 
 title: "<title>"
 intent: "<one-line: what running this prompt achieves>"
 prerequisites: ["<tool/access/file needed>"]   # optional, omit if none
-model: "sonnet|opus|haiku"
+model: "sonnet|opus|haiku|fable"
 tags: [tag1, tag2]
 created: "<YYYY-MM-DD>"
 ---

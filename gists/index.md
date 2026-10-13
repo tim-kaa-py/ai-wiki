@@ -2,7 +2,7 @@
 
 Reusable Claude Code prompts. Each gist is self-contained — copy the file (or just the prompt block), paste into a fresh Claude Code session, run.
 
-These are author-authored *artifacts*, not ingested knowledge. They are not summarized or cross-linked into the wiki. See `CLAUDE.md` → "Gists Workflow" for the contract.
+These are author-authored *artifacts*, not ingested knowledge. They are not summarized or cross-linked into the wiki. The `gist` skill (`.claude/skills/gist/SKILL.md`) holds the contract.
 
 | Date | Title | Intent | Model | Tags |
 |------|-------|--------|-------|------|
