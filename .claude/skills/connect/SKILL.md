@@ -40,7 +40,7 @@ Pass 1 both classifies and merges, so until this step its own word is the only c
 
 ## 3. Menu (orchestrator)
 
-No tensions: go to step 5. Otherwise present the menu from `tension-handling.md`, one block per tension, and wait for an answer to each.
+No tensions: go to step 5. Otherwise present the menu from `tension-handling.md` in its exact format, one block per tension, and wait for an answer to each. Tell the user the reply format: one line per tension (`1c 2a 3q`) or `all q`. The recommendation is a hint, not a default; never apply without an answer.
 
 ## 4. Pass 2: apply (sub-agent)
 
