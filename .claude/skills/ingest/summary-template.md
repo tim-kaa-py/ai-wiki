@@ -55,8 +55,9 @@ Write `summaries/<slug>.md` with the summary frontmatter from `.claude/rules/fro
 
 ## Section usage rules
 
-- **Video Structure:** include for YouTube/podcast sources. Omit for articles, papers, repos.
+- **Video Structure:** include for YouTube and podcast sources (for podcasts, title it `Episode Structure`, list only the selected sections, and use `[Early/Mid/Late]` when the transcript has no timestamps). Omit for articles, papers, repos.
 - **Key Concepts:** include when the creator explains or defines terms. Omit if nothing is worth defining separately.
 - **Argument Structures:** include when the creator makes substantive arguments. Omit for purely instructional content.
+- **User Notes:** include when there was a focus interview. Omit for podcasts, where the section choice is the user's input.
 
 Summaries are opinionated: focus on the user's interests (the notes file), not exhaustive coverage.

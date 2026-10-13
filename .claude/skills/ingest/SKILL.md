@@ -1,63 +1,88 @@
 ---
 name: ingest
-description: Ingest a source into the AI wiki. Use whenever the user pastes a URL (YouTube, podcast, arxiv, GitHub repo, docs page, article), drops a file in inbox/ and says "process inbox", or asks to "ingest", "add this", "clip this", "deep dive this". Runs the full pipeline (metadata → extract → save → focus → summarize → confidentiality scan → connect → index → log) in Tier 1 (quick clip) or Tier 2 (deep dive). Podcast episodes have their own skill (podcast-ingest); user-authored prompts are gists (gist skill), not ingests.
+description: Ingests a source into the AI wiki. Use whenever the user pastes a URL to add to the wiki (YouTube, podcast episode on Apple Podcasts, Spotify, RSS or any podcast link, arxiv or PDF, GitHub repo, docs page, article), drops a file in inbox/ and says "process inbox", or asks to "ingest", "add this", "clip this" or "deep dive this". Runs a Tier 1 quick clip or a Tier 2 deep dive through confidentiality scan, connect, index and log; podcast episodes also get transcript discovery and a section menu. Not for URLs meant for a LinkedIn post (linkedin-url-post) or user-authored prompts (gist).
 argument-hint: "<url or 'inbox'> [notes…] [quick|deep dive]"
 ---
 
 # Ingest
 
-Knowledge ingest pipeline for this wiki. Conventions (pillars, source-type table, slug format, tag taxonomy, model routing, guardrails) live in `CLAUDE.md`. Frontmatter schemas live in `.claude/rules/frontmatter.md` — read it before writing any file under `sources/`, `summaries/`, or `wiki/`.
+Knowledge ingest pipeline for this wiki. Conventions (pillars, source-type table, slug format, tag taxonomy, model routing, guardrails) live in `CLAUDE.md`. Frontmatter schemas live in `.claude/rules/frontmatter.md`; read it before writing any file under `sources/`, `summaries/` or `wiki/`.
 
 Supporting files in this skill directory:
 
-- `step0-scan.md` — the Confidentiality Scan: when to run it, the sub-agent prompt, the verdict format, how to handle it.
-- `summary-template.md` — the Tier 2 summary structure and section-usage rules.
+- `step0-scan.md`: the Confidentiality Scan (when to run it, the sub-agent prompt, the verdict, the abort cleanup).
+- `summary-template.md`: the Tier 2 summary structure and section-usage rules.
+- `podcast.md`: podcast episodes only. Metadata, transcript acquisition and the section menu that replace Tier 2 Steps 1, 3, 5 and 6.
 
-The CONNECT step is its own skill (`connect`). Invoke it at the point marked below; never merge contradicting claims yourself.
+## Rules for every run
 
-## Choose the tier
-
-| Input | Tier |
-|-------|------|
-| YouTube, podcast, arxiv/PDF, GitHub repo URL | Tier 2 — Deep Dive |
-| Docs page, article, any other URL, inbox file | Tier 1 — Quick Clip |
-| User says "deep dive" | Tier 2 (override) |
-| User says "quick" or "clip" | Tier 1 (override) |
-
-Podcast URLs: hand off to the `podcast-ingest` skill instead.
-
-Before anything else, **check `index.md` for duplicates** (match on URL or video ID). If already processed, tell the user and ask whether to redo.
+- **Duplicates first.** Before fetching anything, run `grep -rl '<video-id or URL>' sources/ summaries/` (the URL sits in each file's `resource:` frontmatter; `index.md` holds no URLs). For a podcast, also grep the episode title. On a hit, tell the user and ask whether to redo.
+- **Tier.** Take the Default tier column of `CLAUDE.md`'s source-type table; "deep dive", "quick" or "clip" from the user overrides it. Podcast episodes run Tier 2 with `podcast.md`.
+- **Scan before publishing.** This repo is public. Every summary gets the Step 0 scan; non-public sources get it too (`step0-scan.md` says which). If a scan flags, remediate and re-scan before moving on. If the user aborts, follow the abort cleanup in `step0-scan.md`: delete every file this run wrote, so nothing flagged reaches a commit.
+- **CONNECT runs in the main session**, for every tier, including quick clips and instructional sources. Invoke the `connect` skill directly, never inside a sub-agent: it spawns its own Opus sub-agents and needs the main session to put its tension menu to the user. Never merge contradicting claims yourself.
 
 ## Tier 1 — Quick Clip
 
-No interview, no deep analysis. All steps run in the main session; no sub-agents except the Step 0 scan and CONNECT.
+No interview, no deep analysis. Everything runs in the main session except the Step 0 scan sub-agent and CONNECT's own sub-agents.
+
+Copy this checklist into the reply and tick it off:
+
+```text
+Tier 1 progress:
+- [ ] Duplicate check: no hit, or the user said redo
+- [ ] SAVE: sources/<folder>/<slug>.md exists as .md with source frontmatter
+- [ ] SUMMARIZE: summaries/<slug>.md written
+- [ ] SCAN: summary verdict CLEAR (and source CLEAR for inbox files)
+- [ ] CONNECT: report shown, every tension answered
+- [ ] INDEX: summary bullet under the pillar's ### Sources; new wiki pages under ### Wiki Pages
+- [ ] LOG: **Creation** entry under today's heading
+If a scan flags, remediate and return to SCAN. On abort, run the cleanup in step0-scan.md.
+```
 
 ### Entry A: URL paste
 
-1. **DETECT** — source type from the URL pattern (table in `CLAUDE.md`).
-2. **FETCH** — WebFetch the content.
-3. **CLASSIFY** — pillar and tags.
-4. **SLUG** — `YYYY-MM-DD_source-slug_title-slug`.
-5. **SAVE** — verbatim content to `sources/<folder>/<slug>.md` with source frontmatter.
-6. **SUMMARIZE** — `summaries/<slug>.md` with: TL;DR (2-3 sentences), Key Takeaways (numbered, with **How to apply** for actionable items), Notable Commands/Snippets (if any), Related Topics (tags).
-7. **SCAN SUMMARY** — run Step 0 (`step0-scan.md`) on the summary. Resolve flags before continuing.
-8. **CONNECT** — invoke the `connect` skill on the new summary.
-9. **INDEX** — add `* [Title](path) - description` to `index.md` under the pillar heading; description from frontmatter.
-10. **LOG** — append a `**Creation**` entry to `log.md` under today's `## YYYY-MM-DD` heading (newest-first): action, source, type, tier, what was updated.
+1. **DETECT**: source type from the URL pattern (table in `CLAUDE.md`).
+2. **FETCH**: WebFetch the content.
+3. **CLASSIFY**: pillar and tags.
+4. **SLUG**: `YYYY-MM-DD_source-slug_title-slug`.
+5. **SAVE**: verbatim content to `sources/<folder>/<slug>.md` with source frontmatter.
+6. **SUMMARIZE**: `summaries/<slug>.md` with TL;DR (2-3 sentences), Key Takeaways (numbered, with **How to apply** for actionable items), Notable Commands/Snippets (if any), Related Topics (tags).
+7. **SCAN SUMMARY**: run Step 0 (`step0-scan.md`) on the summary.
+8. **CONNECT**: invoke the `connect` skill on the new summary.
+9. **INDEX**: in `index.md`, add `* [Title](summaries/<slug>.md) - description` under the pillar's `### Sources` heading, description from the summary frontmatter. Add each wiki page the CONNECT report lists as created, same bullet format, under that pillar's `### Wiki Pages` heading; connect does not index them itself.
+10. **LOG**: append a `**Creation**` entry to `log.md` under today's `## YYYY-MM-DD` heading (newest-first): action, source, type, tier, what was updated.
 
 ### Entry B: inbox processing
 
 User says "process inbox" or similar.
 
-1. **SCAN** — list `inbox/`.
-2. **For each file:** READ → **Step 0 on the file** (inbox files are non-public by default) → CLASSIFY → SLUG → move to `sources/<folder>/` → SUMMARIZE → **Step 0 on the summary** → CONNECT → INDEX → LOG.
-3. **CLEAN** — delete processed files. `inbox/` must be empty when done.
+1. **LIST**: list `inbox/`.
+2. **For each file:** EXTRACT the text (read a PDF or docx; Markdown and text as is) → **Step 0 on the extracted text** (inbox files are non-public by default) → CLASSIFY → SLUG → SAVE as `sources/<folder>/<slug>.md` with source frontmatter (`extraction_method: pdf-extract` for PDFs, `user-pasted` otherwise) → SUMMARIZE → **Step 0 on the summary** → CONNECT → INDEX → LOG.
+3. **CLEAN**: delete each original whose source file was saved. `inbox/` must be empty when done, except originals left in place by an abort.
 
 ## Tier 2 — Deep Dive
 
-Full extraction plus a one-round interview. Steps 5, 7 and CONNECT run on Opus sub-agents (see Model Routing in `CLAUDE.md`); everything else runs in the main session.
+Full extraction plus a one-round interview. Steps 5 and 7 run on Opus sub-agents (see Model Routing in `CLAUDE.md`); a purely instructional source (feature walkthrough, tutorial) with no argumentative content may run them in the main session instead, and the user can override either way. Everything else runs in the main session, and CONNECT always uses its own Opus sub-agents.
+
+Copy this checklist into the reply and tick it off:
+
+```text
+Tier 2 progress:
+- [ ] 1 Metadata confirmed by the user; duplicate check clean
+- [ ] 2 Slug set; source scan CLEAR if the source is not obviously public
+- [ ] 3 Full text or transcript extracted, extraction_method known
+- [ ] 4 Source saved with frontmatter
+- [ ] 5 Extraction plan (podcast: section choice) confirmed by the user
+- [ ] 6 notes/<slug>.md written
+- [ ] 7 Summary written; summary scan CLEAR
+- [ ] 8 CONNECT report shown, every tension answered
+- [ ] 9 Index (### Sources plus any new ### Wiki Pages) and log entries added
+If a scan flags, remediate and return to that scan. On abort, run the cleanup in step0-scan.md.
+```
 
 ### Step 1 — Metadata
+
+Podcast: see `podcast.md`.
 
 YouTube: check `which yt-dlp` first (suggest install if missing), then
 
@@ -67,13 +92,15 @@ yt-dlp --skip-download --print "%(title)s|||%(channel)s|||%(upload_date)s|||%(id
 
 Paper: title, authors, date, abstract from the PDF or arxiv page. Repo: name, description, primary language, stars, last activity.
 
-**Confirm with the user**: title, author/channel, date, duration/size. Then the duplicate check against `index.md` if not already done.
+**Confirm with the user**: title, author/channel, date, duration/size.
 
 ### Step 2 — Slug
 
 `YYYY-MM-DD_source-slug_title-slug`. If the source is **not obviously public** (user-supplied document rather than a public URL), run Step 0 on the raw material now, before Extract. Public URLs skip the source scan.
 
 ### Step 3 — Extract
+
+Podcast: see `podcast.md`.
 
 YouTube (check `python --version` first):
 
@@ -101,17 +128,19 @@ Paper: read the PDF, extract full text. Repo: analyze README, directory structur
 
 ### Step 5 — Focus & Discovery (Opus sub-agent)
 
-Spawn with `model: "opus"`. Give it the source path, the user's notes (inline or path), and: *"Read the transcript. Map the user's focus points to timestamp ranges. Identify 3-5 notable points not covered by the user's notes. Return the extraction plan."*
+Podcast: the section menu in `podcast.md` replaces this step.
 
-**Mode A — notes provided:** parse notes into focus points → map each to timestamps → find 3-5 uncovered points → present the plan (**Your focus points** with timestamps; **Also in this transcript** with timestamp, one-liner, relevance) → user confirms which discoveries to include (all / letters / none). One interaction.
+Spawn with `model: "opus"`. Give it the source path, the user's notes (inline or path), and: *"Read the source. Map the user's focus points to timestamp ranges (sections for papers and repos). Identify 3-5 notable points not covered by the user's notes. Return the extraction plan."*
 
-**Mode B — URL only:** read the transcript, ask one question: *"What caught your attention? Any specific topics, workflows, or concepts to capture? Anything to exclude?"* Then run Mode A steps 3-5 with the answer as focus points.
+**Mode A — notes provided:** parse notes into focus points → map each to timestamps or sections → find 3-5 uncovered points → present the plan (**Your focus points** with locations; **Also in this source** with location, one-liner, relevance) → user confirms which discoveries to include (all / letters / none). One interaction.
 
-The orchestrator presents the plan to the user for confirmation.
+**Mode B — URL only:** ask one question: *"What caught your attention? Any specific topics, workflows, or concepts to capture? Anything to exclude?"* Then continue as in Mode A with the answer as the focus points.
+
+The main session presents the plan to the user for confirmation.
 
 ### Step 6 — Notes
 
-Save to `notes/<slug>.md`:
+Save to `notes/<slug>.md` (podcast: the notes variant in `podcast.md`):
 
 ```markdown
 # Ingest Notes
@@ -129,16 +158,12 @@ Save to `notes/<slug>.md`:
 
 Spawn with `model: "opus"`. Give it the source path, the notes path, the summary frontmatter (from `.claude/rules/frontmatter.md`), and the template in `summary-template.md`. It writes `summaries/<slug>.md` directly and confirms. Focus on what the **user** found interesting, not a generic overview.
 
-Then **run Step 0 on the summary** (`step0-scan.md`). Resolve flags before CONNECT.
+Then run Step 0 on the summary (`step0-scan.md`).
 
 ### Step 8 — Connect
 
-Invoke the `connect` skill with the new summary path. It detects tensions before merging and returns conflicts for the user's decision; the orchestrator presents the menu and dispatches the writes.
+Invoke the `connect` skill from the main session with the new summary path. It detects tensions before merging and returns conflicts; the main session presents the menu and connect dispatches the writes.
 
 ### Step 9 — Index & Log
 
 Same as Tier 1 steps 9 and 10.
-
-## When to skip Opus
-
-If the source is purely instructional (feature walkthrough, tutorial) with no argumentative content, Steps 5 and 7 can run in the main session. The user can override either way ("use Opus for this one" / "no sub-agent needed").

@@ -16,8 +16,6 @@ This wiki is public. Before publishing anything that is **not obviously public**
 
 **Always run on the generated summary** (after Summarize, before Connect), regardless of whether the source was scanned. Summaries fold in user notes and focus points, which can introduce context the source did not have.
 
-When in doubt, run the scan. The cost is low.
-
 ## How to run
 
 **Model: Sonnet sub-agent** via the Agent tool, `model: "sonnet"`. It scans in isolation and returns a structured verdict.
@@ -62,7 +60,7 @@ Option C: ...
 - **CLEAR:** proceed. No user interaction needed.
 - **FLAGGED:** present the full verdict and options. Wait for the user to choose an option (by letter) or give custom instructions. Do not proceed until every flagged item is resolved.
 - After remediation, re-scan the revised content. Repeat until CLEAR or the user aborts.
-- On abort, stop the workflow. Do not write partial artifacts to `sources/`, `summaries/`, or `gists/`.
+- On abort, stop the workflow and delete every file this run already wrote (for example under `sources/`, `summaries/`, `notes/` or `gists/`), because anything left in the working tree of this public repo reaches the next commit. Leave what the user supplied where it was (an original in `inbox/` stays there) and tell the user what was removed.
 
 ## Manual edits
 
