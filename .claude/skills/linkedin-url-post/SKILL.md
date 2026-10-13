@@ -1,6 +1,6 @@
 ---
 name: linkedin-url-post
-description: Proxy to the author-private LinkedIn module (see docs/private-modules.md). Turn a raw URL (video, podcast, article) straight into a LinkedIn post without wiki ingest. Use when a URL comes with a posting intent: "share this on LinkedIn", "post this", "LI post for <url>". Not for summaries/ paths (that is linkedin-post).
+description: "Turns a raw URL (video, podcast, article) straight into a LinkedIn post, skipping wiki ingest. Use when a URL comes with a posting intent, such as 'share this on LinkedIn', 'post this' or 'LI post for this link'. Not for summaries/ paths (linkedin-post), gists/ paths (linkedin-gist-post) or a plain ingest. Proxy: needs the author-private linkedin/ module."
 ---
 
 # linkedin-url-post (proxy)
@@ -9,9 +9,9 @@ This is a **proxy skill**. The real `linkedin-url-post` skill lives in the autho
 
 ## Guard (run first, no exceptions)
 
-Check whether `linkedin/.claude/skills/linkedin-url-post/SKILL.md` exists at the ai-wiki repo root (the current working directory).
+Check whether `${CLAUDE_SKILL_DIR}/../../../linkedin/.claude/skills/linkedin-url-post/SKILL.md` exists. The path is anchored to this skill's folder (three levels up is the ai-wiki repo root) so the check holds whatever the working directory is; a check relative to the working directory would report the module missing whenever the session started elsewhere.
 
-**If the file does NOT exist:** print exactly the message below and **stop**. Do not attempt the work yourself. Do not fall back to a generic LinkedIn draft.
+**If the file does NOT exist:** print exactly the message below and **stop**. Do not attempt to do any of the work yourself. Do not fall back to a generic LinkedIn draft. Do not improvise. The real workflow carries the author's voice and rules, so a substitute would pass for output it is not.
 
 ```
 The `linkedin-url-post` skill is an author-private extension of this wiki, provided by the
@@ -25,4 +25,4 @@ workflow, contact the author.
 
 ## Dispatch
 
-Read `linkedin/.claude/skills/linkedin-url-post/SKILL.md` and follow it verbatim. All paths in the real skill resolve relative to the ai-wiki repo root (CWD). Do not `cd` into `linkedin/`.
+Read `${CLAUDE_SKILL_DIR}/../../../linkedin/.claude/skills/linkedin-url-post/SKILL.md` and follow it verbatim. Resolve every path in the real skill from the ai-wiki repo root, and do not `cd` into `linkedin/`: the real skill's paths are written relative to the ai-wiki root, so from inside `linkedin/` they would point at the wrong files.
