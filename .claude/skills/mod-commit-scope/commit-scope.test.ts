@@ -29,10 +29,10 @@ function world(on: On, w: World): { toasts: string[] } {
   })
   on('fs.list', () => ({
     value: [
-      { name: SELF, kind: 'file', size: 1, mtimeMs: NOW },
+      { name: SELF, kind: 'file', size: 1, mtimeMs: NOW, isLink: false },
       ...(w.otherSessionAgeMs === undefined
         ? []
-        : [{ name: 'other.jsonl', kind: 'file' as const, size: 1, mtimeMs: NOW - w.otherSessionAgeMs }]),
+        : [{ name: 'other.jsonl', kind: 'file' as const, size: 1, mtimeMs: NOW - w.otherSessionAgeMs, isLink: false }]),
     ],
   }))
   on('ui.toast', ($, e) => {

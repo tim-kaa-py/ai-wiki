@@ -157,7 +157,7 @@ async function after($: EngineInterface, e: ToolCallInput, ran: ToolCallResult):
   if (e.tool === 'Bash') {
     if (METADATA.test(e.command)) {
       const fields = text.split('\n').find(line => line.includes('|||'))?.split('|||')
-      await update($, run, live =>
+      await update($, run, (live): IngestRun | null =>
         live === null
           ? live
           : {

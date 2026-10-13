@@ -16,7 +16,7 @@ function world(on: On, w: World) {
   on('session.cwd', () => ({ value: ROOT }))
   on('fs.exists', ($, e) => ({ value: w.hasModule !== false && (e.path === POSTS || e.path === `${ROOT}/linkedin/CLAUDE.md`) }))
   on('fs.list', () => ({
-    value: Object.keys(w.files).map(name => ({ name, kind: 'file' as const, size: 1, mtimeMs: 0 })),
+    value: Object.keys(w.files).map(name => ({ name, kind: 'file' as const, size: 1, mtimeMs: 0, isLink: false })),
   }))
   on('fs.read', ($, e) => ({ value: w.files[e.path.slice(POSTS.length + 1)] ?? '' }))
   on('fs.write', ($, e) => {
@@ -72,7 +72,7 @@ test('with several drafts it asks for a slug, and a slug picks one', async ($, o
   const seen = world(on, { files: { 'first-post.md': post('draft', 'One'), 'second-post.md': post('draft', 'Two') } })
   expect(await posted($ as never)).toBe('Several drafts are open; name one with /posted <slug>:\n  first-post\n  second-post')
   expect(Object.keys(seen.writes)).toEqual([])
-  expect(await $.command.run({ command: 'posted', args: 'second --no-commit' }).then(r => r.text)).toBe(
+  expect(await $.command.run({ command: 'posted', args: 'second --no-commit' } as never).then(r => r.text)).toBe(
     'Marked second-post as posted. Not committed (--no-commit).',
   )
 })

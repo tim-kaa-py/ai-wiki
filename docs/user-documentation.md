@@ -316,7 +316,7 @@ Five project mods in `.claude/skills/mod-*/` change Claude Code itself, for this
 | `mod-posted` | The `/posted [slug] [--no-commit]` command | After you publish a LinkedIn post. It sets the open draft's `status` to `posted`, deletes its `.txt`, commits only that file in `linkedin/` and pushes (never forced). With several drafts open it asks for a slug; without the private module it says so and changes nothing. |
 
 - **Turn one off:** `claude plugin disable mod-decision-ping@skills-dir`, or use `/plugin`.
-- **After editing a mod:** run `claude plugin validate .claude/skills/<mod>` and `claude plugin test .claude/skills/<mod>`; `/reload-plugins` picks up the change mid-session.
+- **After editing a mod:** run `claude plugin validate .claude/skills/<mod>` and `claude plugin test .claude/skills/<mod>`; `/reload-plugins` picks up the change mid-session. With TypeScript installed (`brew install typescript`), `tsc -p .claude/skills/<mod>` also type-checks it, once a session has loaded the mod and written its API types into `.claude-plugin/types/` (gitignored). The mods run without TypeScript; it only adds the type check.
 - **If a mod seems to do nothing:** start with `claude --debug`; the log names any module that failed to load, and why. The mod API is early access and can change between Claude Code releases.
 - **Public clones load them too.** They act only on this repo's own files; the LinkedIn parts do nothing without the private module.
 

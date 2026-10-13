@@ -9,7 +9,7 @@ const URL = 'https://www.youtube.com/watch?v=VQyYzLJ6xos'
 const SLUG = '2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills'
 const BAND = {
   component: 'AbovePrompt',
-  props: { hasSurvey: false, isWorking: false, maxRows: 3, bodyColumns: 200, scroll: { offset: 0, bodyRows: 3 } },
+  props: { hasSurvey: false, isWorking: false, maxRows: 3, bodyColumns: 200, scroll: { offset: 0, bodyRows: 3 }, view: {} },
 } as const
 
 // Tool results as the session saw them during the RoboNuggets ingest.
