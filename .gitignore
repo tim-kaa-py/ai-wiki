@@ -19,9 +19,10 @@ linkedin/
 # Local secrets — never commit
 .env
 
-# Reports written by the global tech-brief / storm-research skills: keep them out of the public repo
+# Reports written by the global tech-brief / storm-research skills and the daily-ai-briefing skill: keep them out of the public repo
 tech-briefs/
 storm-reports/
+ai-research/
 
 # Type declarations Claude Code writes into a mod it hot-reloads
 .claude/skills/mod-*/.claude-plugin/types/
