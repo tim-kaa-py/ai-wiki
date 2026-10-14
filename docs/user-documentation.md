@@ -88,6 +88,8 @@ Example:
 > Ingest https://youtube.com/watch?v=xyz
 > — wanted to capture: his claim that X, the demo of Y around the middle, any tool names
 
+**From your Obsidian queue.** If you log videos in the Obsidian note "AI Videos" (iCloud-synced vault), say *"ingest from my vault"* or type `/obsidian-videos`. The agent finds the note on its own and lists the entries under `# Ingest next`, numbered, with your remarks and an "already ingested" flag where one applies. The other sections of the note are ignored. Pick the ones you want (`1 3` or `all`, or pass the numbers with the command). Each one runs as a deep dive with its bold label and remarks as your notes, so you skip the focus interview. Once an ingest has finished and been logged, its entry is **deleted from the note**. An aborted ingest leaves the entry where it was. Your remarks end up in the public `notes/` file, so anything beyond questions about the video gets the confidentiality scan first. If the note gets renamed, or you have more than one, set `AI_VIDEOS_NOTE=<path>`. Parsing and deletion are done by `scripts/obsidian-videos.py`; the agent never edits the note by hand.
+
 ### 3. Process inbox
 
 Drop files (PDFs, saved HTML, `.md` notes) into `inbox/`. Then:
@@ -393,6 +395,7 @@ $ claude
 - [`index.md`](../index.md) — browse everything.
 - [`log.md`](../log.md) — chronological ingest history.
 - [`scripts/extract-transcript.py`](../scripts/extract-transcript.py) — YouTube/podcast caption extractor.
+- [`scripts/obsidian-videos.py`](../scripts/obsidian-videos.py) — lists the Obsidian "AI Videos" note's Ingest next queue as JSON and deletes ingested entries (used by `obsidian-videos`).
 - [`scripts/transcribe-audio.py`](../scripts/transcribe-audio.py) — local audio→text fallback (whisper.cpp) for sources with no captions.
 - [`scripts/okf-check.py`](../scripts/okf-check.py) — OKF v0.1 conformance checker; run by the `lint` skill, by the pre-commit hook, and by CI on every push.
 - [`docs/private-modules.md`](private-modules.md) — pattern for author-private extensions mounted inside this repo (some skills may not be available in a public clone).

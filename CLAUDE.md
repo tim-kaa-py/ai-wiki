@@ -24,6 +24,7 @@ Other files: `index.md` (master index; frontmatter `okf_version: "0.1"` only; bo
 |-----------|-------|
 | Pastes a URL, drops a file in `inbox/`, says "ingest" / "process inbox" | `ingest` |
 | Pastes a podcast episode URL | `ingest` (loads its `podcast.md` reference) |
+| Says "ingest from my vault" / "process AI Videos" | `obsidian-videos` (picks from the Obsidian note's Ingest next queue, then runs `ingest`) |
 | Asks a question (no URL) | `query` |
 | Says "save as gist" / `/gist` | `gist` |
 | Says "lint" / "check wiki health" | `lint` |
