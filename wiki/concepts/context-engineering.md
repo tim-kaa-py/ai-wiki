@@ -21,7 +21,8 @@ sources:
   - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
-timestamp: "2026-10-05"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Context Engineering
@@ -199,6 +200,12 @@ Also Jay's own argument, not attributed to the article, and worth separating bec
 Measure it: `wc -c CLAUDE.md` ÷ ~4 for a rough token count, × sessions per week. That is the standing tax on your operating contract.
 
 This is the same shape as two patterns already on the wiki, arrived at independently: Ryan Lopopolo's [AGENTS.md as table of contents, not encyclopedia](harness-engineering.md#harness-as-repo-artifacts-ryan-lopopolo-openai) (~100-line map into a structured `docs/` tree), and the L1/L2/L3 loading model of [Agent Skills](agent-skills.md#progressive-disclosure-three-levels). The router framing is the CLAUDE.md-specific case of a principle the wiki already holds in two other places. *(Source: Tariq via Jay E / RoboNuggets, 2026-08-03 — secondhand)*
+
+### File Names as Load Triggers
+
+A router only works if the agent can tell from a file's name when to open it. Matt Pocock's October 2026 rename is a worked example: his domain-modeling skill used to write `CONTEXT.md` (after "bounded context" in Eric Evans's *Domain-Driven Design*) and now writes `GLOSSARY.md`. His reasons: "Context.md just felt way too vague. It didn't trigger the agent to pull it in at the right moment," users found it confusing, and the file had shrunk until it was "literally just a glossary" [08:41-09:38]. Nothing else about the skill changed — "literally just a file name change" [09:29-09:32] — but it is a breaking change, because many of his skills now expect `GLOSSARY.md` so they can use the project's domain language (his `/pr` skill, for one, points the agent at it).
+
+**How to apply:** name agent-facing files after what they contain (`GLOSSARY.md`, `REVIEW.md`), not after an abstract role (`CONTEXT.md`, `NOTES.md`), so the name itself tells the agent when to read it. If you use Pocock's skills, rename `CONTEXT.md` to `GLOSSARY.md`. *(Source: Matt Pocock, 2026-10-05)*
 
 ### Enforcement Leaves CLAUDE.md: Mods Shape What Claude Sees
 

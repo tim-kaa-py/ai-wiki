@@ -17,7 +17,8 @@ sources:
   - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md"
-timestamp: "2026-10-13"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Reviewer Agents
@@ -212,6 +213,8 @@ Both are held without choosing. They are not strictly incompatible — better in
 So there are two separable questions: whether a human *approves* each merge (Lopopolo: no; Horthy and the playbook: yes) and whether a human *reads* each diff (Horthy: every line; the playbook: only regulated and critical code; Lopopolo: no). The playbook reports no outcome data, so it is a design stance rather than evidence for either pole. [Plan and Review § Code Review Stays Human](plan-and-review.md#code-review-stays-human) holds Knight-Webb's version of the Horthy position and points here.
 
 **A fourth datapoint (added 2026-10-13).** DX's platform data adds a measured input to the "too many PRs vs too many bad PRs" question without settling it. Across its customer base average **PR size grew from ~44 to ~72 lines** [07:09-07:16] and perceived incremental delivery fell ~10% [08:12-08:28], while median PR throughput rose only ~7.7% [15:22-15:44]. Read one way, this supports Horthy's diagnosis — the review load is growing per PR more than in PR count, so the problem is the shape of the input. Read the other way, larger PRs are exactly what makes synchronous human review the bottleneck Lopopolo routes around. Reock's own causal account (verbose model output plus slow pipelines that push developers to batch changes) is interpretation rather than shown, and the data is vendor-collected. *(Source: [Justin Reock, DX, AI Engineer 2026-09-30](../../summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md).)*
+
+**A fifth datapoint (added 2026-10-14).** Matt Pocock adds a per-PR answer to the *reads each diff* question, opposite to Horthy's. Horthy aims for a world where *"it's actually feasible to still read every line of code"* [16:57-17:00]; Pocock's `/pr` skill writes a Merge Danger section (one-way or two-way door, plus blast radius) so the reviewer knows how hard to look, and "if you have a very small blast radius on a two-way door, then, you know, you really don't need to like review that PR very hard" [06:54-07:05]. He still treats the PR as the human bottleneck ("PRs are still the main bottleneck for work getting to main" [05:28-05:40]), so the human stays on the merge path, but review depth is triaged per PR rather than every line. *(Source: [Matt Pocock, *New Skills! v1.3 brings /pr, /implement-spec, and /retro*](../../summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md).)*
 
 ## Related Pages
 

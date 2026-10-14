@@ -10,7 +10,8 @@ sources:
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md"
-timestamp: "2026-10-13"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Plan and Review
@@ -148,6 +149,41 @@ Most current tooling addresses **code generation** well and the other four poorl
 Knight-Webb's position: AI-assisted review is fine; fully unread vibe-coded merges are not, for anyone with money on the line. Lean on AI for pre-review and PR-comment shepherding (job #4), but keep human read-through as a hard gate on production merges. It shares [Reviewer Agents](reviewer-agents.md)' point that a fresh-context reviewer beats self-review, but not Lopopolo's goal of taking synchronous humans off the merge path: Knight-Webb's position is close to Horthy's, and the wiki holds Lopopolo vs. Horthy as an open question in [Reviewer Agents § Unresolved Tensions](reviewer-agents.md#is-the-review-bottleneck-a-throughput-problem-or-a-pr-quality-problem).
 
 Anthropic's AI-native SDLC playbook keeps the hard gate but relaxes the read-through: branch protection still requires a code owner's approval on every PR and "the agent that wrote the code has no way to approve it", while per-line reading "can't keep up once agents write most of the diff" and human review is "reserved for regulated and critical code." Whether an approval informed by agentic findings is the read-through Knight-Webb means is open; the wiki holds that question in one place, [Reviewer Agents § Unresolved Tensions](reviewer-agents.md#is-the-review-bottleneck-a-throughput-problem-or-a-pr-quality-problem). [Source: 2026-08-21_anthropic_the-ai-native-sdlc-playbook]
+
+## PR Bodies Built for the Human Reviewer (Pocock `/pr`)
+
+Matt Pocock (October 2026) starts from the same bottleneck: "PRs are still the main bottleneck for work getting to main" [05:28-05:40]. His response is on the input side of review: a `/pr` skill whose only job is to give the agent a template for the PR body [05:41-05:46]. Verbatim from the [v1.3.1 SKILL.md](https://github.com/mattpocock/skills/blob/v1.3.1/skills/engineering/pr/SKILL.md):
+
+```markdown
+## Summary
+
+<diagram, diff-sketch, or tree>
+
+## Evidence
+
+- **Before:** <screenshot/output/failing test run>
+  **After:** <screenshot/output/passing test run>
+
+## Merge Danger
+
+**Door:** <one-way or two-way>
+
+<optional: description>
+
+**Blast Radius:** <one-word description>
+
+<optional: potential ramifications of merge>
+```
+
+- **Summary** is a visual: pseudocode, call tree, component tree, file tree, Mermaid or diff sketch, picking the smallest view that makes the point. This guidance comes from Dex Horthy's `show-me` skill (HumanLayer), copied in with credit rather than depended on *(SKILL.md / CREDITS.md)*.
+- **Evidence** asks for before and after. Asking for it often makes the agent run an extra test or take a screenshot, which gives runtime proof instead of "that probably works because I've read the code" [05:53-06:22]. The skill ranks screenshots "S-tier" for visual changes and execution output (test results, console output) "A-tier" *(SKILL.md)*.
+- **Merge Danger** names the door: two-way if the PR is easy to revert, one-way if it does something out in the world (deleting data) or is expensive to roll back [06:28-06:53]. **Blast radius** is a one-word description of the knock-on effects plus optional ramifications [06:54-07:05].
+
+The skill also tells the agent to skip preambles and use the domain language from GLOSSARY.md *(SKILL.md)*. It is model-invocable, with a one-line description ("Use when writing a PR body.").
+
+This is the same move as the [AI-Native SDLC playbook's](ai-native-sdlc.md) code owner who "can concentrate on intent and risk because the mechanical evidence is already attached", made concrete as a template, and the Evidence section is the PR-level version of Lopopolo's required PR media in [Reviewer Agents § QA Plans](reviewer-agents.md#qa-plans-as-the-product-reviewers-rubric).
+
+**How to apply:** require a before/after (test output, screenshot, runtime result) in every agent-written PR, and add a door + blast-radius field so the reviewer knows the stakes before reading the diff. Install `/pr` or copy those sections into your own PR skill. *(Source: Matt Pocock, 2026-10-05)*
 
 ## Second Datapoint for the Heuristic, and Four Named Stages (Horthy)
 

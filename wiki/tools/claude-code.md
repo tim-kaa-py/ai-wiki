@@ -43,7 +43,8 @@ sources:
   - "summaries/2026-08-05_ray-amjad_opus-5-is-exhausting-anthropic-reveals-the-fix.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
-timestamp: "2026-10-05"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Claude Code
@@ -268,7 +269,11 @@ Define in `.claude/agents/my-agent.md` with frontmatter controlling name, tools,
 
 Boris Cherny's personal agent set: `build-validator.md`, `code-architect.md`, `code-simplifier.md`, `oncall-guide.md`, `verify-app.md`. Each encodes detailed instructions for a specific task run at a consistent point in the workflow (e.g. code-simplifier runs after Claude finishes, verify-app runs before shipping). *(Source: Boris Cherny, Creator of Claude Code)*
 
-The full configuration surface — `description` as routing key, 4-level model resolution, persistent `memory` field, scoped `mcpServers`, `PreToolUse` validation hooks, fork vs named subagent, the no-nested-subagents rule — is documented separately. See [Claude Code Custom Subagents](../how-tos/claude-code-custom-subagents.md). *(Source: Claude Code Docs — Create custom subagents)*
+The full configuration surface — `description` as routing key, 4-level model resolution, persistent `memory` field, scoped `mcpServers`, `PreToolUse` validation hooks, fork vs named subagent, nested subagents — is documented separately. See [Claude Code Custom Subagents](../how-tos/claude-code-custom-subagents.md). *(Source: Claude Code Docs — Create custom subagents)*
+
+Sub-agents can now spawn their own sub-agents: Matt Pocock (October 2026) says that before, they "were kind of a little bit nerfed whereas now they're actually as powerful as orchestrator agents" [02:44-02:58]. He does not name the version that introduced it. See [Claude Code Custom Subagents § Nested Subagents](../how-tos/claude-code-custom-subagents.md#nested-subagents-subagents-can-now-spawn-subagents). *(Source: Matt Pocock — New Skills! v1.3 brings /pr, /implement-spec, and /retro)*
+
+*Earlier versions of this page listed "the no-nested-subagents rule" (a subagent cannot delegate to another subagent), per Claude Code Docs — Create custom subagents (2026-04-25); superseded by Matt Pocock — New Skills! v1.3 brings /pr, /implement-spec, and /retro (2026-10-05) on 2026-10-14.*
 
 ### Permissions: Three Strategies
 Anthropic's canonical guidance: Claude Code offers **three complementary permission strategies**, not one right answer. Compose them.
@@ -513,8 +518,10 @@ Anthropic's AI-Native SDLC playbook (August 2026) adds a *durable* twin to the r
 - **Start with `/init`, then cut to what a new joiner needs on day one.**
 - **Keep it under a page**, "because Claude reads all of it at the start of a session and anything stale is taking up context for no benefit." A stricter heuristic than the 200-line rule above, pointing the same way.
 - **Check it into git with code-owner approval**, so the instructions the agent works to are reviewable and auditable and every change to them is in git history.
-- **Make CLAUDE.md edits a normal outcome of PR review.** A review finding flagged a second time goes into CLAUDE.md *as part of that review*, not as a later cleanup. A "Things Claude gets wrong" section gives those entries a home.
+- **Make CLAUDE.md edits a normal outcome of PR review.** A review finding flagged a second time goes into CLAUDE.md *as part of that review*, not as a later cleanup. A "Things Claude gets wrong" section gives those entries a home. A rule that must hold every time, not just usually, gets promoted from CLAUDE.md to a hook or other deterministic check: CLAUDE.md is advisory, hooks are deterministic (see [§ Extension Decision Map, item 3](#extension-decision-map-anthropic-official)).
 - **Make verification part of done.** Add a "Verifying your work" block (build, test, lint, each with a pass criterion) and require the output to be pasted; the full block is on [Claude Code Hooks § Lock the Test During a Fix](../how-tos/claude-code-hooks-memory.md#lock-the-test-during-a-fix).
+
+**A stronger version (Matt Pocock, `/retro`, October 2026).** Pocock's v1.3.1 `/retro` skill defaults to the deterministic side of that line: a mechanical coding-standard violation gets a deterministic check (lint rule, pre-commit hook or CI job) rather than a written rule, and a repo with no guardrail at all is itself a finding. Standards that need judgment go to the review agent, which in his framing has the least context pressure. Pocock goes further than Anthropic on what remains: in his view CLAUDE.md/AGENTS.md should hold little beyond navigation pointers. That is his position, not the playbook's, which still gives repeated corrections a home in CLAUDE.md. Read together, the two form a ladder: a repeated correction goes into CLAUDE.md; if it is mechanical and must hold every time, build the check; if it needs judgment, hand it to the reviewer. See [Agent Session Retrospective](../concepts/agent-session-retro.md). *(Source: Matt Pocock — New Skills! v1.3 brings /pr, /implement-spec, and /retro, 2026-10-05; SKILL.md details as reported in the summary)*
 
 Because CLAUDE.md now steers behaviour for a whole team, the playbook regression-tests it: an eval suite runs on any PR touching `CLAUDE.md` or `.claude/**`. See [Agent Evaluation § Evals on the Agent's Configuration](../concepts/agent-evaluation.md#evals-on-the-agents-configuration-anthropics-ai-native-sdlc-playbook). Its proposed indicators: repeated mistakes CLAUDE.md should have caught (leading), and time to first merged PR for new joiners (lagging). *(Source: Anthropic's AI-Native SDLC playbook, 2026-08-21)*
 

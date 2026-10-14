@@ -7,7 +7,8 @@ tags: [auto-research, self-improving-ai, optimization, evals, criteria-design, a
 sources:
   - "summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md"
   - "summaries/2026-04-14_py_rethinking-ai-agents-rise-of-harness-engineering.md"
-timestamp: "2026-04-19"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Auto Research
@@ -89,6 +90,24 @@ The contrast is useful for sizing your own optimization work:
 | Who | Individual developer | Research lab |
 
 See [Meta Harness](meta-harness.md) and [Harness Engineering](harness-engineering.md).
+
+## Unresolved Tensions
+
+### Should a loop that improves CLAUDE.md and agent setup run without a human?
+
+*Surfaced 2026-10-14.*
+
+**Position A — full autonomy is the point.** [Source: `summaries/2026-04-07_ben-ai_karpathys-autoresearch-10x-claude.md` (Ben AI), via [The Loop](#the-loop) and [Applications Beyond Content](#applications-beyond-content)]
+
+> "The key differentiator from manual evals: full autonomy. No human feedback is required between iterations."
+
+> "**CLAUDE.md optimization** — define criteria (e.g., "file routing accuracy to correct folders > 90%") and run the loop against test scenarios"
+
+**Position B — do not automate repo and agent-setup improvement.** [Source: `summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md` (Matt Pocock), [12:56-13:16], on his `/retro` skill]
+
+> "No, you don't want to automate this. Automating this means that the agent will get itself into a loop where it continually finds false positives. It continually tries to fix things and you'll end up in this weird trajectory where it just takes the repo and your agent into a place it shouldn't really go."
+
+**Why this is held rather than merged.** The two loops differ in what judges a change: Auto Research scores each iteration against predefined boolean criteria and test scenarios, while `/retro` reads open-ended sessions for improvements with no fixed metric. That difference may explain the disagreement, but neither source draws it, and both make claims about improving CLAUDE.md. See [Agent Session Retrospective](agent-session-retro.md).
 
 ## Related Pages
 

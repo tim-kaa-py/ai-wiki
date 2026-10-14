@@ -17,7 +17,8 @@ sources:
   - "summaries/2026-08-08_ai-engineer_anthropic-cca-exam-field-guide-agentic-engineering.md"
   - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Parallel Agent Patterns
@@ -209,6 +210,28 @@ This is the same fresh-context-reviewer principle from [Reviewer Agents](reviewe
 - You can afford the merge cost — at high parallelism, merges become a sub-problem of their own.
 
 When you can't, fall back to single-stream Ralph or the lock-file pattern.
+
+### /implement-spec — the Same Pipeline with an Agent Running the Loop (Pocock, v1.3)
+
+**Source: Matt Pocock — skills repo v1.3, October 2026.** Video claims carry timestamps; details marked *(SKILL.md)* come from the [v1.3.1 skill file](https://github.com/mattpocock/skills/blob/v1.3.1/skills/engineering/implement-spec/SKILL.md), not the video.
+
+Sandcastle is code driving agents. `/implement-spec` puts an **orchestrator agent** in that seat: it reads a spec and its tickets, treats them as "a task graph with blocking relationships between them", and keeps a **frontier** of unblocked tickets running in parallel [03:35-03:46]. What makes this possible is **nested sub-agents**: sub-agents can now spawn their own sub-agents, which means that, where they used to be "a little bit nerfed", "now they're actually as powerful as orchestrator agents" [02:44-02:58]. Pocock does not name the harness version; check that yours supports nested spawning before relying on the skill (see [Claude Code Custom Subagents § Nested Subagents](../how-tos/claude-code-custom-subagents.md#nested-subagents-subagents-can-now-spawn-subagents)). The steps *(SKILL.md)*:
+
+1. Read the spec and tickets to build the task graph.
+2. Optionally run an exploration sub-agent that saves notes outside the repo for every later sub-agent.
+3. Create an integration branch; open a draft PR after the first merge if the tracker closes work through PRs.
+4. Hand each ready ticket to an implementer sub-agent, in the background where possible, in its own worktree and branch based on the integration branch, built with the `tdd` skill, merging the integration tip in before reporting done.
+5. Merge each finished ticket into the integration branch with a merger sub-agent.
+6. When a merge moves the frontier, start implementers on the newly unblocked tickets.
+7. When all tickets are done, run the `code-review` skill on the integration branch and fix everything it raises in one implementer sub-agent.
+8. Mark the draft PR ready, or close the tickets the tracker's way and report the branch.
+9. Clean up the worktrees.
+
+Two design choices worth copying *(SKILL.md)*: sub-agents talk through **context pointers** (to the spec, tickets, notes and commits) rather than restating them, and the skill is user-invoked only (`disable-model-invocation: true`). The default single PR per spec is "a basic version" to adapt, for example with stacked PRs [04:41-04:54].
+
+**Where it sits relative to Sandcastle.** Pocock ranks three ways to loop over tickets [01:08-03:23]: a **deterministic script** first (same behaviour every run, cheap, but it takes patience to build and refine), the **sub-agent loop** second ("an agent does the babysitting instead of a human", but not deterministic), the **manual human loop** last ("not really workable"). Read against this page, Sandcastle and Ralph sit on the script rung and `/implement-spec` is the entry point for someone who has no script yet. This matches Anthropic's workflows-vs-agents default in [Agent Orchestration Patterns § Workflows vs Agents](agent-orchestration-patterns.md#workflows-vs-agents): predefined code paths first, model-driven control flow when you can't or haven't yet written them.
+
+**How to apply:** use `/implement-spec` (or your own version) to run whole specs unattended while you have no script; once the flow is stable, move it to a deterministic script. Read the SKILL.md before installing it [03:23-03:30].
 
 ## Pattern 5: Persona Fan-Out with a Verification Fleet (STORM)
 

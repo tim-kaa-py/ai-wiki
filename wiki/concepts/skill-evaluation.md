@@ -7,7 +7,8 @@ tags: [agent-skills, evaluation, agents, best-practices, anti-patterns, workflow
 sources:
   - "summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md"
   - "summaries/2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills.md"
-timestamp: "2026-10-12"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Skill Evaluation
@@ -146,6 +147,8 @@ No-ops usually do not move eval scores. That is exactly the point: they are pure
 If a skill body reads *"Step one, go there. Step two, do this. Step three, do this,"* the workflow is deterministic and should not be a skill at all — write a script and tell the model to run it. Skills should state **goals and constraints**; the model already knows how to edit a config file. Spending model judgment on a procedure with no context-dependent variation pays for judgment you don't need.
 
 This sharpens the existing [Agent Skills § Scripts as Deterministic Tools](agent-skills.md#scripts-as-deterministic-tools) guidance from "move deterministic *steps* into scripts" to "if the whole workflow is deterministic, there is no skill here."
+
+A skill author arrives at the same ranking from the other side. Matt Pocock (October 2026) ships `/implement-spec`, a nine-step orchestration skill, and still ranks it below a deterministic script for looping over tickets: the script "works the same way every time" and costs less, and the skill is what you use until you have the patience to build one [01:08-03:23]. His steps carry judgment (which tickets are unblocked, when to merge, what code review raised), which is what keeps them on the skill side of the line for now. *(Source: Matt Pocock, 2026-10-05)*
 
 ### Vague or essayistic descriptions
 

@@ -8,7 +8,8 @@ sources:
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md"
-timestamp: "2026-10-13"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Agent Enablement
@@ -51,6 +52,8 @@ Two ritual changes distinguish the teams Debois considers advanced:
 | **Planning** | Split the backlog at planning time into sufficiently scoped work that goes straight to agents, versus unscoped work that stays a human conversation |
 
 **How to apply:** add a standing retro question — "what did the agent trip over repeatedly?" — and tag each backlog item as agent-ready or needs-conversation before the sprint, not during it.
+
+Matt Pocock's `/retro` skill (October 2026) is a tool for exactly this question at the individual level: it reads real coding-agent sessions and proposes fixes to the repo and agent setup. His reason for reading sessions matches Debois's: agents push through problems until the feature gets built and do not complain or fix the cause, so another agent has to look back over the sessions to find what they "actually hide from" [10:42-11:16]. See [Agent Session Retrospective](agent-session-retro.md). *(Source: Matt Pocock, 2026-10-05)*
 
 ### The Team Lead Sets the Pace
 

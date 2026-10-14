@@ -20,7 +20,8 @@ sources:
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
   - "summaries/2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills.md"
-timestamp: "2026-10-12"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Agent Skills
@@ -233,6 +234,8 @@ Pairing this with [Claude Code Skills § Skill Authoring Patterns](../how-tos/cl
 
 See [Agentic Coding Workflow § The Pocock Pipeline](../how-tos/agentic-coding-workflow.md#the-pocock-pipeline-grill--prd--kanban--loop) for the end-to-end use.
 
+**v1.3 additions (October 2026).** The kit grew three skills, and their invocation settings follow the side-effects rule in [§ Invocation Control](#invocation-control-claude-code-specifics): `/implement-spec` (creates branches, worktrees and a PR) and `/retro` (proposes changes to the agent setup) are user-invoked only (`disable-model-invocation: true`), while `/pr`, which only writes a PR body, is model-invocable with a one-line description, "Use when writing a PR body." The domain-modeling skill's output file was renamed from `CONTEXT.md` to `GLOSSARY.md`, which breaks any setup that relied on the old name. Pocock's own advice for his kit and anyone else's: read the SKILL.md before you install it [03:23-03:30]. *(Source: Matt Pocock, 2026-10-05; invocation settings from the v1.3.1 skill files)*
+
 ## Command Chain as Owned SDLC (Cole Medin)
 
 Cole Medin's principled-agentic-engineer system (April 2026) is the parallel worked example with a different emphasis: where Pocock owns the **planning stack** as repo-local skills, Cole owns the **whole SDLC** as a chain of repo-local **commands** in `.claude/commands/`. The talk uses commands rather than skills throughout — they predate skills in his workflow — but the conceptual claim ("the AI layer is rules + commands + skills, all in source control with PR review") generalizes to either Claude-Code-era primitive.
@@ -291,6 +294,22 @@ When a skill encodes an organisational policy (security, compliance, brand), it 
 See [AI-Native SDLC § Governance as the Agent Acts](ai-native-sdlc.md#governance-as-the-agent-acts) for where this sits in the playbook. *(Source: Anthropic's AI-Native SDLC playbook, 2026-08-21)*
 
 Jay E (RoboNuggets, October 2026) makes the same move for a skill's internal invariants. His example: "never send an invoice above $10,000 without a person's sign-off." Writing it in capitals works "most of the time"; he calls hooks underused and among the most important rules. The captured transcript ends there, so the conclusion that a hook enforces the rule every time is inferred from his setup, not quoted. **How to apply:** find any "NEVER"/"ALWAYS" in a skill whose violation would be costly and decide whether a `PreToolUse` hook (or a mod) can block the action instead. [Source: 2026-10-05_robonuggets_anthropic-just-revealed-10-new-rules-for-claude-skills]
+
+## Unresolved Tensions
+
+### Should routine dev-workflow skills like PR creation be user-invoked or model-invoked?
+
+*Surfaced 2026-10-14.*
+
+**Position A — user-invoked, to remove the trigger-reliability problem.** [Source: `summaries/2026-07-14_ai-engineer_dont-ship-skills-without-evals.md` (Philipp Schmid), via [§ Model-Triggered vs User-Invoked](#model-triggered-vs-user-invoked)]
+
+> "user-invoked skills are underrated for routine dev workflow — creating a pull request, staging documentation — because explicit invocation removes the trigger-reliability problem entirely."
+
+**Position B — a model-invoked PR skill can trigger reliably.** [Source: `summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md` (Matt Pocock), [07:46-08:03]]
+
+> "It is also one of the most consistently invoked model invoke skills that I've seen. The you you the user don't have to worry about it at all. It seems to just invoke it every single time, at least on Opus 5.5."
+
+**Why this is held rather than merged.** Pocock's evidence is one skill, his own observation, on one model ("at least on Opus 5.5"), and his `/pr` only writes the PR body, a narrower job than Schmid's "creating a pull request". Schmid's point is about the reliability problem in general. Neither settles whether model invocation is reliable enough for routine workflow skills across models.
 
 ## Related Pages
 

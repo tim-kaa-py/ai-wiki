@@ -7,7 +7,8 @@ tags: [context-engineering, dumb-zone, smart-zone, claude-code, workflow, best-p
 sources:
   - "summaries/2026-04-24_ai-engineer_workflow-for-ai-coding-matt-pocock.md"
   - "summaries/2026-09-01_cole-medin_11-tiny-coding-agent-fixes-with-a-stupid-amount-of-payoff.md"
-timestamp: "2026-09-03"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Smart Zone vs Dumb Zone
@@ -62,6 +63,7 @@ Smart-zone discipline is the underlying constraint that shapes the rest of Matt 
 - **Grill-me + PRD eat ~25K tokens of conversation** — and the conversation is the asset, not a side-effect. See [PRD-as-Prompt Pattern](prd-as-prompt.md).
 - **Fresh context for the reviewer** — if the implementer also reviews, the review happens in the dumb zone after the smart zone got burned on implementation. See [Reviewer Agents](reviewer-agents.md).
 - **Sandcastle's per-issue worktrees** isolate each task in its own fresh context so no single agent burns through ~100K. See [Parallel Agent Patterns](parallel-agent-patterns.md).
+- **One ticket per session.** Pocock's October 2026 version of the pipeline splits a spec into tickets that each fit a single coding-agent session, because a whole spec in one session pushes the agent into the dumb zone and can trigger auto-compact. He grants it sometimes works and is getting better, but ticket-by-ticket is "just a lot cleaner" [00:28-01:08]. *(Source: Matt Pocock, 2026-10-05)*
 - **"Closing PRDs after implementation" doctrine** keeps stale destination docs from re-entering future sessions and re-burning context on outdated state. See [PRD-as-Prompt Pattern § Doc Rot](prd-as-prompt.md).
 
 ## A Second Degradation Axis: The Tainted Conversation

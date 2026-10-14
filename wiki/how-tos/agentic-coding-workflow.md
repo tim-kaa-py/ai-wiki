@@ -22,7 +22,8 @@ sources:
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
-timestamp: "2026-08-03"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Agentic Coding Workflow
@@ -464,11 +465,28 @@ The pipeline is a stack of skills in `.claude/skills/`:
 
 The pipeline owns its planning stack as repo-local skills rather than depending on closed planning products. See [Agent Skills](../concepts/agent-skills.md).
 
+### v1.3 Update (October 2026): Spec, Tickets and Three Ways to Loop
+
+Six months on, Pocock describes the same shape in new words: a **spec** says where you are going, and **tickets** break it into chunks that each fit one coding-agent session, because doing a whole spec in one session pushes the agent into the dumb zone and can trigger auto-compact. He grants that this sometimes works and is getting better, but ticket-by-ticket is "just a lot cleaner" [00:28-01:08].
+
+Something has to loop over the tickets. His ranking [01:08-03:23]:
+
+| Loop | Who runs it | His verdict |
+|------|-------------|-------------|
+| Manual | You, acting "like a for loop": implement, wait, clear, next | "Not really workable" |
+| Deterministic script | A script that reads each ticket and runs the implementation (the `once.sh` / `ralph-loop` of Stage 4) | Best for most people: same every run, cheap. Takes patience to set up and refine, so out of reach for beginners |
+| Sub-agent loop (`/implement-spec`) | An orchestrator agent: "an agent does the babysitting instead of a human" | The middle ground, below a script because it is not deterministic; a good way into AFK work |
+
+Details of `/implement-spec` are on [Parallel Agent Patterns § /implement-spec](../concepts/parallel-agent-patterns.md#implement-spec--the-same-pipeline-with-an-agent-running-the-loop-pocock-v13). The same release adds `/pr`, a PR body template with before/after evidence and a merge-danger section ([Plan and Review § PR Bodies Built for the Human Reviewer](../concepts/plan-and-review.md#pr-bodies-built-for-the-human-reviewer-pocock-pr)), and `/retro`, a by-hand review of real sessions that proposes changes to the repo and agent setup ([Agent Session Retrospective](../concepts/agent-session-retro.md)). The domain-modeling skill now writes `GLOSSARY.md` instead of `CONTEXT.md` ([Context Engineering § File Names as Load Triggers](../concepts/context-engineering.md#file-names-as-load-triggers)).
+
+**How to apply:** if you have no loop script yet, run specs through `/implement-spec` (or your own version); once the flow is stable, move it to a deterministic script. Read any skill's SKILL.md before installing it, his included [03:23-03:30]. *(Source: Matt Pocock, 2026-10-05)*
+
 ### Unresolved Tensions
 
 Matt names two open problems in his own pipeline:
 
 - **Review batch size.** Ralph batched commits push toward larger PRs; the keep-PRs-small dictum pushes the other way. Verbatim: "I don't honestly know what the answer to this yet" [0:59:18].
+  - *October 2026:* `/implement-spec` defaults to one PR per spec when the tracker works through PRs, which leans toward larger PRs; Pocock calls it "a basic version" to adapt, for example with stacked PRs [04:41-04:54]. He does not present it as an answer to this question. *(Source: Matt Pocock, 2026-10-05)*
 - **PRD retention.** He recommends closing/deleting PRDs after implementation to avoid doc rot, but the migrations analogy ("are migrations also transient process artifacts?") is unresolved [1:24:40] — Matt: "I don't know… let's talk about it afterwards." Treat the always-delete rule as a working heuristic, not a verified principle.
 
 *(Source: Matt Pocock, AI Engineer 2026)*
@@ -685,6 +703,20 @@ Page-level tensions across sources. (The Pocock pipeline carries [its own two op
 - **Contested:** *method* prescription. Whether "detailed enough to implement without human intervention" licenses step-by-step ordering is exactly what Cherny denies — *"you must do like one, then two, then three, then four"* [15:08-15:14] is his example of the mistake.
 
 **The synthesis that was available and not taken:** "complete about *what* and *done*, minimal about *how*." Buetow's behavioral-tests bridge in principle #9 already does half this work by moving enforcement out of the spec and into the runtime loop. It is recorded here rather than written into the page because the two sources genuinely differ on whether spec detail is an asset to accumulate or a habit to unlearn — and a reader deciding how to write tomorrow's prompt is better served seeing both than seeing a reconciliation that neither author endorsed.
+
+### Do coding-style rules belong in CLAUDE.md or with the reviewer?
+
+*Surfaced 2026-10-14.*
+
+**Position A — style rules that differ from defaults go in CLAUDE.md.** [Source: `summaries/2026-05-06_claude-code-docs_best-practices.md` (Anthropic), via [CLAUDE.md Quality Rules](#claudemd-quality-rules)]
+
+> "| Style rules that differ from defaults | Standard conventions |" (Include / Exclude columns of the CLAUDE.md quality table)
+
+**Position B — the reviewer enforces standards; CLAUDE.md holds navigation.** [Source: `summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md` (Matt Pocock), `/retro` v1.3.1 SKILL.md reference section, as reported in the summary]
+
+> "the review agent, which has the least context pressure, should enforce coding standards, and … CLAUDE.md/AGENTS.md should hold little beyond navigation pointers."
+
+**Why this is held rather than merged.** Anthropic's table treats non-default style as exactly what CLAUDE.md is for; Pocock moves standards out of the always-loaded file into the review agent (and, for mechanical violations, into a deterministic check). Both agree that CLAUDE.md should be pruned hard; they disagree on whether non-default style survives the pruning.
 
 ## Related Pages
 

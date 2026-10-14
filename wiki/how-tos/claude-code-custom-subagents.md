@@ -7,7 +7,8 @@ tags: [claude-code, subagents, agents, configuration, hooks, permissions, mcp, c
 sources:
   - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
-timestamp: "2026-09-15"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # Claude Code Custom Subagents
@@ -143,12 +144,16 @@ Two distinct mechanisms:
 
 Named: *"review this PR"*. Forked: *"draft tests for the parser changes so far."*
 
-## Subagents Cannot Spawn Subagents
+## Nested Subagents: Subagents Can Now Spawn Subagents
 
-A subagent cannot delegate to another subagent. Two workarounds:
+Sub-agents can now spawn their own sub-agents. Matt Pocock (October 2026) says this "has recently gotten possible": before, sub-agents "were kind of a little bit nerfed whereas now they're actually as powerful as orchestrator agents" [02:44-02:58]. He does not name the harness or version that introduced it; his `/implement-spec` skill depends on it, because an orchestrator agent hands each ticket to an implementer sub-agent. Check that your harness version supports nested spawning before relying on an orchestrator skill. See [Parallel Agent Patterns § /implement-spec](../concepts/parallel-agent-patterns.md#implement-spec--the-same-pipeline-with-an-agent-running-the-loop-pocock-v13). *(Source: Matt Pocock — New Skills! v1.3 brings /pr, /implement-spec, and /retro)*
+
+Before this change, a subagent could not delegate to another subagent, and two workarounds applied. They remain useful on harness versions without nested spawning, and when you want the main conversation to keep control of the chain:
 
 1. **Skills** — run in main conversation context, can be invoked from anywhere
 2. **Sequential chaining** — orchestrate the chain from the main conversation
+
+*Earlier versions of this page stated "A subagent cannot delegate to another subagent", per Claude Code Docs — Create custom subagents (2026-04-25); superseded by Matt Pocock — New Skills! v1.3 brings /pr, /implement-spec, and /retro (2026-10-05) on 2026-10-14.*
 
 ## Disabling Specific Subagents
 

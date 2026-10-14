@@ -6,7 +6,8 @@ pillar: "building"
 tags: [agentic-engineering, claude-code, system-evolution, outer-loop, ai-layer, compounding, root-cause-analysis]
 sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
-timestamp: "2026-05-09"
+  - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+timestamp: "2026-10-14"
 ---
 
 # System Evolution (Outer-Loop AI-Layer RCA)
@@ -117,6 +118,23 @@ System Evolution is closest to Garbage Collection Day in spirit — both convert
 ## Sources
 
 - [Cole Medin — Full Guide to Becoming a Principled Agentic Engineer](../../summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md) — origin of the term, the argument, and the self-evolution prompt
+- [Matt Pocock — New Skills! v1.3 brings /pr, /implement-spec, and /retro](../../summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md) — `/retro`, the sampled-cadence counter-position held below
+
+## Unresolved Tensions
+
+### Must the AI-layer improvement pass fire every time, or on a sample?
+
+*Surfaced 2026-10-14.*
+
+**Position A — every time, or the compounding fails.** [Source: `summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md` (Cole Medin), via [Anti-Patterns](#anti-patterns)]
+
+> "**Skipping the outer-loop pass under deadline pressure.** The whole compounding argument depends on the loop firing every time. Skip it once and the practice degrades to "fancier prompting.""
+
+**Position B — run it on a sample, when you have a free moment.** [Source: `summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md` (Matt Pocock), [13:16-13:33], on his `/retro` skill]
+
+> "I recommend you run retro on a sampling of your agent sessions. Every time you've got a free moment and you realize, "Oh, I haven't run retro in a while." Just try getting it to run through your most recent sessions. Maybe a session that has gone wrong…"
+
+**Why this is held rather than merged.** The triggers differ: Medin's pass fires on a shipped defect, while Pocock's `/retro` reads sessions in general, with "a session that has gone wrong" as one candidate. That may make the two cadences compatible, but neither source says so, and they disagree directly on whether skipping the pass is a failure. See [Agent Session Retrospective](agent-session-retro.md).
 
 ## Related Pages
 
