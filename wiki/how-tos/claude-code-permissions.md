@@ -11,7 +11,8 @@ sources:
   - "summaries/2025-10-20_anthropic_claude-code-sandboxing.md"
   - "summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
-timestamp: "2026-10-05"
+  - "summaries/2026-10-14_claude-code-docs_best-practices.md"
+timestamp: "2026-10-14"
 ---
 
 # Claude Code Permissions
@@ -92,6 +93,8 @@ Anthropic's canonical guidance is that Claude Code offers **three complementary 
 
 These compose. Power-user setup: `/permissions` allowlist for routine commands, `--permission-mode auto` for long autonomous runs, `/sandbox` as the outer ring when running unknown scripts.
 
+<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-permissions-three-strategies -->
+
 **Installed mods sit outside all three.** Claude Code [mods](../tools/claude-code-mods.md) (v2.1.287+) run with your permissions, are not sandboxed, and per the official docs can approve tool calls before you are asked, including ones an `ask` rule would have stopped. Permission rules constrain Claude's tool calls, not a mod's own code. Install mods only from trusted marketplaces, check them with `claude plugin validate`, and use `--safe-mode`, `"disableAllHooks": true` or (for organisations) `allowManagedModsOnly` to switch them off. *(Source: Ray Amjad, 2026-09-04, read against the official mods docs)*
 
 ### Auto Mode (`--permission-mode auto`)
@@ -100,6 +103,8 @@ A two-stage classifier replaces permission fatigue: server-side prompt-injection
 
 Published metrics: **0.4% false positive, 17% false negative**. Much safer than `--dangerously-skip-permissions`, but the 17% miss rate means it is **not** a substitute for human review on prod or security-critical systems. Escalation halt: after 3 consecutive or 20 total denials, the agent stops.
 
+<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-permissions-denial-halt -->
+
 See [Claude Code Auto Mode](claude-code-auto-mode.md) for the full how-to.
 
 ### Sandbox (`/sandbox`)
@@ -107,6 +112,18 @@ See [Claude Code Auto Mode](claude-code-auto-mode.md) for the full how-to.
 OS-level isolation — bubblewrap on Linux, seatbelt on macOS — restricting filesystem and network access. Catches spawned subprocesses (application-level permissioning does not). Internal testing: **-84% permission prompts**. The right choice for scripted / unattended runs and running unknown code.
 
 See [Claude Code Sandboxing](claude-code-sandboxing.md) for the full how-to.
+
+### `dontAsk` for Unattended Scripted Runs
+
+`--permission-mode dontAsk` "denies anything else that would need approval", that is, anything not already pre-approved. Paired with `--allowedTools` in a `claude -p` fan-out loop, it turns the allowlist into a hard boundary for runs nobody is watching:
+
+```bash
+claude -p "Migrate $file from Python 2 to Python 3. Return OK or FAIL." \
+  --allowedTools "Edit,Bash(git commit *)" \
+  --permission-mode dontAsk
+```
+
+*(Source: Claude Code Docs — Best practices, October 2026)*
 
 ## Scoping Skill Invocation
 

@@ -23,7 +23,8 @@ sources:
   - "summaries/2026-06-10_beyond-coding_engineers-solving-code-review-bottlenecks.md"
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
-timestamp: "2026-10-14"
+  - "summaries/2026-10-14_claude-code-docs_best-practices.md"
+timestamp: "2026-10-15"
 ---
 
 # Agentic Coding Workflow
@@ -322,7 +323,9 @@ Use plan mode (read-only tools only) for exploration. **`Ctrl+G`** opens the pla
 | Test runners | Frequently-changing info |
 | Repo etiquette | Reference material that loads-when-needed |
 
-Add **"IMPORTANT"** or **"YOU MUST"** for high-adherence rules. Run `/init` to generate a starter. **Prune aggressively** — every line that doesn't change behavior wastes context.
+Updated October 2026: if Claude keeps skipping one instruction, add emphasis such as "IMPORTANT" to that line alone. If you emphasize many lines, none of them stands out. *(Source: Claude Code Docs — Best practices, October 2026)* Run `/init` to generate a starter. **Prune aggressively** — every line that doesn't change behavior wastes context.
+
+*Earlier versions of this page stated 'Add **"IMPORTANT"** or **"YOU MUST"** for high-adherence rules', per Claude Code Docs — Best practices (2026-05-06); superseded by Claude Code Docs — Best practices (2026-10-14) on 2026-10-15.*
 
 ### Course-Correct Early, Not Late
 
@@ -381,6 +384,77 @@ claude --continue            # resume most recent session
 claude --resume              # pick from session list
 claude -p "prompt" --output-format json   # one-off with structured output
 ```
+
+## Anthropic's Best Practices: October 2026 Additions
+
+The same Best Practices page, re-read on 2026-10-14, keeps the root constraint (context fills fast, performance degrades as it fills) and adds the practices below. Each is additive to the May section above; where the October page says something the May section contradicts, that is held for a decision rather than merged here. *(Source: Claude Code Docs — Best practices, October 2026)*
+
+### Verification as a Ladder of Gates
+
+The October page frames verification by what it buys you: a check Claude can run is "the difference between a session you watch and one you walk away from." The mechanism: "Claude stops when the work looks done." Without a runnable check, "you become the verification loop." Once the check exists, "decide how hard it gates the stop":
+
+| Gate | Mechanism | When to pick it |
+|------|-----------|-----------------|
+| In one prompt | Ask Claude to run the check and iterate in the same message | Supervised work; "works on any task today" |
+| Across a session | A `/goal` condition: "A separate evaluator re-checks it after every turn and Claude keeps working until the goal resolves" | A session-long condition you will walk away from |
+| As a deterministic gate | A Stop hook "runs your check as a script and blocks the turn from ending until it passes" | The check must pass before the turn can end |
+| By a second opinion | A verification subagent or dynamic workflow has "a fresh model try to refute the result, so the agent doing the work isn't the one grading it" | The worker should not grade itself |
+
+"Each step trades setup for attention." Two companion habits:
+
+- **Ask for evidence, not assertions.** "Have Claude show evidence rather than asserting success: the test output, the command it ran and what it returned, or a screenshot of the result." Reviewing evidence is faster than re-running the check, and it works for sessions you were not watching.
+- **Run `/verify` yourself** after Claude's check passes, to confirm the change against the running app.
+
+### Add an Adversarial Review Step
+
+"Before treating a task as done, have a subagent review the diff in a fresh context and report gaps." The reviewer "sees only the diff and the criteria you give it, not the reasoning that produced the change." The longer the unattended run, "the more an independent check matters." This extends the [Writer / Reviewer Pattern](#writer--reviewer-pattern) above from a second session to a subagent, so the implementing session receives the gaps directly and can fix and re-review without you copying findings between windows.
+
+- **For correctness:** run the bundled `/code-review` skill, which reviews the current diff for bugs in a fresh subagent.
+- **For conformance to a plan:** write the prompt yourself, naming the work, the plan, and what counts as a finding:
+
+```text
+Use a subagent to review the rate limiter diff against PLAN.md. Check that
+every requirement is implemented, the listed edge cases have tests, and
+nothing outside the task's scope changed. Report gaps, not style preferences.
+```
+
+**Anti-pattern: chasing every finding.** "A reviewer prompted to find gaps will usually report some, even when the work is sound." Chasing them all "leads to over-engineering: extra abstraction layers, defensive code, and tests for cases that can't happen." Fix: tell the reviewer "to flag only gaps that affect correctness or the stated requirements, and treat the rest as optional." See [Reviewer Agents](../concepts/reviewer-agents.md) for how this sits next to coverage-first reviewer prompting.
+
+### CLAUDE.md: Test, Route, Delete or Hook
+
+- **Per-line test:** *"Would removing this cause Claude to make mistakes?"* If not, cut it.
+- **Confirm it loaded:** "Run `/context` to confirm Claude loaded the file."
+- **Let Claude propose cuts:** "run `/doctor` and Claude proposes cuts for content it can derive from the codebase."
+- **Route the occasional to skills:** "For domain knowledge or workflows that are only relevant sometimes, use skills instead."
+- **Over-specified CLAUDE.md, sharpened fix:** "If Claude already does something correctly without the instruction, delete it or convert it to a hook." In practice, sort each line three ways: Claude gets it wrong without it (keep), Claude already does it (delete), it must happen every time (move to a hook).
+
+### Interview, Then Execute in a Fresh Session
+
+For larger features, have Claude interview you (via the `AskUserQuestion` tool) and write a spec to `SPEC.md`. Then "start a fresh session to execute it": the new session has clean context focused on implementation. Good specs "name the files and interfaces involved, state what is out of scope, and end with an end-to-end verification step that proves the feature works." The same shape as [Stage 1 — Grill-Me](#stage-1--grill-me-interview-not-plan) below: in both, the interviewing session writes the spec, and execution starts from clean context.
+
+### Rewind: Partial Compaction and Its Limits
+
+- `/rewind` (or `Esc Esc`) can now "summarize from a selected message": **Summarize from here** condenses from that point forward, keeping earlier context; **Summarize up to here** condenses earlier messages, keeping recent ones in full.
+- **Rewind is not git.** "Checkpoints only track changes made through Claude's file editing tools. Changes made through Bash commands or external processes are not captured. This isn't a replacement for git." A `sed`, a code generator or a `git checkout` run through Bash is not undone by `/rewind`. Commit before letting Claude try something risky that involves shell commands.
+
+### Fan-Out, October Version
+
+- **`/batch <instruction>`** has Claude "split the change across 5 to 30 subagents. Each subagent works in its own worktree."
+- **Scripted loop with a hard boundary:** `--permission-mode dontAsk` "denies anything else that would need approval, which matters when you're running unattended." The page's example now migrates Python 2 to Python 3 and returns a machine-readable result:
+
+```bash
+for file in $(cat files.txt); do
+  claude -p "Migrate $file from Python 2 to Python 3. Return OK or FAIL." \
+    --allowedTools "Edit,Bash(git commit *)" \
+    --permission-mode dontAsk
+done
+```
+
+- **Non-interactive runs persist by default:** "The run still creates a resumable session unless you pass `--no-session-persistence`." For streaming output, `--output-format stream-json --verbose`.
+
+### More Parallel-Session Options
+
+Beyond worktrees and the Writer/Reviewer split, the page lists **cross-session messaging** ("let the sessions you run yourself pass findings to each other"), **agent view** ("research preview. Run `claude agents` to dispatch sessions that keep running in the background and watch them from one screen") and [agent teams](claude-code-agent-teams.md) ("experimental and disabled by default").
 
 ## The Pocock Pipeline (Grill → PRD → Kanban → Loop)
 

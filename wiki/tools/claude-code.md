@@ -44,7 +44,8 @@ sources:
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
   - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
-timestamp: "2026-10-14"
+  - "summaries/2026-10-14_claude-code-docs_best-practices.md"
+timestamp: "2026-10-15"
 ---
 
 # Claude Code
@@ -98,7 +99,11 @@ The MEMORY.md index loads every session and is capped at **200 lines / 25KB**. D
 | `Esc Esc` / `/rewind` | Restore previous conversation + code state (snapshot per file edit) |
 | `Shift+Tab` | Cycle permission modes (default → auto-accept → plan) |
 
-Checkpoints enable safe experimentation — every file edit is snapshotted before execution. Work boldly; the safety net means you can undo anything Claude does.
+<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-shift-tab-mode-cycle -->
+
+Checkpoints enable safe experimentation — every file edit is snapshotted before execution. Updated October 2026: "Every prompt you send that starts a turn creates a checkpoint." The net has limits: "Checkpoints only track changes made through Claude's file editing tools. Changes made through Bash commands or external processes are not captured. This isn't a replacement for git." *(Source: Claude Code Docs — Best practices, October 2026)*
+
+*Earlier versions of this page stated "Work boldly; the safety net means you can undo anything Claude does", per Claude Code Docs — How Claude Code works (2026-05-06); superseded by Claude Code Docs — Best practices (2026-10-14) on 2026-10-15.*
 
 ## Context Window Token Budget
 
@@ -260,6 +265,10 @@ Say **"use a workflow"** — no syntax. Claude starts a VM inside a Bun sandbox 
 | `--worktree` / `-w` | Isolated git checkout per session — multiple agents, no file conflicts |
 | `/batch` | Fan out large changes to parallel worktree agents, each opens a PR |
 | `--add-dir` | Access multiple directories/repos in one session |
+| Cross-session messaging | Sessions you run yourself pass findings to each other |
+| `claude agents` (agent view) | Research preview: dispatch sessions that keep running in the background and watch them from one screen |
+
+Per the October 2026 Best Practices page, `/batch <instruction>` splits the change "across 5 to 30 subagents. Each subagent works in its own worktree." The same page qualifies [agent teams](../how-tos/claude-code-agent-teams.md) as "experimental and disabled by default." *(Source: Claude Code Docs — Best practices, October 2026)*
 
 ### Plan Mode
 Press **Shift+Tab twice** to enter Plan mode. Boris Cherny starts almost every session here — write a full blueprint before execution. Claude can often one-shot complex tasks when given a solid plan upfront. *(Source: Boris Cherny, Creator of Claude Code)*
@@ -276,6 +285,9 @@ Sub-agents can now spawn their own sub-agents: Matt Pocock (October 2026) says t
 *Earlier versions of this page listed "the no-nested-subagents rule" (a subagent cannot delegate to another subagent), per Claude Code Docs — Create custom subagents (2026-04-25); superseded by Matt Pocock — New Skills! v1.3 brings /pr, /implement-spec, and /retro (2026-10-05) on 2026-10-14.*
 
 ### Permissions: Three Strategies
+
+<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-three-permission-strategies -->
+
 Anthropic's canonical guidance: Claude Code offers **three complementary permission strategies**, not one right answer. Compose them.
 
 | Strategy | Command | When to use |
@@ -287,6 +299,8 @@ Anthropic's canonical guidance: Claude Code offers **three complementary permiss
 **Never use `--dangerously-skip-permissions`** — it is a blanket bypass with no granularity. All three strategies above are safer.
 
 **Auto mode** uses a two-stage classifier (prompt-injection detector on inputs, transcript classifier on outputs). Classifier strips assistant narrative so the agent can't rationalize bad calls. Three approval tiers (safe-tool allowlist, in-project file ops, high-risk review). Metrics: **0.4% FP / 17% FN**. Escalation halt after 3 consecutive or 20 total denials. Safer than skip-permissions, **not** a substitute for human review on prod.
+
+<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-denial-halt -->
 
 **Sandbox** (`/sandbox`) uses bubblewrap on Linux, seatbelt on macOS. Restricts filesystem + network — and catches spawned subprocesses, which application-level permissioning can't. Internal testing: **-84% permission prompts**. Claude Code on the Web extends this to cloud VMs with credentials held in a separate proxy (Claude never touches signing keys).
 
@@ -307,6 +321,8 @@ Claude Code can use MCP servers to interact with external services (Slack, BigQu
 ```
 
 *(Source: Boris Cherny, Creator of Claude Code)*
+
+From the command line, `claude mcp add` connects a server by name and URL or command, e.g. `claude mcp add --transport http notion https://mcp.notion.com/mcp`. For typed languages, the October 2026 Best Practices page also recommends installing a **code intelligence plugin** (browse with `/plugin`) "to give Claude precise symbol navigation and automatic error detection after edits." *(Source: Claude Code Docs — Best practices, October 2026)*
 
 ### Parallel Sessions
 Boris Cherny runs 5-10 Claudes in parallel — `claude.ai/code` tabs alongside local terminal sessions. Hand off reviews or kick off background work while continuing in the terminal. Use `/compact` to manage context across sessions. *(Source: Boris Cherny, Creator of Claude Code)*
@@ -505,6 +521,8 @@ For every line in CLAUDE.md, ask: **"Would removing this make Claude wrong?"** I
 
 CLAUDE.md is *advisory*. Hooks are *deterministic*. Don't put things in CLAUDE.md that need to happen reliably.
 
+The October 2026 version of the page turns this into a pruning rule for the over-specified CLAUDE.md: "If Claude already does something correctly without the instruction, delete it or convert it to a hook." Two commands support the audit: "Run `/context` to confirm Claude loaded the file," and "run `/doctor` and Claude proposes cuts for content it can derive from the codebase" (the CLAUDE.md-thinning check in [§ `/doctor`](#doctor--setup-health-check)). *(Source: Claude Code Docs — Best practices, October 2026)*
+
 **The router framing (2026).** Reported Anthropic guidance for the Claude 5 generation goes further than "prune": CLAUDE.md "becomes more powerful if you make it function as a router to your tree of files" rather than a central repository of every practice. Split by *when* content is needed, not by topic — everything needed on every turn stays, everything else moves to a domain file with one routing line pointing at it. See [Context Engineering § CLAUDE.md as Router, Not Repository](../concepts/context-engineering.md#claudemd-as-router-not-repository) for the sub-router pattern and the per-session token-cost argument. *(Source: Tariq via Jay E / RoboNuggets — secondhand)*
 
 ### The After-2-Corrections Rule
@@ -537,9 +555,15 @@ done
 
 **Test on 2-3 inputs before fanning out** to catch prompt issues cheaply.
 
+For an unattended loop, the October 2026 page adds `--permission-mode dontAsk`, which "denies anything else that would need approval", so `--allowedTools` becomes a hard boundary rather than a set of pre-approvals with prompts behind them. The built-in alternative is `/batch <instruction>` (5 to 30 subagents, one worktree each). Note that `claude -p` "still creates a resumable session unless you pass `--no-session-persistence`." *(Source: Claude Code Docs — Best practices, October 2026)*
+
 ### Writer / Reviewer Pattern
 
 Fresh-context reviewer beats self-review. After the writer Claude finishes, spawn a reviewer Claude with a clean context and the output. The writer can't see its own blind spots; a fresh context can.
+
+### Adversarial Review Step and the Verification Ladder (October 2026)
+
+The October 2026 page adds a named step: "Before treating a task as done, have a subagent review the diff in a fresh context and report gaps." Use the bundled `/code-review` skill for correctness, or write a review prompt naming the work, the plan and what counts as a finding. Restrain the reviewer: one "prompted to find gaps will usually report some, even when the work is sound," so flag "only gaps that affect correctness or the stated requirements." It also grades verification into four gates (one prompt, a `/goal` condition, a Stop hook, a second-opinion subagent or dynamic workflow), adds `/verify` for checking the running app yourself, and asks Claude to "show evidence rather than asserting success." Full treatment: [Agentic Coding Workflow § October 2026 Additions](../how-tos/agentic-coding-workflow.md#anthropics-best-practices-october-2026-additions). *(Source: Claude Code Docs — Best practices, October 2026)*
 
 ### Subagents for Investigation
 

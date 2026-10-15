@@ -18,6 +18,7 @@ sources:
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-30_ai-engineer_state-of-ai-in-software-development-data-from-400-orgs.md"
   - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
+  - "summaries/2026-10-14_claude-code-docs_best-practices.md"
 timestamp: "2026-10-14"
 ---
 
@@ -186,6 +187,14 @@ This page already resists perfectionism at the reviewer boundary — [Non-Blocki
 **The trigger to watch for** is a resource one, not a quality one: leftover tokens before a rate-limit reset, and the impulse to spend them on "go iterate on this a ton and make it perfect" [15:59].
 
 **How to apply:** treat "one more pass" as a decision requiring a reason, keep intermediate versions so you can walk back to a better one, and note that this makes the [Non-Blocking by Design](#non-blocking-by-design) stance load-bearing rather than merely polite — an always-blocking reviewer is a machine for manufacturing exactly this over-revision. *(Source: Cole Medin, 2026-09-01)*
+
+## Anthropic's Adversarial Review Step (Best Practices, October 2026)
+
+Anthropic's Claude Code Best Practices page now names the single-session form of this pattern: "Before treating a task as done, have a subagent review the diff in a fresh context and report gaps." The justification is the fresh-context one above: the reviewer "sees only the diff and the criteria you give it, not the reasoning that produced the change." Because it runs as a subagent, the implementing session receives the gaps directly and can fix and re-review without a human relaying findings. Two ways to run it: the bundled `/code-review` skill for correctness, or a hand-written prompt that names the work, the plan to check it against, and what counts as a finding ("Report gaps, not style preferences").
+
+The page also names the reviewer-side cause of [over-revision](#over-revision-iteration-has-a-peak): "A reviewer prompted to find gaps will usually report some, even when the work is sound, because that is what it was asked to do. Chasing every finding leads to over-engineering: extra abstraction layers, defensive code, and tests for cases that can't happen." Its fix is to "flag only gaps that affect correctness or the stated requirements, and treat the rest as optional."
+
+**Where this sits next to [Coverage-First Prompting](#coverage-first-prompting-on-opus-47).** That section puts conservatism in a separate filter stage and tells the *finding* stage to report everything. Anthropic's review step has no filter stage between the reviewer and the implementer, which is the one-pass case that section already covers with a concrete bar ("only omit pure style or naming preferences"). In a pipeline with a downstream ranking or verification stage, coverage-first still applies to the finder. *(Source: Claude Code Docs — Best practices, October 2026)*
 
 ## Unresolved Tensions
 

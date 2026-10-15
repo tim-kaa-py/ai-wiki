@@ -32,6 +32,8 @@ See [Claude Code](../tools/claude-code.md#prompting-for-claude-46-and-47) for mo
 
 Use `claude agents` to list everything currently configured. Use `/agents` for guided creation inside a session.
 
+<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-custom-subagents-claude-agents-command -->
+
 ## Minimal Subagent File
 
 ```markdown

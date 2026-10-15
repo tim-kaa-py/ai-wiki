@@ -15,6 +15,8 @@ timestamp: "2026-05-08"
 
 Auto mode is Anthropic's third permission strategy for Claude Code — a safer alternative to `--dangerously-skip-permissions` that replaces permission fatigue with a two-stage classifier.
 
+<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-auto-mode-default-framing -->
+
 ## When to Use
 
 Auto mode is the right default when:
@@ -45,6 +47,8 @@ Auto mode layers two classifiers around every tool call:
 ### Escalation & Halts
 
 After **3 consecutive** or **20 total** denials, the agent halts. This prevents a stuck agent from repeatedly probing the guard.
+
+<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-auto-mode-denial-halt -->
 
 ## Starting Auto Mode
 
