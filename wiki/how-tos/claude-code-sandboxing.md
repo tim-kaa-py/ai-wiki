@@ -9,7 +9,8 @@ sources:
   - "summaries/2025-04-18_anthropic_claude-code-best-practices.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
-timestamp: "2026-10-05"
+  - "summaries/2026-10-15_claude-code-docs_permission-modes.md"
+timestamp: "2026-10-15"
 ---
 
 # Claude Code Sandboxing
@@ -57,13 +58,15 @@ For scripted runs of Claude Code, `/sandbox` is the correct tool. `--dangerously
 
 Anthropic **open-sourced the sandboxing code on GitHub** — useful as a reference implementation for any agent framework needing OS-level isolation.
 
-## Layering With Other Permission Strategies
+## Layering With Permission Modes and Rules
 
-The three permission strategies compose:
+The sandbox is one of three layers that combine (see [Claude Code Permissions § Three Layers](claude-code-permissions.md#three-layers-mode-rules-sandbox)): "Permission modes decide whether Claude asks before an action, and the Bash sandbox and outer isolation boundaries decide what an action can reach once it runs." *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
 
-- `/permissions` for the allowlist of routine safe commands
-- `--permission-mode auto` for the classifier layer (see [Auto Mode](claude-code-auto-mode.md))
+- The permission mode as the baseline: auto mode, the built-in starting mode from v2.1.283, for the classifier layer (see [Auto Mode](claude-code-auto-mode.md)), or Manual to approve actions yourself
+- `/permissions` rules on top, to pre-approve or block specific tools
 - `/sandbox` for OS-level isolation as the outermost ring
+
+*Earlier versions of this page stated "The three permission strategies compose", listing `--permission-mode auto` as one of them, per Anthropic Engineering — Claude Code: Best practices for agentic coding (2025-04-18); superseded by Claude Code Docs — Choose a permission mode (2026-10-15) on 2026-10-15.*
 
 ## Managed Settings: Closing the Gaps Permissions Leave
 

@@ -7,7 +7,7 @@ tags: [anti-patterns, agentic-coding-workflow, parallel-agents, claude-code, wor
 sources:
   - "summaries/2026-05-02_louis-knight-webb_software-engineering-becoming-plan-and-review.md"
   - "summaries/2026-05-20_claude_stop-babysitting-your-agents.md"
-timestamp: "2026-05-27"
+timestamp: "2026-10-15"
 ---
 
 # Focus Maxing (Anti-Pattern)
@@ -79,7 +79,7 @@ Both implement the fix this page prescribes — let agents run long and yield cl
 
 - [Plan and Review](plan-and-review.md) — the broader frame; focus maxing is the named anti-pattern within it
 - [Parallel Agent Patterns](parallel-agent-patterns.md) — the alternative once runs cross the 5-minute threshold
-- [Claude Code Auto Mode](../how-tos/claude-code-auto-mode.md) — `accept-edits` permission mode that reduces the interrupt rate
+- [Claude Code Auto Mode](../how-tos/claude-code-auto-mode.md) — auto mode, where a classifier reviews actions instead of prompting you, which reduces the interrupt rate
 - [Smart Zone vs Dumb Zone](smart-zone.md) — context-axis counterpart to this attention-axis discipline
 - [Claude Routines](../tools/claude-routines.md) — `/loop` and Routines, the third rung that removes the keyboard from routine work
 - [Generator-Evaluator Harness](generator-evaluator-harness.md) — the verification loop that must come first before parallelism pays off

@@ -8,7 +8,8 @@ sources:
   - "summaries/2026-04-25_claude-code-docs_create-custom-subagents.md"
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
-timestamp: "2026-10-14"
+  - "summaries/2026-10-15_claude-code-docs_permission-modes.md"
+timestamp: "2026-10-15"
 ---
 
 # Claude Code Custom Subagents
@@ -66,7 +67,7 @@ Add the phrase **"use proactively"** to encourage automatic invocation.
 | `description` | Routing signal — when to delegate (required) |
 | `tools` | Comma-list of allowed tool names (omit = inherit all) |
 | `model` | `haiku`, `sonnet`, `opus`, `inherit`, or pinned model id |
-| `permissionMode` | `default`, `acceptEdits`, `bypassPermissions`, `plan` |
+| `permissionMode` | `default`, `acceptEdits`, `bypassPermissions`, `plan`; ignored in auto mode (see [Permission Mode Notes](#permission-mode-notes)) |
 | `mcpServers` | Inline MCP server defs scoped to this subagent only |
 | `hooks` | `PreToolUse`, `PostToolUse`, etc. — same format as `settings.json` |
 | `memory` | `user`, `project`, or `local` — persistent MEMORY.md |
@@ -127,8 +128,11 @@ The script inspects the command, exits 0 to allow, exits 2 to block.
 
 ## Permission Mode Notes
 
-- `permissionMode: bypassPermissions` is powerful but **scoped**. Even in bypass, writes to `.git`, `.claude`, `.vscode`, `.idea`, `.husky` still prompt — except `.claude/commands`, `.claude/agents`, `.claude/skills`.
+- `permissionMode: bypassPermissions` skips the checks entirely: tool calls "execute immediately, including writes to protected paths". [Protected paths](claude-code-permissions.md#protected-paths) (`.git`, `.claude`, `.vscode`, `.idea`, `.husky` and others) are never auto-approved in the other modes. "Deny rules block in every mode, including `bypassPermissions`." Its only scoping is the parent's mode, per the next two bullets. *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
 - The **parent's** `bypassPermissions` or `acceptEdits` takes precedence over subagent settings — you cannot make a subagent stricter than its parent.
+- In **auto mode**, "Any `permissionMode` in the subagent's frontmatter is ignored": each subagent action goes through the parent's classifier decision order, the delegated task is checked at spawn time, and the subagent's report is reviewed before the parent reads it. See [Claude Code Auto Mode § Subagents Under Auto Mode](claude-code-auto-mode.md#subagents-under-auto-mode). *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
+
+*Earlier versions of this page stated "Even in bypass, writes to `.git`, `.claude`, `.vscode`, `.idea`, `.husky` still prompt — except `.claude/commands`, `.claude/agents`, `.claude/skills`", per Claude Code Docs — Create custom subagents (2026-04-25); superseded by Claude Code Docs — Choose a permission mode (2026-10-15) on 2026-10-15.*
 
 See [Claude Code Permissions](claude-code-permissions.md).
 

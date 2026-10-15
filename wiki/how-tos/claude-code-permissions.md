@@ -12,7 +12,8 @@ sources:
   - "summaries/2026-04-25_claude-code-docs_extend-claude-with-skills.md"
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
   - "summaries/2026-10-14_claude-code-docs_best-practices.md"
-timestamp: "2026-10-14"
+  - "summaries/2026-10-15_claude-code-docs_permission-modes.md"
+timestamp: "2026-10-15"
 ---
 
 # Claude Code Permissions
@@ -81,29 +82,33 @@ Good candidates for pre-approval:
 - Secret-accessing commands
 - Package install commands (unless in a sandboxed environment)
 
-## The Three Permission Strategies
+Not pre-allowing `push` does not create a checkpoint in auto mode: its classifier allows "Pushing to any branch of the repository you're working in, including the default branch" by default. To keep a human checkpoint there, add an explicit `permissions.ask` rule such as `Bash(git push *)`, which still prompts in auto mode. See [Claude Code Auto Mode § Default Block and Allow Lists](claude-code-auto-mode.md#default-block-and-allow-lists). *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
 
-Anthropic's canonical guidance is that Claude Code offers **three complementary permission strategies** — not one right answer:
+## Three Layers: Mode, Rules, Sandbox
 
-| Strategy | Command | What it does |
-|----------|---------|--------------|
-| Allowlist | `/permissions` | Pre-approve safe command patterns (covered above) |
-| Auto mode | `--permission-mode auto` | Classifier-gated auto-approval for most actions |
-| Sandbox | `/sandbox` | OS-level filesystem + network isolation |
+Permissions are three layers that combine, not three peer strategies to pick from. "Modes set the baseline. Layer permission rules on top to pre-approve or block specific tools. Deny rules block in every mode, including `bypassPermissions`." The sandbox is a separate axis: "Permission modes decide whether Claude asks before an action, and the Bash sandbox and outer isolation boundaries decide what an action can reach once it runs." *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
 
-These compose. Power-user setup: `/permissions` allowlist for routine commands, `--permission-mode auto` for long autonomous runs, `/sandbox` as the outer ring when running unknown scripts.
+| Layer | Set with | What it decides |
+|-------|----------|-----------------|
+| Mode | `Shift+Tab`, `--permission-mode`, `permissions.defaultMode` | The baseline: whether Claude asks. `auto` is the built-in starting mode for interactive terminal and VS Code sessions from v2.1.283; `-p` and the Agent SDK usually start in Manual (`default`) |
+| Rules | `/permissions` (allow, ask, deny) | Pre-approve or block specific tools on top of the mode. Broad allow rules are dropped while in auto mode |
+| Sandbox | `/sandbox` | What an action can reach once it runs (OS-level filesystem + network isolation) |
 
-<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-permissions-three-strategies -->
+Power-user setup: stay in auto mode (the starting mode) with narrow `/permissions` allow rules and `ask` rules for the checkpoints you want, add `/sandbox` as the outer ring when running unknown scripts, and switch to Manual for sensitive work. Without a classifier, Manual plus the sandbox in auto-allow mode also cuts prompts.
 
-**Installed mods sit outside all three.** Claude Code [mods](../tools/claude-code-mods.md) (v2.1.287+) run with your permissions, are not sandboxed, and per the official docs can approve tool calls before you are asked, including ones an `ask` rule would have stopped. Permission rules constrain Claude's tool calls, not a mod's own code. Install mods only from trusted marketplaces, check them with `claude plugin validate`, and use `--safe-mode`, `"disableAllHooks": true` or (for organisations) `allowManagedModsOnly` to switch them off. *(Source: Ray Amjad, 2026-09-04, read against the official mods docs)*
+*Earlier versions of this page stated "Anthropic's canonical guidance is that Claude Code offers three complementary permission strategies — not one right answer" and "Power-user setup: `/permissions` allowlist for routine commands, `--permission-mode auto` for long autonomous runs, `/sandbox` as the outer ring when running unknown scripts.", per Anthropic Engineering — Claude Code: Best practices for agentic coding (2025-04-18) and Anthropic Engineering — Claude Code auto mode: a safer way to skip permissions (2026-03-25); superseded by Claude Code Docs — Choose a permission mode (2026-10-15) on 2026-10-15.*
+
+**Installed mods sit outside all three.** Claude Code [mods](../tools/claude-code-mods.md) (v2.1.287+) run with your permissions, are not sandboxed, and per the official docs can approve tool calls before you are asked, including ones an `ask` rule would have stopped. Permission rules constrain Claude's tool calls, not a mod's own code. Install mods only from trusted marketplaces, check them with `claude plugin validate`, and use `--safe-mode`, `"disableAllHooks": true` or (for organisations) `allowManagedModsOnly` to switch them off. *(Source: Ray Amjad, 2026-09-04, read against the official mods docs)* The permission-modes docs confirm the auto-mode side: a mod that handles `tool.check` "can approve an action before step 3, and the classifier doesn't check an action the mod approves." *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
 
 ### Auto Mode (`--permission-mode auto`)
 
-A two-stage classifier replaces permission fatigue: server-side prompt-injection detector on inputs, transcript classifier on outputs. Three approval tiers (safe-tool allowlist, in-project file ops, high-risk → classifier review).
+A two-stage classifier replaces permission fatigue: server-side prompt-injection detector on inputs, transcript classifier on outputs. Decision order, first match wins: your allow/ask/deny rules, then auto-approval of reads and working-directory edits (protected paths excepted), then the classifier for everything else; see [Claude Code Auto Mode § Decision Order](claude-code-auto-mode.md#decision-order-first-match-wins). *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
 
-Published metrics: **0.4% false positive, 17% false negative**. Much safer than `--dangerously-skip-permissions`, but the 17% miss rate means it is **not** a substitute for human review on prod or security-critical systems. Escalation halt: after 3 consecutive or 20 total denials, the agent stops.
+*Earlier versions of this page stated "Three approval tiers (safe-tool allowlist, in-project file ops, high-risk → classifier review)", per Anthropic Engineering — Claude Code auto mode: a safer way to skip permissions (2026-03-25); superseded by Claude Code Docs — Choose a permission mode (2026-10-15) on 2026-10-15.*
 
-<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-permissions-denial-halt -->
+Published metrics: **0.4% false positive, 17% false negative**. Much safer than `--dangerously-skip-permissions`, but the 17% miss rate means it is **not** a substitute for human review on prod or security-critical systems. Repeated blocks: after 3 blocks in a row or 20 in total (not configurable), "auto mode pauses and Claude Code resumes prompting. Approving the prompted action resumes auto mode." A `-p` run without `--permission-prompt-tool` has no prompt to fall back to: the blocked action doesn't run, and "Claude keeps working. Claude Code doesn't stop the run." *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
+
+*Earlier versions of this page stated "Escalation halt: after 3 consecutive or 20 total denials, the agent stops.", per Anthropic Engineering — Claude Code auto mode: a safer way to skip permissions (2026-03-25); superseded by Claude Code Docs — Choose a permission mode (2026-10-15) on 2026-10-15.*
 
 See [Claude Code Auto Mode](claude-code-auto-mode.md) for the full how-to.
 
@@ -124,6 +129,26 @@ claude -p "Migrate $file from Python 2 to Python 3. Return OK or FAIL." \
 ```
 
 *(Source: Claude Code Docs — Best practices, October 2026)*
+
+## How Rules Behave Across Modes
+
+"Deny rules block in every mode, including `bypassPermissions`." Allow rules have no effect in `bypassPermissions`, and entering auto mode drops broad allow rules such as `Bash(*)` or `Bash(python*)` (see [Auto Mode § Broad Allow Rules Are Dropped](claude-code-auto-mode.md#broad-allow-rules-are-dropped)). A few actions are never auto-approved in any mode, including tools matched by an explicit ask rule and `rm`/`rmdir` removals of a critical path (filesystem root, top-level directories, home, the working directory and its parents), which "no allow rule or `PreToolUse` hook `"allow"` approves." *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
+
+## Protected Paths
+
+"Writes to a small set of paths are never auto-approved, except in `bypassPermissions` mode and in interactive terminal sessions in plan mode with bypass permissions available." The set covers repository and tool configuration: directories such as `.git`, `.vscode`, `.idea`, `.husky`, `.devcontainer` and `.claude` (with exceptions such as `.claude/worktrees/` and auto-memory Markdown files), and files such as `.gitconfig`, shell rc files (`.bashrc`, `.zshrc`, `.profile`, `.envrc`), `.npmrc`, `.pre-commit-config.yaml`, `.mcp.json` and `.claude.json`.
+
+| Mode | Protected-path writes |
+|------|----------------------|
+| Manual (`default`), `acceptEdits` | Prompted |
+| `plan` | Allowed with bypass available in an interactive terminal; otherwise routed to the classifier when auto mode is available, prompted when not |
+| `auto` | Routed to the classifier |
+| `dontAsk` | Denied |
+| `bypassPermissions` | Allowed |
+
+Allow rules cannot change this table: "`permissions.allow` rules in settings files do not pre-approve protected-path writes. The safety check runs before Claude Code evaluates allow rules from settings, so an entry such as `Edit(.claude/**)` in `~/.claude/settings.json` or `.claude/settings.json` does not change the per-mode outcome in the table above." *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
+
+**How to apply:** don't add `Edit(.claude/**)` to silence prompts while Claude edits skills or settings; it does nothing. Pick the session-scoped prompt option instead ("Yes, and allow Claude to edit files in this project's .claude folder for this session", or the `~/.claude` equivalent).
 
 ## Scoping Skill Invocation
 

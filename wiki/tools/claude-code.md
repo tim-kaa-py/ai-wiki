@@ -45,6 +45,7 @@ sources:
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
   - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
   - "summaries/2026-10-14_claude-code-docs_best-practices.md"
+  - "summaries/2026-10-15_claude-code-docs_permission-modes.md"
 timestamp: "2026-10-15"
 ---
 
@@ -97,9 +98,11 @@ The MEMORY.md index loads every session and is capped at **200 lines / 25KB**. D
 |---------|-------------|
 | `Esc` (single) | Stop mid-action with context preserved |
 | `Esc Esc` / `/rewind` | Restore previous conversation + code state (snapshot per file edit) |
-| `Shift+Tab` | Cycle permission modes (default → auto-accept → plan) |
+| `Shift+Tab` | Cycle permission modes. From `auto`, the first press goes to Manual (`default`), then `default` → `acceptEdits` → `plan`; enabled optional modes follow `plan`, `bypassPermissions` first and `auto` last. `dontAsk` never appears in the cycle |
 
-<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-shift-tab-mode-cycle -->
+Per the permission-modes docs: "From `auto`, the first press switches to `default`, and the cycle then runs `default` → `acceptEdits` → `plan`. Optional modes slot in after `plan`." and "Enabled optional modes slot in after `plan`, with `bypassPermissions` first and `auto` last." *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
+
+*Earlier versions of this page gave the cycle as "default → auto-accept → plan", per Claude Code Docs — How Claude Code works (2026-05-06); superseded by Claude Code Docs — Choose a permission mode (2026-10-15) on 2026-10-15.*
 
 Checkpoints enable safe experimentation — every file edit is snapshotted before execution. Updated October 2026: "Every prompt you send that starts a turn creates a checkpoint." The net has limits: "Checkpoints only track changes made through Claude's file editing tools. Changes made through Bash commands or external processes are not captured. This isn't a replacement for git." *(Source: Claude Code Docs — Best practices, October 2026)*
 
@@ -273,6 +276,8 @@ Per the October 2026 Best Practices page, `/batch <instruction>` splits the chan
 ### Plan Mode
 Press **Shift+Tab twice** to enter Plan mode. Boris Cherny starts almost every session here — write a full blueprint before execution. Claude can often one-shot complex tasks when given a solid plan upfront. *(Source: Boris Cherny, Creator of Claude Code)*
 
+Updated October 2026: "twice" counts from Manual. From v2.1.283 sessions start in auto mode, and "From `auto`, the first press switches to `default`, and the cycle then runs `default` → `acceptEdits` → `plan`", so it takes three presses. Prefixing a prompt with `/plan` works from any mode, and `claude --permission-mode plan` starts there. *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
+
 ### Custom Agents
 Define in `.claude/agents/my-agent.md` with frontmatter controlling name, tools, model, and permissions. Use for specialized workflows: code review, debugging, documentation, read-only analysis.
 
@@ -284,23 +289,20 @@ Sub-agents can now spawn their own sub-agents: Matt Pocock (October 2026) says t
 
 *Earlier versions of this page listed "the no-nested-subagents rule" (a subagent cannot delegate to another subagent), per Claude Code Docs — Create custom subagents (2026-04-25); superseded by Matt Pocock — New Skills! v1.3 brings /pr, /implement-spec, and /retro (2026-10-05) on 2026-10-14.*
 
-### Permissions: Three Strategies
+### Permissions: Modes, Rules, Sandbox
 
-<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-three-permission-strategies -->
+Three layers that combine: the permission mode sets the baseline (whether Claude asks), `/permissions` rules pre-approve or block specific tools on top, and `/sandbox` decides what an action can reach once it runs. Auto mode is the built-in starting mode for interactive terminal and VS Code sessions from v2.1.283; `-p` and the Agent SDK usually start in Manual (`default`). *(Source: Claude Code Docs — Choose a permission mode, October 2026)* Details in [Claude Code Permissions § Three Layers](../how-tos/claude-code-permissions.md#three-layers-mode-rules-sandbox).
 
-Anthropic's canonical guidance: Claude Code offers **three complementary permission strategies**, not one right answer. Compose them.
+*Earlier versions of this page stated "Claude Code offers three complementary permission strategies, not one right answer. Compose them." and listed auto mode as `--permission-mode auto` for "Long autonomous runs", per Anthropic Engineering — Claude Code: Best practices for agentic coding (2025-04-18) and Anthropic Engineering — Claude Code auto mode: a safer way to skip permissions (2026-03-25); superseded by Claude Code Docs — Choose a permission mode (2026-10-15) on 2026-10-15.*
 
-| Strategy | Command | When to use |
-|----------|---------|-------------|
-| **Allowlist** | `/permissions` | Team-shared pre-approved safe commands (build/test/lint) |
-| **Auto mode** | `--permission-mode auto` | Long autonomous runs; classifier gates each action |
-| **Sandbox** | `/sandbox` | OS-level isolation for unknown scripts / unattended runs |
+**Never use `--dangerously-skip-permissions` on your host** — it is a blanket bypass with no granularity. The docs reserve it for one row, "Run fully unattended inside a container": `claude -p "<prompt>" --dangerously-skip-permissions`, with isolation "Required: a container, VM, or the sandbox runtime; on Linux and macOS, run it as a non-root user". It refuses to start as root or under `sudo` outside a recognized sandbox. For hands-off work anywhere else, use auto mode. *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
 
-**Never use `--dangerously-skip-permissions`** — it is a blanket bypass with no granularity. All three strategies above are safer.
+*Earlier versions of this page stated "Never use `--dangerously-skip-permissions` — it is a blanket bypass with no granularity. All three strategies above are safer.", per Anthropic Engineering — Claude Code: Best practices for agentic coding (2025-04-18) and Claude Code Tips from the Creator (Boris Cherny Thread) (2026-01-02); superseded by Claude Code Docs — Choose a permission mode (2026-10-15) on 2026-10-15.*
 
-**Auto mode** uses a two-stage classifier (prompt-injection detector on inputs, transcript classifier on outputs). Classifier strips assistant narrative so the agent can't rationalize bad calls. Three approval tiers (safe-tool allowlist, in-project file ops, high-risk review). Metrics: **0.4% FP / 17% FN**. Escalation halt after 3 consecutive or 20 total denials. Safer than skip-permissions, **not** a substitute for human review on prod.
+**Auto mode** uses a two-stage classifier (prompt-injection detector on inputs, transcript classifier on outputs). Classifier strips assistant narrative so the agent can't rationalize bad calls. Decision order, first match wins: your rules, then auto-approved reads and working-directory edits, then classifier review for everything else. Metrics: **0.4% FP / 17% FN**. After 3 blocks in a row or 20 in total (not configurable), "auto mode pauses and Claude Code resumes prompting. Approving the prompted action resumes auto mode."; a `-p` run without `--permission-prompt-tool` skips the blocked action and "Claude keeps working. Claude Code doesn't stop the run." *(Source: Claude Code Docs — Choose a permission mode, October 2026)* Safer than skip-permissions, **not** a substitute for human review on prod.
 
-<!-- TENSION 2026-10-15: see meta/contradictions.md#2026-10-15-claude-code-denial-halt -->
+*Earlier versions of this page stated "Escalation halt after 3 consecutive or 20 total denials.", per Anthropic Engineering — Claude Code auto mode: a safer way to skip permissions (2026-03-25); superseded by Claude Code Docs — Choose a permission mode (2026-10-15) on 2026-10-15.*
+*Earlier versions of this page stated "Three approval tiers (safe-tool allowlist, in-project file ops, high-risk review).", per Anthropic Engineering — Claude Code auto mode: a safer way to skip permissions (2026-03-25); superseded by Claude Code Docs — Choose a permission mode (2026-10-15) on 2026-10-15.*
 
 **Sandbox** (`/sandbox`) uses bubblewrap on Linux, seatbelt on macOS. Restricts filesystem + network — and catches spawned subprocesses, which application-level permissioning can't. Internal testing: **-84% permission prompts**. Claude Code on the Web extends this to cloud VMs with credentials held in a separate proxy (Claude never touches signing keys).
 
@@ -509,7 +511,7 @@ Most of Anthropic's official guidance traces to one constraint: **context fills 
 
 ### The Four-Phase Loop: Explore → Plan → Implement → Commit
 
-Default workflow for non-trivial tasks. Use Plan Mode (Shift+Tab twice, or `Ctrl+G` to open the plan in an editor). Skip this only for one-line fixes.
+Default workflow for non-trivial tasks. Use Plan Mode (Shift+Tab twice, or `Ctrl+G` to open the plan in an editor). Skip this only for one-line fixes. From the v2.1.283 auto starting mode it's three presses; `/plan` or `claude --permission-mode plan` works from any mode. *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
 
 ### CLAUDE.md Hygiene
 

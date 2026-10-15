@@ -24,6 +24,7 @@ sources:
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
   - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
   - "summaries/2026-10-14_claude-code-docs_best-practices.md"
+  - "summaries/2026-10-15_claude-code-docs_permission-modes.md"
 timestamp: "2026-10-15"
 ---
 
@@ -38,7 +39,7 @@ A step-by-step guide to productive agentic coding, synthesized from Peter Steinb
 3. **Write a CLAUDE.md.** Orient the agent: project structure, conventions, what matters. The agent starts from zero every session.
 4. **Consider a soul.md.** A personality/values document for your agent. Let the agent contribute to it.
 
-5. **Start in Plan mode.** Press Shift+Tab twice to enter Plan mode. Write a full blueprint before execution — a good plan dramatically increases first-shot success rate. *(Source: Boris Cherny, Creator of Claude Code)*
+5. **Start in Plan mode.** Press Shift+Tab twice to enter Plan mode. Write a full blueprint before execution — a good plan dramatically increases first-shot success rate. *(Source: Boris Cherny, Creator of Claude Code)* From the v2.1.283 auto starting mode it's three presses; `/plan` or `claude --permission-mode plan` works from any mode. *(Source: Claude Code Docs — Choose a permission mode, October 2026)*
 6. **Use the best model.** Default to Opus. It's bigger and slower per call, but handles tasks better — net result is faster overall. *(Source: Boris Cherny, Creator of Claude Code)*
 7. **Pre-allow safe commands via `/permissions`.** Don't use `--dangerously-skip-permissions`. Use `/permissions` to allowlist build, test, lint, and typecheck commands by pattern. Check `.claude/settings.json` into the team repo. See [Claude Code Permissions](../how-tos/claude-code-permissions.md). *(Source: Boris Cherny, Creator of Claude Code)*
 
@@ -312,7 +313,9 @@ Anthropic's official Best Practices doc reorganizes the field's lessons around o
 
 ### Explore → Plan → Code → Commit (Canonical Workflow)
 
-Use plan mode (read-only tools only) for exploration. **`Ctrl+G`** opens the plan in your editor. Then switch to implementation. Planning pays off most when you're unfamiliar with the code or the change spans multiple files. **For any change touching 3+ files or unfamiliar code, start in plan mode.**
+Use plan mode for exploration: Claude "reads files, runs shell commands to explore, and writes a plan, but does not edit your source." With auto mode available and `useAutoModeDuringPlan` on, "which it is by default", the classifier reviews shell commands instead of prompting you. *(Source: Claude Code Docs — Choose a permission mode, October 2026)* **`Ctrl+G`** opens the plan in your editor. Then switch to implementation. Planning pays off most when you're unfamiliar with the code or the change spans multiple files. **For any change touching 3+ files or unfamiliar code, start in plan mode.**
+
+*Earlier versions of this page stated "Use plan mode (read-only tools only) for exploration", per Claude Code Docs — Best practices (2026-05-06); superseded by Claude Code Docs — Choose a permission mode (2026-10-15) on 2026-10-15.*
 
 ### CLAUDE.md Quality Rules
 
