@@ -20,7 +20,7 @@ An LLM-maintained personal knowledge wiki. The human curates sources (URLs, file
 
 - `CLAUDE.md` — the operating contract. Defines workflows, templates, guardrails. (You will generate this.)
 - `index.md` — master index of sources and wiki pages, grouped by pillar.
-- `log.md` — append-only chronological ingest log.
+- `log.md` — ingest and maintenance log, newest first: `## YYYY-MM-DD` headings, newest entry first under each; existing entries are never edited.
 - `inbox/` — drop zone for unprocessed URLs/files.
 - `notes/` — per-source ingest notes capturing the user's focus.
 - `scripts/` — helper scripts (transcript extraction, etc.).

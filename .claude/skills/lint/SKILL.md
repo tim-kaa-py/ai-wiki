@@ -43,4 +43,4 @@ Run `python3 scripts/okf-check.py` last, so it validates the final state. Fix vi
 
 ## 5. Log
 
-Log every run, clean ones included. Under today's `## YYYY-MM-DD` heading in `log.md` (create it at the top if missing), append `**Update** LINT: <one clause per check: clean, or findings and fixes>`.
+Log every run, clean ones included. Under today's `## YYYY-MM-DD` heading in `log.md` (create it at the top if missing), insert as the first entry `**Update** LINT: <one clause per check: clean, or findings and fixes>`.

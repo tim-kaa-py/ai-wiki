@@ -42,7 +42,7 @@ Triage progress:
 3. **ADVERSARIAL** — per candidate, Conflict-Advocate and Harmonizer (Sonnet, parallel), from the templates. Apply the policy's advocate-concession short-circuit.
 4. **SYNTHESIZE** — Opus judge from the template, both briefs included. Verdict: DISMISS / QUEUE / AUTO-RESOLVE, with an AGENT'S READ.
 5. **CHALLENGE** — only for AUTO-RESOLVE: a fresh Opus agent (challenger template) tries to overturn it. Overturned: QUEUE. Confirmed: apply (c) per the resolution-action table.
-6. **REPORT** — write the `meta/triage-runs/` report (candidates, dismissals with reasons, near-misses, clean pages, autonomous actions, editorial defects), append a `**Update** TRIAGE:` entry to `log.md`, run `python3 scripts/okf-check.py` (fails: fix the page and rerun), and commit the batch on its own so any batch reverts cleanly.
+6. **REPORT** — write the `meta/triage-runs/` report (candidates, dismissals with reasons, near-misses, clean pages, autonomous actions, editorial defects), insert a `**Update** TRIAGE:` entry in `log.md` as the first entry under today's heading, run `python3 scripts/okf-check.py` (fails: fix the page and rerun), and commit the batch on its own so any batch reverts cleanly.
 
 ## Orchestrator judgment calls
 

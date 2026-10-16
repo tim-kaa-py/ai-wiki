@@ -16,7 +16,7 @@ Three layers:
 
 Parallel track: **Gists** (`gists/`) — user-authored Claude Code prompts, shareable. Not derived from sources, not synthesized into the wiki, indexed only in `gists/index.md`.
 
-Other files: `index.md` (master index; frontmatter `okf_version: "0.1"` only; body is `* [Title](path) - description` bullets under pillar headings), `log.md` (newest-first `## YYYY-MM-DD` headings; entries prefixed `**Creation**` for ingests, `**Update**` for everything else), `notes/` (per-ingest focus notes), `inbox/` (unprocessed items, must be empty after processing), `meta/` (contradiction ledger, triage policy and prompts).
+Other files: `index.md` (master index; frontmatter `okf_version: "0.1"` only; body is `* [Title](path) - description` bullets under pillar headings), `log.md` (newest-first `## YYYY-MM-DD` headings, newest entry first under each; entries prefixed `**Creation**` for ingests, `**Update**` for everything else), `notes/` (per-ingest focus notes), `inbox/` (unprocessed items, must be empty after processing), `meta/` (contradiction ledger, triage policy and prompts).
 
 ## Workflow routing
 
@@ -37,7 +37,7 @@ Every ingest ends with the `connect` skill (merge into wiki pages with tension d
 
 ## Model routing
 
-The main session runs on the model Claude Code is configured with (Opus 5.5 by default for this repo; this file does not set it). It handles orchestration and mechanical steps. Analytical steps delegate to sub-agents via the Agent tool. The delegation is for context isolation (deep reading stays out of the session window); it adds capability only when the session model sits below the tier named.
+The main session runs on the model Claude Code is configured with; this file does not set it. It handles orchestration and mechanical steps. Analytical steps delegate to sub-agents via the Agent tool. The delegation is for context isolation (deep reading stays out of the session window); it adds capability only when the session model sits below the tier named.
 
 | Step | Sub-agent |
 |------|-----------|

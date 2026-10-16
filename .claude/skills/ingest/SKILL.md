@@ -50,7 +50,7 @@ If a scan flags, remediate and return to SCAN. On abort, run the cleanup in step
 7. **SCAN SUMMARY**: run Step 0 (`step0-scan.md`) on the summary.
 8. **CONNECT**: invoke the `connect` skill on the new summary.
 9. **INDEX**: in `index.md`, add `* [Title](summaries/<slug>.md) - description` under the pillar's `### Sources` heading, description from the summary frontmatter. Add each wiki page the CONNECT report lists as created, same bullet format, under that pillar's `### Wiki Pages` heading; connect does not index them itself.
-10. **LOG**: append a `**Creation**` entry to `log.md` under today's `## YYYY-MM-DD` heading (newest-first): action, source, type, tier, what was updated.
+10. **LOG**: insert a `**Creation**` entry in `log.md` as the first entry under today's `## YYYY-MM-DD` heading (create the heading at the top if missing; the log is newest-first within each day too): action, source, type, tier, what was updated.
 
 ### Entry B: inbox processing
 
