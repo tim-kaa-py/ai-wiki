@@ -26,3 +26,6 @@ ai-research/
 
 # Type declarations Claude Code writes into a mod it hot-reloads
 .claude/skills/mod-*/.claude-plugin/types/
+
+# User-level findings from claude-config-refresh runs: personal config, not for this public repo
+.claude/restructure/*-user-level.md
