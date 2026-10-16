@@ -6,7 +6,7 @@ This file is the operating contract: facts and standing rules that apply in ever
 
 ## Architecture
 
-This repo is an [Open Knowledge Framework (OKF) v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) bundle. `sources/`, `summaries/`, `wiki/`, `index.md`, and `log.md` conform to the OKF v0.1 schema; `scripts/okf-check.py` checks conformance and a pre-commit hook runs it.
+This repo is an [Open Knowledge Framework (OKF) v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) bundle. `sources/`, `summaries/`, `wiki/`, `index.md`, and `log.md` conform to the OKF v0.1 schema; `scripts/okf-check.py` checks conformance and a pre-commit hook runs it; a second pre-commit hook runs it together with the `scripts/tests` unit tests, as CI does.
 
 Three layers:
 
@@ -16,7 +16,7 @@ Three layers:
 
 Parallel track: **Gists** (`gists/`) — user-authored Claude Code prompts, shareable. Not derived from sources, not synthesized into the wiki, indexed only in `gists/index.md`.
 
-Other files: `index.md` (master index; frontmatter `okf_version: "0.1"` only; body is `* [Title](path) - description` bullets under pillar headings), `log.md` (newest-first `## YYYY-MM-DD` headings, newest entry first under each; entries prefixed `**Creation**` for ingests, `**Update**` for everything else), `notes/` (per-ingest focus notes), `inbox/` (unprocessed items, must be empty after processing), `meta/` (contradiction ledger, triage policy and prompts).
+Other files: `index.md` (master index; frontmatter `okf_version: "0.1"` only; body is `* [Title](path) - description` bullets under pillar headings), `log.md` (newest-first `## YYYY-MM-DD` headings, newest entry first under each; entries prefixed `**Creation**` for ingests, `**Update**` for everything else), `notes/` (per-ingest focus notes), `inbox/` (unprocessed items, must be empty after processing), `meta/` (contradiction ledger, triage policy and prompts). When a workspace-level `CLAUDE.md` is loaded too, this repo's log format and `.claude/rules/frontmatter.md` override its log prefix and frontmatter template: this bundle is OKF.
 
 ## Workflow routing
 
