@@ -6,7 +6,7 @@ This file is the operating contract: facts and standing rules that apply in ever
 
 ## Architecture
 
-This repo is an [Open Knowledge Framework (OKF) v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) bundle. `sources/`, `summaries/`, `wiki/`, `index.md`, and `log.md` conform to the OKF v0.1 schema; `scripts/okf-check.py` checks conformance and a pre-commit hook runs it; a second pre-commit hook runs it together with the `scripts/tests` unit tests, as CI does.
+This repo is an [Open Knowledge Framework (OKF) v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) bundle. `sources/`, `summaries/`, `wiki/`, `index.md`, and `log.md` conform to the OKF v0.1 schema; `scripts/okf-check.py` checks conformance; a pre-commit hook runs it and the `scripts/tests` unit tests, as CI does.
 
 Three layers:
 

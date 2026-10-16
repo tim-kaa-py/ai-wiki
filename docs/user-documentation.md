@@ -306,7 +306,7 @@ git push
 
 If the repo is new and not yet on GitHub, ask the agent to run the setup (see `concept.md` §6) — it uses `gh repo create`.
 
-**A hook blocks bad commits locally.** `.claude/settings.json` registers a pre-commit hook (`.claude/hooks/okf-precommit.sh`): whenever the agent runs `git commit`, it first runs `scripts/okf-check.py` and refuses the commit if the bundle doesn't conform, showing the violations so the agent fixes them. A second hook (`.claude/hooks/validate-gate.sh`) runs the same two checks CI runs, the OKF check and the script unit tests, so a broken test also stops the commit locally instead of turning the badge red after the push. Both only fire on commits the agent makes from inside Claude Code; commits you make in a plain terminal are not gated (CI still catches them). Claude Code asks you once to approve the project's hooks the first time it sees them.
+**A hook blocks bad commits locally.** `.claude/settings.json` registers a pre-commit hook (`.claude/hooks/okf-precommit.sh`): whenever the agent runs `git commit`, it first runs `scripts/okf-check.py` and the script unit tests (the same two checks CI runs) and refuses the commit if either fails, showing the violations so the agent fixes them. A broken test stops the commit locally instead of turning the badge red after the push. It only fires on commits the agent makes from inside Claude Code; commits you make in a plain terminal are not gated (CI still catches them). Claude Code asks you once to approve the project's hooks the first time it sees them.
 
 **CI runs on every push.** A GitHub Actions workflow (`.github/workflows/checks.yml`) re-validates OKF conformance and runs the script tests each time you (or the agent) push. If a push breaks conformance, GitHub emails you within a minute and the README badge turns red — you don't have to wait for the next lint pass to find out. Free for public repos.
 
@@ -390,14 +390,14 @@ $ claude
 ## Reference Files
 
 - [`CLAUDE.md`](../CLAUDE.md) — the standing operating contract. The agent reads this every session.
-- [`.claude/skills/`](../.claude/skills/) — one skill per workflow; [`.claude/rules/frontmatter.md`](../.claude/rules/frontmatter.md) — file schemas; [`.claude/settings.json`](../.claude/settings.json) + [`.claude/hooks/`](../.claude/hooks/) — the pre-commit gates (OKF check; OKF check plus unit tests, matching CI) and the docs-sync reminder.
+- [`.claude/skills/`](../.claude/skills/) — one skill per workflow; [`.claude/rules/frontmatter.md`](../.claude/rules/frontmatter.md) — file schemas; [`.claude/settings.json`](../.claude/settings.json) + [`.claude/hooks/`](../.claude/hooks/) — the pre-commit gate (OKF check plus unit tests, matching CI) and the docs-sync reminder.
 - [`concept.md`](concept.md) — architecture + recreation guide for a different topic.
 - [`index.md`](../index.md) — browse everything.
 - [`log.md`](../log.md) — chronological ingest history.
 - [`scripts/extract-transcript.py`](../scripts/extract-transcript.py) — YouTube/podcast caption extractor.
 - [`scripts/obsidian-videos.py`](../scripts/obsidian-videos.py) — lists the Obsidian "AI Videos" note's Ingest next queue as JSON and deletes ingested entries (used by `obsidian-videos`).
 - [`scripts/transcribe-audio.py`](../scripts/transcribe-audio.py) — local audio→text fallback (whisper.cpp) for sources with no captions.
-- [`scripts/okf-check.py`](../scripts/okf-check.py) — OKF v0.1 conformance checker; run by the `lint` skill, by both pre-commit hooks, and by CI on every push.
+- [`scripts/okf-check.py`](../scripts/okf-check.py) — OKF v0.1 conformance checker; run by the `lint` skill, by the pre-commit hook, and by CI on every push.
 - [`docs/private-modules.md`](private-modules.md) — pattern for author-private extensions mounted inside this repo (some skills may not be available in a public clone).
 
 ---

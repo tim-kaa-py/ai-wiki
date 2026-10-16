@@ -1,14 +1,14 @@
 # Detector briefing (Sonnet)
 
 You are scanning wiki pages for INTERNAL CONTRADICTIONS — two claims on the
-SAME page that cannot both be followed or cannot both be true. These pages
-were built by merging multiple sources without conflict detection; your job
-is to find where that silently produced contradictory prose.
+SAME page that cannot both be followed or cannot both be true. A contradiction
+can reach a page through a merge that slipped past connect's tension check, a
+manual edit, or text written before that check existed; your job is to find it.
 
 Read each of these pages in full:
 {page_paths}
 
-Also read the calibration policy (may be empty early on):
+Also read the calibration policy and apply any rule that covers a pair:
 meta/tension-policy.md
 
 STRICT criteria — a candidate tension requires ALL of:

@@ -67,7 +67,6 @@ Create the following directory structure in the working directory:
 │   ├── settings.json           # hooks registration
 │   ├── hooks/
 │   │   ├── okf-precommit.sh
-│   │   ├── validate-gate.sh
 │   │   └── docs-sync-reminder.sh
 │   ├── rules/
 │   │   └── frontmatter.md      # path-scoped file schemas
@@ -163,7 +162,7 @@ The contract is split across four surfaces, following Claude Code's guidance on 
 
 **`.claude/rules/frontmatter.md`** — the four file schemas, with `paths:` frontmatter so it loads only when a file under `sources/`, `summaries/`, `wiki/` or `gists/` is touched. Copy verbatim; adjust `type` enums if the source mix differs.
 
-**`.claude/settings.json` + `.claude/hooks/`** — deterministic enforcement, independent of what the agent remembers. Three hooks: `okf-precommit.sh` (PreToolUse on Bash; runs `scripts/okf-check.py` before any `git commit` and blocks with exit 2 on failure), `validate-gate.sh` (PreToolUse on Bash; before any `git commit` runs the same commands as CI, `scripts/okf-check.py` and `python3 -m unittest discover -s scripts/tests`, read from the `CLAUDE_RESTRUCTURE_VALIDATOR` line at its top, and blocks with exit 2 on failure) and `docs-sync-reminder.sh` (PostToolUse on Edit/Write; when `CLAUDE.md` or anything under `.claude/` changes, injects a reminder of the Self-documentation rule). Copy verbatim and `chmod +x` the scripts. Claude Code asks the user to approve project hooks on first launch.
+**`.claude/settings.json` + `.claude/hooks/`** — deterministic enforcement, independent of what the agent remembers. Two hooks: `okf-precommit.sh` (PreToolUse on Bash; before any `git commit` runs the same checks as CI, `scripts/okf-check.py` and then `python3 -m unittest discover -s scripts/tests` when that folder exists, and blocks with exit 2 on failure) and `docs-sync-reminder.sh` (PostToolUse on Edit/Write; when `CLAUDE.md` or anything under `.claude/` changes, injects a reminder of the Self-documentation rule). Copy verbatim and `chmod +x` the scripts. Claude Code asks the user to approve project hooks on first launch.
 
 **`.claude/skills/mod-*/`** (optional) — project mods: Claude Code plugins of function hooks (Claude Code 2.1.287 or later; the API is early access and moves between releases). Claude Code auto-loads a plugin folder in the project's skills folder as `<name>@skills-dir` with project scope, so nothing lands in the user's global config, and a public clone loads them too. Each mod is `.claude-plugin/plugin.json`, `hooks/hooks.json` naming one module, `hooks/register.ts` (or `.tsx` when it draws), a `types/index.d.ts` contract declaring every `$.state` key it keeps, and a `*.test.ts` that `claude plugin test <folder>` runs against the engine with git, files and the clock answered by the test's own hooks; `claude plugin validate <folder>` checks the manifest, the contract and every hook before a session loads it. This repo ships five, each from a pattern found in its own session history:
 
