@@ -7,7 +7,8 @@ tags: [claude-code, hooks, function-hooks, claude-mods, plugins, workflow, safet
 sources:
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
   - "summaries/2026-10-02_chase-ai_claude-mods-biggest-claude-code-upgrade.md"
-timestamp: "2026-10-09"
+  - "summaries/2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes.md"
+timestamp: "2026-11-01"
 ---
 
 # Claude Code Mods
@@ -176,6 +177,8 @@ The argument for moving rules into mods is the same one behind settings hooks: C
 
 Chase's cache clock rests on his own figures: a one-hour cache on a subscription and roughly a 95% discount on cached tokens. These are unverified here; Anthropic's API pricing lists cache reads at 0.1× the base input price. Check the current numbers before building a timer around them. *(Source: Chase AI, 2026-10-02, 05:48-07:04)*
 
+Jay E (RoboNuggets) builds the same idea into a mod he calls the **ribbon**: it shows remaining weekly usage and whether the chat's prompt cache is warm or cold, so you avoid an expensive cold reread. His description of the cache is the same one-hour figure ("after about an hour it goes cold, and the next message rereads everything at normal cost"), which is a second creator's claim, still not a documented number. His other example, **savvy progress**, adds a progress bar above the chat box and, for big jobs, a live panel of every sub-agent. His rule for which mods to build: whatever you check all the time, built by describing it to Claude. *(Source: Jay E / RoboNuggets, 2026-10-28, 14:38-15:55)*
+
 ### Finding Which Mods to Build: The Session Audit
 
 The useful question is less *how* to write a mod (`/plugin-authoring` handles that) than *which* ones are worth having. Chase's answer is to let Claude read your history and propose them:
@@ -216,6 +219,7 @@ Ray compares it to Infisical's Agent Proxy, which injects secrets into outgoing 
 ## Related Pages
 
 - [Claude Code](claude-code.md) — the host runtime
+- [Claude Desktop App (Code Tab)](claude-desktop-app.md) — the other surface where mods draw
 - [Claude Code Hooks for Memory](../how-tos/claude-code-hooks-memory.md) — settings hooks: exit codes, JSON output, scopes, SDLC gates
 - [Claude Code Plugins](../how-tos/claude-code-plugins.md) — the packaging layer mods ship in
 - [Claude Code Sandboxing](../how-tos/claude-code-sandboxing.md) — why mod processes sit outside the Bash sandbox; managed-only switches

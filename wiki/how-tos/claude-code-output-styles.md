@@ -6,7 +6,8 @@ pillar: "building"
 tags: [claude-code, output-styles, workflow, how-to, best-practices]
 sources:
   - "summaries/2026-08-05_ray-amjad_opus-5-is-exhausting-anthropic-reveals-the-fix.md"
-timestamp: "2026-08-06"
+  - "summaries/2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes.md"
+timestamp: "2026-11-01"
 ---
 
 # Claude Code Output Styles
@@ -108,7 +109,9 @@ Your selection is saved to `.claude/settings.local.json` at the local project le
 }
 ```
 
-> **Deprecation.** The standalone `/output-style` command was deprecated in v2.1.73 and **removed in v2.1.91**. Use `/config` or edit `outputStyle` directly. Older tutorials still show the removed command.
+> **`/output-style` works.** The standalone `/output-style` command switches the style directly, per [Jay E / RoboNuggets, 2026-10-28](../../summaries/2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes.md) and confirmed by a hands-on check in the current Claude Code on 2026-11-01. `/config` and editing `outputStyle` directly remain alternatives.
+
+*Earlier versions of this page stated the standalone `/output-style` command was deprecated in v2.1.73 and removed in v2.1.91, per [Ray Amjad, 2026-08-05](../../summaries/2026-08-05_ray-amjad_opus-5-is-exhausting-anthropic-reveals-the-fix.md); superseded by [Jay E / RoboNuggets, 2026-10-28](../../summaries/2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes.md) and a hands-on check on 2026-11-01.*
 
 **Changes take effect after `/clear` or a new session.** Output style is part of the system prompt, which Claude Code reads once at session start — switching mid-session does not retroactively restyle the current one.
 

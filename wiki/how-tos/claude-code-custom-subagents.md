@@ -9,7 +9,8 @@ sources:
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
   - "summaries/2026-10-15_claude-code-docs_permission-modes.md"
-timestamp: "2026-10-15"
+  - "summaries/2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes.md"
+timestamp: "2026-11-01"
 ---
 
 # Claude Code Custom Subagents
@@ -160,6 +161,12 @@ Before this change, a subagent could not delegate to another subagent, and two w
 2. **Sequential chaining** — orchestrate the chain from the main conversation
 
 *Earlier versions of this page stated "A subagent cannot delegate to another subagent", per Claude Code Docs — Create custom subagents (2026-04-25); superseded by Matt Pocock — New Skills! v1.3 brings /pr, /implement-spec, and /retro (2026-10-05) on 2026-10-14.*
+
+## Subagent or Nested Session?
+
+Not the same thing as nested subagents above. In the desktop app's Code tab, a *session* can start its own *sessions*, which sit under it in the sidebar and report back when they finish. Jay E's contrast: a sub-agent is "a one-way order: it gets a prompt and returns a result, and you can peek at its progress but not talk to it"; a nested session is a real chat you can open and redirect. His rule: prefer nested sessions when you may want to steer mid-task. *(Source: Jay E / RoboNuggets, 2026-10-28, 03:56-05:10)*
+
+What the rule leaves out: context isolation is why subagents exist (only the summary returns to the parent), and the video does not say how much of a nested session flows back into its parent. Keep subagents for look-ups and checks whose result is all you need; reach for a nested session when the work is a deliverable you expect to redirect. See [Claude Desktop App § Nested Sessions vs Sub-agents](../tools/claude-desktop-app.md#nested-sessions-vs-sub-agents).
 
 ## Disabling Specific Subagents
 

@@ -25,7 +25,8 @@ sources:
   - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
   - "summaries/2026-10-14_claude-code-docs_best-practices.md"
   - "summaries/2026-10-15_claude-code-docs_permission-modes.md"
-timestamp: "2026-10-15"
+  - "summaries/2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes.md"
+timestamp: "2026-11-01"
 ---
 
 # Agentic Coding Workflow
@@ -348,9 +349,11 @@ Updated October 2026: if Claude keeps skipping one instruction, add emphasis suc
 
 | Command | Purpose |
 |---------|---------|
-| `/btw <question>` | Answer in dismissible overlay without adding to context |
+| `/btw <question>` | Terminal CLI and VS Code extension: answer in dismissible overlay without adding to context (not saved). Desktop app Code tab: opens a saved side chat instead |
 | `/clear` | Reset between unrelated tasks |
 | `/compact <instructions>` | Compaction with custom focus |
+
+> **Surface matters.** `/btw` behaves differently depending on where you run Claude Code. In the terminal CLI and the VS Code extension it is still a throwaway overlay that is not saved (author's hands-on check, 2026-11-01). In the Claude desktop app's Code tab, `/btw` (or ⋯ at the top right) opens a *side chat*: a separate window that can read the whole main session, is saved, and can be one of as many as you want, per [Jay E / RoboNuggets, 2026-10-28](../../summaries/2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes.md). See [Claude Desktop App § Side Chats](../tools/claude-desktop-app.md#side-chats).
 
 Treat `/clear` like `git stash` — use between logically distinct tasks even when context isn't full.
 

@@ -8,7 +8,8 @@ sources:
   - "summaries/2026-04-20_chase-ai_only-claude-design-guide-you-should-watch.md"
   - "summaries/2026-04-18_jono-catliff_how-i-built-insane-claude-design-websites-in-10-minutes.md"
   - "summaries/2026-04-13_anthropic_claude-prompting-best-practices.md"
-timestamp: "2026-04-22"
+  - "summaries/2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes.md"
+timestamp: "2026-11-01"
 ---
 
 # Claude Design
@@ -151,6 +152,24 @@ The argument (Chase AI):
 - **Variant-first path:** Branch to variants → tweak each one. Each tweak is scoped and cheap; variants evolve independently as intended.
 - **Apply-to-all path (the trap):** Variants exist, ask for "apply X to all". Each variant re-generates. N× the cost per tweak.
 - **Conclusion:** Variants first, then tweak each one in isolation. Matches the model's default scoping; keeps usage linear instead of multiplicative.
+
+## Unresolved Tensions
+
+### Is the standalone claude.ai/design site staying?
+
+*Surfaced: 2026-11-01 (ingest of 2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes).*
+
+This page describes Claude Design as a standalone site:
+
+> "Anthropic's browser-based front-end generator, available at **claude.ai/design**."
+
+Sources: [Chase AI, 2026-04-20](../../summaries/2026-04-20_chase-ai_only-claude-design-guide-you-should-watch.md); [Jono Catliff, 2026-04-18](../../summaries/2026-04-18_jono-catliff_how-i-built-insane-claude-design-websites-in-10-minutes.md).
+
+A later feature tour says Design is moving into the Claude app's artifacts and the standalone site is closing:
+
+> "Design is Claude's answer to Canva and, per the creator, is moving in for good: the video states the standalone claude.ai/design site closes on 14 December"
+
+Source: [Jay E / RoboNuggets, 2026-10-28](../../summaries/2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes.md), Key Takeaway 9. Not yet checked against an Anthropic announcement.
 
 ## Related Pages
 

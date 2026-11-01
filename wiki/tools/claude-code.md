@@ -46,7 +46,8 @@ sources:
   - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
   - "summaries/2026-10-14_claude-code-docs_best-practices.md"
   - "summaries/2026-10-15_claude-code-docs_permission-modes.md"
-timestamp: "2026-10-15"
+  - "summaries/2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes.md"
+timestamp: "2026-11-01"
 ---
 
 # Claude Code
@@ -159,6 +160,8 @@ Ships with recent Claude Code. Five things it checks:
 4. **Slow hooks** — flags hooks that add per-turn latency.
 5. **Reports before applying** — asks for confirmation rather than fixing silently.
 
+A narrower companion, `/skill-doctor`, shows what each skill costs in context and how often you use it, so you can switch off unused ones. *(Source: Jay E / RoboNuggets, 2026-10-28)*
+
 Worth a recurring cadence (monthly is a reasonable default) on any setup that accumulates skills and MCP servers. Note this is a *config-hygiene* instrument and not a substitute for [ablation](../concepts/harness-engineering.md#ablation-the-named-procedure-cherny-july-2026): `/doctor` finds what is broken, duplicated, or obviously unused; ablation finds what is *intact and used and still not earning its tokens*. Cherny's six-month delete-everything ritual answers a question `/doctor` cannot ask. *(Source: Jay E / RoboNuggets, 2026-08-03)*
 
 ## Extension Decision Map (Anthropic Official)
@@ -253,6 +256,8 @@ Say **"use a workflow"** — no syntax. Claude starts a VM inside a Bun sandbox 
 | `/branch` | Fork in place | Explore an alternative without losing current context |
 | `/btw` | Side query | Ask a question without polluting the main thread |
 
+In the desktop app's Code tab, remote control can be switched on for every session rather than per session: Settings → Claude Code → *Connect new sessions to remote control*, plus *Keep computer awake while Claude works* so long tasks survive the machine sleeping. See [Claude Desktop App § Session Rail](claude-desktop-app.md#session-rail). *(Source: Jay E / RoboNuggets, 2026-10-28)*
+
 ### Automation
 | Command | What it does |
 |---------|-------------|
@@ -331,8 +336,12 @@ Boris Cherny runs 5-10 Claudes in parallel — `claude.ai/code` tabs alongside l
 
 The binding constraint is **attention, not compute**: you can *open* many sessions, but a single person can only *actively steer* about 4-5 before quality drops — the surplus run as parked/background streams you check in on. The two figures are the same picture from different angles (5-10 open, ~4-5 actively attended), which is exactly why attention-triage surfaces exist (Claude Agents sorted by attention needed, Remote Control). *(Source: Stop babysitting your agents, Claude, 2026-05-20)*
 
+The desktop Code tab adds three more such surfaces: a pinned **master session** that reads the other chats and reports what is waiting on you, **nested sessions** you can open and redirect, and **split view**. The split-view advice matches the attention ceiling: zooming out fits up to ten chats, but start with two side by side. See [Claude Desktop App](claude-desktop-app.md). *(Source: Jay E / RoboNuggets, 2026-10-28)*
+
 ### Voice
 `/voice` or `export CLAUDE_CODE_VOICE_DICTATION=true`. Hold Space to record, release to transcribe. Encourages conversational prompting over terse typed instructions.
+
+In the desktop app, Ctrl+D starts voice dictation. *(Source: Jay E / RoboNuggets, 2026-10-28)*
 
 ## Key Insight
 
@@ -687,6 +696,7 @@ Contrast with the hierarchical **orchestrator-worker** pattern of the multi-agen
 - [Ultrareview](../how-tos/claude-code-ultrareview.md) — multi-agent verified bug-finding
 - [Parallel Agent Patterns](../concepts/parallel-agent-patterns.md)
 - [Claude Design](claude-design.md) — browser-based front-end generator; hand off its HTML export to Claude Code
+- [Claude Desktop App (Code Tab)](claude-desktop-app.md) — session rail, nested and master sessions, side chats, split view, artifacts
 - [Claude Routines](claude-routines.md)
 - [Claude Routines vs n8n](../comparisons/claude-routines-vs-n8n.md)
 - [Claude Code Orchestration Layers](../comparisons/claude-code-orchestration-layers.md)
