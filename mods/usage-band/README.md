@@ -54,7 +54,7 @@ Keep `~/.claude/mod-marketplaces/usage-band/`: Claude Code installs the mod from
 - Where the band sits relative to other mods' bands is decided by Claude Code, not by the mod.
 - There's no pace colour in the first 10% of a window, because there's too little data to judge the pace.
 - It needs a Claude Code version with mod support. It was tested on 2.1.312 to 2.1.316. The minimum version is unknown.
-- If your status line already shows context or rate limits, you will see them twice. Trim the status line.
+- If your status line already shows context or rate limits, you will see them twice. Trim the status line. The install gist offers to slim down the [ai-wiki status line](../../sources/articles/2026-04-16_self_claude-code-statusline-setup.md) to one line for you.
 
 ## Files
 

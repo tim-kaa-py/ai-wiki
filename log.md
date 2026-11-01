@@ -4,6 +4,8 @@
 
 ## 2026-11-01
 
+**Update** GIST: [usage-band — Install the Claude Code Usage Mod](gists/2026-11-01_usage-band-install.md) — step 7 now recognises the ai-wiki status line (2026-04-16 setup) and offers to slim it to one line: back up the script, drop context, 5h, 7d, ⚡, "(Xh left)", kT and the burn-rate state file, keep the reader's own additions, show the diff, test with a sample payload. Any other status line only gets a warning about duplicate figures. The mod README points to this. Confidentiality scan CLEAR.
+
 **Update** GIST: [usage-band — Install the Claude Code Usage Mod](gists/2026-11-01_usage-band-install.md) — copy-paste prompt that sparse-clones only `mods/usage-band/`, copies it to `~/.claude/mod-marketplaces/usage-band/`, registers and installs it from there, then deletes the temp clone so no copy of the wiki stays behind. Confidentiality scan CLEAR. Added to gists/index.md (count 2 → 3).
 
 **Update** MODS: published the usage-band Claude Code mod (v0.1.1) under `mods/usage-band/`, with a README. It shows context, 5h and 7d above the prompt, with pace colours and run-out time. The folder is its own marketplace (`tim-kaa-py-usage-band`, `source: "./"`). There's no marketplace file at the repo root, because a root marketplace would make Claude Code keep a full wiki clone. Tested in an isolated config: `claude plugin marketplace remove` uninstalls a marketplace's plugins, so the mod's folder has to stay. The installed copy passes `claude plugin validate` and its 35 tests. Licence CC BY 4.0 like the rest of the repo. Added a dated update note to sources/articles/2026-04-16_self_claude-code-statusline-setup.md that points to the mod and warns about duplicate figures. Confidentiality scan CLEAR.

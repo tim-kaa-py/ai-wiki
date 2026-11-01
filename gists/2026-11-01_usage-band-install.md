@@ -35,7 +35,11 @@ Install the Claude Code mod "usage-band" from the public repo tim-kaa-py/ai-wiki
 
 6. Only after step 5 succeeds, delete the temp directory from step 2, so no copy of the ai-wiki repo stays on this machine. Never delete ~/.claude/mod-marketplaces/usage-band: Claude Code installs the mod from that folder, and never run `claude plugin marketplace remove` for it, because that uninstalls the mod.
 
-7. If my status line (statusLine in ~/.claude/settings.json) already shows the context window or the 5-hour/7-day limits, tell me, because I'll see them twice. Don't change it unless I ask.
+7. Check my status line (statusLine in ~/.claude/settings.json) for figures the mod now shows, so I don't see them twice:
+   - If it runs ~/.claude/statusline-command.sh and that script's header says "Claude Code status line — three-line display", it is the setup from tim-kaa-py/ai-wiki (sources/articles/2026-04-16_self_claude-code-statusline-setup.md). Offer to slim it down to one line and wait for my yes. On yes: back the script up to ~/.claude/statusline-command.sh.bak, then remove the context bar, the 5h and 7d segments (bars, percentages, reset countdowns and the ~Xd estimate), the ⚡ burn indicator, the "(Xh left)" warning, the kT token count, and the burn-rate state file logic (STATE_FILE, ~/.claude/.statusline-rl5h-last; delete that file too). Keep model and effort, the session cost, git branch, working directory, session duration and API %, joined on one line. If my copy differs from the original, keep my own additions. Show me the diff, then prove it still runs and prints exactly one line:
+     echo '{"model":{"display_name":"Sonnet 4.6"},"context_window":{"used_percentage":42,"total_input_tokens":100000,"total_output_tokens":50000},"cost":{"total_cost_usd":1.50,"total_duration_ms":600000,"total_api_duration_ms":300000,"total_lines_added":50,"total_lines_removed":10},"rate_limits":{"five_hour":{"used_percentage":30,"resets_at":9999999999},"seven_day":{"used_percentage":55,"resets_at":9999999999}},"workspace":{"current_dir":"."}}' | bash ~/.claude/statusline-command.sh
+   - If it is any other status line that shows the context window or the 5-hour/7-day limits, only tell me which parts duplicate the mod. Don't change it.
+   - If it shows none of those, say nothing about it.
 
 8. Tell me to restart Claude Code. The band appears above the prompt after the first reply.
 ```
