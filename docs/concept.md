@@ -307,7 +307,7 @@ Design rationale and phasing (supervised pilots → shadow mode → autonomous s
 
 ### 5.1 Transcript extraction
 
-Copy [`scripts/extract-transcript.py`](../scripts/extract-transcript.py) from this repo into the new repo at the same path. It extracts YouTube captions (manual preferred, auto-generated fallback) as timestamped text via `yt-dlp`, with no `ffmpeg` dependency.
+Copy [`scripts/extract-transcript.py`](../scripts/extract-transcript.py) from this repo into the new repo at the same path. It extracts YouTube captions (manual preferred, auto-generated fallback) as timestamped text via `yt-dlp`, with no `ffmpeg` dependency. When YouTube answers with its "Sign in to confirm you're not a bot" check, it retries once with `--force-ipv4`: the check often hits one address family only (seen on IPv6 behind a mobile hotspot), and no yt-dlp upgrade lifts it. `transcribe-audio.py` carries the same `run_ytdlp` retry, tested in `scripts/tests/test_ytdlp_retry.py`.
 
 Runtime requirements (document these in `README.md` or `user-documentation.md`):
 

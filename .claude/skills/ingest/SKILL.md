@@ -90,6 +90,8 @@ YouTube: check `which yt-dlp` first (suggest install if missing), then
 yt-dlp --skip-download --print "%(title)s|||%(channel)s|||%(upload_date)s|||%(id)s|||%(duration_string)s" "<URL>"
 ```
 
+If YouTube answers "Sign in to confirm you're not a bot", rerun with `--force-ipv4`: the block is usually on one address family only, and a yt-dlp upgrade does not lift it. The transcript scripts in Step 3 do this retry on their own.
+
 Paper: title, authors, date, abstract from the PDF or arxiv page. Repo: name, description, primary language, stars, last activity.
 
 **Confirm with the user**: title, author/channel, date, duration/size.

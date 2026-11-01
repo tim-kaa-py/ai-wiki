@@ -29,13 +29,30 @@ def js_runtime_args():
     return []
 
 
+BOT_CHECK = "Sign in to confirm"
+
+
+def run_ytdlp(args):
+    """Run yt-dlp with args; on YouTube's bot check retry once over IPv4.
+
+    YouTube sometimes answers one address family with "Sign in to confirm
+    you're not a bot" while the other goes through (seen on IPv6 behind a
+    mobile hotspot). Upgrading yt-dlp does not help; IPv4 does. Raises
+    CalledProcessError like subprocess.run(check=True).
+    """
+    result = subprocess.run(["yt-dlp", *args], capture_output=True, text=True)
+    if result.returncode != 0 and BOT_CHECK in result.stderr:
+        print("YouTube bot check on the default route; retrying over IPv4.", file=sys.stderr)
+        result = subprocess.run(["yt-dlp", "--force-ipv4", *args], capture_output=True, text=True)
+    if result.returncode != 0:
+        raise subprocess.CalledProcessError(result.returncode, ["yt-dlp", *args], result.stdout, result.stderr)
+    return result
+
+
 def get_video_info(url):
     """Run yt-dlp -j and return parsed JSON."""
     try:
-        result = subprocess.run(
-            ["yt-dlp", *js_runtime_args(), "-j", url],
-            capture_output=True, text=True, check=True
-        )
+        result = run_ytdlp([*js_runtime_args(), "-j", url])
         return json.loads(result.stdout)
     except FileNotFoundError:
         print("Error: yt-dlp not found. Install it: pip install yt-dlp", file=sys.stderr)

@@ -23,6 +23,9 @@ const AUDIO = /scripts\/transcribe-audio\.py|transcribe\/scripts\/transcribe\.sh
 const VIDEO_ID = /(?:[?&]v=|youtu\.be\/|\/shorts\/|\/live\/)([\w-]{11})/
 const RATE_LIMITED = /HTTP Error 429/
 const BLOCKED = /HTTP Error 403|Sign in to confirm/
+// The scripts retry a bot check over IPv4 on their own and print its text only
+// when that retry fails too; no yt-dlp upgrade fixes it.
+const BOT_CHECK = /Sign in to confirm/
 const RELEASE = /^(\d{4})\.(\d{2})\.(\d{2})/
 const COOLDOWN_MS = 10 * 60 * 1000
 const STALE_DAYS = 60
@@ -74,6 +77,15 @@ export const register: Register = on => {
       return withContext(
         ran,
         `${PLUGIN}: YouTube rate-limited the caption download (HTTP 429). Do not re-run the caption script; it fails the same way for about ten minutes. Fall back once to scripts/transcribe-audio.py for this URL. If that fails too, ${PASTE}.`,
+      )
+    }
+
+    if ((isCaptions || isAudio) && BOT_CHECK.test(text)) {
+      await tellUser($, videoId, false)
+
+      return withContext(
+        ran,
+        `${PLUGIN}: YouTube's bot check ("Sign in to confirm you're not a bot") blocked this network, and the script's own IPv4 retry failed too. A yt-dlp upgrade does not fix a bot check, so do not suggest one and do not retry: ${PASTE}.`,
       )
     }
 

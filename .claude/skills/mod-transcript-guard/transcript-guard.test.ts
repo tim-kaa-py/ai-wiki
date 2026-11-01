@@ -77,6 +77,21 @@ test('with a fresh yt-dlp the audio 403 asks for a paste, by toast when notifica
   expect(seen.toasts[0]).toContain('Show transcript')
 })
 
+test('a bot check that survived the IPv4 retry asks for a paste, never an upgrade', async ($, on) => {
+  const { clock, seen } = world(on, { version: '2026.06.09', bashText: "ERROR: [youtube] x: Sign in to confirm you're not a bot." })
+  await $.session.start({ cwd: '/repo', surface: 'terminal', isInteractive: true })
+  await clock.advance(0)
+
+  const captions = await $.tool.call({ tool: 'Bash', command: CAPTIONS })
+  expect(captions.context?.[0]).toContain('paste the transcript')
+  expect(captions.context?.[0]).not.toContain('pip install')
+  expect(seen.notes[0]).toContain('Show transcript')
+
+  const audio = await $.tool.call({ tool: 'Bash', command: AUDIO })
+  expect(audio.context?.[0]).toContain('bot check')
+  expect(seen.notes.length).toBe(1)
+})
+
 test('other commands pass through untouched', async ($, on) => {
   const { seen } = world(on, { bashText: 'HTTP Error 429' })
   const ran = await $.tool.call({ tool: 'Bash', command: 'grep -n "VQyYzLJ6xos" index.md' })
