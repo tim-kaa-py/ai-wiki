@@ -52,9 +52,20 @@ Because one Claude Code session can see the others, a single pinned session can 
 
 A separate chat window opened next to the main session that can read the whole main session. Unlike the old `/btw`, which opened a throwaway chat, side chats are saved, and you can keep as many as you want.
 
-### Artifacts
+### Artifacts: working on docs, slides and files together with Claude
 
-What Claude's docs, slides, design, dashboard and motion tools produce: a shared canvas you and Claude work on together, which takes comments for Claude to fix and can be published as a live link or shared with a team or client.
+Anthropic now has its own take on Google Docs and Google Slides inside Claude, plus tools for design, dashboards and videos. Each of them produces an **artifact**: a shared canvas that you and Claude work on at the same time, instead of Claude handing you a finished file.
+
+How it works, per the video (10:19-13:07):
+
+- **One canvas, two editors.** You and Claude work on the same document, deck, design or dashboard. Docs work like Google Docs: you and Claude write the same document together.
+- **Comments as instructions.** You leave comments on the artifact, and Claude fixes what they point at, the way you would comment on a colleague's draft.
+- **Share like a Google Doc.** Any artifact can be published as a live link, or shared with your team or a client.
+- **Slides leave Claude when you need them to.** Download a deck as PowerPoint, or present it straight from Claude.
+- **Design keeps your brand.** Design is Claude's answer to Canva (social posts, websites, anything visual). Upload your own design system in settings, or bring it in through a skill.
+- **Dashboards stay current.** They pull live data from your connected apps, so the numbers are up to date every time someone opens the link.
+- **Claude Motion makes videos from code**, not from a video model: cheaper, because you don't pay per generation, and easier to change afterwards.
+- **Artifacts can contain Claude.** With AI-powered artifacts switched on, a shared artifact can answer questions itself (see below).
 
 ### AI-powered artifacts
 
@@ -86,8 +97,8 @@ Short-term memory Claude keeps during a chat so it does not reread the whole con
    - **How to apply:** ⋯ at the top right or type `/btw`; ask it to explain what Claude has done so far or to check the status.
 8. **Use split view to watch several chats at once, but start small.**
    - **How to apply:** Option-click (Alt on Windows) a chat in the sidebar, or right-click → *Open in split view*. Zooming out with Cmd+minus fits up to ten chats, but that floods your own attention; start with two side by side.
-9. **Use artifacts instead of separate tools.** Docs work like Google Docs; Slides export to PowerPoint or present straight from Claude; Design is Claude's answer to Canva and, per the creator, is moving in for good: the video states the standalone claude.ai/design site closes on 14 December; dashboards pull live data from connected apps, so the numbers are current every time the link opens; Claude Motion makes animated videos with code instead of a video model, cheaper (no per-generation cost) and easier to tweak.
-   - **How to apply:** Upload your design system in settings, or bring it in through a skill.
+9. **Make documents, decks and designs with Claude in an artifact instead of a separate tool.** Working on the same canvas, steering by comments and sharing a live link replaces the round trip of "Claude writes a file, you paste it into Google Docs, you send it on" (how it works: Key Concepts › Artifacts). Design is moving in for good, per the creator: the video states the standalone claude.ai/design site closes on 14 December.
+   - **How to apply:** Ask Claude for the doc, deck or dashboard as an artifact, then comment on the parts to change. Publish the link or share it with your team or client when it's ready; download a deck as PowerPoint or present it from Claude. For design work, upload your design system in settings or bring it in through a skill.
 10. **On Pro or Max you get everything shown except Claude Motion** (for now).
 11. **Make shared dashboards answer questions.** With AI-powered artifacts on, ask Claude to add a chat window or search bar to a team dashboard, so teammates who don't use Claude Code can ask questions of its data from the shared link.
    - **How to apply:** Settings → Capabilities → *AI-powered artifacts*, then ask Claude to add the chat box.

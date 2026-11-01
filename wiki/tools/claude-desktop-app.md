@@ -77,7 +77,7 @@ What Claude's docs, slides, design, dashboard and motion tools produce: a shared
 
 | Artifact type | Per the video |
 |---------------|---------------|
-| **Docs** | Work like Google Docs |
+| **Docs** | Work like Google Docs: you and Claude write the same document together |
 | **Slides** | Export to PowerPoint or present straight from Claude |
 | **Design** | Claude's answer to Canva; upload your design system in settings or bring it in through a skill. See [Claude Design](claude-design.md) for the standalone tool |
 | **Dashboards** | Pull live data from connected apps, so the numbers are current every time the link opens |
