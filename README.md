@@ -40,6 +40,7 @@ Every ingest runs a pipeline defined in the [`ingest`](.claude/skills/ingest/SKI
 | [`docs/concept.md`](docs/concept.md) | How to recreate this system from scratch, on any topic |
 | [`log.md`](log.md) | Chronological record of every ingest, lint, and structural change |
 | [`gists/`](gists/) | Reusable Claude Code prompts, shareable standalone |
+| [`mods/`](mods/) | Claude Code mods to install, each with an install gist (start with [usage-band](mods/usage-band/README.md)) |
 
 ## Want this for your own topic?
 
@@ -54,6 +55,7 @@ wiki/        synthesized pages, maintained over time
 notes/       per-source ingest notes (user focus + confirmed discoveries)
 meta/        contradiction ledger, tension policy, triage-run reports
 gists/       user-authored, reusable Claude Code prompts
+mods/        shareable Claude Code mods, each folder its own marketplace
 ai-research/ local, gitignored reports from the optional daily briefing (never committed or ingested)
 scripts/     transcript extraction, local Whisper fallback, OKF conformance check (+ tests)
 docs/        user documentation, recreation guide, design specs & plans

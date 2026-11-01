@@ -122,6 +122,8 @@ gists/
 └── index.md
 ```
 
+Optional: `mods/<mod>/` for Claude Code mods the user wants to share. Each folder is its own marketplace (`marketplace.json` with `source: "./"`), installed through a gist that sparse-clones only that folder. Don't put a marketplace file at the repo root, because installers would keep a full clone of the repo.
+
 ---
 
 ## 4. File Templates

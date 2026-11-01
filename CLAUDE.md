@@ -16,6 +16,8 @@ Three layers:
 
 Parallel track: **Gists** (`gists/`) — user-authored Claude Code prompts, shareable. Not derived from sources, not synthesized into the wiki, indexed only in `gists/index.md`.
 
+Parallel track: **Mods** (`mods/<mod>/`) — the author's Claude Code mods, published to share. Each folder is its own marketplace (`.claude-plugin/marketplace.json` beside `plugin.json`, `source: "./"`), paired with an install gist that sparse-clones only that folder, installs it from `~/.claude/mod-marketplaces/<mod>/` and deletes the temp clone. There is no root marketplace file: it would make installers keep a full wiki clone. `claude plugin marketplace remove` uninstalls a marketplace's plugins, so the install gist never uses it for cleanup. Outside OKF scope; scan every file before committing.
+
 Other files: `index.md` (master index; frontmatter `okf_version: "0.1"` only; body is `* [Title](path) - description` bullets under pillar headings), `log.md` (newest-first `## YYYY-MM-DD` headings, newest entry first under each; entries prefixed `**Creation**` for ingests, `**Update**` for everything else), `notes/` (per-ingest focus notes), `inbox/` (unprocessed items, must be empty after processing), `meta/` (contradiction ledger, triage policy and prompts). When a workspace-level `CLAUDE.md` is loaded too, this repo's log format and `.claude/rules/frontmatter.md` override its log prefix and frontmatter template: this bundle is OKF.
 
 ## Workflow routing

@@ -1,0 +1,13 @@
+{
+  "name": "tim-kaa-py-usage-band",
+  "owner": { "name": "tim-kaa-py" },
+  "description": "usage-band, a Claude Code mod from tim-kaa-py/ai-wiki",
+  "plugins": [
+    {
+      "name": "usage-band",
+      "source": "./",
+      "description": "A band above the prompt: the 5-hour and 7-day limits with pace and time left, and the context window with its compaction point",
+      "version": "0.1.1"
+    }
+  ]
+}

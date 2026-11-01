@@ -28,6 +28,8 @@ Three layers:
 
 Plus a parallel track for **gists** (`gists/`) — your own reusable Claude Code prompts, intended to be shared. Gists are not summarized or cross-linked into the wiki. See [Save a gist](#5-save-a-gist).
 
+Plus **mods** (`mods/`) — your Claude Code mods, published so others can install them. Each mod folder is a self-contained marketplace, and each comes with an install gist. The gist fetches only that folder, installs it and deletes the download, so installers never keep a copy of the wiki. To share a new mod, copy it from your local marketplace (never from a private mirror, and never the generated `.claude-plugin/types/`), add its `marketplace.json`, README and install gist, run `claude plugin validate` and `claude plugin test` on the copy, and run the confidentiality scan.
+
 Plus:
 
 - `index.md` — master index. Your browse-entry.

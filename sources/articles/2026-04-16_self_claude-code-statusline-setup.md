@@ -12,6 +12,8 @@ extraction_method: "user-pasted"
 
 > **Maintenance note:** This file is the single source of truth for the status line setup. When the script or layout changes, update this file and the referencing wiki pages (`wiki/how-tos/claude-code-status-line.md`, `summaries/2026-04-16_self_claude-code-statusline-setup.md`). Do not create a new ingest — update in place.
 
+> **Update 2026-11-01:** I now show the context window and the 5-hour and 7-day limits with the [usage-band mod](../../mods/usage-band/README.md), a band above the prompt that also works in VS Code and the desktop app. Install it with the [usage-band gist](../../gists/2026-11-01_usage-band-install.md). If you use both, drop the context and rate-limit parts of this status line, or you will see them twice.
+
 # Claude Code Status Line — Context Awareness + Rate Limit Dashboard
 
 Want more context awareness and a useful status bar? Three lines at the bottom of your Claude Code terminal showing live context usage, rate limits, session cost, and productivity — without ever leaving the terminal.

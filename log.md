@@ -2,6 +2,12 @@
 
 <!-- OKF log: date headings newest first, prose entries. Append-only. -->
 
+## 2026-11-01
+
+**Update** GIST: [usage-band — Install the Claude Code Usage Mod](gists/2026-11-01_usage-band-install.md) — copy-paste prompt that sparse-clones only `mods/usage-band/`, copies it to `~/.claude/mod-marketplaces/usage-band/`, registers and installs it from there, then deletes the temp clone so no copy of the wiki stays behind. Confidentiality scan CLEAR. Added to gists/index.md (count 2 → 3).
+
+**Update** MODS: published the usage-band Claude Code mod (v0.1.1) under `mods/usage-band/`, with a README. It shows context, 5h and 7d above the prompt, with pace colours and run-out time. The folder is its own marketplace (`tim-kaa-py-usage-band`, `source: "./"`). There's no marketplace file at the repo root, because a root marketplace would make Claude Code keep a full wiki clone. Tested in an isolated config: `claude plugin marketplace remove` uninstalls a marketplace's plugins, so the mod's folder has to stay. The installed copy passes `claude plugin validate` and its 35 tests. Licence CC BY 4.0 like the rest of the repo. Added a dated update note to sources/articles/2026-04-16_self_claude-code-statusline-setup.md that points to the mod and warns about duplicate figures. Confidentiality scan CLEAR.
+
 ## 2026-10-16
 
 **Update** CONFIG: Claude config restructure (report `.claude/restructure/2026-10-16.md`). Prompt audit applied: every skill now inserts its log entry first under today's heading (ingest, lint, query, wiki-tension-triage matched to gist and to the log's real order); CLAUDE.md states the in-day order, drops the pinned default model and says its OKF log format and frontmatter rule override a workspace-level CLAUDE.md. New commit gate `.claude/hooks/validate-gate.sh` runs the same checks as CI (OKF check plus `scripts/tests`). No sections moved: CLAUDE.md stays 115 lines. Five audit findings in `meta/` left for a separate pass.

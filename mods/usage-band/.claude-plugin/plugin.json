@@ -1,0 +1,7 @@
+{
+  "name": "usage-band",
+  "version": "0.1.1",
+  "description": "A band above the prompt: the 5-hour and 7-day limits with pace and time left, and the context window with its compaction point",
+  "author": { "name": "tim-kaa-py" },
+  "types": "./types/index.d.ts"
+}
