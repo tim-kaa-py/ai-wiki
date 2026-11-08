@@ -1,0 +1,13 @@
+{
+  "name": "linkedin-posted",
+  "owner": { "name": "tim-kaa-py" },
+  "description": "mod-posted as its own marketplace, so a project outside ai-wiki can enable /posted at project scope (with LINKEDIN_MODULE set in its settings.json)",
+  "plugins": [
+    {
+      "name": "mod-posted",
+      "source": "./",
+      "description": "/posted marks the open LinkedIn draft as posted: status posted, paste-ready .txt deleted, committed and pushed in the private linkedin module.",
+      "version": "0.1.0"
+    }
+  ]
+}
