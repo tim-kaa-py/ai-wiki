@@ -84,15 +84,25 @@ async function markPosted($: EngineInterface, args: string): Promise<string> {
     : `${changed}, committed ${sha}, but the push failed (not forced): ${firstLine(pushed.stderr || pushed.stdout)}`
 }
 
+// The module sits under the working directory in an ai-wiki session. A session
+// elsewhere (a work workspace whose skill saves posts into the module) names it
+// in $LINKEDIN_MODULE, set in that project's settings.json, so no private path
+// lives in this public repo.
 async function findModule($: EngineInterface): Promise<string | undefined> {
   const cwd = (await $.session.cwd()).replace(/\/$/, '')
   for (const dir of [`${cwd}/linkedin`, ...(cwd.endsWith('/linkedin') ? [cwd] : [])]) {
-    if ((await $.fs.exists(`${dir}/posts`)) && (await $.fs.exists(`${dir}/CLAUDE.md`))) {
+    if (await isModule($, dir)) {
       return dir
     }
   }
+  const env = await $.process.run(['printenv', 'LINKEDIN_MODULE'])
+  const named = env.exitCode === 0 ? env.stdout.trim().replace(/\/$/, '') : ''
 
-  return undefined
+  return named !== '' && (await isModule($, named)) ? named : undefined
+}
+
+async function isModule($: EngineInterface, dir: string): Promise<boolean> {
+  return (await $.fs.exists(`${dir}/posts`)) && (await $.fs.exists(`${dir}/CLAUDE.md`))
 }
 
 async function openDrafts($: EngineInterface, posts: string): Promise<Draft[]> {
