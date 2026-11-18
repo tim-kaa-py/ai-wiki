@@ -14,7 +14,8 @@ sources:
   - "summaries/2026-04-30_cole-medin_principled-agentic-engineer-guide.md"
   - "summaries/2026-05-08_claude_memory-and-dreaming-for-self-learning-agents.md"
   - "summaries/2025-05-05_ibm-technology_mcp-vs-api-ai-agent-integration.md"
-timestamp: "2026-07-12"
+  - "summaries/2026-11-16_ray-amjad_code-mode-is-claude-codes-biggest-harness-change-yet.md"
+timestamp: "2026-11-18"
 ---
 
 # MCP (Model Context Protocol)
@@ -55,6 +56,10 @@ Instead of routing every tool call and every intermediate result through the mod
 - Cost: requires secure sandboxing, resource limits, and monitoring infrastructure.
 
 **Use when:** many MCP servers, large tool outputs, or context bloat is the bottleneck.
+
+### Code Mode: Server-Side and Client-Side
+
+The same pattern now goes by **Code Mode**. Cloudflare popularised it server-side: its own MCP server went from 2,600 tools costing 1.1M tokens to two tools (search, execute) costing about 1,000, with the code running in Cloudflare's sandbox and spanning that one server. Claude Code's experimental version is client-side: a persistent JavaScript REPL in which every MCP server, and every other harness tool, is a function, and variables survive between calls. Practical use: when an MCP tool floods context, have Claude store the result in a REPL variable and preview only the slice it needs. See [Code Mode](code-mode.md). *(Source: Ray Amjad, 2026-11-16)*
 
 ## Advanced Tool Use (beta: `advanced-tool-use-2025-11-20`)
 

@@ -22,7 +22,8 @@ sources:
   - "summaries/2026-08-21_anthropic_the-ai-native-sdlc-playbook.md"
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
   - "summaries/2026-10-05_matt-pocock_new-skills-v1-3-brings-pr-implement-spec-and-retro.md"
-timestamp: "2026-10-14"
+  - "summaries/2026-11-16_ray-amjad_code-mode-is-claude-codes-biggest-harness-change-yet.md"
+timestamp: "2026-11-18"
 ---
 
 # Context Engineering
@@ -231,6 +232,10 @@ A 1M-token window does **not** eliminate context overload — the dense-reasonin
 
 This complements the token-budget table above: the subagent's 6,100 tokens of file reads → 420-token summary back isn't merely "tidier" — it's an order-of-magnitude protection of the parent's smart zone. The architectural pattern is justified by the math, regardless of the advertised window size. *(Source: Cole Medin)*
 
+## Variables as Context Buffers: Code Mode
+
+A second way to keep bulky intermediate results out of the parent window, alongside sub-agents: in a classic tool loop every tool output stays in context and is reread on each later call, so even cached at 10% of the normal rate those tokens are spent for nothing [01:40-01:59]. Claude Code's experimental Code Mode lets the model write code in a persistent REPL where tools are functions; results go into variables, get looped over, deduplicated and filtered there, and only the distilled output enters the conversation. Anti-pattern it fixes: letting a verbose MCP response land whole in the window. Instead, assign it to a variable and preview only the slice needed. See [Code Mode](code-mode.md). *(Source: Ray Amjad, 2026-11-16)*
+
 ## Memory Systems as a Context-Engineering Surface
 
 Simon Scrapes (May 2026) frames any agent memory system around three questions — **storage, injection, recall** — and the framework is, at its core, a context-engineering lens. *Injection* is the fixed per-session token cost a memory layer imposes; *recall* is the on-demand retrieval cost. Lean injection (a curated ~1,300-token frozen snapshot, cached) beats fat injection (30k tokens of raw history) for the same reason just-in-time retrieval beats RAG pre-loading: the goal is "load the right small thing at the right time," not "load more."
@@ -302,6 +307,10 @@ The [reset-over-compaction](#compaction-vs-full-reset) default gets a number. Me
 
 Self-check he recommends: compact a real conversation, then ask the agent about small technical details from earlier in it. It will typically fail and admit the loss. *(Source: Cole Medin, 2026-09-01)*
 
+### Self-Edited History Instead of Compaction (speculation)
+
+A forward-looking alternative to both compaction and resets: if the conversation history were a variable in the REPL, the model could notice its window filling and delete or shorten noisy tool calls that are no longer relevant, deciding itself what to remove rather than delegating it to a summariser [12:50-13:30]. The cost is prompt-cache breakage: an edit early in the history invalidates everything cached after it. Anthropic's API already offers **context editing**, and warns that edits break the cache and need a cost-benefit check [13:30-14:07]. Nothing like this ships in Claude Code; Ray Amjad's "maybe in 2027" is explicitly a guess. See [Recursive Language Models § Conversation History as a Variable](recursive-language-models.md#conversation-history-as-a-variable-speculation). *(Source: Ray Amjad, 2026-11-16)*
+
 ## Related Pages
 
 - [Harness Engineering](harness-engineering.md) — the successor discipline that subsumes context engineering
@@ -318,3 +327,5 @@ Self-check he recommends: compact a real conversation, then ask the agent about 
 - [Retrieval-Augmented Generation (RAG)](rag.md) — foundational reference for the retrieve-on-demand mechanism that just-in-time retrieval generalizes
 - [Boris Cherny](../people/boris-cherny.md) — the 80% cut and the ablation discipline behind rule 5
 - [Claude Code Mods](../tools/claude-code-mods.md) — moving enforced rules out of CLAUDE.md; redaction and injection at the harness level
+- [Code Mode](code-mode.md) — tool results held in REPL variables instead of the window
+- [Recursive Language Models](recursive-language-models.md) — prompt and history as variables the model edits itself (speculative)

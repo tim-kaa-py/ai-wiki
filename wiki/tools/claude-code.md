@@ -47,7 +47,8 @@ sources:
   - "summaries/2026-10-14_claude-code-docs_best-practices.md"
   - "summaries/2026-10-15_claude-code-docs_permission-modes.md"
   - "summaries/2026-10-28_robonuggets_anthropic-just-shipped-claude-2-0-master-it-in-17-minutes.md"
-timestamp: "2026-11-01"
+  - "summaries/2026-11-16_ray-amjad_code-mode-is-claude-codes-biggest-harness-change-yet.md"
+timestamp: "2026-11-18"
 ---
 
 # Claude Code
@@ -247,6 +248,10 @@ CLAUDE_CODE_SIMPLE=1 claude                      # strip ALL system prompts, inc
 ### Dynamic Workflows
 
 Say **"use a workflow"** — no syntax. Claude starts a VM inside a Bun sandbox and orchestrates agents in a fan-out → verify/summarize → fan-out shape, at thousands-of-agents scale. Distinct from `/loop` and Routines: a workflow is *one task chunked with shared context*; loops and routines are *one repetitive task with no shared context*. See [Dynamic Workflows](../concepts/dynamic-workflows.md).
+
+### Code Mode (experimental, v2.1.323+)
+
+`CLAUDE_CODE_EXPERIMENTAL_CODE_MODE=1 claude` replaces Claude's separate tools (Read, Edit, Bash, WebFetch, MCP calls, subagents) with two: a **REPL**, a JavaScript console that stays open for the whole session and exposes every tool as a function, and **Poll**, for checking on scripts that detach into the background. Claude loops, filters and chains tool results in code, so only the distilled output enters the context window. Disable mods that use hooks first (Code Mode refused to enable alongside one), confirm with "what tools do you have?" (only REPL and Poll), and press Ctrl+O to see the code Claude writes. Most useful for MCP-heavy or data-wrangling tasks and for MCP servers that return far too much. The creator's single informal test showed about 30% lower cost; treat it as unverified. Three further functions (spawn, list and release context) sit unreleased in the binary. See [Code Mode](../concepts/code-mode.md). *(Source: Ray Amjad, 2026-11-16)*
 
 ### Session Mobility
 | Command | Direction | Use case |
@@ -698,6 +703,7 @@ Contrast with the hierarchical **orchestrator-worker** pattern of the multi-agen
 - [Claude Design](claude-design.md) — browser-based front-end generator; hand off its HTML export to Claude Code
 - [Claude Desktop App (Code Tab)](claude-desktop-app.md) — session rail, nested and master sessions, side chats, split view, artifacts
 - [Claude Routines](claude-routines.md)
+- [Code Mode](../concepts/code-mode.md) — experimental REPL that puts every harness tool behind code
 - [Claude Routines vs n8n](../comparisons/claude-routines-vs-n8n.md)
 - [Claude Code Orchestration Layers](../comparisons/claude-code-orchestration-layers.md)
 - [GSD](gsd.md)

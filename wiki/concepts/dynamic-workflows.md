@@ -6,7 +6,8 @@ pillar: "building"
 tags: [claude-code, agents, agent-orchestration, test-time-compute, workflow, parallel-agents, scaling]
 sources:
   - "summaries/2026-07-27_y-combinator_boris-cherny-we-cut-80-percent-of-claude-codes-prompt.md"
-timestamp: "2026-08-03"
+  - "summaries/2026-11-16_ray-amjad_code-mode-is-claude-codes-biggest-harness-change-yet.md"
+timestamp: "2026-11-18"
 ---
 
 # Dynamic Workflows (Algebra for Agents)
@@ -49,6 +50,8 @@ Three distinct primitives that are easy to conflate. The discriminator is **cont
 | **Loop** | One repetitive task, re-run | No shared context; may share **memory** | Local — a cron job on your machine |
 | **Routine** | Same as a loop | No shared context; may share memory | Cloud — so you can close your laptop |
 
+**What "shared context" means here, and what it does not.** Cherny's discriminator is between kinds of work: a workflow is *one task broken into chunks*, while loops and routines are recurring runs that *"don't share context, but might share memory"* [27:54-28:11]. The "shared context" cell restates that contrast; Cherny does not describe how a workflow's agents exchange context while they run. Ray Amjad compares at the level of individual agents, and about functions that are not released: spawn context, list contexts and release context appeared in the Claude Code binary alongside Code Mode, and what they do is his inference ([Code Mode § Unreleased Context Functions](code-mode.md#unreleased-context-functions-speculation)). On his reading, a context spawned from the REPL could fork the main conversation, and spawned subagents could message the main coordinator, *"which isn't really possible with a dynamic workflow either"* [10:42-11:10]. Read together: a workflow's chunks share one task, but on Amjad's reading its agents neither fork the main conversation nor talk back to the coordinator. He guesses the two mechanisms may later be combined [11:10-11:19]. *(Sources: Boris Cherny, 2026-07-27; Ray Amjad, 2026-11-16)*
+
 **Picking:** reach for a workflow when a single large task decomposes; reach for loops/routines when the same context-free chore recurs hourly or daily. See [Claude Routines](../tools/claude-routines.md) for the loop/routine end and [Agent Loops](agent-loops.md) for the loop primitive itself.
 
 ## Self-Maintenance as the Flagship Use
@@ -71,3 +74,4 @@ Each is roughly one sentence of prompt. The abstraction-police routine is the mo
 - [Agent Loops (Loop Engineering)](agent-loops.md) — the local-loop primitive
 - [Product Overhang and Hobbling](product-overhang.md) — why one-sentence routines discover capabilities nobody prompted for
 - [Boris Cherny](../people/boris-cherny.md)
+- [Code Mode](code-mode.md) — unreleased REPL-spawned contexts compared against workflows

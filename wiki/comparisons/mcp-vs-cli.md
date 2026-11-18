@@ -9,7 +9,8 @@ sources:
   - "summaries/2025-11-04_anthropic_code-execution-with-mcp.md"
   - "summaries/2025-11-24_anthropic_advanced-tool-use.md"
   - "summaries/2026-04-19_ai-engineer_future-of-mcp-david-soria-parra-anthropic.md"
-timestamp: "2026-07-12"
+  - "summaries/2026-11-16_ray-amjad_code-mode-is-claude-codes-biggest-harness-change-yet.md"
+timestamp: "2026-11-18"
 ---
 
 # MCP vs CLI
@@ -43,6 +44,8 @@ The sharpest argument *against* MCP for deterministic work:
 - A CLI invocation lets the LLM write code *once* that calls the API *many* times — the recurring work no longer goes through the model.
 
 So: for deterministic third-party API work, MCP can be strictly more expensive than a CLI-generated script that performs the same work.
+
+**Code Mode narrows this gap from the MCP side.** Claude Code's experimental Code Mode gives the model a persistent JavaScript REPL in which MCP tools are functions, so it can write code once that calls an MCP server many times, filtering results before they reach the context. Ray Amjad's point on where a shell script falls short: bash can chain commands but cannot reach harness-level tools such as MCP servers or subagent spawning; the REPL can. See [Code Mode](../concepts/code-mode.md). *(Source: Ray Amjad, 2026-11-16)*
 
 ## Progressive Disclosure
 

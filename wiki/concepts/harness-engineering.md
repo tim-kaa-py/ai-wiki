@@ -26,7 +26,8 @@ sources:
   - "summaries/2026-07-23_ai-engineer_harness-engineering-is-not-enough-why-software-factories-fail.md"
   - "summaries/2026-08-22_ai-engineer_coding-agents-dont-scale-themselves-neither-do-your-teams.md"
   - "summaries/2026-09-04_ray-amjad_anthropic-just-released-claude-code-mods.md"
-timestamp: "2026-10-05"
+  - "summaries/2026-11-16_ray-amjad_code-mode-is-claude-codes-biggest-harness-change-yet.md"
+timestamp: "2026-11-18"
 ---
 
 # Harness Engineering
@@ -112,6 +113,8 @@ Anthropic's "How Claude Code works" doc gives the canonical agentic loop and too
 | Code intelligence | (LSP-based — language servers) |
 
 **Operational consequence:** if Claude can't do something, it's usually because no tool covers it. That's the gap MCP, hooks, or skills fill. Before adding harness complexity, check whether a built-in tool already covers the need.
+
+**Code Mode collapses the categories behind one tool.** Claude Code's experimental Code Mode (November 2026) puts all of these, plus MCP calls and subagents, behind a single persistent JavaScript REPL (and a Poll tool for background scripts): tools become functions the model calls from code, so results chain without passing through the context window. Ray Amjad calls it "the model swallowing the harness" and reads it as an instance of Alex Zhang's *Mismanaged Geniuses Hypothesis*, that many limits blamed on models come from how they are used. See [Code Mode](code-mode.md) and [Recursive Language Models](recursive-language-models.md). *(Source: Ray Amjad, 2026-11-16)*
 
 **Verify-first prompting** is the highest-leverage harness improvement. Anthropic's framing: providing test cases, screenshots, or runnable checks gives Claude a feedback loop. "Fix the bug" is weak; "fix the bug and verify tests pass" is strong. Add "verify by running X" to every task prompt — this is harness work expressed in the prompt.
 
@@ -513,6 +516,7 @@ Both are held without choosing. Horthy's position is that the harness raises the
 - [Reviewer Agents](reviewer-agents.md) — persona-based CI reviewers that replace human PR review
 - [Smart Zone](smart-zone.md) — the operational frame Pocock's harness is built around
 - [Parallel Agent Patterns](parallel-agent-patterns.md) — Sandcastle as a worked example
+- [Code Mode](code-mode.md) — every harness tool behind one persistent REPL
 - [Matt Pocock](../people/matt-pocock.md) — author of the structured Ralph variant
 - [Agent Memory Systems](agent-memory-systems.md) — memory primitive at platform scale; permission scopes, OCC, audit
 - [Dreaming](dreaming.md) — operationalization of "one objective per agent" applied to memory curation
