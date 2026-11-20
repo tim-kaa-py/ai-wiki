@@ -1,6 +1,6 @@
 ---
 name: linkedin-url-post
-description: "Turns a raw URL (video, podcast, article) straight into a LinkedIn post, skipping wiki ingest. Use when a URL comes with a posting intent, such as 'share this on LinkedIn', 'post this' or 'LI post for this link'. Not for summaries/ paths (linkedin-post), gists/ paths (linkedin-gist-post) or a plain ingest. Proxy: needs the author-private linkedin/ module."
+description: "Turns a raw URL (video, podcast, article) straight into a LinkedIn post, skipping wiki ingest. Use when a URL comes with a posting intent, such as 'share this on LinkedIn', 'post this' or 'LI post for this link', or when the user asks to post from the Obsidian 'URL post' queue ('URL post from my vault', 'post from Obsidian'). Not for summaries/ paths (linkedin-post), gists/ paths (linkedin-gist-post) or a plain ingest. Proxy: needs the author-private linkedin/ module."
 ---
 
 # linkedin-url-post (proxy)

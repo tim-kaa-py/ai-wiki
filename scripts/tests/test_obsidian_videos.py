@@ -74,5 +74,72 @@ class TestObsidianVideos(unittest.TestCase):
                 ov.main(["obsidian-videos.py", "remove", "ZZZZZZZZZZZ"])
 
 
+SECTIONS_NOTE = """
+# Watch next:
+
+## Some watch title
+https://www.youtube.com/watch?v=AAAAAAAAAAA
+
+# Ingest next:
+
+  ## Heading-titled entry
+  https://m.youtube.com/watch?v=EEEEEEEEEEE&pp=x
+  question under a heading title?
+
+**Bold entry**
+https://www.youtube.com/watch?v=FFFFFFFFFFF
+
+# URL post:
+https://m.youtube.com/watch?v=GGGGGGGGGGG&pp=y
+my angle for this post
+on two lines
+
+**Labelled post**
+https://example.com/article
+"""
+
+
+class TestSections(unittest.TestCase):
+    def setUp(self):
+        fd, self.path = tempfile.mkstemp(suffix=".md")
+        os.close(fd)
+        pathlib.Path(self.path).write_text(SECTIONS_NOTE, encoding="utf-8")
+        os.environ["AI_VIDEOS_NOTE"] = self.path
+
+    def tearDown(self):
+        os.remove(self.path)
+        del os.environ["AI_VIDEOS_NOTE"]
+
+    def test_level_two_heading_is_an_entry_title_not_a_section_end(self):
+        a, b = run("list")["entries"]
+        self.assertEqual((a["video_id"], a["title"], a["remarks"]),
+                         ("EEEEEEEEEEE", "Heading-titled entry", "question under a heading title?"))
+        self.assertEqual((b["video_id"], b["title"]), ("FFFFFFFFFFF", "Bold entry"))
+
+    def test_url_post_section(self):
+        a, b = run("list", "--section", "URL post")["entries"]
+        self.assertEqual(a["url"], "https://www.youtube.com/watch?v=GGGGGGGGGGG")
+        self.assertEqual(a["remarks"], "my angle for this post on two lines")
+        self.assertEqual((b["title"], b["url"], b["video_id"]),
+                         ("Labelled post", "https://example.com/article", None))
+
+    def test_remove_from_url_post_leaves_ingest_next(self):
+        removed = run("remove", "--section", "URL post", "GGGGGGGGGGG")["removed"]
+        self.assertIn("my angle", removed)
+        self.assertEqual([e["url"] for e in run("list", "--section", "URL post")["entries"]],
+                         ["https://example.com/article"])
+        self.assertEqual(len(run("list")["entries"]), 2)
+
+    def test_remove_does_not_reach_into_another_section(self):
+        with self.assertRaises(SystemExit):
+            with contextlib.redirect_stdout(io.StringIO()):
+                ov.main(["obsidian-videos.py", "remove", "--section", "URL post", "EEEEEEEEEEE"])
+
+    def test_unknown_section_fails(self):
+        with self.assertRaises(SystemExit):
+            with contextlib.redirect_stdout(io.StringIO()):
+                ov.main(["obsidian-videos.py", "list", "--section", "Nope"])
+
+
 if __name__ == "__main__":
     unittest.main()

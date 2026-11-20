@@ -32,7 +32,7 @@ Other files: `index.md` (master index; frontmatter `okf_version: "0.1"` only; bo
 | Says "lint" / "check wiki health" | `lint` |
 | Types `/wiki-tension-triage` (user-only: a run spends many sub-agents and commits to this public repo) | `wiki-tension-triage`; after bulk or manual wiki edits, suggest it rather than run it |
 | Types `/daily-ai-briefing` (user-only; if asked in words, point to the command) | `daily-ai-briefing` |
-| Asks for a LinkedIn post | `linkedin-*` proxies (private module, see `docs/private-modules.md`) |
+| Asks for a LinkedIn post, or a post from the Obsidian "URL post" queue | `linkedin-*` proxies (private module, see `docs/private-modules.md`) |
 | Says a LinkedIn post is published | Point to `/posted` (the `mod-posted` command); if asked in words, follow `linkedin/CLAUDE.md`'s commit flow |
 
 Every ingest ends with the `connect` skill (merge into wiki pages with tension detection), then index and log. Frontmatter schemas are in `.claude/rules/frontmatter.md`, loaded automatically when files under `sources/`, `summaries/`, `wiki/` or `gists/` are touched.

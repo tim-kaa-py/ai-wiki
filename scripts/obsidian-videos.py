@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 """Read and trim the user's Obsidian "AI Videos" note (the ingest queue).
 
-The note lives in an iCloud-synced Obsidian vault. Entries sit under `#`
-headings; only the "Ingest next" section is the queue. An entry is a bold
-title line (the user's own label), a URL, and optional free-text remarks
-(questions, angles) on the URL line or the lines below.
+The note lives in an iCloud-synced Obsidian vault. Sections are level-one
+`#` headings. "Ingest next" (the default) is the ingest queue; "URL post"
+is the queue of URLs to post on LinkedIn without an ingest. An entry is an
+optional title line (bold, or a `##` heading: the user's own label), a URL,
+and optional free-text remarks (questions, or the post's angle) on the URL
+line or the lines below.
 
 Usage:
-  python scripts/obsidian-videos.py list
-  python scripts/obsidian-videos.py remove <url-or-video-id>
+  python scripts/obsidian-videos.py list [--section "URL post"]
+  python scripts/obsidian-videos.py remove [--section "URL post"] <url-or-video-id>
 
 `list` prints JSON:
   {"status": "ok", "note": "<path>", "entries": [
      {"n": 1, "title": "...", "url": "...", "video_id": "...",
       "remarks": "...", "duplicate": ["sources/youtube/<slug>.md", ...]}]}
-`remove` deletes that entry from the Ingest next section and prints
+`duplicate` lists wiki files with that video for Ingest next, and LinkedIn
+posts (`linkedin/posts/`) with that URL for URL post.
+`remove` deletes that entry from the chosen section and prints
   {"status": "ok", "removed": "<entry text as it was>"}
 Errors print {"status": "error", "message": "..."} and exit 1.
 
@@ -30,13 +34,13 @@ from pathlib import Path
 
 VAULTS = Path.home() / "Library/Mobile Documents/iCloud~md~obsidian/Documents"
 REPO = Path(__file__).resolve().parent.parent
-QUEUE_HEADING = "ingestnext"
+DEFAULT_SECTION = "Ingest next"
 NOTE_STEM = "aivideos"
 
 URL_RE = re.compile(r"https?://[^\s)\]>]+")
 MD_LINK_RE = re.compile(r"\[([^\]]*)\]\((https?://[^)\s]+)\)")
 BOLD_LINE_RE = re.compile(r"^\s*\*\*(.+?)\*\*\s*:?\s*$")
-HEADING_RE = re.compile(r"^\s*#{1,6}\s+(.*?)\s*$")
+HEADING_RE = re.compile(r"^\s*(#{1,6})\s+(.*?)\s*$")
 YT_ID_RE = re.compile(r"(?:[?&]v=|youtu\.be/|/shorts/|/live/)([A-Za-z0-9_-]{11})")
 
 
@@ -73,19 +77,23 @@ def canonical(url):
     return f"https://www.youtube.com/watch?v={vid}" if vid else url
 
 
-def queue_bounds(lines):
-    """Return (start, end) line indexes of the Ingest next section body."""
+def queue_bounds(lines, section):
+    """Return (start, end) line indexes of a section's body.
+
+    Sections are level-one headings only: a `##` line inside a section is an
+    entry title, not the end of the section.
+    """
     start = None
     for i, line in enumerate(lines):
         m = HEADING_RE.match(line)
-        if not m:
+        if not m or len(m.group(1)) != 1:
             continue
         if start is not None:
             return start, i
-        if norm(m.group(1)) == QUEUE_HEADING:
+        if norm(m.group(2)) == norm(section):
             start = i + 1
     if start is None:
-        fail("The note has no '# Ingest next' heading.")
+        fail(f"The note has no '# {section}' heading.")
     return start, len(lines)
 
 
@@ -101,12 +109,14 @@ def parse_entries(lines, start, end):
     for i in range(start, end):
         line = lines[i]
         bold = BOLD_LINE_RE.match(line)
+        heading = HEADING_RE.match(line)
+        label = bold.group(1) if bold else heading.group(2) if heading else None
         urls = URL_RE.findall(line)
-        if bold or (urls and cur is not None and cur["url"]) or (urls and cur is None):
+        if label is not None or (urls and cur is not None and cur["url"]) or (urls and cur is None):
             close(i)
-            cur = {"start": i, "title": bold.group(1).strip().rstrip(":").strip() if bold else "",
+            cur = {"start": i, "title": label.strip().rstrip(":").strip() if label else "",
                    "url": None, "remarks": []}
-            if bold:
+            if label is not None:
                 continue
         if cur is None:
             continue
@@ -125,10 +135,13 @@ def parse_entries(lines, start, end):
     return [e for e in entries if e["url"]]
 
 
-def duplicates(url):
+def duplicates(url, section):
     needle = video_id(url) or url
     hits = []
-    for folder in ("sources", "summaries"):
+    folders = ("linkedin/posts",) if norm(section) != norm(DEFAULT_SECTION) else ("sources", "summaries")
+    for folder in folders:
+        if not (REPO / folder).is_dir():
+            continue
         for p in (REPO / folder).rglob("*.md"):
             try:
                 if needle in p.read_text(encoding="utf-8"):
@@ -138,15 +151,15 @@ def duplicates(url):
     return sorted(hits)
 
 
-def load():
+def load(section):
     note = find_note()
     lines = note.read_text(encoding="utf-8").split("\n")
-    start, end = queue_bounds(lines)
+    start, end = queue_bounds(lines, section)
     return note, lines, parse_entries(lines, start, end)
 
 
-def cmd_list():
-    note, _, entries = load()
+def cmd_list(section):
+    note, _, entries = load(section)
     out = []
     for n, e in enumerate(entries, 1):
         out.append({
@@ -155,19 +168,19 @@ def cmd_list():
             "url": canonical(e["url"]),
             "video_id": video_id(e["url"]),
             "remarks": " ".join(e["remarks"]),
-            "duplicate": duplicates(e["url"]),
+            "duplicate": duplicates(e["url"], section),
         })
     print(json.dumps({"status": "ok", "note": str(note), "entries": out},
                      ensure_ascii=False, indent=2))
 
 
-def cmd_remove(target):
-    note, lines, entries = load()
+def cmd_remove(section, target):
+    note, lines, entries = load(section)
     key = video_id(target) or target
     matches = [e for e in entries
                if (video_id(e["url"]) or e["url"]) == key or e["url"] == target]
     if len(matches) != 1:
-        fail(f"Expected one Ingest next entry for {target}, found {len(matches)}.")
+        fail(f"Expected one {section} entry for {target}, found {len(matches)}.")
     e = matches[0]
     removed = "\n".join(lines[e["start"]:e["end"]])
     # Drop the blank gap after the entry too, so the note doesn't grow holes.
@@ -188,12 +201,21 @@ def fail(message):
 
 
 def main(argv):
-    if len(argv) == 2 and argv[1] == "list":
-        cmd_list()
-    elif len(argv) == 3 and argv[1] == "remove":
-        cmd_remove(argv[2])
+    args = list(argv[1:])
+    section = DEFAULT_SECTION
+    if "--section" in args:
+        i = args.index("--section")
+        if i + 1 >= len(args):
+            fail("--section needs a heading name, e.g. --section \"URL post\"")
+        section = args[i + 1]
+        del args[i:i + 2]
+    if args == ["list"]:
+        cmd_list(section)
+    elif len(args) == 2 and args[0] == "remove":
+        cmd_remove(section, args[1])
     else:
-        fail("usage: obsidian-videos.py list | remove <url-or-video-id>")
+        fail('usage: obsidian-videos.py list [--section "URL post"] | '
+             'remove [--section "URL post"] <url-or-video-id>')
 
 
 if __name__ == "__main__":
