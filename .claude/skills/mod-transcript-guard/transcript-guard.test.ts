@@ -35,12 +35,17 @@ test('after a caption 429 it tells the model the fallback and refuses the same r
   const { clock, seen } = world(on, { bashText: 'Error downloading subtitles: HTTP Error 429: Too Many Requests\nno_captions None None 0' })
   const first = await $.tool.call({ tool: 'Bash', command: CAPTIONS })
   expect(first.context?.[0]).toContain('Do not re-run the caption script')
+  expect(first.context?.[0]).toContain('days at a time')
+  expect(first.context?.[0]).toContain('transcript panel in Chrome')
+  expect(first.context?.[0]).not.toContain('ten minutes')
 
+  await clock.advance(3 * 60 * 60 * 1000)
   const retry = await $.tool.call({ tool: 'Bash', command: CAPTIONS })
   expect(retry.deny).toContain('HTTP 429')
+  expect(retry.deny).toContain('180 min ago')
   expect(seen.ran).toBe(1)
 
-  await clock.advance(11 * 60 * 1000)
+  await clock.advance(3 * 60 * 60 * 1000 + 60 * 1000)
   await $.tool.call({ tool: 'Bash', command: CAPTIONS })
   expect(seen.ran).toBe(2)
 })

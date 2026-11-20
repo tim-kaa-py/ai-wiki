@@ -2,11 +2,13 @@ import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, ToolCallResult } from 'claude-code'
 
 // YouTube ingests lose their transcript in a fixed pattern: the caption
-// download comes back HTTP 429, the audio fallback HTTP 403. Re-running the
-// caption script minutes later fails the same way, and an old yt-dlp makes
-// the 403 likely. This mod checks yt-dlp's age at session start, refuses an
-// identical caption retry inside the cooldown, tells the model the fallback
-// order, and notifies the user the moment a paste or an upgrade is needed.
+// download comes back HTTP 429, the audio fallback HTTP 403. The 429 is not a
+// short rate limit: from 2026-10 to 2026-11 YouTube refused script caption
+// downloads from this network for days at a time, on and off, while Chrome
+// still got the same captions. An old yt-dlp makes the 403 likely. This mod
+// checks yt-dlp's age at session start, refuses an identical caption retry
+// inside the cooldown, tells the model to move on to the skill's next
+// fallback, and notifies the user the moment a paste or an upgrade is needed.
 // It stays silent during /daily-ai-briefing: a briefing is discovery only and
 // its skill marks a missing transcript and moves on, so steering it toward
 // local transcription or a paste would cost time for nothing.
@@ -27,11 +29,12 @@ const BLOCKED = /HTTP Error 403|Sign in to confirm/
 // when that retry fails too; no yt-dlp upgrade fixes it.
 const BOT_CHECK = /Sign in to confirm/
 const RELEASE = /^(\d{4})\.(\d{2})\.(\d{2})/
-const COOLDOWN_MS = 10 * 60 * 1000
+const COOLDOWN_MS = 6 * 60 * 60 * 1000
 const STALE_DAYS = 60
 const UPGRADE_DAYS = 30
 const DAY_MS = 24 * 60 * 60 * 1000
-const PASTE = "ask the user to paste the transcript (on YouTube: the ⋯ under the video, then Show transcript, then copy) and continue the ingest from it"
+const PASTE = "ask the user to paste the transcript (on YouTube: the ⋯ under the video, then Show transcript, then copy) and continue from it"
+const NEXT_STEP = "Do not re-run the caption script and do not try to get around the block. Go on with the running skill's next fallback: linkedin-url-post reads the transcript panel in Chrome, ingest runs scripts/transcribe-audio.py once."
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
@@ -58,10 +61,10 @@ export const register: Register = on => {
     const now = await $.clock.now()
     const last = await read($, limited)
     if (isCaptions && last !== null && last.videoId === videoId && now - last.at < COOLDOWN_MS) {
-      const minutes = Math.ceil((COOLDOWN_MS - (now - last.at)) / 60_000)
+      const minutes = Math.round((now - last.at) / 60_000)
 
       return {
-        deny: `${PLUGIN}: YouTube rate-limited the captions of this video (HTTP 429) a few minutes ago, and a retry within the next ${minutes} min fails the same way. Run scripts/transcribe-audio.py once instead; if that fails too, ${PASTE}.`,
+        deny: `${PLUGIN}: YouTube refused the captions of this video (HTTP 429) ${minutes} min ago, and such a block usually lasts days. ${NEXT_STEP} If that fails too, ${PASTE}.`,
       }
     }
 
@@ -76,7 +79,7 @@ export const register: Register = on => {
 
       return withContext(
         ran,
-        `${PLUGIN}: YouTube rate-limited the caption download (HTTP 429). Do not re-run the caption script; it fails the same way for about ten minutes. Fall back once to scripts/transcribe-audio.py for this URL. If that fails too, ${PASTE}.`,
+        `${PLUGIN}: YouTube refused the caption download (HTTP 429). This is not a short rate limit: YouTube refuses script caption downloads from this network for days at a time, while a real browser still gets them, and it clears on its own. ${NEXT_STEP} If that fails too, ${PASTE}.`,
       )
     }
 
